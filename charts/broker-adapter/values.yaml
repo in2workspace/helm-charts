@@ -22,6 +22,7 @@ service:
 serviceAccount:
   # -- specifies if the account should be created
   create: false
+  annotations: { }
 
 ## deployment specific configuration
 deployment:
@@ -48,6 +49,15 @@ deployment:
     tag: 1.0.0
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
+  resources:
+    # -- limits for the broker-adapter container
+#    limits:
+#      cpu: 100m
+#      memory: 128Mi
+    # -- requests for the broker-adapter container
+#    requests:
+#      cpu: 100m
+#      memory: 128Mi
   # -- additional labels for the deployment, if required
   additionalLabels: { }
   # -- additional annotations for the deployment, if required
@@ -123,13 +133,6 @@ prometheus:
   path: /prometheus
   # -- port prometheus scrape is available at
   port: 8080
-
-broker:
-  externalDomain: https://domain.com/broker
-  internalDomain: http://broker:8080
-  paths:
-    entities: /ngsi-ld/v1/entities
-    subscriptions: /ngsi-ld/v1/subscriptions
 
 # -- a list of additional env vars to be set, check the blockchain-connector-core doc for all available options
 additionalEnvVars: [ ]

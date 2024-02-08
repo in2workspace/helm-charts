@@ -48,6 +48,7 @@ deployment:
     tag: 1.0.0
     # -- specification of the image pull policy
     pullPolicy: IfNotPresent
+  resources:
   # -- additional labels for the deployment, if required
   additionalLabels: { }
   # -- additional annotations for the deployment, if required
@@ -71,7 +72,7 @@ deployment:
   # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   affinity: { }
   # -- port to request health information at
-  healthPort: 9090
+  healthPort: 8080
   ## liveness and readiness probes
   # ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   livenessProbe:
@@ -126,58 +127,7 @@ prometheus:
   # -- path for prometheus scrape
   path: /prometheus
   # -- port prometheus scrape is available at
-  port: 9090
-
-spring:
-  r2dbc:
-    url: r2dbc:postgresql://mkt-postgres:5432/mktdb
-    username: postgres
-    password: postgres
-  flyway:
-    url: jdbc:postgresql://mkt-postgres:5432/mktdb
-logging:
-    level:
-      es.in2.blockchain.connector: DEBUG
-openapi:
-    server:
-      url: https://localhost:9091
-      description: Blockchain Connector Test Server
-    info:
-        title: Blockchain Connector
-        description: Blockchain Connector Component
-        version: 2.0.0-SNAPSHOT
-        termsOfService: https://example.com/terms
-        license:
-            name: Apache 2.0
-            url: https://www.apache.org/licenses/LICENSE-2.0.html
-        contact:
-            name: IN2, Ingeniería de la Información S.L.
-            url: https://in2.es
-            email:
-operator:
-  organizationId: VATES-99999999
-dlt:
-  adapter:
-    domain: http://dlt-adapter:8080
-blockchain:
-  rpcAddress: https://red-t.alastria.io/v0/9461d9f4292b41230527d57ee90652a6
-  userEthereumAddress: "0xb794f5ea0ba39494ce839613fffba74279579268"
-  subscription:
-    active: true
-    notificationEndpoint: http://blockchain-connector:8080/notifications/dlt
-    eventTypes: ProductOffering, ProductOrder
-broker:
-  externalDomain: https://example.com/scorpio
-  internalDomain: http://scorpio:9090
-ngsi:
-  subscription:
-    notificationEndpoint: http://blockchain-connector:8080/notifications/broker
-    entityTypes: ProductOffering, ProductOrder
-broker-adapter:
-    domain: http://broker-adapter:8080
-    paths:
-      entities: /api/v2/entities
-      subscriptions: /api/v2/subscriptions
+  port: 8080
 
 # -- a list of additional env vars to be set, check the blockchain-connector-core doc for all available options
 additionalEnvVars: [ ]
