@@ -13,7 +13,7 @@ More information on each individual IN2 component, can be found within the indiv
 To make use of the charts, you may add the repository:
 
 ```console
-helm repo add fiware https://in2workspace.github.io/helm-charts
+helm repo add in2 https://in2workspace.github.io/helm-charts
 ```
 
 ## Install
