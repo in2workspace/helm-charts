@@ -1,0 +1,156 @@
+# Default values for desmos.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository:  in2kizuna/desmos
+  pullPolicy: Always
+  tag: "0.5.0"
+port: 8080
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+  # Automatically mount a ServiceAccount's API credentials?
+  automount: false
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+env:
+  SPRING_R2DBC_URL: "r2dbc:postgresql://localhost:5432/mktdb"
+  SPRING_R2DBC_USERNAME: "postgres"
+  SPRING_R2DBC_PASSWORD: "postgres"
+  SPRING_FLYWAY_URL: "jdbc:postgresql://localhost:5432/mktdb"
+  LOGGING_LEVEL_ES_IN2_DESMOS: "DEBUG"
+  OPENAPI_SERVER_URL: "https://localhost:9091"
+  OPENAPI_SERVER_DESCRIPTION: "Blockchain Connector Test Server"
+  OPENAPI_INFO_TITLE: "Blockchain Connector"
+  OPENAPI_INFO_DESCRIPTION: "Blockchain Connector Component"
+  OPENAPI_INFO_VERSION: "1.0.0-SNAPSHOT"
+  OPENAPI_INFO_TERMS_OF_SERVICE: "https://localhost/terms"
+  OPENAPI_INFO_LICENSE_NAME: "Apache 2.0"
+  OPENAPI_INFO_LICENSE_URL: "https://www.apache.org/licenses/LICENSE-2.0.html"
+  OPENAPI_INFO_CONTACT_NAME: "IN2, Ingeniería de la Información"
+  OPENAPI_INFO_CONTACT_URL: "https://www.in2.es"
+  OPENAPI_INFO_CONTACT_EMAIL: "contacto@in2.es"
+  CLIENT_ORGANIZATIONID: "VATFR-00869734"
+  BLOCKCHAIN_ADAPTER_INTERNAL_DOMAIN: "http://localhost:8080"
+  BLOCKCHAIN_ADAPTER_EXTERNAL_DOMAIN: "http://localhost:8080"
+  BLOCKCHAIN_ADAPTER_PROVIDER: "digitelts"
+  DLT_ADAPTER_PATHS_CONFIGURE_NODE: "/api/v1/configureNode"
+  DLT_ADAPTER_PATHS_PUBLISH: "/api/v1/publishEvent"
+  DLT_ADAPTER_PATHS_SUBSCRIBE: "/api/v1/subscribe"
+  DLT_ADAPTER_PATHS_EVENTS: "/api/v1/events"
+  BLOCKCHAIN_RPC_ADDRESS: "https://localhost/v0/9461d9f4292b41230527d57ee90652a6"
+  BLOCKCHAIN_USER_ETHEREUM_ADDRESS: "0xb794f5ea0ba39494ce839613fffba74279579268"
+  BLOCKCHAIN_SUBSCRIPTION_ACTIVE: true
+  BLOCKCHAIN_SUBSCRIPTION_NOTIFICATION_ENDPOINT: "http://localhost:8080/notifications/dlt"
+  BLOCKCHAIN_SUBSCRIPTION_EVENT_TYPES: "ProductOffering,ProductOrder"
+  BROKER_PROVIDER: "scorpio"
+  BROKER_EXTERNAL_DOMAIN: "http://localhost:9090"
+  BROKER_INTERNAL_DOMAIN: "http://localhost:9090"
+  NGSI_SUBSCRIPTION_NOTIFICATION_ENDPOINT: "http://localhost:8080/notifications/broker"
+  NGSI_SUBSCRIPTION_ENTITY_TYPES: "ProductOffering,ProductOrder"
+
+podAnnotations: {}
+
+podLabels: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+livenessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 30
+
+readinessProbe:
+  initialDelaySeconds: 31
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 30
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+## configuration for prometheus monitoring
+prometheus:
+  # -- should prometheus scrape be enabled
+  enabled: false
+  # -- path for prometheus scrape
+  path: /prometheus
+  # -- port prometheus scrape is available at
+  port: 9091
+
+# Additional volumes on the output Deployment definition.
+volumes: []
+# - name: foo
+#   secret:
+#     secretName: mysecret
+#     optional: false
+
+# Additional volumeMounts on the output Deployment definition.
+volumeMounts: []
+# - name: foo
+#   mountPath: "/etc/foo"
+#   readOnly: true
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
