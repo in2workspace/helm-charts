@@ -1,3 +1,5 @@
+![Alastria](resources/Alastria-Logo.png)
+
 # IN2 Helm Repository for Generic Enablers.
 
 Repository for providing [HELM Charts](https://helm.sh/) of Generic Enablers from the IN2 components. The charts can be installed into  [Kubernetes](https://kubernetes.io/) with [helm3](https://helm.sh/docs/).

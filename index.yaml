@@ -1,0 +1,19 @@
+apiVersion: v1
+entries:
+  desmos:
+  - apiVersion: v2
+    appVersion: 0.5.0
+    created: "2024-02-21T16:27:24.685468+01:00"
+    description: A Helm chart for Kubernetes
+    digest: ba93c124cfa145e365c21d8ed949a77e22e293e475b7e6082af7ea876837ba64
+    maintainers:
+    - email: oriol.canades@in2.es
+      name: Oriol Canadés
+    name: desmos
+    sources:
+    - https://github.com/in2workspace/desmos
+    type: application
+    urls:
+    - https://in2workspace.github.io/helm-charts/desmos-1.0.0.tgz
+    version: 1.0.0
+generated: "2024-02-21T16:27:24.683505+01:00"
