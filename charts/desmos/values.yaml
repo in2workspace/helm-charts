@@ -47,7 +47,7 @@ deployment:
     # -- tag of the image to be used
     tag: v0.5.0
     # -- specification of the image pull policy
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
   resources:
   # -- additional labels for the deployment, if required
   additionalLabels: { }
@@ -147,3 +147,54 @@ ingress:
 
 # -- a list of additional env vars to be set, check the blockchain-connector-core doc for all available options
 additionalEnvVars: [ ]
+
+env:
+  spring:
+    r2dbc:
+      url: r2dbc:postgresql://postgresql-connector:5432/mktdb
+      username: postgres
+      password: postgres
+    flyway:
+        url: jdbc:postgresql://postgresql-connector:5432/mktdb
+  logging:
+    level:
+      es:
+        in2:
+          desmos: DEBUG
+  openapi:
+    server:
+      url: https://localhost:9091
+      description: Blockchain Connector Test Server
+    info:
+      title: Blockchain Connector
+      description: Blockchain Connector Component
+      version: 1.0.0-SNAPSHOT
+      termsOfService: https://localhost/terms
+      license:
+        name: Apache 2.0
+        url: https://www.apache.org/licenses/LICENSE-2.0.html
+      contact:
+        name: IN2, Ingeniería de la Información
+        url: https://www.in2.es
+        email: example@info.com
+  client:
+    organizationId: VATFR-00869734
+  dltAdapter:
+      provider: digitelts
+      internalDomain: http://dlt-adapter:8080
+      externalDomain: http://dlt-adapter:8080
+      paths:
+          publication: /api/v1/publishEvent
+          subscription: /api/v1/subscribe
+          events: /api/v1/events
+  blockchain:  
+    subscription:
+      notificationEndpoint: http://desmos:8080/notifications/dlt
+      eventTypes: ProductOffering,Catalog,Category
+  broker:
+    provider: scorpio
+    internalDomain: http://scorpio:9090
+    externalDomain: http://scorpio:9090
+  ngsiSubscription:
+    notificationEndpoint: http://desmos:8080/notifications/broker
+    entityTypes: ProductOffering,Catalog,Category

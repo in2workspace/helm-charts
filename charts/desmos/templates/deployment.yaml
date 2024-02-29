@@ -58,73 +58,65 @@ spec:
             timeoutSeconds: {{ .Values.deployment.readinessProbe.timeoutSeconds }}
           env:
             - name: SPRING_R2DBC_URL
-              value: r2dbc:postgresql://postgresql-connector:5432/mktdb
+              value: {{.Values.env.spring.r2dbc.url}}
             - name: SPRING_R2DBC_USERNAME
-              value: postgres
+              value: {{.Values.env.spring.r2dbc.username}}
             - name: SPRING_R2DBC_PASSWORD
-              value: postgres
+              value: {{.Values.env.spring.r2dbc.password}}
             - name: SPRING_FLYWAY_URL
-              value: jdbc:postgresql://postgresql-connector:5432/mktdb
+              value: {{.Values.env.spring.flyway.url}}
             - name: LOGGING_LEVEL_ES_IN2_DESMOS
-              value: DEBUG
+              value: {{.Values.env.logging.level.es.in2.desmos}}
             - name: OPENAPI_SERVER_URL
-              value: https://localhost:9091
+              value: {{.Values.env.openapi.server.url}}
             - name: OPENAPI_SERVER_DESCRIPTION
-              value: Blockchain Connector Test Server
+              value: {{.Values.env.openapi.server.description}}
             - name: OPENAPI_INFO_TITLE
-              value: Blockchain Connector
+              value: {{.Values.env.openapi.info.title}}
             - name: OPENAPI_INFO_DESCRIPTION
-              value: Blockchain Connector Component
+              value: {{.Values.env.openapi.info.description}}
             - name: OPENAPI_INFO_VERSION
-              value: 1.0.0-SNAPSHOT
+              value: {{.Values.env.openapi.info.version}}
             - name: OPENAPI_INFO_TERMS_OF_SERVICE
-              value: https://localhost/terms
+              value: {{.Values.env.openapi.info.termsOfService}}
             - name: OPENAPI_INFO_LICENSE_NAME
-              value: Apache 2.0
+              value: {{.Values.env.openapi.info.license.name}}
             - name: OPENAPI_INFO_LICENSE_URL
-              value: https://www.apache.org/licenses/LICENSE-2.0.html
+              value: {{.Values.env.openapi.info.license.url}}
             - name: OPENAPI_INFO_CONTACT_NAME
-              value: IN2, Ingeniería de la Información
+              value: {{.Values.env.openapi.info.contact.name}}
             - name: OPENAPI_INFO_CONTACT_URL
-              value: https://www.in2.es
+              value: {{.Values.env.openapi.info.contact.url}}
             - name: OPENAPI_INFO_CONTACT_EMAIL
-              value: example@info.com
-            - name: CLIENT_ORGANIZATIONID
-              value: VATFR-00869734
+              value: {{.Values.env.openapi.info.contact.email}}
+            - name: CLIENT_ORGANIZATION_ID
+              value: {{.Values.env.client.organizationId}}
             - name: BLOCKCHAIN_ADAPTER_INTERNAL_DOMAIN
-              value: http://dlt-adapter:8080
+              value: {{.Values.env.dltAdapter.internalDomain}}
             - name: BLOCKCHAIN_ADAPTER_EXTERNAL_DOMAIN
-              value: http://dlt-adapter:8080
+              value: {{.Values.env.dltAdapter.externalDomain}}
             - name: BLOCKCHAIN_ADAPTER_PROVIDER
-              value: digitelts
-            - name: DLT_ADAPTER_PATHS_CONFIGURE_NODE
-              value: /api/v1/configureNode
+              value: {{.Values.env.dltAdapter.provider}}
             - name: DLT_ADAPTER_PATHS_PUBLISH
-              value: /api/v1/publishEvent
+              value: {{.Values.env.dltAdapter.paths.publication}}
             - name: DLT_ADAPTER_PATHS_SUBSCRIBE
-              value: /api/v1/subscribe
+              value: {{.Values.env.dltAdapter.paths.subscription}}
             - name: DLT_ADAPTER_PATHS_EVENTS
-              value: /api/v1/events
-            - name: BLOCKCHAIN_RPC_ADDRESS
-              value: https://localhost/v0/9461d9f4292b41230527d57ee90652a6
-            - name: BLOCKCHAIN_USER_ETHEREUM_ADDRESS
-              value: 0xb794f5ea0ba39494ce839613fffba74279579268
-            - name: BLOCKCHAIN_SUBSCRIPTION_ACTIVE
-              value: "true"
+              value: {{.Values.env.dltAdapter.paths.events}}
             - name: BLOCKCHAIN_SUBSCRIPTION_NOTIFICATION_ENDPOINT
-              value: http://desmos:8080/notifications/dlt
+              value: {{.Values.env.blockchain.subscription.notificationEndpoint}}
             - name: BLOCKCHAIN_SUBSCRIPTION_EVENT_TYPES
-              value: ProductOffering,Catalog,Category
+              value: {{.Values.env.blockchain.subscription.eventTypes}}
             - name: BROKER_PROVIDER
-              value: scorpio
+              value: {{.Values.env.broker.provider}}
             - name: BROKER_EXTERNAL_DOMAIN
-              value: http://scorpio:9090
+              value: {{.Values.env.broker.externalDomain}}
             - name: BROKER_INTERNAL_DOMAIN
-              value: http://scorpio:9090
+              value: {{.Values.env.broker.internalDomain}}
             - name: NGSI_SUBSCRIPTION_NOTIFICATION_ENDPOINT
-              value: http://desmos:8080/notifications/broker
+              value: {{.Values.env.ngsiSubscription.notificationEndpoint}}
             - name: NGSI_SUBSCRIPTION_ENTITY_TYPES
-              value: ProductOffering,Catalog,Category
+              value: {{.Values.env.ngsiSubscription.entityTypes}}
           resources:
                 {{- toYaml .Values.deployment.resources | nindent 12 }}
           {{- with .Values.deployment.nodeSelector }}
