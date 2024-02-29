@@ -58,13 +58,13 @@ spec:
             timeoutSeconds: {{ .Values.deployment.readinessProbe.timeoutSeconds }}
           env:
             - name: SPRING_R2DBC_URL
-              value: r2dbc:postgresql://localhost:5432/mktdb
+              value: r2dbc:postgresql://postgresql-connector:5432/mktdb
             - name: SPRING_R2DBC_USERNAME
               value: postgres
             - name: SPRING_R2DBC_PASSWORD
               value: postgres
             - name: SPRING_FLYWAY_URL
-              value: jdbc:postgresql://localhost:5432/mktdb
+              value: jdbc:postgresql://postgresql-connector:5432/mktdb
             - name: LOGGING_LEVEL_ES_IN2_DESMOS
               value: DEBUG
             - name: OPENAPI_SERVER_URL
@@ -92,9 +92,9 @@ spec:
             - name: CLIENT_ORGANIZATIONID
               value: VATFR-00869734
             - name: BLOCKCHAIN_ADAPTER_INTERNAL_DOMAIN
-              value: http://localhost:8080
+              value: http://dlt-adapter:8080
             - name: BLOCKCHAIN_ADAPTER_EXTERNAL_DOMAIN
-              value: http://localhost:8080
+              value: http://dlt-adapter:8080
             - name: BLOCKCHAIN_ADAPTER_PROVIDER
               value: digitelts
             - name: DLT_ADAPTER_PATHS_CONFIGURE_NODE
@@ -112,19 +112,19 @@ spec:
             - name: BLOCKCHAIN_SUBSCRIPTION_ACTIVE
               value: "true"
             - name: BLOCKCHAIN_SUBSCRIPTION_NOTIFICATION_ENDPOINT
-              value: http://localhost:8080/notifications/dlt
+              value: http://desmos:8080/notifications/dlt
             - name: BLOCKCHAIN_SUBSCRIPTION_EVENT_TYPES
-              value: ProductOffering,ProductOrder
+              value: ProductOffering,Catalog,Category
             - name: BROKER_PROVIDER
               value: scorpio
             - name: BROKER_EXTERNAL_DOMAIN
-              value: http://localhost:9090
+              value: http://scorpio:9090
             - name: BROKER_INTERNAL_DOMAIN
-              value: http://localhost:9090
+              value: http://scorpio:9090
             - name: NGSI_SUBSCRIPTION_NOTIFICATION_ENDPOINT
-              value: http://localhost:8080/notifications/broker
+              value: http://desmos:8080/notifications/broker
             - name: NGSI_SUBSCRIPTION_ENTITY_TYPES
-              value: ProductOffering,ProductOrder
+              value: ProductOffering,Catalog,Category
           resources:
                 {{- toYaml .Values.deployment.resources | nindent 12 }}
           {{- with .Values.deployment.nodeSelector }}
