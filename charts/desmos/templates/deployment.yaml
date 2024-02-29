@@ -58,65 +58,73 @@ spec:
             timeoutSeconds: {{ .Values.deployment.readinessProbe.timeoutSeconds }}
           env:
             - name: SPRING_R2DBC_URL
-              value: {{.Values.env.spring.r2dbc.url}}
+              value: {{.Values.deployment.env.spring.r2dbc.url}}
             - name: SPRING_R2DBC_USERNAME
-              value: {{.Values.env.spring.r2dbc.username}}
+              value: {{.Values.deployment.env.spring.r2dbc.username}}
             - name: SPRING_R2DBC_PASSWORD
-              value: {{.Values.env.spring.r2dbc.password}}
+              value: {{.Values.deployment.env.spring.r2dbc.password}}
             - name: SPRING_FLYWAY_URL
-              value: {{.Values.env.spring.flyway.url}}
+              value: {{.Values.deployment.env.spring.flyway.url}}
+
             - name: LOGGING_LEVEL_ES_IN2_DESMOS
-              value: {{.Values.env.logging.level.es.in2.desmos}}
+              value: {{.Values.deployment.env.logging.level.es.in2.desmos}}
+
             - name: OPENAPI_SERVER_URL
-              value: {{.Values.env.openapi.server.url}}
+              value: {{.Values.deployment.env.openapi.server.url}}
             - name: OPENAPI_SERVER_DESCRIPTION
-              value: {{.Values.env.openapi.server.description}}
+              value: {{.Values.deployment.env.openapi.server.description}}
             - name: OPENAPI_INFO_TITLE
-              value: {{.Values.env.openapi.info.title}}
+              value: {{.Values.deployment.env.openapi.info.title}}
             - name: OPENAPI_INFO_DESCRIPTION
-              value: {{.Values.env.openapi.info.description}}
+              value: {{.Values.deployment.env.openapi.info.description}}
             - name: OPENAPI_INFO_VERSION
-              value: {{.Values.env.openapi.info.version}}
+              value: {{.Values.deployment.env.openapi.info.version}}
             - name: OPENAPI_INFO_TERMS_OF_SERVICE
-              value: {{.Values.env.openapi.info.termsOfService}}
+              value: {{.Values.deployment.env.openapi.info.termsOfService}}
             - name: OPENAPI_INFO_LICENSE_NAME
-              value: {{.Values.env.openapi.info.license.name}}
+              value: {{.Values.deployment.env.openapi.info.license.name}}
             - name: OPENAPI_INFO_LICENSE_URL
-              value: {{.Values.env.openapi.info.license.url}}
+              value: {{.Values.deployment.env.openapi.info.license.url}}
             - name: OPENAPI_INFO_CONTACT_NAME
-              value: {{.Values.env.openapi.info.contact.name}}
+              value: {{.Values.deployment.env.openapi.info.contact.name}}
             - name: OPENAPI_INFO_CONTACT_URL
-              value: {{.Values.env.openapi.info.contact.url}}
+              value: {{.Values.deployment.env.openapi.info.contact.url}}
             - name: OPENAPI_INFO_CONTACT_EMAIL
-              value: {{.Values.env.openapi.info.contact.email}}
+              value: {{.Values.deployment.env.openapi.info.contact.email}}
+
             - name: CLIENT_ORGANIZATION_ID
-              value: {{.Values.env.client.organizationId}}
-            - name: BLOCKCHAIN_ADAPTER_INTERNAL_DOMAIN
-              value: {{.Values.env.dltAdapter.internalDomain}}
-            - name: BLOCKCHAIN_ADAPTER_EXTERNAL_DOMAIN
-              value: {{.Values.env.dltAdapter.externalDomain}}
-            - name: BLOCKCHAIN_ADAPTER_PROVIDER
-              value: {{.Values.env.dltAdapter.provider}}
+              value: {{.Values.deployment.env.client.organizationId}}
+
+            - name: DLT_ADAPTER_INTERNAL_DOMAIN
+              value: {{.Values.deployment.env.dltAdapter.internalDomain}}
+            - name: DLT_ADAPTER_EXTERNAL_DOMAIN
+              value: {{.Values.deployment.env.dltAdapter.externalDomain}}
+            - name: DLT_ADAPTER_PROVIDER
+              value: {{.Values.deployment.env.dltAdapter.provider}}
             - name: DLT_ADAPTER_PATHS_PUBLISH
-              value: {{.Values.env.dltAdapter.paths.publication}}
+              value: {{.Values.deployment.env.dltAdapter.paths.publication}}
             - name: DLT_ADAPTER_PATHS_SUBSCRIBE
-              value: {{.Values.env.dltAdapter.paths.subscription}}
+              value: {{.Values.deployment.env.dltAdapter.paths.subscription}}
             - name: DLT_ADAPTER_PATHS_EVENTS
-              value: {{.Values.env.dltAdapter.paths.events}}
+              value: {{.Values.deployment.env.dltAdapter.paths.events}}
+
             - name: BLOCKCHAIN_SUBSCRIPTION_NOTIFICATION_ENDPOINT
-              value: {{.Values.env.blockchain.subscription.notificationEndpoint}}
+              value: {{.Values.deployment.env.blockchain.subscription.notificationEndpoint}}
             - name: BLOCKCHAIN_SUBSCRIPTION_EVENT_TYPES
-              value: {{.Values.env.blockchain.subscription.eventTypes}}
+              value: {{.Values.deployment.env.blockchain.subscription.eventTypes}}
+
             - name: BROKER_PROVIDER
-              value: {{.Values.env.broker.provider}}
+              value: {{.Values.deployment.env.broker.provider}}
             - name: BROKER_EXTERNAL_DOMAIN
-              value: {{.Values.env.broker.externalDomain}}
+              value: {{.Values.deployment.env.broker.externalDomain}}
             - name: BROKER_INTERNAL_DOMAIN
-              value: {{.Values.env.broker.internalDomain}}
+              value: {{.Values.deployment.env.broker.internalDomain}}
+
             - name: NGSI_SUBSCRIPTION_NOTIFICATION_ENDPOINT
-              value: {{.Values.env.ngsiSubscription.notificationEndpoint}}
+              value: {{.Values.deployment.env.ngsiSubscription.notificationEndpoint}}
             - name: NGSI_SUBSCRIPTION_ENTITY_TYPES
-              value: {{.Values.env.ngsiSubscription.entityTypes}}
+              value: {{.Values.deployment.env.ngsiSubscription.entityTypes}}
+
           resources:
                 {{- toYaml .Values.deployment.resources | nindent 12 }}
           {{- with .Values.deployment.nodeSelector }}

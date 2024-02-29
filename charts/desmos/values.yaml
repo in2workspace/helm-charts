@@ -48,6 +48,82 @@ deployment:
     tag: v0.5.0
     # -- specification of the image pull policy
     pullPolicy: Always
+  env:
+    spring:
+      r2dbc:
+        url: r2dbc:postgresql://postgresql-connector:5432/mktdb
+        username: postgres
+        password: postgres
+      flyway:
+        url: jdbc:postgresql://postgresql-connector:5432/mktdb
+    logging:
+      level:
+        es:
+          in2:
+            desmos: DEBUG
+    openapi:
+      server:
+        url: https://localhost:9091
+        description: Blockchain Connector Test Server
+      info:
+        title: Blockchain Connector
+        description: Blockchain Connector Component
+        version: 1.0.0-SNAPSHOT
+        termsOfService: https://localhost/terms
+        license:
+          name: Apache 2.0
+          url: https://www.apache.org/licenses/LICENSE-2.0.html
+        contact:
+          name: IN2, Ingeniería de la Información
+          url: https://www.in2.es
+          email: example@info.com
+    ## configuration to connect to the dlt-adapter
+    dltAdapter:
+      # -- provider of the dlt-adapter component
+      provider: digitelts
+      # -- (local) address of the dlt-adapter
+      internalDomain: http://dlt-adapter:8080
+      # -- (external) address of the dlt-adapter
+      externalDomain: http://dlt-adapter:8080
+      # -- paths to be used for the dlt-adapter
+      paths:
+        publication: /api/v1/publishEvent
+        subscription: /api/v1/subscribe
+        events: /api/v1/events
+    ## configuration of subscriptions at the blockchain
+    eventSubscription:
+      # -- local address of the dlt-adapter notification endpoint for dlt events
+      notificationEndpoint: http://desmos:8080/notifications/dlt
+      # -- a list of entity-types the connector is interested in
+      eventTypes: product-offering
+    ## connection information for the context broker
+    broker:
+      # -- provider of the broker
+      provider: scorpio
+      # -- external address of the broker. Will included in the hashlink and used by other access-nodes to retrieve the actual entities
+      internalDomain: http://scorpio:9090
+      # -- internal address of the context broker to be used by the connector
+      externalDomain: http://scorpio:9090
+      # -- paths to be used for the broker
+      paths:
+        entities: /ngsi-ld/v1/entities
+        subscriptions: /ngsi-ld/v1/subscriptions
+        temporal: /ngsi-ld/v1/temporal/entities
+    ## configuration of ngsi-ld entities to listen for
+    ngsiSubscription:
+      # -- local address of the blockchain-connectors notification endpoint for ngsi-ld events
+      notificationEndpoint: http://desmos:8080/notifications/broker
+      # -- a list of entity-types the connector is interested in
+      entityTypes: catalog,individual,organization,product,product-offering,category,service-specification,product-offering-price,resource-specification,product-specification
+    ## information about the access-node operator
+    client:
+      # -- did of the organization running the node
+      organizationId: did:web:my-marketplace-operator.org
+    blockchain:
+      subscription:
+        notificationEndpoint: http://desmos:8080/notifications/dlt
+        eventTypes: ProductOffering,Catalog,Category
+  
   resources:
   # -- additional labels for the deployment, if required
   additionalLabels: { }
@@ -147,54 +223,3 @@ ingress:
 
 # -- a list of additional env vars to be set, check the blockchain-connector-core doc for all available options
 additionalEnvVars: [ ]
-
-env:
-  spring:
-    r2dbc:
-      url: r2dbc:postgresql://postgresql-connector:5432/mktdb
-      username: postgres
-      password: postgres
-    flyway:
-        url: jdbc:postgresql://postgresql-connector:5432/mktdb
-  logging:
-    level:
-      es:
-        in2:
-          desmos: DEBUG
-  openapi:
-    server:
-      url: https://localhost:9091
-      description: Blockchain Connector Test Server
-    info:
-      title: Blockchain Connector
-      description: Blockchain Connector Component
-      version: 1.0.0-SNAPSHOT
-      termsOfService: https://localhost/terms
-      license:
-        name: Apache 2.0
-        url: https://www.apache.org/licenses/LICENSE-2.0.html
-      contact:
-        name: IN2, Ingeniería de la Información
-        url: https://www.in2.es
-        email: example@info.com
-  client:
-    organizationId: VATFR-00869734
-  dltAdapter:
-      provider: digitelts
-      internalDomain: http://dlt-adapter:8080
-      externalDomain: http://dlt-adapter:8080
-      paths:
-          publication: /api/v1/publishEvent
-          subscription: /api/v1/subscribe
-          events: /api/v1/events
-  blockchain:  
-    subscription:
-      notificationEndpoint: http://desmos:8080/notifications/dlt
-      eventTypes: ProductOffering,Catalog,Category
-  broker:
-    provider: scorpio
-    internalDomain: http://scorpio:9090
-    externalDomain: http://scorpio:9090
-  ngsiSubscription:
-    notificationEndpoint: http://desmos:8080/notifications/broker
-    entityTypes: ProductOffering,Catalog,Category
