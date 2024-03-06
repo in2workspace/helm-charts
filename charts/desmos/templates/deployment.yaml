@@ -9,8 +9,7 @@ spec:
   revisionHistoryLimit: 3
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "desmos.name" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
+      {{- include "desmos.selectorLabels" . | nindent 6 }}
   strategy:
     rollingUpdate:
       maxSurge: 1
