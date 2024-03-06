@@ -44,13 +44,13 @@ spec:
             - name: LOGGING_LEVEL_ROOT
               value: {{.Values.deployment.logLevel}}
             - name: SPRING_R2DBC_URL
-              value: "r2dbc:postgresql://{{ .Values.db.host }}:5432/demos"
+              value: "r2dbc:postgresql://{{ .Values.db.host }}:5432/mktdb"
             - name: SPRING_R2DBC_USERNAME
               value: {{.Values.db.username}}
             - name: SPRING_R2DBC_PASSWORD
               value: {{.Values.db.password}}
             - name: SPRING_FLYWAY_URL
-              value: "jdbc:postgresql://{{ .Values.db.host }}:5432/desmos"
+              value: "jdbc:postgresql://{{ .Values.db.host }}:5432/mktdb"
             - name: SPRING_FLYWAY_USERNAME
               value: {{ .Values.db.username }}
             - name: DLT_ADAPTER_PROVIDER
