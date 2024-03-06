@@ -5,138 +5,77 @@ metadata:
   labels:
     {{- include "desmos.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.deployment.replicaCount }}
-  {{- end }}
+  replicas: 1
+  revisionHistoryLimit: 3
   selector:
     matchLabels:
-      {{- include "desmos.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/name: {{ include "desmos.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
   template:
     metadata:
       labels:
-             {{ include "desmos.labels" . | nindent 8 }}
-             {{- with .Values.deployment.additionalLabels }}
-             {{- toYaml . | nindent 8 }}
-             {{- end }}
-         {{- if .Values.deployment.additionalAnnotations -}}
-      annotations:
-        prometheus.io/scrape: {{ .Values.prometheus.enabled | quote }}
-        prometheus.io/path: {{ .Values.prometheus.path }}
-        prometheus.io/port: {{ .Values.prometheus.port }}
-            {{- with .Values.deployment.additionalAnnotations }}
-            {{- toYaml . | nindent 8 }}
-            {{- end }}
-          {{- end }}
+            {{ include "desmos.labels" . | nindent 8 }}
     spec:
-      serviceAccountName: {{ include "desmos.serviceAccountName" . }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"
           imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
-          ports:
-            - name: http
-              containerPort: {{ .Values.port}}
-              protocol: TCP
-            - name: http-health
-              containerPort: {{ .Values.deployment.healthPort }}
-              protocol: TCP
           livenessProbe:
             httpGet:
               path: /health
               port: http-health
-            initialDelaySeconds: {{ .Values.deployment.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.deployment.livenessProbe.periodSeconds }}
-            successThreshold: {{ .Values.deployment.livenessProbe.successThreshold }}
-            timeoutSeconds: {{ .Values.deployment.livenessProbe.timeoutSeconds }}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
           readinessProbe:
             httpGet:
               path: /health
               port: http-health
-            initialDelaySeconds: {{ .Values.deployment.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.deployment.readinessProbe.periodSeconds }}
-            successThreshold: {{ .Values.deployment.readinessProbe.successThreshold }}
-            timeoutSeconds: {{ .Values.deployment.readinessProbe.timeoutSeconds }}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
           env:
+            - name: LOGGING_LEVEL_ROOT
+              value: {{.Values.deployment.logLevel}}
             - name: SPRING_R2DBC_URL
-              value: {{.Values.deployment.env.spring.r2dbc.url}}
+              value: "r2dbc:postgresql://{{ .Values.db.host }}:5432/demos"
             - name: SPRING_R2DBC_USERNAME
-              value: {{.Values.deployment.env.spring.r2dbc.username}}
+              value: {{.Values.db.username}}
             - name: SPRING_R2DBC_PASSWORD
-              value: {{.Values.deployment.env.spring.r2dbc.password}}
+              value: {{.Values.db.password}}
             - name: SPRING_FLYWAY_URL
-              value: {{.Values.deployment.env.spring.flyway.url}}
-
-            - name: LOGGING_LEVEL_ES_IN2_DESMOS
-              value: {{.Values.deployment.env.logging.level.es.in2.desmos}}
-
-            - name: OPENAPI_SERVER_URL
-              value: {{.Values.deployment.env.openapi.server.url}}
-            - name: OPENAPI_SERVER_DESCRIPTION
-              value: {{.Values.deployment.env.openapi.server.description}}
-            - name: OPENAPI_INFO_TITLE
-              value: {{.Values.deployment.env.openapi.info.title}}
-            - name: OPENAPI_INFO_DESCRIPTION
-              value: {{.Values.deployment.env.openapi.info.description}}
-            - name: OPENAPI_INFO_VERSION
-              value: {{.Values.deployment.env.openapi.info.version}}
-            - name: OPENAPI_INFO_TERMS_OF_SERVICE
-              value: {{.Values.deployment.env.openapi.info.termsOfService}}
-            - name: OPENAPI_INFO_LICENSE_NAME
-              value: {{.Values.deployment.env.openapi.info.license.name}}
-            - name: OPENAPI_INFO_LICENSE_URL
-              value: {{.Values.deployment.env.openapi.info.license.url}}
-            - name: OPENAPI_INFO_CONTACT_NAME
-              value: {{.Values.deployment.env.openapi.info.contact.name}}
-            - name: OPENAPI_INFO_CONTACT_URL
-              value: {{.Values.deployment.env.openapi.info.contact.url}}
-            - name: OPENAPI_INFO_CONTACT_EMAIL
-              value: {{.Values.deployment.env.openapi.info.contact.email}}
-
-            - name: CLIENT_ORGANIZATION_ID
-              value: {{.Values.deployment.env.client.organizationId}}
-
-            - name: DLT_ADAPTER_INTERNAL_DOMAIN
-              value: {{.Values.deployment.env.dltAdapter.internalDomain}}
-            - name: DLT_ADAPTER_EXTERNAL_DOMAIN
-              value: {{.Values.deployment.env.dltAdapter.externalDomain}}
+              value: "jdbc:postgresql://{{ .Values.db.host }}:5432/desmos"
+            - name: SPRING_FLYWAY_USERNAME
+              value: {{ .Values.db.username }}
             - name: DLT_ADAPTER_PROVIDER
-              value: {{.Values.deployment.env.dltAdapter.provider}}
-            - name: DLT_ADAPTER_PATHS_PUBLISH
-              value: {{.Values.deployment.env.dltAdapter.paths.publication}}
-            - name: DLT_ADAPTER_PATHS_SUBSCRIBE
-              value: {{.Values.deployment.env.dltAdapter.paths.subscription}}
-            - name: DLT_ADAPTER_PATHS_EVENTS
-              value: {{.Values.deployment.env.dltAdapter.paths.events}}
-
-            - name: BLOCKCHAIN_SUBSCRIPTION_NOTIFICATION_ENDPOINT
-              value: {{.Values.deployment.env.blockchain.subscription.notificationEndpoint}}
-            - name: BLOCKCHAIN_SUBSCRIPTION_EVENT_TYPES
-              value: {{.Values.deployment.env.blockchain.subscription.eventTypes}}
-
+              value: {{.Values.deployment.dltAdapter.provider}}
+            - name: DLT_ADAPTER_INTERNAL_DOMAIN
+              value: {{.Values.deployment.dltAdapter.internalDomain}}
+            - name: DLT_ADAPTER_EXTERNAL_DOMAIN
+              value: {{.Values.deployment.dltAdapter.externalDomain}}
+            - name: EVENT_SUBSCRIPTION_NOTIFICATION_ENDPOINT
+              value: {{.Values.deployment.eventSubscription.notificationEndpoint}}
+            - name: EVENT_SUBSCRIPTION_EVENT_TYPES
+              value: {{.Values.deployment.eventSubscription.eventTypes}}
             - name: BROKER_PROVIDER
-              value: {{.Values.deployment.env.broker.provider}}
+              value: {{.Values.deployment.broker.provider}}
             - name: BROKER_EXTERNAL_DOMAIN
-              value: {{.Values.deployment.env.broker.externalDomain}}
+              value: {{.Values.deployment.broker.externalDomain}}
             - name: BROKER_INTERNAL_DOMAIN
-              value: {{.Values.deployment.env.broker.internalDomain}}
-
+              value: {{.Values.deployment.broker.internalDomain}}
             - name: NGSI_SUBSCRIPTION_NOTIFICATION_ENDPOINT
-              value: {{.Values.deployment.env.ngsiSubscription.notificationEndpoint}}
+              value: {{.Values.deployment.ngsiSubscription.notificationEndpoint}}
             - name: NGSI_SUBSCRIPTION_ENTITY_TYPES
-              value: {{.Values.deployment.env.ngsiSubscription.entityTypes}}
-
-          resources:
-                {{- toYaml .Values.deployment.resources | nindent 12 }}
-          {{- with .Values.deployment.nodeSelector }}
-      nodeSelector:
-            {{- toYaml . | nindent 8 }}
-          {{- end }}
-          {{- with .Values.deployment.affinity }}
-      affinity:
-            {{- toYaml . | nindent 8 }}
-          {{- end }}
-          {{- with .Values.deployment.tolerations }}
-      tolerations:
-             {{- toYaml . | nindent 8 }}
-          {{- end }}
-      restartPolicy: Always
+              value: {{.Values.deployment.ngsiSubscription.entityTypes}}
+            - name: CLIENT_ORGANIZATION_ID
+              value: {{.Values.deployment.client.organizationId}}
+          ports:
+            - containerPort: {{ .Values.service.port}}
+              name: http
+              protocol: TCP
