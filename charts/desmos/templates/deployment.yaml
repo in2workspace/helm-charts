@@ -2,28 +2,44 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "desmos.fullname" . }}
-  namespace: {{ $.Release.Namespace | quote }}
   labels:
     {{- include "desmos.labels" . | nindent 4 }}
 spec:
-  replicas: 1
-  revisionHistoryLimit: 3
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+    {{- end }}
   selector:
     matchLabels:
-      {{- include "desmos.selectorLabels" . | nindent 6 }}
-  strategy:
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
+        {{- include "desmos.selectorLabels" . | nindent 6 }}
   template:
     metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       labels:
-            {{ include "desmos.labels" . | nindent 8 }}
+        {{- include "desmos.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
     spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+              {{- toYaml . | nindent 8 }}
+            {{- end }}
+      serviceAccountName: {{ include "desmos.serviceAccountName" . }}
+      securityContext:
+              {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"
-          imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
           livenessProbe:
             httpGet:
               path: /health
@@ -42,7 +58,7 @@ spec:
             timeoutSeconds: 10
           env:
             - name: LOGGING_LEVEL_ROOT
-              value: {{.Values.deployment.logLevel}}
+              value: {{.Values.app.logLevel}}
             - name: SPRING_R2DBC_URL
               value: "r2dbc:postgresql://{{ .Values.db.host }}:5432/mktdb"
             - name: SPRING_R2DBC_USERNAME
@@ -54,28 +70,24 @@ spec:
             - name: SPRING_FLYWAY_USERNAME
               value: {{ .Values.db.username }}
             - name: DLT_ADAPTER_PROVIDER
-              value: {{.Values.deployment.dltAdapter.provider}}
+              value: {{.Values.app.dltAdapter.provider}}
             - name: DLT_ADAPTER_INTERNAL_DOMAIN
-              value: {{.Values.deployment.dltAdapter.internalDomain}}
+              value: {{.Values.app.dltAdapter.internalDomain}}
             - name: DLT_ADAPTER_EXTERNAL_DOMAIN
-              value: {{.Values.deployment.dltAdapter.externalDomain}}
+              value: {{.Values.app.dltAdapter.externalDomain}}
             - name: EVENT_SUBSCRIPTION_NOTIFICATION_ENDPOINT
-              value: {{.Values.deployment.eventSubscription.notificationEndpoint}}
+              value: {{.Values.app.eventSubscription.notificationEndpoint}}
             - name: EVENT_SUBSCRIPTION_EVENT_TYPES
-              value: {{.Values.deployment.eventSubscription.eventTypes}}
+              value: {{.Values.app.eventSubscription.eventTypes}}
             - name: BROKER_PROVIDER
-              value: {{.Values.deployment.broker.provider}}
+              value: {{.Values.app.broker.provider}}
             - name: BROKER_EXTERNAL_DOMAIN
-              value: {{.Values.deployment.broker.externalDomain}}
+              value: {{.Values.app.broker.externalDomain}}
             - name: BROKER_INTERNAL_DOMAIN
-              value: {{.Values.deployment.broker.internalDomain}}
+              value: {{.Values.app.broker.internalDomain}}
             - name: NGSI_SUBSCRIPTION_NOTIFICATION_ENDPOINT
-              value: {{.Values.deployment.ngsiSubscription.notificationEndpoint}}
+              value: {{.Values.app.ngsiSubscription.notificationEndpoint}}
             - name: NGSI_SUBSCRIPTION_ENTITY_TYPES
-              value: {{.Values.deployment.ngsiSubscription.entityTypes}}
+              value: {{.Values.app.ngsiSubscription.entityTypes}}
             - name: CLIENT_ORGANIZATION_ID
-              value: {{.Values.deployment.client.organizationId}}
-          ports:
-            - containerPort: {{ .Values.service.port}}
-              name: http
-              protocol: TCP
+              value: {{.Values.app.client.organizationId}}
