@@ -5,10 +5,10 @@
 replicaCount: 1
 
 image:
-  repository: in2kizuna/desmos
+  repository: nginx
+  pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: v0.5.0
-  pullPolicy: Always
+  tag: ""
 
 imagePullSecrets: []
 nameOverride: ""
@@ -29,7 +29,7 @@ podAnnotations: {}
 podLabels: {}
 
 podSecurityContext: {}
-# fsGroup: 2000
+  # fsGroup: 2000
 
 securityContext: {}
   # capabilities:
@@ -37,30 +37,18 @@ securityContext: {}
   #   - ALL
   # readOnlyRootFilesystem: true
   # runAsNonRoot: true
-# runAsUser: 1000
+  # runAsUser: 1000
 
 service:
   type: ClusterIP
   port: 80
-
-readinessProbe:
-  path: /health
-  initialDelaySeconds: 40
-  failureThreshold: 6
-  periodSeconds: 10
-
-livenessProbe:
-  path: /health
-  initialDelaySeconds: 40
-  failureThreshold: 6
-  periodSeconds: 10
 
 ingress:
   enabled: false
   className: ""
   annotations: {}
     # kubernetes.io/ingress.class: nginx
-  # kubernetes.io/tls-acme: "true"
+    # kubernetes.io/tls-acme: "true"
   hosts:
     - host: chart-example.local
       paths:
@@ -81,14 +69,23 @@ resources: {}
   #   memory: 128Mi
   # requests:
   #   cpu: 100m
-#   memory: 128Mi
+  #   memory: 128Mi
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
 
 autoscaling:
   enabled: false
   minReplicas: 1
   maxReplicas: 100
   targetCPUUtilizationPercentage: 80
-  targetMemoryUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
 
 # Additional volumes on the output Deployment definition.
 volumes: []
@@ -108,26 +105,3 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
-
-app:
-  logLevel: DEBUG
-  dltAdapter:
-    provider: digitelts
-    internalDomain: http://dlt-adapter:8080
-    externalDomain: http://dlt-adapter:8080
-  eventSubscription:
-    notificationEndpoint: http://desmos:8080/notifications/dlt
-    eventTypes: catalog,product-offering,category
-  broker:
-    provider: scorpio
-    internalDomain: http://scorpio:9090
-    externalDomain: http://scorpio:9090
-  ngsiSubscription:
-    notificationEndpoint: http://desmos:8080/notifications/broker
-    entityTypes: catalog,product-offering,category
-  client:
-    organizationId: did:web:my-marketplace-operator.org
-db:
-  host: postgresql-connector
-  password: postgres
-  username: postgres

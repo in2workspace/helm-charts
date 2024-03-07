@@ -2,15 +2,14 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "desmos.fullname" . }}
-  namespace: {{ $.Release.Namespace | quote }}
+  name: {{ include "example.fullname" . }}
   labels:
-    {{- include "desmos.labels" . | nindent 4 }}
+    {{- include "example.labels" . | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "desmos.fullname" . }}
+    name: {{ include "example.fullname" . }}
   minReplicas: {{ .Values.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.autoscaling.maxReplicas }}
   metrics:
