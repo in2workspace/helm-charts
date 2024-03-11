@@ -5,10 +5,10 @@
 replicaCount: 1
 
 image:
-  repository: nginx
-  pullPolicy: IfNotPresent
+  repository: in2kizuna/wallet-driving-application
+  pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
+  tag: "v1.0.0"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -28,10 +28,12 @@ serviceAccount:
 podAnnotations: {}
 podLabels: {}
 
-podSecurityContext: {}
+podSecurityContext:
+  {}
   # fsGroup: 2000
 
-securityContext: {}
+securityContext:
+  {}
   # capabilities:
   #   drop:
   #   - ALL
@@ -41,12 +43,13 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 80
+  port: 4200
 
 ingress:
   enabled: false
   className: ""
-  annotations: {}
+  annotations:
+    {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
@@ -59,7 +62,8 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-resources: {}
+resources:
+  {}
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -75,6 +79,7 @@ livenessProbe:
   httpGet:
     path: /
     port: http
+
 readinessProbe:
   httpGet:
     path: /
@@ -105,3 +110,26 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+app:
+  # wallet-server API
+  server:
+    url: http://localhost:8080
+  # wallet-identity-provider (Keycloak)
+  iam:
+    url: http://localhost:9099
+    uri: /realms/wallet
+  executionContext:
+    uri: /api/v2/execute-content
+  verifiablePresentation:
+    uri: /api/v2/verifiable-presentation
+  credentials:
+    uri: /api/v2/credentials
+  credentialsId:
+    uri: /api/v2/credentials?credentialId=
+  user:
+    uri: /api/v2/users
+  # wallet-server Websocket
+  websocket:
+    url: ws://localhost:8080
+    uri: /api/v2/pin

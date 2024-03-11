@@ -2,8 +2,12 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "wallet-driving-application.fullname" . }}
+  annotations:
+    kompose.cmd: kompose convert -c
+    kompose.version: 1.32.0 (765fde254)
   labels:
     {{- include "wallet-driving-application.labels" . | nindent 4 }}
+    io.kompose.service: wallet-driving-application
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
@@ -11,17 +15,22 @@ spec:
   selector:
     matchLabels:
       {{- include "wallet-driving-application.selectorLabels" . | nindent 6 }}
+      io.kompose.service: wallet-driving-application
   template:
     metadata:
       {{- with .Values.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
+        kompose.cmd: kompose convert -c
+        kompose.version: 1.32.0 (765fde254)
       {{- end }}
       labels:
         {{- include "wallet-driving-application.labels" . | nindent 8 }}
         {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
+        io.kompose.network/kompose-default: "true"
+        io.kompose.service: wallet-driving-application
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -37,13 +46,34 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - name: http
+            - name: http 
               containerPort: {{ .Values.service.port }}
               protocol: TCP
           livenessProbe:
             {{- toYaml .Values.livenessProbe | nindent 12 }}
           readinessProbe:
             {{- toYaml .Values.readinessProbe | nindent 12 }}
+          env:
+            - name: SERVER_URL
+              value: {{.Values.app.server.url}}
+            - name: IAM_URI
+              value: {{.Values.app.iam.url}}
+            - name: IAM_URL
+              value: {{.Values.app.iam.uri}}
+            - name: EXECCONT_URI
+              value: {{.Values.app.executionContext.uri}}
+            - name: VP_URI
+              value: {{.Values.app.verifiablePresentation.uri}}
+            - name: CREDID_URI
+              value: {{.Values.app.credentialsId.uri}}
+            - name: CRED_URI
+              value: {{.Values.app.credentials.uri}}
+            - name: USER_URI
+              value: {{.Values.app.user.uri}}
+            - name: WEBSOCKET_URL
+              value: {{.Values.app.websocket.url}}
+            - name: WEBSOCKET_URI
+              value: {{.Values.app.websocket.uri}}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- with .Values.volumeMounts }}
@@ -66,3 +96,4 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      restartPolicy: Always
