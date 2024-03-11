@@ -2,8 +2,12 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "wallet-server.fullname" . }}
+  annotations:
+    kompose.cmd: kompose convert -c
+    kompose.version: 1.32.0 (765fde254)
   labels:
     {{- include "wallet-server.labels" . | nindent 4 }}
+    io.kompose.service: wallet-server
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
@@ -11,17 +15,22 @@ spec:
   selector:
     matchLabels:
       {{- include "wallet-server.selectorLabels" . | nindent 6 }}
+      io.kompose.service: wallet-server
   template:
     metadata:
       {{- with .Values.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
+        kompose.cmd: kompose convert -c
+        kompose.version: 1.32.0 (765fde254)
       {{- end }}
       labels:
         {{- include "wallet-server.labels" . | nindent 8 }}
         {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
+        io.kompose.network/kompose-default: "true"
+        io.kompose.service: wallet-server
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -44,6 +53,8 @@ spec:
             {{- toYaml .Values.livenessProbe | nindent 12 }}
           readinessProbe:
             {{- toYaml .Values.readinessProbe | nindent 12 }}
+          env:
+            {{- toYaml .Values.env | nindent 12 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- with .Values.volumeMounts }}
@@ -66,3 +77,4 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      restartPolicy: Always

@@ -5,10 +5,10 @@
 replicaCount: 1
 
 image:
-  repository: nginx
-  pullPolicy: IfNotPresent
+  repository: in2kizuna/wallet-server
+  pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
+  tag: "v1.0.0"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -28,10 +28,12 @@ serviceAccount:
 podAnnotations: {}
 podLabels: {}
 
-podSecurityContext: {}
+podSecurityContext:
+  {}
   # fsGroup: 2000
 
-securityContext: {}
+securityContext:
+  {}
   # capabilities:
   #   drop:
   #   - ALL
@@ -41,12 +43,13 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 80
+  port: 8080
 
 ingress:
   enabled: false
   className: ""
-  annotations: {}
+  annotations:
+    {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
@@ -59,7 +62,8 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-resources: {}
+resources:
+  {}
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -73,13 +77,19 @@ resources: {}
 
 livenessProbe:
   httpGet:
-    path: /
+    path: /health
     port: http
+    initialDelaySeconds: 40
+    failureThreshold: 6
+    periodSeconds: 10
+
 readinessProbe:
   httpGet:
-    path: /
+    path: /health
     port: http
-
+    initialDelaySeconds: 40
+    failureThreshold: 6
+    periodSeconds: 10
 autoscaling:
   enabled: false
   minReplicas: 1
@@ -105,3 +115,112 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+app:
+  logLevel: DEBUG
+  openApi:
+    server:
+      url: "https://localhost:8080"
+      description: "Wallet Server"
+    info:
+      title: "Wallet Server"
+      description: "Wallet Server Component"
+      version: "1.0.0"
+      termsOfService: "https://example.com/terms"
+      license:
+        name: "Apache 2.0"
+        url: "https://www.apache.org/licenses/LICENSE-2.0.html"
+      contact:
+        name: "IN2, Ingeniería de la Información"
+        url: "https://in2.es"
+        email: "contacto@in2.es"
+  wallet:
+    Wda:
+      Url: "http://localhost:4200"
+  authServer:
+    domain: "https://issuerkeycloak.demo.in2.es/realms/EAAProvider"
+    tokenEndpoint: "https://issuerkeycloak.demo.in2.es/realms/EAAProvider/verifiable-credential/did:key:z6MkqmaCT2JqdUtLeKah7tEVfNXtDXtQyj4yxEgV11Y5CqUa/token"
+  identityProvider:
+    url: "http://wallet-identity-provider:9099/realms/wallet/protocol/openid-connect/token"
+    clientSecret: "fV51P8jFBo8VnFKMMuP3imw3H3i5mNck"
+    clientId: "user-registry-client"
+    username: "adminWallet"
+    password: "adminPass"
+  broker:
+    provider: "scorpio"
+    externalDomain: "http://scorpio:9090"
+    internalDomain: "http://scorpiot:9090"
+    pathsEntities: "/ngsi-ld/v1/entities"
+  vault:
+    providerName: "hashicorp"
+    springCloudVault:
+      authentication: "token"
+      token: ""
+      host: "vault"
+      scheme: "http"
+      port: "8201"
+      kvEnabled: "true"
+
+env:
+  - name: LOGGING_LEVEL_ES_IN2_WALLET_SERVER
+    value: "DEBUG"
+  - name: OPENAPI_SERVER_URL
+    value: "https://localhost:8080"
+  - name: OPENAPI_SERVER_DESCRIPTION
+    value: "Wallet Server"
+  - name: OPENAPI_INFO_TITLE
+    value: "Wallet Server"
+  - name: OPENAPI_INFO_DESCRIPTION
+    value: "Wallet Server Component"
+  - name: OPENAPI_INFO_VERSION
+    value: "1.0.0"
+  - name: OPENAPI_INFO_TERMS_OF_SERVICE
+    value: "https://example.com/terms"
+  - name: OPENAPI_INFO_LICENSE_NAME
+    value: "Apache 2.0"
+  - name: OPENAPI_INFO_LICENSE_URL
+    value: "https://www.apache.org/licenses/LICENSE-2.0.html"
+  - name: OPENAPI_INFO_CONTACT_NAME
+    value: "IN2, Ingeniería de la Información"
+  - name: OPENAPI_INFO_CONTACT_URL
+    value: "https://in2.es"
+  - name: OPENAPI_INFO_CONTACT_EMAIL
+    value: "contacto@in2.es"
+  - name: WALLET_WDA_URL
+    value: "http://localhost:4200"
+  - name: AUTH_SERVER_DOMAIN
+    value: "https://issuerkeycloak.demo.in2.es/realms/EAAProvider"
+  - name: AUTH_SERVER_TOKEN_ENDPOINT
+    value: "https://issuerkeycloak.demo.in2.es/realms/EAAProvider/verifiable-credential/did:key:z6MkqmaCT2JqdUtLeKah7tEVfNXtDXtQyj4yxEgV11Y5CqUa/token"
+  - name: IDENTITY_PROVIDER_URL
+    value: "http://wallet-identity-provider:9099/realms/wallet/protocol/openid-connect/token"
+  - name: IDENTITY_PROVIDER_CLIENT_SECRET
+    value: "fV51P8jFBo8VnFKMMuP3imw3H3i5mNck"
+  - name: IDENTITY_PROVIDER_CLIENT_ID
+    value: "user-registry-client"
+  - name: IDENTITY_PROVIDER_USERNAME
+    value: "adminWallet"
+  - name: IDENTITY_PROVIDER_PASSWORD
+    value: "adminPass"
+  - name: BROKER_PROVIDER
+    value: "scorpio"
+  - name: BROKER_EXTERNALDOMAIN
+    value: "http://scorpio:9090"
+  - name: BROKER_INTERNALDOMAIN
+    value: "http://scorpiot:9090"
+  - name: BROKER_PATHS_ENTITIES
+    value: "/ngsi-ld/v1/entities"
+  - name: VAULT_PROVIDER_NAME
+    value: "hashicorp"
+  - name: SPRING_CLOUD_VAULT_AUTHENTICATION
+    value: "token"
+  - name: SPRING_CLOUD_VAULT_TOKEN
+    value: ""
+  - name: SPRING_CLOUD_VAULT_HOST
+    value: "vault"
+  - name: SPRING_CLOUD_VAULT_SCHEME
+    value: "http"
+  - name: SPRING_CLOUD_VAULT_PORT
+    value: "8201"
+  - name: SPRING_CLOUD_VAULT_KV_ENABLED
+    value: "true"
