@@ -79,17 +79,17 @@ livenessProbe:
   httpGet:
     path: /health
     port: http
-    initialDelaySeconds: 40
-    failureThreshold: 6
-    periodSeconds: 10
+  initialDelaySeconds: 40
+  failureThreshold: 6
+  periodSeconds: 10
 
 readinessProbe:
   httpGet:
     path: /health
     port: http
-    initialDelaySeconds: 40
-    failureThreshold: 6
-    periodSeconds: 10
+  initialDelaySeconds: 40
+  failureThreshold: 6
+  periodSeconds: 10
 autoscaling:
   enabled: false
   minReplicas: 1
