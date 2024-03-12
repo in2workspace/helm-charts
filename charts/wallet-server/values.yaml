@@ -116,51 +116,6 @@ tolerations: []
 
 affinity: {}
 
-app:
-  logLevel: DEBUG
-  openApi:
-    server:
-      url: "https://localhost:8080"
-      description: "Wallet Server"
-    info:
-      title: "Wallet Server"
-      description: "Wallet Server Component"
-      version: "1.0.0"
-      termsOfService: "https://example.com/terms"
-      license:
-        name: "Apache 2.0"
-        url: "https://www.apache.org/licenses/LICENSE-2.0.html"
-      contact:
-        name: "IN2, Ingeniería de la Información"
-        url: "https://in2.es"
-        email: "contacto@in2.es"
-  wallet:
-    Wda:
-      Url: "http://localhost:4200"
-  authServer:
-    domain: "https://issuerkeycloak.demo.in2.es/realms/EAAProvider"
-    tokenEndpoint: "https://issuerkeycloak.demo.in2.es/realms/EAAProvider/verifiable-credential/did:key:z6MkqmaCT2JqdUtLeKah7tEVfNXtDXtQyj4yxEgV11Y5CqUa/token"
-  identityProvider:
-    url: "http://wallet-identity-provider:9099/realms/wallet/protocol/openid-connect/token"
-    clientSecret: "fV51P8jFBo8VnFKMMuP3imw3H3i5mNck"
-    clientId: "user-registry-client"
-    username: "adminWallet"
-    password: "adminPass"
-  broker:
-    provider: "scorpio"
-    externalDomain: "http://scorpio:9090"
-    internalDomain: "http://scorpiot:9090"
-    pathsEntities: "/ngsi-ld/v1/entities"
-  vault:
-    providerName: "hashicorp"
-    springCloudVault:
-      authentication: "token"
-      token: ""
-      host: "vault"
-      scheme: "http"
-      port: "8201"
-      kvEnabled: "true"
-
 env:
   - name: LOGGING_LEVEL_ES_IN2_WALLET_SERVER
     value: "DEBUG"
