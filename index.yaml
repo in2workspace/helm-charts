@@ -32,4 +32,20 @@ entries:
       urls:
         - https://in2workspace.github.io/helm-charts/wallet-driving-application-0.2.0.tgz
       version: 0.2.0
-generated: "2024-02-29T07:58:47.9567568+01:00"
+  wallet-server:
+    - apiVersion: v2
+      appVersion: v1.0.0
+      created: "2024-03-13T12:51:54.9952889+01:00"
+      description: A Helm chart for Kubernetes
+      digest: b22dfbd82a9672ba6daabc09fe540b908d9279f5a43fcb79d4a0f6ef383285fa
+      maintainers:
+        - email: carlos.villarroel@in2.es
+          name: Carlos Villarroel
+      name: wallet-server
+      sources:
+        - https://github.com/in2workspace/wallet-server
+      type: application
+      urls:
+        - https://in2workspace.github.io/helm-charts/wallet-server-0.1.0.tgz
+      version: 0.1.0
+generated: "2024-03-13T12:51:54.9941332+01:00"
