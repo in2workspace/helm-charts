@@ -11,8 +11,8 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - name: "{{ .Values.service.port }}"
-      port: {{ .Values.service.port }}
+    - name: "{{ .Values.service.port | default 4200}}"
+      port: {{ .Values.service.port | default "4200"}}
       targetPort: 8088
   selector:
     {{- include "wallet-driving-application.selectorLabels" . | nindent 4 }}

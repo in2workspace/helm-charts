@@ -19,9 +19,9 @@ entries:
   wallet-driving-application:
     - apiVersion: v2
       appVersion: v1.0.0
-      created: "2024-03-12T17:39:57.5994868+01:00"
+      created: "2024-03-14T11:44:07.8543732+01:00"
       description: A Helm chart for Kubernetes
-      digest: ef1f08fac2bd7e0bbffc062ba2ee2040707ababf2fd2cdaaecace64d9b645255
+      digest: 0b1a7ab828c55ac23374f433da4dc76bff007d1a7b9ec39b26f4b86e4e31fdd3
       maintainers:
         - email: carlos.villarroel@in2.es
           name: Carlos Villarroel
@@ -30,12 +30,12 @@ entries:
         - https://github.com/in2workspace/wallet-driving-application
       type: application
       urls:
-        - https://in2workspace.github.io/helm-charts/wallet-driving-application-0.2.0.tgz
-      version: 0.2.0
+        - https://in2workspace.github.io/helm-charts/wallet-driving-application-0.3.0.tgz
+      version: 0.3.0
   wallet-server:
     - apiVersion: v2
       appVersion: v1.0.0
-      created: "2024-03-13T12:51:54.9952889+01:00"
+      created: "2024-03-14T11:44:07.8554883+01:00"
       description: A Helm chart for Kubernetes
       digest: b22dfbd82a9672ba6daabc09fe540b908d9279f5a43fcb79d4a0f6ef383285fa
       maintainers:

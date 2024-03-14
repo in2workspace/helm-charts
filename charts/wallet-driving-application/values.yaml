@@ -10,18 +10,8 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag: "v1.0.0"
 
-imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
-
 podAnnotations: {}
 podLabels: {}
-
-podSecurityContext:
-  {}
-  # fsGroup: 2000
-
-securityContext: {}
 
 service:
   type: ClusterIP
@@ -29,40 +19,41 @@ service:
 
 resources: {}
 
-livenessProbe:
-  httpGet:
-    path: /
-    port: http
-
-readinessProbe:
-  httpGet:
-    path: /
-    port: http
-
 autoscaling:
   enabled: false
   minReplicas: 1
   maxReplicas: 100
   targetCPUUtilizationPercentage: 80
+
 app:
-  # wallet-server API
+  ## @section Wallet Server API parameters
   server:
+    ## @param app.server.url Url to Server
     url: http://localhost:8080
-  # wallet-identity-provider (Keycloak)
+  ## @section Identity & Access Manager parameters
   iam:
+    ## @param app.iam.url Url to the Identity Provider
     url: http://localhost:9099
+    ## @param app.iam.url Uri to the Identity Provider Realm
     uri: /realms/wallet
   executionContext:
+    ## @param app.executionContext.uri URI for Execution Context
     uri: /api/v2/execute-content
   verifiablePresentation:
+    ## @param app.verifiablePresentation.uri URI for Verifiable Presentation
     uri: /api/v2/verifiable-presentation
   credentials:
+    ## @param app.credentials.uri URI for Credentials
     uri: /api/v2/credentials
   credentialsId:
+    ## @param app.credentialsId.uri URI for Credential ID
     uri: /api/v2/credentials?credentialId=
   user:
+    ## @param app.user.uri URI for User
     uri: /api/v2/users
-  # wallet-server Websocket
+  ## @section Identity & Access Manager Websocket parameters
   websocket:
+    ## @param app.websocket.url WebSocket URL to Server
     url: ws://localhost:8080
+    ## @param app.websocket.uri URI for WebSocket
     uri: /api/v2/pin

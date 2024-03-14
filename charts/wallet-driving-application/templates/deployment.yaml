@@ -41,9 +41,8 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          securityContext: {}
+          image: "{{ .Values.image.repository | default "in2kizuna/wallet-driving-application"}}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http 
@@ -51,9 +50,13 @@ spec:
               hostPort: {{ .Values.service.port }}
               protocol: TCP
           livenessProbe:
-            {{- toYaml .Values.livenessProbe | nindent 12 }}
+            httpGet:
+              path: /
+              port: http
           readinessProbe:
-            {{- toYaml .Values.readinessProbe | nindent 12 }}
+            httpGet:
+              path: /
+              port: http
           env:
             - name: SERVER_URL
               value: {{.Values.app.server.url}}
@@ -75,8 +78,6 @@ spec:
               value: {{.Values.app.websocket.url}}
             - name: WEBSOCKET_URI
               value: {{.Values.app.websocket.uri}}
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
           {{- with .Values.volumeMounts }}
           volumeMounts:
             {{- toYaml . | nindent 12 }}
