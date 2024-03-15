@@ -1,4 +1,4 @@
-## Wallet Identity Provider (Keycloak) configuartion - see https://github.com/bitnami/charts/tree/main/bitnami/keycloak
+## Identity Provider (Keycloak) configuartion - see https://github.com/bitnami/charts/tree/main/bitnami/keycloak
 wallet-identity-provider:
   # -- should be enabled?
   enabled: true
@@ -36,24 +36,310 @@ wallet-identity-provider:
       database: "keycloak"
       existingSecret: ""
     architecture: standalone
+  ## @param extraEnvVars Extra environment variables to be set on Keycloak container
+  extraEnvVars:
+    ## Import ./identity-provider/imports/wallet-realm.json
+    - name: KEYCLOAK_EXTRA_ARGS
+      value: "-Dkeycloak.import=/config/realm.json"
+  ## @param extraVolumes Optionally specify extra list of additional volumes for Keycloak pods
+  extraVolumes:
+    - name: config
+      configMap:
+        name: keycloak-realm
+        items:
+          - key: "realm.json"
+            path: "/identity-provider/imports/wallet-realm.json"
+  ## @param server.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Vault Server container(s)
+  extraVolumeMounts:
+    - name: config
+      mountPath: "./identity-provider"
+      readOnly: true
+  ingress:
+    enabled: true
+    hosts:
+      - name: keycloak.local
+        path: /
+        tls: false
+    annotations:
+      kubernetes.io/ingress.class: public
 
 ## Wallet Driving Application (WDA) configuration - see https://github.com/in2workspace/helm-charts/tree/main/charts/wallet-driving-application
 wallet-driving-application:
   # -- should be enabled?
   enabled: true
+  ## @param appVersion App Version
+  appVersion: "v1.0.0"
+  service:
+    ## @param service.type Type of service
+    type: ClusterIP
+    ## @param service.port Port to service
+    port: 4200
+
+  ## @section App parameters
   ## Wallet Driving Application (WDA) Application parameters
   app:
-    ## Wallet Server API parameters
+    ## @section Wallet Server API parameters
     server:
-      ## @param app.server.url Url to Wallet Server API
-      ##
+      ## @param app.server.url Url to Server
       url: http://wallet-server:8080
-    # wallet-identity-provider (Keycloak)
+    ## @section Identity & Access Manager parameters
     iam:
+      ## @param app.iam.url Url to the Identity Provider
       url: http://wallet-identity-provider:9099
-    # wallet-server Websocket
+      ## @param app.iam.url Uri to the Identity Provider Realm
+      uri: /realms/wallet
+    executionContext:
+      ## @param app.executionContext.uri URI for Execution Context
+      uri: /api/v2/execute-content
+    verifiablePresentation:
+      ## @param app.verifiablePresentation.uri URI for Verifiable Presentation
+      uri: /api/v2/verifiable-presentation
+    credentials:
+      ## @param app.credentials.uri URI for Credentials
+      uri: /api/v2/credentials
+    credentialsId:
+      ## @param app.credentialsId.uri URI for Credential ID
+      uri: /api/v2/credentials?credentialId=
+    user:
+      ## @param app.user.uri URI for User
+      uri: /api/v2/users
+    ## @section Identity & Access Manager Websocket parameters
     websocket:
+      ## @param app.websocket.url WebSocket URL to Server
       url: ws://wallet-server:8080
+      ## @param app.websocket.uri URI for WebSocket
+      uri: /api/v2/pin
+
+## Wallet Server configuration - see https://github.com/in2workspace/helm-charts/tree/main/charts/wallet-server
+wallet-server:
+  # -- should be enabled?
+  enabled: true
+  ## @param appVersion App Version
+  appVersion: "v1.0.0"
+
+  image:
+    repository: in2kizuna/wallet-server
+    pullPolicy: Always
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "v1.0.0"
+
+  imagePullSecrets: []
+  nameOverride: ""
+  fullnameOverride: ""
+
+  serviceAccount:
+    # Specifies whether a service account should be created
+    create: true
+    # Automatically mount a ServiceAccount's API credentials?
+    automount: true
+    # Annotations to add to the service account
+    annotations: {}
+    # The name of the service account to use.
+    # If not set and create is true, a name is generated using the fullname template
+    name: ""
+
+  podAnnotations: {}
+  podLabels: {}
+
+  podSecurityContext:
+    {}
+    # fsGroup: 2000
+
+  securityContext:
+    {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+
+  service:
+    type: ClusterIP
+    port: 8080
+
+  ingress:
+    enabled: false
+    className: ""
+    annotations:
+      {}
+      # kubernetes.io/ingress.class: nginx
+      # kubernetes.io/tls-acme: "true"
+    hosts:
+      - host: chart-example.local
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+    tls: []
+    #  - secretName: chart-example-tls
+    #    hosts:
+    #      - chart-example.local
+
+  resources: {}
+
+  livenessProbe:
+    httpGet:
+      path: /health
+      port: http
+    initialDelaySeconds: 40
+    failureThreshold: 6
+    periodSeconds: 10
+
+  readinessProbe:
+    httpGet:
+      path: /health
+      port: http
+    initialDelaySeconds: 40
+    failureThreshold: 6
+    periodSeconds: 10
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+
+  # Additional volumes on the output Deployment definition.
+  volumes: []
+
+  # Additional volumeMounts on the output Deployment definition.
+  volumeMounts: []
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}
+
+  env:
+    - name: LOGGING_LEVEL_ES_IN2_WALLET_SERVER
+      value: "DEBUG"
+    - name: OPENAPI_SERVER_URL
+      value: "https://wallet-server:8080"
+    - name: OPENAPI_SERVER_DESCRIPTION
+      value: "Wallet Server"
+    - name: OPENAPI_INFO_TITLE
+      value: "Wallet Server"
+    - name: OPENAPI_INFO_DESCRIPTION
+      value: "Wallet Server Component"
+    - name: OPENAPI_INFO_VERSION
+      value: "1.0.0"
+    - name: OPENAPI_INFO_TERMS_OF_SERVICE
+      value: "https://example.com/terms"
+    - name: OPENAPI_INFO_LICENSE_NAME
+      value: "Apache 2.0"
+    - name: OPENAPI_INFO_LICENSE_URL
+      value: "https://www.apache.org/licenses/LICENSE-2.0.html"
+    - name: OPENAPI_INFO_CONTACT_NAME
+      value: "IN2, Ingeniería de la Información"
+    - name: OPENAPI_INFO_CONTACT_URL
+      value: "https://in2.es"
+    - name: OPENAPI_INFO_CONTACT_EMAIL
+      value: "contacto@in2.es"
+    - name: WALLET_WDA_URL
+      value: "http://wallet-driving-application:4200"
+    - name: AUTH_SERVER_DOMAIN
+      value: "https://issuerkeycloak.demo.in2.es/realms/EAAProvider"
+    - name: AUTH_SERVER_TOKEN_ENDPOINT
+      value: "https://issuerkeycloak.demo.in2.es/realms/EAAProvider/verifiable-credential/did:key:z6MkqmaCT2JqdUtLeKah7tEVfNXtDXtQyj4yxEgV11Y5CqUa/token"
+    - name: IDENTITY_PROVIDER_URL
+      value: "http://wallet-identity-provider:9099/realms/wallet/protocol/openid-connect/token"
+    - name: IDENTITY_PROVIDER_CLIENT_SECRET
+      value: "fV51P8jFBo8VnFKMMuP3imw3H3i5mNck"
+    - name: IDENTITY_PROVIDER_CLIENT_ID
+      value: "user-registry-client"
+    - name: IDENTITY_PROVIDER_USERNAME
+      value: "adminWallet"
+    - name: IDENTITY_PROVIDER_PASSWORD
+      value: "adminPass"
+    - name: BROKER_PROVIDER
+      value: "scorpio"
+    - name: BROKER_EXTERNALDOMAIN
+      value: "http://scorpio:9090"
+    - name: BROKER_INTERNALDOMAIN
+      value: "http://scorpiot:9090"
+    - name: BROKER_PATHS_ENTITIES
+      value: "/ngsi-ld/v1/entities"
+    - name: VAULT_PROVIDER_NAME
+      value: "hashicorp"
+    - name: SPRING_CLOUD_VAULT_AUTHENTICATION
+      value: "token"
+    - name: SPRING_CLOUD_VAULT_TOKEN
+      value: ""
+    - name: SPRING_CLOUD_VAULT_HOST
+      value: "vault"
+    - name: SPRING_CLOUD_VAULT_SCHEME
+      value: "http"
+    - name: SPRING_CLOUD_VAULT_PORT
+      value: "8201"
+    - name: SPRING_CLOUD_VAULT_KV_ENABLED
+      value: "true"
+
+## Hashicorp Vault
+vault:
+  # -- should be enabled?
+  enabled: true
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param server.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param server.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param server.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param server.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param server.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param server.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param server.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param server.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param server.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param server.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: null
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      add: ["IPC_LOCK"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## @param server.command Override default container command (useful when using custom images)
+  command: ["/bin/sh", "/config/init.sh"]
+  ## @param server.config [string] Vault server configuration (evaluated as a template)
+  config: |
+    "listener": {
+      "tcp": {
+        "address": "0.0.0.0:8201",
+        "tls_disable": "true"
+      }
+    },
+    "storage": {
+      "file": {
+        "path": "/vault/file"
+      }
+    },
+    "default_lease_ttl": "168h",
+    "max_lease_ttl": "0h",
+    "api_addr": "http://0.0.0.0:8201"
+  ## @param extraVolumes Optionally specify extra list of additional volumes for Keycloak pods
+  extraVolumes:
+    - name: config
+      configMap:
+        name: vault-config
+        items:
+          - key: "init.sh"
+            path: "/config/init.sh"
+  ## @param server.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Vault Server container(s)
+  extraVolumeMounts:
+    - name: config
+      mountPath: "/vault"
+
+## System Config Service configuration in case to be used by kafka - see https://github.com/bitnami/charts/tree/main/bitnami/zookeeper
+zookeeper:
+  # -- should kafka be enabled?
+  enabled: false
 
 ## Event Streaming configuration in case to be used by scorpio - see https://github.com/bitnami/charts/tree/main/bitnami/kafka
 kafka:

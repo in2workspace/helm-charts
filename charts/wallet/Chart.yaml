@@ -1,6 +1,6 @@
 apiVersion: v2
 name: wallet
-description: Umbrella Helm chart for Wallet
+description: Umbrella Helm chart for the Wallet
 
 # A chart can be either an 'application' or a 'library' chart.
 #
@@ -24,25 +24,20 @@ version: 0.1.0
 appVersion: "v1.0.0"
 
 dependencies:
-  - name: keycloak # Includes postgres, bitnami common dependencies
+  - name: keycloak # Includes postgres
     alias: wallet-identity-provider
     condition: wallet-identity-provider.enabled
     repository: oci://registry-1.docker.io/bitnamicharts
     version: 19.3.0
-  #- name: postgresql
-  #  alias: keycloak-postgres
-  #  condition: keycloak-postgres.enabled
-  #  repository: oci://registry-1.docker.io/bitnamicharts
-  #  version: 13.1.5
   - name: wallet-driving-application
     condition: wallet-driving-application.enabled
     repository: https://in2workspace.github.io/helm-charts
-    version: 0.2.0
+    version: 0.3.0
   - name: wallet-server
     condition: wallet-server.enabled
     repository: https://in2workspace.github.io/helm-charts
     version: 0.1.0
-  - name: vault # Requires bitnami common dependency
+  - name: vault
     condition: vault.enabled
     repository: oci://registry-1.docker.io/bitnamicharts
     version: 0.12.3
