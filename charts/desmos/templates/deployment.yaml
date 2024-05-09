@@ -8,10 +8,10 @@ metadata:
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
-    {{- end }}
+  {{- end }}
   selector:
     matchLabels:
-        {{- include "desmos.selectorLabels" . | nindent 6 }}
+      {{- include "desmos.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -23,11 +23,34 @@ spec:
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
-              {{- toYaml . | nindent 8 }}
-            {{- end }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       serviceAccountName: {{ include "desmos.serviceAccountName" . }}
       securityContext:
-              {{- toYaml .Values.podSecurityContext | nindent 8 }}
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        - name: check-external-services
+          image: curlimages/curl
+          command:
+            - sh
+            - -c
+            - >
+              echo "Checking availability for: {{ .Values.app.broker.externalDomain }}/q/health";
+              echo "Checking availability for: {{ .Values.app.dltAdapter.externalDomain }}/health";
+              response1=$(curl -si {{ .Values.app.broker.externalDomain }}/q/health);
+              response2=$(curl -si {{ .Values.app.dltAdapter.externalDomain }}/health);
+              until echo "$response1" | grep -q "HTTP/1.[01] 200 OK" && echo "$response2" | grep -q "HTTP/1.[01] 200 OK"; do
+                echo "Waiting for external services to be available at {{ .Values.app.broker.externalDomain }}/q/health and {{ .Values.app.dltAdapter.externalDomain }}/health...";
+                echo "Response from {{ .Values.app.broker.externalDomain }}/q/health:";
+                echo "$response1";
+                echo "Response from {{ .Values.app.dltAdapter.externalDomain }}/health:";
+                echo "$response2";
+                sleep 10;
+                response1=$(curl -si {{ .Values.app.broker.externalDomain }}/q/health);
+                response2=$(curl -si {{ .Values.app.dltAdapter.externalDomain }}/health);
+              done;
+
+
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
