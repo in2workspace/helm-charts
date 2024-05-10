@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: in2kizuna/desmos
   # Overrides the image tag whose default is the chart appVersion.
-  tag: v0.5.0
+  tag: v0.6.0
   pullPolicy: Always
 
 imagePullSecrets: []
