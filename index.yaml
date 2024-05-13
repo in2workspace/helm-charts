@@ -1,51 +1,51 @@
 apiVersion: v1
 entries:
   desmos:
-    - apiVersion: v2
-      appVersion: v0.5.0
-      created: "2024-02-29T07:58:47.9567568+01:00"
-      description: A Helm chart for Kubernetes
-      digest: 1728e2b0f5b1327b91983eb4597d42328654d8fc8048e1268f1339ed7861f1e2
-      maintainers:
-        - email: oriol.canades@in2.es
-          name: Oriol Canadés
-      name: desmos
-      sources:
-        - https://github.com/in2workspace/desmos
-      type: application
-      urls:
-        - https://in2workspace.github.io/helm-charts/desmos-0.5.0.tgz
-      version: 0.5.0
+  - apiVersion: v2
+    appVersion: v0.6.0
+    created: "2024-05-10T13:02:59.8253469+02:00"
+    description: A Helm chart for Kubernetes
+    digest: 1067e6925f2d05700e2bbafc2acf9888cdd522e387a36f07f33fd1e3f464d39d
+    maintainers:
+    - email: oriol.canades@in2.es
+      name: Oriol Canadés
+    name: desmos
+    sources:
+    - https://github.com/in2workspace/desmos
+    type: application
+    urls:
+    - https://in2workspace.github.io/helm-charts/desmos-0.6.0.tgz
+    version: 0.6.0
   wallet-driving-application:
-    - apiVersion: v2
-      appVersion: v1.0.0
-      created: "2024-03-14T11:44:07.8543732+01:00"
-      description: A Helm chart for Kubernetes
-      digest: 0b1a7ab828c55ac23374f433da4dc76bff007d1a7b9ec39b26f4b86e4e31fdd3
-      maintainers:
-        - email: carlos.villarroel@in2.es
-          name: Carlos Villarroel
-      name: wallet-driving-application
-      sources:
-        - https://github.com/in2workspace/wallet-driving-application
-      type: application
-      urls:
-        - https://in2workspace.github.io/helm-charts/wallet-driving-application-0.3.0.tgz
-      version: 0.3.0
+  - apiVersion: v2
+    appVersion: v1.0.0
+    created: "2024-05-10T13:02:59.8372548+02:00"
+    description: A Helm chart for Kubernetes
+    digest: 0b1a7ab828c55ac23374f433da4dc76bff007d1a7b9ec39b26f4b86e4e31fdd3
+    maintainers:
+    - email: carlos.villarroel@in2.es
+      name: Carlos Villarroel
+    name: wallet-driving-application
+    sources:
+    - https://github.com/in2workspace/wallet-driving-application
+    type: application
+    urls:
+    - https://in2workspace.github.io/helm-charts/wallet-driving-application-0.3.0.tgz
+    version: 0.3.0
   wallet-server:
-    - apiVersion: v2
-      appVersion: v1.0.0
-      created: "2024-03-14T11:44:07.8554883+01:00"
-      description: A Helm chart for Kubernetes
-      digest: b22dfbd82a9672ba6daabc09fe540b908d9279f5a43fcb79d4a0f6ef383285fa
-      maintainers:
-        - email: carlos.villarroel@in2.es
-          name: Carlos Villarroel
-      name: wallet-server
-      sources:
-        - https://github.com/in2workspace/wallet-server
-      type: application
-      urls:
-        - https://in2workspace.github.io/helm-charts/wallet-server-0.1.0.tgz
-      version: 0.1.0
-generated: "2024-03-13T12:51:54.9941332+01:00"
+  - apiVersion: v2
+    appVersion: v1.0.0
+    created: "2024-05-10T13:02:59.8492794+02:00"
+    description: A Helm chart for Kubernetes
+    digest: b22dfbd82a9672ba6daabc09fe540b908d9279f5a43fcb79d4a0f6ef383285fa
+    maintainers:
+    - email: carlos.villarroel@in2.es
+      name: Carlos Villarroel
+    name: wallet-server
+    sources:
+    - https://github.com/in2workspace/wallet-server
+    type: application
+    urls:
+    - https://in2workspace.github.io/helm-charts/wallet-server-0.1.0.tgz
+    version: 0.1.0
+generated: "2024-05-10T13:02:59.8247794+02:00"
