@@ -35,19 +35,19 @@ spec:
             - sh
             - -c
             - >
-              echo "Checking availability for: {{ .Values.app.broker.externalDomain }}/q/health";
-              echo "Checking availability for: {{ .Values.app.dltAdapter.externalDomain }}/health";
-              response1=$(curl -si {{ .Values.app.broker.externalDomain }}/q/health);
-              response2=$(curl -si {{ .Values.app.dltAdapter.externalDomain }}/health);
+              echo "Checking availability for: {{ .Values.app.broker.internalDomain }}/q/health";
+              echo "Checking availability for: {{ .Values.app.dltAdapter.internalDomain }}/health";
+              response1=$(curl -si {{ .Values.app.broker.internalDomain }}/q/health);
+              response2=$(curl -si {{ .Values.app.dltAdapter.internalDomain }}/health);
               until echo "$response1" | grep -q "HTTP/1.[01] 200 OK" && echo "$response2" | grep -q "HTTP/1.[01] 200 OK"; do
-                echo "Waiting for external services to be available at {{ .Values.app.broker.externalDomain }}/q/health and {{ .Values.app.dltAdapter.externalDomain }}/health...";
-                echo "Response from {{ .Values.app.broker.externalDomain }}/q/health:";
+                echo "Waiting for external services to be available at {{ .Values.app.broker.internalDomain }}/q/health and {{ .Values.app.dltAdapter.internalDomain }}/health...";
+                echo "Response from {{ .Values.app.broker.internalDomain }}/q/health:";
                 echo "$response1";
-                echo "Response from {{ .Values.app.dltAdapter.externalDomain }}/health:";
+                echo "Response from {{ .Values.app.dltAdapter.internalDomain }}/health:";
                 echo "$response2";
                 sleep 10;
-                response1=$(curl -si {{ .Values.app.broker.externalDomain }}/q/health);
-                response2=$(curl -si {{ .Values.app.dltAdapter.externalDomain }}/health);
+                response1=$(curl -si {{ .Values.app.broker.internalDomain }}/q/health);
+                response2=$(curl -si {{ .Values.app.dltAdapter.internalDomain }}/health);
               done;
 
 
