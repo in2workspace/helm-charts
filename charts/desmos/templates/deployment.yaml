@@ -108,5 +108,5 @@ spec:
               value: {{.Values.app.ngsiSubscription.notificationEndpoint}}
             - name: NGSI_SUBSCRIPTION_ENTITY_TYPES
               value: {{.Values.app.ngsiSubscription.entityTypes}}
-            - name: CLIENT_ORGANIZATION_ID
-              value: {{.Values.app.client.organizationId}}
+            - name: OPERATOR_ORGANIZATION_IDENTIFIER
+              value: {{.Values.app.operator.organizationIdentifier}}

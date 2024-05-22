@@ -125,8 +125,8 @@ app:
   ngsiSubscription:
     notificationEndpoint: http://desmos:8080/notifications/broker
     entityTypes: catalog,product-offering,category
-  client:
-    organizationId: did:web:my-marketplace-operator.org
+  operator:
+    organizationIdentifier: did:web:my-marketplace-operator.org
 db:
   host: postgresql-connector
   password: postgres
