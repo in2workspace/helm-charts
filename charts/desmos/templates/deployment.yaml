@@ -49,8 +49,6 @@ spec:
                 response1=$(curl -si {{ .Values.app.broker.internalDomain }}/q/health);
                 response2=$(curl -si {{ .Values.app.dltAdapter.internalDomain }}/health);
               done;
-
-
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -76,6 +74,8 @@ spec:
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: {{.Values.app.profile}}
             - name: LOGGING_LEVEL_ROOT
               value: {{.Values.app.logLevel}}
             - name: SPRING_R2DBC_URL
@@ -86,18 +86,8 @@ spec:
               value: {{.Values.db.password}}
             - name: SPRING_FLYWAY_URL
               value: "jdbc:postgresql://{{ .Values.db.host }}:5432/mktdb"
-            - name: SPRING_FLYWAY_USERNAME
-              value: {{ .Values.db.username }}
-            - name: DLT_ADAPTER_PROVIDER
-              value: {{.Values.app.dltAdapter.provider}}
-            - name: DLT_ADAPTER_INTERNAL_DOMAIN
-              value: {{.Values.app.dltAdapter.internalDomain}}
-            - name: DLT_ADAPTER_EXTERNAL_DOMAIN
-              value: {{.Values.app.dltAdapter.externalDomain}}
-            - name: TX_SUBSCRIPTION_NOTIFICATION_ENDPOINT
-              value: {{.Values.app.txsubscription.notificationEndpoint}}
-            - name: TX_SUBSCRIPTION_ENTITY_TYPES
-              value: {{.Values.app.txsubscription.eventTypes}}
+            - name: OPERATOR_ORGANIZATION_IDENTIFIER
+              value: {{.Values.app.operator.organizationIdentifier}}
             - name: BROKER_PROVIDER
               value: {{.Values.app.broker.provider}}
             - name: BROKER_EXTERNAL_DOMAIN
@@ -108,5 +98,13 @@ spec:
               value: {{.Values.app.ngsiSubscription.notificationEndpoint}}
             - name: NGSI_SUBSCRIPTION_ENTITY_TYPES
               value: {{.Values.app.ngsiSubscription.entityTypes}}
-            - name: OPERATOR_ORGANIZATION_IDENTIFIER
-              value: {{.Values.app.operator.organizationIdentifier}}
+            - name: DLT_ADAPTER_PROVIDER
+              value: {{.Values.app.dltAdapter.provider}}
+            - name: DLT_ADAPTER_INTERNAL_DOMAIN
+              value: {{.Values.app.dltAdapter.internalDomain}}
+            - name: DLT_ADAPTER_EXTERNAL_DOMAIN
+              value: {{.Values.app.dltAdapter.externalDomain}}
+            - name: TX_SUBSCRIPTION_NOTIFICATION_ENDPOINT
+              value: {{.Values.app.txSubscription.notificationEndpoint}}
+            - name: TX_SUBSCRIPTION_ENTITY_TYPES
+              value: {{.Values.app.txSubscription.entityTypes}}
