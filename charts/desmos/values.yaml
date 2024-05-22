@@ -115,7 +115,7 @@ app:
     provider: digitelts
     internalDomain: http://dlt-adapter:8080
     externalDomain: http://dlt-adapter:8080
-  tx-subscription:
+  txsubscription:
     notificationEndpoint: http://desmos:8080/notifications/dlt
     eventTypes: catalog,product-offering,category
   broker:
