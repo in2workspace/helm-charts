@@ -3,9 +3,9 @@ entries:
   desmos:
   - apiVersion: v2
     appVersion: v0.6.0
-    created: "2024-05-21T14:01:43.5958141+02:00"
+    created: "2024-05-22T11:13:09.0260003+02:00"
     description: A Helm chart for Kubernetes
-    digest: 63bfea3defcf80b777555a85ac795264d71b1b958b4e0f164cc088b2ceef6066
+    digest: 93407de5a885544a7f928bdf4aad0af9e55d7274ca6517cac95a8060d88c6b7d
     maintainers:
     - email: oriol.canades@in2.es
       name: Oriol Canadés
@@ -18,9 +18,9 @@ entries:
     version: 0.6.0
   - apiVersion: v2
     appVersion: v0.5.0
-    created: "2024-05-21T14:01:43.5917315+02:00"
+    created: "2024-05-22T11:13:09.0249288+02:00"
     description: A Helm chart for Kubernetes
-    digest: c7c15a1ea9c1dbda8b03e7a47157b525774a361818805c471137c4e39c2cd306
+    digest: 77ac820b273fb78ff6814d32085f1fdb8ed5d653248d978195119f32eea51323
     maintainers:
     - email: oriol.canades@in2.es
       name: Oriol Canadés
@@ -34,7 +34,7 @@ entries:
   wallet-driving-application:
   - apiVersion: v2
     appVersion: v1.0.0
-    created: "2024-05-21T14:01:43.6038565+02:00"
+    created: "2024-05-22T11:13:09.0273142+02:00"
     description: A Helm chart for Kubernetes
     digest: 0b1a7ab828c55ac23374f433da4dc76bff007d1a7b9ec39b26f4b86e4e31fdd3
     maintainers:
@@ -50,7 +50,7 @@ entries:
   wallet-server:
   - apiVersion: v2
     appVersion: v1.0.0
-    created: "2024-05-21T14:01:43.6145196+02:00"
+    created: "2024-05-22T11:13:09.0286239+02:00"
     description: A Helm chart for Kubernetes
     digest: b22dfbd82a9672ba6daabc09fe540b908d9279f5a43fcb79d4a0f6ef383285fa
     maintainers:
@@ -63,4 +63,4 @@ entries:
     urls:
     - https://in2workspace.github.io/helm-charts/wallet-server-0.1.0.tgz
     version: 0.1.0
-generated: "2024-05-21T14:01:43.5870466+02:00"
+generated: "2024-05-22T11:13:09.0202667+02:00"
