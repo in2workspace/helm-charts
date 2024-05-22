@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: in2kizuna/desmos
+  repository: in2workspace/desmos-api
   # Overrides the image tag whose default is the chart appVersion.
   tag: v0.6.0
   pullPolicy: Always
@@ -110,23 +110,25 @@ tolerations: []
 affinity: {}
 
 app:
+  profile: dev
   logLevel: DEBUG
-  dltAdapter:
-    provider: digitelts
-    internalDomain: http://dlt-adapter:8080
-    externalDomain: http://dlt-adapter:8080
-  txsubscription:
-    notificationEndpoint: http://desmos:8080/notifications/dlt
-    eventTypes: catalog,product-offering,category
+  operator:
+    organizationIdentifier: VATES-S9999999E
   broker:
     provider: scorpio
     internalDomain: http://scorpio:9090
     externalDomain: http://scorpio:9090
   ngsiSubscription:
     notificationEndpoint: http://desmos:8080/notifications/broker
-    entityTypes: catalog,product-offering,category
-  operator:
-    organizationIdentifier: did:web:my-marketplace-operator.org
+    entityTypes: catalog,product-offering,category,individual,organization,product,service-specification,product-offering-price,resource-specification,product-specification
+  dltAdapter:
+    provider: digitelts
+    internalDomain: http://dlt-adapter:8080
+    externalDomain: http://dlt-adapter:8080
+  txSubscription:
+    notificationEndpoint: http://desmos:8080/notifications/dlt
+    entityTypes: catalog,product-offering,category,individual,organization,product,service-specification,product-offering-price,resource-specification,product-specification
+
 db:
   host: postgresql-connector
   password: postgres
