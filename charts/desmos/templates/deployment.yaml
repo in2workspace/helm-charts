@@ -94,9 +94,9 @@ spec:
               value: {{.Values.app.dltAdapter.internalDomain}}
             - name: DLT_ADAPTER_EXTERNAL_DOMAIN
               value: {{.Values.app.dltAdapter.externalDomain}}
-            - name: EVENT_SUBSCRIPTION_NOTIFICATION_ENDPOINT
+            - name: TX_SUBSCRIPTION_NOTIFICATION_ENDPOINT
               value: {{.Values.app.eventSubscription.notificationEndpoint}}
-            - name: EVENT_SUBSCRIPTION_EVENT_TYPES
+            - name: TX_SUBSCRIPTION_ENTITY_TYPES
               value: {{.Values.app.eventSubscription.eventTypes}}
             - name: BROKER_PROVIDER
               value: {{.Values.app.broker.provider}}
