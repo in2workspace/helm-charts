@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: in2kizuna/desmos
   # Overrides the image tag whose default is the chart appVersion.
-  tag: v0.5.0
+  tag: v0.6.0
   pullPolicy: Always
 
 imagePullSecrets: []
@@ -115,7 +115,7 @@ app:
     provider: digitelts
     internalDomain: http://dlt-adapter:8080
     externalDomain: http://dlt-adapter:8080
-  eventSubscription:
+  tx-subscription:
     notificationEndpoint: http://desmos:8080/notifications/dlt
     eventTypes: catalog,product-offering,category
   broker:
@@ -125,8 +125,8 @@ app:
   ngsiSubscription:
     notificationEndpoint: http://desmos:8080/notifications/broker
     entityTypes: catalog,product-offering,category
-  client:
-    organizationId: did:web:my-marketplace-operator.org
+  operator:
+    organizationIdentifier: did:web:my-marketplace-operator.org
 db:
   host: postgresql-connector
   password: postgres

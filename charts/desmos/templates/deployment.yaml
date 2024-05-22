@@ -35,19 +35,19 @@ spec:
             - sh
             - -c
             - >
-              echo "Checking availability for: {{ .Values.app.broker.externalDomain }}/q/health";
-              echo "Checking availability for: {{ .Values.app.dltAdapter.externalDomain }}/health";
-              response1=$(curl -si {{ .Values.app.broker.externalDomain }}/q/health);
-              response2=$(curl -si {{ .Values.app.dltAdapter.externalDomain }}/health);
+              echo "Checking availability for: {{ .Values.app.broker.internalDomain }}/q/health";
+              echo "Checking availability for: {{ .Values.app.dltAdapter.internalDomain }}/health";
+              response1=$(curl -si {{ .Values.app.broker.internalDomain }}/q/health);
+              response2=$(curl -si {{ .Values.app.dltAdapter.internalDomain }}/health);
               until echo "$response1" | grep -q "HTTP/1.[01] 200 OK" && echo "$response2" | grep -q "HTTP/1.[01] 200 OK"; do
-                echo "Waiting for external services to be available at {{ .Values.app.broker.externalDomain }}/q/health and {{ .Values.app.dltAdapter.externalDomain }}/health...";
-                echo "Response from {{ .Values.app.broker.externalDomain }}/q/health:";
+                echo "Waiting for external services to be available at {{ .Values.app.broker.internalDomain }}/q/health and {{ .Values.app.dltAdapter.internalDomain }}/health...";
+                echo "Response from {{ .Values.app.broker.internalDomain }}/q/health:";
                 echo "$response1";
-                echo "Response from {{ .Values.app.dltAdapter.externalDomain }}/health:";
+                echo "Response from {{ .Values.app.dltAdapter.internalDomain }}/health:";
                 echo "$response2";
                 sleep 10;
-                response1=$(curl -si {{ .Values.app.broker.externalDomain }}/q/health);
-                response2=$(curl -si {{ .Values.app.dltAdapter.externalDomain }}/health);
+                response1=$(curl -si {{ .Values.app.broker.internalDomain }}/q/health);
+                response2=$(curl -si {{ .Values.app.dltAdapter.internalDomain }}/health);
               done;
 
 
@@ -94,10 +94,10 @@ spec:
               value: {{.Values.app.dltAdapter.internalDomain}}
             - name: DLT_ADAPTER_EXTERNAL_DOMAIN
               value: {{.Values.app.dltAdapter.externalDomain}}
-            - name: EVENT_SUBSCRIPTION_NOTIFICATION_ENDPOINT
-              value: {{.Values.app.eventSubscription.notificationEndpoint}}
-            - name: EVENT_SUBSCRIPTION_EVENT_TYPES
-              value: {{.Values.app.eventSubscription.eventTypes}}
+            - name: TX_SUBSCRIPTION_NOTIFICATION_ENDPOINT
+              value: {{.Values.app.tx-subscription.notificationEndpoint}}
+            - name: TX_SUBSCRIPTION_ENTITY_TYPES
+              value: {{.Values.app.tx-subscription.eventTypes}}
             - name: BROKER_PROVIDER
               value: {{.Values.app.broker.provider}}
             - name: BROKER_EXTERNAL_DOMAIN
@@ -108,5 +108,5 @@ spec:
               value: {{.Values.app.ngsiSubscription.notificationEndpoint}}
             - name: NGSI_SUBSCRIPTION_ENTITY_TYPES
               value: {{.Values.app.ngsiSubscription.entityTypes}}
-            - name: CLIENT_ORGANIZATION_ID
-              value: {{.Values.app.client.organizationId}}
+            - name: OPERATOR_ORGANIZATION_IDENTIFIER
+              value: {{.Values.app.operator.organizationIdentifier}}
