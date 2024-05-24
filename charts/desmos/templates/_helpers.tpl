@@ -60,3 +60,22 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Support for existing database secret 
+*/}}
+{{- define "desmos.secretName" -}}
+    {{- if .Values.db.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.db.existingSecret.name $) -}}
+    {{- else -}}
+        {{- printf "%s" (include "desmos.fullname" .) -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "desmos.passwordKey" -}}
+    {{- if .Values.db.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.db.existingSecret.key $) -}}
+    {{- else -}}
+        {{- printf "desmos-db-password" -}}
+    {{- end -}}
+{{- end -}}

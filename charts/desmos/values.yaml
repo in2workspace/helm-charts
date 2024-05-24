@@ -133,3 +133,10 @@ db:
   host: postgresql-connector
   password: postgres
   username: postgres
+  existingSecret:
+      # -- should an existing secret be used
+    enabled: false
+    # -- name of the secret
+    name: desmos-secret
+    # -- key to retrieve the password from
+    key: desmos-db-password

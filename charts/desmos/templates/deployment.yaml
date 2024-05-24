@@ -83,7 +83,10 @@ spec:
             - name: SPRING_R2DBC_USERNAME
               value: {{.Values.db.username}}
             - name: SPRING_R2DBC_PASSWORD
-              value: {{.Values.db.password}}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "desmos.secretName" . }}
+                  key: {{ include "desmos.passwordKey" . }}
             - name: SPRING_FLYWAY_URL
               value: "jdbc:postgresql://{{ .Values.db.host }}:5432/mktdb"
             - name: OPERATOR_ORGANIZATION_IDENTIFIER
