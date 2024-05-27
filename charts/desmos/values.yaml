@@ -131,8 +131,11 @@ app:
 
 db:
   host: postgresql-connector
-  password: postgres
+  port: 5432
+  externalService: false
+  name: mktdb
   username: postgres
+  password: postgres
   existingSecret:
       # -- should an existing secret be used
     enabled: false
