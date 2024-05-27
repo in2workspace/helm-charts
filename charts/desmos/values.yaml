@@ -130,8 +130,8 @@ app:
     entityTypes: catalog,product-offering,category,individual,organization,product,service-specification,product-offering-price,resource-specification,product-specification
 
 db:
-  host:
-  port:
+  host: postgresql-connector
+  port: 5432
   externalService: false
   name: mktdb
   username: postgres
