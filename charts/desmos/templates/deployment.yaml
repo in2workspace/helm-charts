@@ -79,7 +79,7 @@ spec:
             - name: LOGGING_LEVEL_ROOT
               value: {{.Values.app.logLevel}}
             - name: SPRING_R2DBC_URL
-              value: "r2dbc:postgresql://{{ .Values.db.host }}:5432/mktdb"
+              value: "r2dbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}"
             - name: SPRING_R2DBC_USERNAME
               value: {{.Values.db.username}}
             - name: SPRING_R2DBC_PASSWORD
@@ -88,7 +88,7 @@ spec:
                   name: {{ include "desmos.secretName" . }}
                   key: {{ include "desmos.passwordKey" . }}
             - name: SPRING_FLYWAY_URL
-              value: "jdbc:postgresql://{{ .Values.db.host }}:5432/mktdb"
+              value: "jdbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}"
             - name: OPERATOR_ORGANIZATION_IDENTIFIER
               value: {{.Values.app.operator.organizationIdentifier}}
             - name: BROKER_PROVIDER

@@ -130,9 +130,12 @@ app:
     entityTypes: catalog,product-offering,category,individual,organization,product,service-specification,product-offering-price,resource-specification,product-specification
 
 db:
-  host: postgresql-connector
-  password: postgres
+  host:
+  port:
+  externalService: false
+  name: mktdb
   username: postgres
+  password: postgres
   existingSecret:
       # -- should an existing secret be used
     enabled: false
