@@ -1,9 +1,8 @@
-name: Deploy Production
+name: Build Production
 
 on:
-  push:
-    branches:
-      - main
+  pull_request:
+    types: [ opened, synchronize, reopened ]
 
 jobs:
 
@@ -14,8 +13,25 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      - name: Create directory for Helm package and index
+        run: mkdir -p output/helm-charts
+
       - name: Package Helm Chart
-        run: helm package charts/desmos
+        run: helm package charts/desmos --destination output/helm-charts
 
       - name: Upload Helm Repository Index
-        run: helm repo index --url https://in2workspace.github.io/helm-charts .
+        run: helm repo index output/helm-charts --url https://in2workspace.github.io/helm-charts
+
+      - name: Configure Git
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+
+      - name: Commit and Push Helm package and index
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd output/helm-charts
+          git add .
+          git commit -m 'Add Helm package and index'
+          git push
