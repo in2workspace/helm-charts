@@ -39,5 +39,4 @@ jobs:
           cd temp/
           git add .
           git commit -m 'Add Helm package and index'
-          git push
           git push origin HEAD:${{ github.event.pull_request.head.ref }}
