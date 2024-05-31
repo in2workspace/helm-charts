@@ -41,4 +41,4 @@ jobs:
           git add .
           git commit -m 'Add Helm package and index'
           git push
-          git push origin ${{ github.head_ref }}
+          git push origin HEAD:${{ github.head_ref }}
