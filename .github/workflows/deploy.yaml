@@ -1,8 +1,11 @@
 name: Build Production
 
 on:
-  pull_request:
-    types: [ opened, synchronize, reopened ]
+  push:
+    branches:
+      - main
+#  pull_request:
+#    types: [ opened, synchronize, reopened ]
 
 jobs:
 
@@ -35,10 +38,9 @@ jobs:
       - name: Commit and Push Helm package and index
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_OUTPUT: ${{ steps.extract_branch.outputs.branch }}
         run: |
           cd temp/
           git add .
           git commit -m 'Add Helm package and index'
           git push
-          git push origin HEAD:${{ github.head_ref }}
+          git push origin HEAD:main
