@@ -13,6 +13,11 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        id: extract_branch
+
       - name: Create directory for Helm package and index
         run: mkdir -p output/helm-charts
 
@@ -30,8 +35,10 @@ jobs:
       - name: Commit and Push Helm package and index
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_OUTPUT: ${{ steps.extract_branch.outputs.branch }}
         run: |
           cd output/helm-charts
           git add .
           git commit -m 'Add Helm package and index'
           git push
+          git push origin HEAD:$GITHUB_OUTPUT
