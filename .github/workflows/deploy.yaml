@@ -18,5 +18,4 @@ jobs:
         run: helm package charts/desmos
 
       - name: Upload Helm Repository Index
-        uses: actions/checkout@v3
         run: helm repo index --url https://in2workspace.github.io/helm-charts .
