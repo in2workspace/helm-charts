@@ -1,46 +1,47 @@
-#name: Build Production
-#
-##on:
-##  push:
-##    branches:
-##      - main
-##  pull_request:
-##    types: [ opened, synchronize, reopened ]
-#
-#jobs:
-#
-#  package-helm:
-#    name: package-helm
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Checkout Repository
-#        uses: actions/checkout@v3
-#
-##      - name: Extract branch name
-##        shell: bash
-##        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
-##        id: extract_branch
-#
-#      - name: Create directory for Helm package and index
-#        run: mkdir -p temp
-#
-#      - name: Package Helm Chart
-#        run: helm package charts/desmos --destination temp/
-#
-#      - name: Upload Helm Repository Index
-#        run: helm repo index temp/ --url https://in2workspace.github.io/helm-charts
-#
-#      - name: Configure Git
-#        run: |
-#          git config --global user.name 'github-actions'
-#          git config --global user.email 'github-actions@github.com'
-#
-#      - name: Commit and Push Helm package and index
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        run: |
-#          cd temp/
-#          git add .
-#          git commit -m 'Add Helm package and index'
-##          git push
-#          git push origin HEAD:${{ github.head_ref }}
+name: Build Production
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [ opened, synchronize, reopened ]
+
+permissions:
+  contents: write
+
+jobs:
+
+  package-helm:
+    name: package-helm
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Package Helm Chart
+        run: helm package charts/desmos
+
+      - name: Upload Helm Repository Index
+        run: helm repo index . --url https://in2workspace.github.io/helm-charts
+
+      - name: Add Package and Index
+        run: |
+          git add *.tgz
+          git add index.yaml
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "$GITHUB_ACTOR"
+          git config --global user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+      - name: Commit Package and Index
+        run: |
+          git commit -m "add helm package and index"
+
+      - name: Push to Branch
+        run: |
+          git push origin ${{ github.head_ref }}
