@@ -110,7 +110,7 @@ tolerations: []
 affinity: {}
 
 app:
-  profile: dev
+  profile: test
   logLevel: DEBUG
   internalServerPort: 8080
   operator:
