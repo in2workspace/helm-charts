@@ -1,0 +1,13 @@
+apiVersion: v2
+name: issuer-keycloak-plugin
+description: A Helm chart for Kubernetes
+type: application
+version: 1.1.0
+appVersion: v1.1.0
+
+sources:
+  - https://github.com/in2workspace/issuer-keycloak-plugin
+
+maintainers:
+  - name: Oriol Canadés
+    email: oriol.canades@in2.es

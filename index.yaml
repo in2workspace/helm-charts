@@ -3,7 +3,7 @@ entries:
   desmos:
   - apiVersion: v2
     appVersion: v0.7.0
-    created: "2024-05-27T15:41:15.515588+02:00"
+    created: "2024-06-03T15:10:58.4384659+02:00"
     description: A Helm chart for Kubernetes
     digest: 7c13d01cf5bce03e3d5dbe17a7f6bdf7e545a86c9fec0344dbd6549ea5543c2c
     maintainers:
@@ -16,10 +16,58 @@ entries:
     urls:
     - https://in2workspace.github.io/helm-charts/desmos-0.7.0.tgz
     version: 0.7.0
+  issuer-api:
+  - apiVersion: v2
+    appVersion: v0.7.0
+    created: "2024-06-03T15:10:58.4389937+02:00"
+    description: A Helm chart for Kubernetes
+    digest: 04f5199cb388846d0648a191b6ff67cf7a647414fb618000e4d4f561136c0c86
+    maintainers:
+    - email: oriol.canades@in2.es
+      name: Oriol Canadés
+    name: issuer-api
+    sources:
+    - https://github.com/in2workspace/issuer-api
+    type: application
+    urls:
+    - https://in2workspace.github.io/helm-charts/issuer-api-0.7.0.tgz
+    version: 0.7.0
+  issuer-keycloak-plugin:
+  - apiVersion: v2
+    appVersion: v1.1.0
+    created: "2024-06-03T15:10:58.4400417+02:00"
+    description: A Helm chart for Kubernetes
+    digest: 28b247d0400a944995400efb6ef2f9004b710682902d79392384cac42e61d705
+    maintainers:
+    - email: oriol.canades@in2.es
+      name: Oriol Canadés
+    name: issuer-keycloak-plugin
+    sources:
+    - https://github.com/in2workspace/issuer-keycloak-plugin
+    type: application
+    urls:
+    - https://in2workspace.github.io/helm-charts/issuer-keycloak-plugin-1.1.0.tgz
+    version: 1.1.0
+  issuer-ui:
+  - apiVersion: v2
+    appVersion: v0.6.0
+    created: "2024-06-03T15:10:58.4405595+02:00"
+    description: A Helm chart for Kubernetes
+    digest: e2ed6a585766da6bea51dcce742f69d8ac2ed364ff2e0496258ade285675b85c
+    maintainers:
+    - email: oriol.canades@in2.es
+      name: Oriol Canadés
+    name: issuer-ui
+    sources:
+    - https://github.com/in2workspace/issuer-ui
+    type: application
+    urls:
+    - https://in2workspace.github.io/helm-charts/issuer-ui-0.6.0.tgz
+    version: 0.6.0
   wallet-driving-application:
   - apiVersion: v2
     appVersion: v1.0.0
-    created: "2024-05-27T15:41:15.5171945+02:00"
+    created: "2024-06-03T15:10:58.4527819+02:00"
     description: A Helm chart for Kubernetes
     digest: 0b1a7ab828c55ac23374f433da4dc76bff007d1a7b9ec39b26f4b86e4e31fdd3
     maintainers:
@@ -35,7 +83,7 @@ entries:
   wallet-server:
   - apiVersion: v2
     appVersion: v1.0.0
-    created: "2024-05-27T15:41:15.5184799+02:00"
+    created: "2024-06-03T15:10:58.4624202+02:00"
     description: A Helm chart for Kubernetes
     digest: b22dfbd82a9672ba6daabc09fe540b908d9279f5a43fcb79d4a0f6ef383285fa
     maintainers:
@@ -48,4 +96,4 @@ entries:
     urls:
     - https://in2workspace.github.io/helm-charts/wallet-server-0.1.0.tgz
     version: 0.1.0
-generated: "2024-05-27T15:41:15.5145214+02:00"
+generated: "2024-06-03T15:10:58.4247815+02:00"
