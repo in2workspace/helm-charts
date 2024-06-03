@@ -5,10 +5,10 @@ entries:
     appVersion: v0.7.0
     created: "2024-06-03T15:10:58.4384659+02:00"
     description: A Helm chart for Kubernetes
-    digest: 7c13d01cf5bce03e3d5dbe17a7f6bdf7e545a86c9fec0344dbd6549ea5543c2c
+    digest: 8172ecbbfe4522b8448ca647ff71f05fcf835cf09b3d21012041f9512149f7d5
     maintainers:
-    - email: oriol.canades@in2.es
-      name: Oriol Canadés
+    - email: domesupport@in2.es
+      name: IN2 Team
     name: desmos
     sources:
     - https://github.com/in2workspace/desmos

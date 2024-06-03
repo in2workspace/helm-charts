@@ -112,6 +112,7 @@ affinity: {}
 app:
   profile: dev
   logLevel: DEBUG
+  internalServerPort: 8080
   operator:
     organizationIdentifier: VATES-S9999999E
   broker:
@@ -119,14 +120,14 @@ app:
     internalDomain: http://scorpio:9090
     externalDomain: http://scorpio:9090
   ngsiSubscription:
-    notificationEndpoint: http://desmos:8080/notifications/broker
+    notificationEndpoint: /api/v1/notifications/broker
     entityTypes: catalog,product-offering,category,individual,organization,product,service-specification,product-offering-price,resource-specification,product-specification
   dltAdapter:
     provider: digitelts
     internalDomain: http://dlt-adapter:8080
     externalDomain: http://dlt-adapter:8080
   txSubscription:
-    notificationEndpoint: http://desmos:8080/notifications/dlt
+    notificationEndpoint: /api/v1/notifications/dlt
     entityTypes: catalog,product-offering,category,individual,organization,product,service-specification,product-offering-price,resource-specification,product-specification
 
 db:
