@@ -92,7 +92,7 @@ spec:
             - name: SPRING_FLYWAY_URL
               value: "jdbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}"
             - name: OPERATOR_ORGANIZATION_IDENTIFIER
-              value: "http://{{.Chart.Name}}:{{.Values.app.internalServerPort}}{{.Values.app.operator.organizationIdentifier}}"
+              value: {{.Values.app.operator.organizationIdentifier}}
             - name: BROKER_PROVIDER
               value: {{.Values.app.broker.provider}}
             - name: BROKER_EXTERNAL_DOMAIN
@@ -100,7 +100,7 @@ spec:
             - name: BROKER_INTERNAL_DOMAIN
               value: {{.Values.app.broker.internalDomain}}
             - name: NGSI_SUBSCRIPTION_NOTIFICATION_ENDPOINT
-              value: {{.Values.app.ngsiSubscription.notificationEndpoint}}
+              value: "http://{{.Chart.Name}}:{{.Values.app.internalServerPort}}{{.Values.app.ngsiSubscription.notificationEndpoint}}"
             - name: NGSI_SUBSCRIPTION_ENTITY_TYPES
               value: {{.Values.app.ngsiSubscription.entityTypes}}
             - name: DLT_ADAPTER_PROVIDER
