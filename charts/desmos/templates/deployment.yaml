@@ -79,7 +79,7 @@ spec:
             - name: LOGGING_LEVEL_ROOT
               value: {{.Values.app.logLevel}}
             - name: SERVER_PORT
-              value: {{.Values.app.internalServerPort}}
+              value: {{ quote .Values.app.internalServerPort}}
             - name: SPRING_R2DBC_URL
               value: "r2dbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}"
             - name: SPRING_R2DBC_USERNAME
