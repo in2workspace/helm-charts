@@ -8,7 +8,7 @@ image:
   repository: in2workspace/issuer-keycloak-plugin
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "v1.1.0-SNAPSHOT"
+  tag: v1.1.0-SNAPSHOT
 
 imagePullSecrets: []
 nameOverride: ""

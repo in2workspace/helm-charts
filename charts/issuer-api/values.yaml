@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   repository: in2workspace/issuer-api
   # Overrides the image tag whose default is the chart appVersion.
-  tag: v0.7.0
+  tag: v0.7.0-SNAPSHOT
   pullPolicy: Always
 
 imagePullSecrets: []
