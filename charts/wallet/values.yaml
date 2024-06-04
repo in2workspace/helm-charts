@@ -63,8 +63,8 @@ wallet-identity-provider:
     annotations:
       kubernetes.io/ingress.class: public
 
-## Wallet Driving Application (WDA) configuration - see https://github.com/in2workspace/helm-charts/tree/main/charts/wallet-driving-application
-wallet-driving-application:
+## Wallet UI configuration - see https://github.com/in2workspace/helm-charts/tree/main/charts/wallet-ui
+wallet-ui:
   # -- should be enabled?
   enabled: true
   ## @param appVersion App Version
@@ -73,7 +73,7 @@ wallet-driving-application:
     ## @param service.type Type of service
     type: ClusterIP
     ## @param service.port Port to service
-    port: 4200
+    port: 4202
 
   ## @section App parameters
   ## Wallet Driving Application (WDA) Application parameters
@@ -81,7 +81,7 @@ wallet-driving-application:
     ## @section Wallet Server API parameters
     server:
       ## @param app.server.url Url to Server
-      url: http://wallet-server:8080
+      url: http://wallet-api:8080
     ## @section Identity & Access Manager parameters
     iam:
       ## @param app.iam.url Url to the Identity Provider
@@ -106,22 +106,22 @@ wallet-driving-application:
     ## @section Identity & Access Manager Websocket parameters
     websocket:
       ## @param app.websocket.url WebSocket URL to Server
-      url: ws://wallet-server:8080
+      url: ws://wallet-api:8080
       ## @param app.websocket.uri URI for WebSocket
-      uri: /api/v2/pin
+      uri: /api/v1/pin
 
-## Wallet Server configuration - see https://github.com/in2workspace/helm-charts/tree/main/charts/wallet-server
-wallet-server:
+## Wallet Server configuration - see https://github.com/in2workspace/helm-charts/tree/main/charts/wallet-api
+wallet-api:
   # -- should be enabled?
   enabled: true
   ## @param appVersion App Version
-  appVersion: "v1.0.0"
+  appVersion: "v1.2.0"
 
   image:
-    repository: in2kizuna/wallet-server
+    repository: in2workspace/wallet-api
     pullPolicy: Always
     # Overrides the image tag whose default is the chart appVersion.
-    tag: "v1.0.0"
+    tag: "v1.2.0"
 
   imagePullSecrets: []
   nameOverride: ""
@@ -215,7 +215,7 @@ wallet-server:
     - name: LOGGING_LEVEL_ES_IN2_WALLET_SERVER
       value: "DEBUG"
     - name: OPENAPI_SERVER_URL
-      value: "https://wallet-server:8080"
+      value: "https://wallet-api:8080"
     - name: OPENAPI_SERVER_DESCRIPTION
       value: "Wallet Server"
     - name: OPENAPI_INFO_TITLE
@@ -237,7 +237,7 @@ wallet-server:
     - name: OPENAPI_INFO_CONTACT_EMAIL
       value: "contacto@in2.es"
     - name: WALLET_WDA_URL
-      value: "http://wallet-driving-application:4200"
+      value: "http://wallet-ui:4202"
     - name: AUTH_SERVER_DOMAIN
       value: "https://issuerkeycloak.demo.in2.es/realms/EAAProvider"
     - name: AUTH_SERVER_TOKEN_ENDPOINT

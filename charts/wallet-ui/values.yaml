@@ -1,0 +1,43 @@
+# Default values for wallet-ui.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: in2workspace/wallet-ui
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "v1.2.0"
+
+podAnnotations: {}
+podLabels: {}
+
+service:
+  type: ClusterIP
+  port: 4202
+
+resources: {}
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+
+app:
+  walletApi:
+    internalDomain: https://<the dns domain>
+    websocketExternalDomain: wss://<the dns domain>
+    websocketPath: /api/v1/pin
+    executeContentPath: /api/v1/execute-content
+    requestCredentialPath: /api/v1/request-credential
+    verifiablePresentationPath: /api/v1/vp
+    credentialsPath: /api/v1/credentials
+    credentialsByIdPath: /api/v1/credentials?credentialId=
+    requestSignedCredentialPath: /api/v1/request-signed-credential
+    cborPath: /api/v1/vp/cbor
+  iam:
+    external_domain: https://<the domain>
+    realm_path: /realms/wallet

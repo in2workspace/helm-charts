@@ -1,14 +1,14 @@
-# Default values for wallet-server.
+# Default values for wallet-api.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
 
 image:
-  repository: in2kizuna/wallet-server
+  repository: in2workspace/wallet-api
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "v1.0.0"
+  tag: "v1.2.0"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -43,7 +43,7 @@ securityContext:
 
 service:
   type: ClusterIP
-  port: 8080
+  port: 8082
 
 ingress:
   enabled: false
@@ -116,66 +116,40 @@ tolerations: []
 
 affinity: {}
 
-env:
-  - name: LOGGING_LEVEL_ES_IN2_WALLET_SERVER
-    value: "DEBUG"
-  - name: OPENAPI_SERVER_URL
-    value: "https://localhost:8080"
-  - name: OPENAPI_SERVER_DESCRIPTION
-    value: "Wallet Server"
-  - name: OPENAPI_INFO_TITLE
-    value: "Wallet Server"
-  - name: OPENAPI_INFO_DESCRIPTION
-    value: "Wallet Server Component"
-  - name: OPENAPI_INFO_VERSION
-    value: "1.0.0"
-  - name: OPENAPI_INFO_TERMS_OF_SERVICE
-    value: "https://example.com/terms"
-  - name: OPENAPI_INFO_LICENSE_NAME
-    value: "Apache 2.0"
-  - name: OPENAPI_INFO_LICENSE_URL
-    value: "https://www.apache.org/licenses/LICENSE-2.0.html"
-  - name: OPENAPI_INFO_CONTACT_NAME
-    value: "IN2, Ingeniería de la Información"
-  - name: OPENAPI_INFO_CONTACT_URL
-    value: "https://in2.es"
-  - name: OPENAPI_INFO_CONTACT_EMAIL
-    value: "contacto@in2.es"
-  - name: WALLET_WDA_URL
-    value: "http://localhost:4200"
-  - name: AUTH_SERVER_DOMAIN
-    value: "https://issuerkeycloak.demo.in2.es/realms/EAAProvider"
-  - name: AUTH_SERVER_TOKEN_ENDPOINT
-    value: "https://issuerkeycloak.demo.in2.es/realms/EAAProvider/verifiable-credential/did:key:z6MkqmaCT2JqdUtLeKah7tEVfNXtDXtQyj4yxEgV11Y5CqUa/token"
-  - name: IDENTITY_PROVIDER_URL
-    value: "http://wallet-identity-provider:9099/realms/wallet/protocol/openid-connect/token"
-  - name: IDENTITY_PROVIDER_CLIENT_SECRET
-    value: "fV51P8jFBo8VnFKMMuP3imw3H3i5mNck"
-  - name: IDENTITY_PROVIDER_CLIENT_ID
-    value: "user-registry-client"
-  - name: IDENTITY_PROVIDER_USERNAME
-    value: "adminWallet"
-  - name: IDENTITY_PROVIDER_PASSWORD
-    value: "adminPass"
-  - name: BROKER_PROVIDER
-    value: "scorpio"
-  - name: BROKER_EXTERNALDOMAIN
-    value: "http://scorpio:9090"
-  - name: BROKER_INTERNALDOMAIN
-    value: "http://scorpiot:9090"
-  - name: BROKER_PATHS_ENTITIES
-    value: "/ngsi-ld/v1/entities"
-  - name: VAULT_PROVIDER_NAME
-    value: "hashicorp"
-  - name: SPRING_CLOUD_VAULT_AUTHENTICATION
-    value: "token"
-  - name: SPRING_CLOUD_VAULT_TOKEN
-    value: ""
-  - name: SPRING_CLOUD_VAULT_HOST
-    value: "vault"
-  - name: SPRING_CLOUD_VAULT_SCHEME
-    value: "http"
-  - name: SPRING_CLOUD_VAULT_PORT
-    value: "8201"
-  - name: SPRING_CLOUD_VAULT_KV_ENABLED
-    value: "true"
+app:
+  logLevel: DEBUG
+  walletUi:
+    schema: https
+    domain: <The dns domain>
+  authServer:
+    external:
+      schema: https
+      domain: <The dns domain>
+      path: /realms/wallet
+    internal:
+      schema: http
+      domain: wallet-keycloak
+      port: 8080
+      path: /realms/wallet
+    jwtDecoderPath: /protocol/openid-connect/certs
+  ebsiTest:
+    url: http://wallet-keycloak:8080/realms/wallet/protocol/openid-connect/token
+    client:
+      id: user-registry-client
+      secret: <the secret>
+    username:
+      name: admin
+      password: <the password>
+  vault:
+    provider: hashicorp
+    host: vault
+    schema: http
+    port: 8200
+    token: token
+  broker:
+    provider: scorpio
+    external:
+      schema: http
+      domain: scorpio
+      port: 9090
+    pathsEntities: /ngsi-ld/v1/entities

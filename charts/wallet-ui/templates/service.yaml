@@ -1,19 +1,19 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "wallet-server.fullname" . }}
+  name: {{ include "wallet-ui.fullname" . }}
   namespace: {{ $.Release.Namespace | quote }}
   annotations:
     kompose.cmd: kompose convert -c
     kompose.version: 1.32.0 (765fde254)
   labels:
-    {{- include "wallet-server.labels" . | nindent 4 }}
+    {{- include "wallet-ui.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
+    - port: { { .Values.service.port } }
+      targetPort: 8080
       protocol: TCP
       name: http
   selector:
-    {{- include "wallet-server.selectorLabels" . | nindent 4 }}
+    {{- include "wallet-ui.selectorLabels" . | nindent 4 }}

@@ -16,7 +16,7 @@ entries:
     urls:
     - https://in2workspace.github.io/helm-charts/desmos-0.7.0.tgz
     version: 0.7.0
-  wallet-driving-application:
+  wallet-ui:
   - apiVersion: v2
     appVersion: v1.0.0
     created: "2024-05-27T15:41:15.5171945+02:00"
@@ -25,14 +25,14 @@ entries:
     maintainers:
     - email: carlos.villarroel@in2.es
       name: Carlos Villarroel
-    name: wallet-driving-application
+    name: wallet-ui
     sources:
-    - https://github.com/in2workspace/wallet-driving-application
+    - https://github.com/in2workspace/wallet-ui
     type: application
     urls:
-    - https://in2workspace.github.io/helm-charts/wallet-driving-application-0.3.0.tgz
-    version: 0.3.0
-  wallet-server:
+    - https://in2workspace.github.io/helm-charts/wallet-ui-0.4.0.tgz
+    version: 0.4.0
+  wallet-api:
   - apiVersion: v2
     appVersion: v1.0.0
     created: "2024-05-27T15:41:15.5184799+02:00"
@@ -41,11 +41,11 @@ entries:
     maintainers:
     - email: carlos.villarroel@in2.es
       name: Carlos Villarroel
-    name: wallet-server
+    name: wallet-api
     sources:
-    - https://github.com/in2workspace/wallet-server
+    - https://github.com/in2workspace/wallet-api
     type: application
     urls:
-    - https://in2workspace.github.io/helm-charts/wallet-server-0.1.0.tgz
-    version: 0.1.0
+    - https://in2workspace.github.io/helm-charts/wallet-api-0.2.0.tgz
+    version: 0.2.0
 generated: "2024-05-27T15:41:15.5145214+02:00"

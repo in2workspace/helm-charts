@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "wallet-driving-application.name" -}}
+{{- define "wallet-keycloak.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "wallet-driving-application.fullname" -}}
+{{- define "wallet-keycloak.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,16 +26,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "wallet-driving-application.chart" -}}
+{{- define "wallet-keycloak.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "wallet-driving-application.labels" -}}
-helm.sh/chart: {{ include "wallet-driving-application.chart" . }}
-{{ include "wallet-driving-application.selectorLabels" . }}
+{{- define "wallet-keycloak.labels" -}}
+helm.sh/chart: {{ include "wallet-keycloak.chart" . }}
+{{ include "wallet-keycloak.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -45,18 +45,45 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "wallet-driving-application.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "wallet-driving-application.name" . }}
+{{- define "wallet-keycloak.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "wallet-keycloak.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "wallet-driving-application.serviceAccountName" -}}
+{{- define "wallet-keycloak.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "wallet-driving-application.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "wallet-keycloak.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Support for existing database secret 
+*/}}
+{{- define "wallet-keycloak.secretName" -}}
+    {{- if .Values.db.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.db.existingSecret.name $) -}}
+    {{- else -}}
+        {{- printf "%s" (include "wallet-keycloak.fullname" .) -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "wallet-keycloak.db-passwordKey" -}}
+    {{- if .Values.db.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.db.existingSecret.key $) -}}
+    {{- else -}}
+        {{- printf "keycloak-db-password" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "wallet-keycloak.passwordKey" -}}
+    {{- if .Values.app.keycloak.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.keycloak.existingSecret.key $) -}}
+    {{- else -}}
+        {{- printf "keycloak-password" -}}
+    {{- end -}}
+{{- end -}}

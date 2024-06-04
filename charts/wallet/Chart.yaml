@@ -15,7 +15,7 @@ type: application
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.1.0
+version: 0.2.0
 
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application. Versions are not expected to
@@ -29,14 +29,14 @@ dependencies:
     condition: wallet-identity-provider.enabled
     repository: oci://registry-1.docker.io/bitnamicharts
     version: 19.3.0
-  - name: wallet-driving-application
-    condition: wallet-driving-application.enabled
+  - name: wallet-ui
+    condition: wallet-ui.enabled
     repository: https://in2workspace.github.io/helm-charts
-    version: 0.3.0
-  - name: wallet-server
-    condition: wallet-server.enabled
+    version: 0.4.0
+  - name: wallet-api
+    condition: wallet-api.enabled
     repository: https://in2workspace.github.io/helm-charts
-    version: 0.1.0
+    version: 0.2.0
   - name: vault
     condition: vault.enabled
     repository: oci://registry-1.docker.io/bitnamicharts
