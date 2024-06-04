@@ -59,7 +59,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "wallet-keycloak.keycloakSecretName" . }}
-                  key: {{ include "wallet-keycloak.passwordKey" . }}
+                  key: {{ include "wallet-keycloak.keycloak-passwordKey" . }}
             - name: KC_DB_USERNAME
               value: {{.Values.db.name}}
             - name: KC_DB_PASSWORD

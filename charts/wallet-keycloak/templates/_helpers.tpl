@@ -81,14 +81,14 @@ Support for existing database secret
 {{- end -}}
 
 {{- define "wallet-keycloak.keycloakSecretName" -}}
-    {{- if .Values.app.existingSecret.enabled -}}
+    {{- if .Values.app.keycloak.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.db.existingSecret.name $) -}}
     {{- else -}}
         {{- printf "%s" (include "wallet-keycloak.fullname" .) -}}
     {{- end -}}
 {{- end -}}
 
-{{- define "wallet-keycloak.passwordKey" -}}
+{{- define "wallet-keycloak.keycloak-passwordKey" -}}
     {{- if .Values.app.keycloak.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.keycloak.existingSecret.key $) -}}
     {{- else -}}
