@@ -19,10 +19,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "issuer-api.labels" . | nindent 8 }}
-        {{- with .Values.podLabels }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
+        {{- include "issuer-api.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -35,16 +32,26 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ .Values.service.port }}
+              containerPort: {{ .Values.app.internalServerPort }}
               protocol: TCP
           livenessProbe:
-            {{- toYaml .Values.livenessProbe | nindent 12 }}
+            httpGet:
+              path: {{ .Values.livenessProbe.path }}
+              port: {{ .Values.app.internalServerPort }}
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
           readinessProbe:
-            {{- toYaml .Values.readinessProbe | nindent 12 }}
+            httpGet:
+              path: {{ .Values.readinessProbe.path }}
+              port: {{ .Values.app.internalServerPort }}
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: {{ .Values.app.profile }}
@@ -57,14 +64,14 @@ spec:
             - name: SPRING_R2DBC_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "issuer-api.secretName.db" . }}
-                  key: {{ include "issuer-api.passwordKey.db" . }}
+                  name: {{ include "issuer-api.secretName" . }}
+                  key: {{ include "issuer-api.passwordKey" . }}
             - name: SPRING_FLYWAY_URL
               value: jdbc:postgresql://{{ .Values.db.host }}:{{ .Values.db.port }}/{{ .Values.db.name }}
             - name: SPRING_MAIL_HOST
               value: {{ .Values.app.mail.host }}
             - name: SPRING_MAIL_PORT
-              value: {{ .Values.app.mail.port }}
+              value: "{{ .Values.app.mail.port }}" # Convert to string
             - name: API_EXTERNAL_DOMAIN
               value: {{ .Values.app.api.externalDomain }}
             - name: API_INTERNAL_DOMAIN
@@ -72,9 +79,9 @@ spec:
             - name: API_CONFIG_SOURCE
               value: {{ .Values.app.api.configSource }}
             - name: API_CACHE_LIFETIME_CREDENTIAL_OFFER
-              value: {{ .Values.app.api.cacheLifetimeCredentialOffer }}
+              value: "{{ .Values.app.api.cacheLifetimeCredentialOffer }}" # Convert to string
             - name: API_CACHE_LIFETIME_VERIFIABLE_CREDENTIAL
-              value: {{ .Values.app.api.cacheLifetimeVerifiableCredential }}
+              value: "{{ .Values.app.api.cacheLifetimeVerifiableCredential }}" # Convert to string
             - name: AUTH_SERVER_PROVIDER
               value: {{ .Values.app.authServer.provider }}
             - name: AUTH_SERVER_EXTERNAL_DOMAIN
@@ -103,26 +110,3 @@ spec:
               value: {{ .Values.app.ui.externalDomain }}
             - name: ISSUER_UI_INTERNAL_DOMAIN
               value: {{ .Values.app.ui.internalDomain }}
-
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-          {{- with .Values.volumeMounts }}
-          volumeMounts:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-      {{- with .Values.volumes }}
-      volumes:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}

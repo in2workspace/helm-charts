@@ -64,7 +64,7 @@ Create the name of the service account to use
 {{/*
 Support for existing database secret 
 */}}
-{{- define "issuer-api.secretName.db" -}}
+{{- define "issuer-api.secretName" -}}
     {{- if .Values.db.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.db.existingSecret.name $) -}}
     {{- else -}}
@@ -72,9 +72,9 @@ Support for existing database secret
     {{- end -}}
 {{- end -}}
 
-{{- define "issuer-api.passwordKey.db" -}}
+{{- define "issuer-api.passwordKey" -}}
     {{- if .Values.db.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.db.existingSecret.passwordKey $) -}}
+        {{- printf "%s" (tpl .Values.db.existingSecret.key $) -}}
     {{- else -}}
         {{- printf "db-password" -}}
     {{- end -}}

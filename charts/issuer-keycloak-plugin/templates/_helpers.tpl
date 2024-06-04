@@ -68,7 +68,7 @@ Support for existing keycloak admin secret
     {{- if .Values.keycloak.admin.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.keycloak.admin.existingSecret.name $) -}}
     {{- else -}}
-        {{- printf "%s" (include "issuer-api.fullname" .) -}}
+        {{- printf "%s" (include "issuer-keycloak-plugin.fullname" .) -}}
     {{- end -}}
 {{- end -}}
 
@@ -87,7 +87,7 @@ Support for existing keycloak https secret
     {{- if .Values.keycloak.https.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.keycloak.https.existingSecret.name $) -}}
     {{- else -}}
-        {{- printf "%s" (include "issuer-api.fullname" .) -}}
+        {{- printf "%s" (include "issuer-keycloak-plugin.fullname" .) -}}
     {{- end -}}
 {{- end -}}
 
@@ -95,7 +95,7 @@ Support for existing keycloak https secret
     {{- if .Values.keycloak.https.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.keycloak.https.existingSecret.trustStorePasswordKey $) -}}
     {{- else -}}
-        {{- printf "keycloak-truststore-password" -}}
+        {{- printf "keycloak-trust-store-password" -}}
     {{- end -}}
 {{- end -}}
 
@@ -106,7 +106,7 @@ Support for existing keycloak db secret
     {{- if .Values.keycloak.db.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.keycloak.db.existingSecret.name $) -}}
     {{- else -}}
-        {{- printf "%s" (include "issuer-api.fullname" .) -}}
+        {{- printf "%s" (include "issuer-keycloak-plugin.fullname" .) -}}
     {{- end -}}
 {{- end -}}
 

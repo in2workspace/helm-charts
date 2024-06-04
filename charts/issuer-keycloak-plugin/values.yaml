@@ -113,10 +113,14 @@ tolerations: []
 
 affinity: {}
 
+app:
+  internalServerPort: 8080
+
 # Keycloak Configuration
 keycloak:
   admin:
     username: admin
+    password: admin
     existingSecret:
       enabled: false
       name: keycloak-secrets
@@ -128,6 +132,7 @@ keycloak:
     certificateKeyFile: /opt/keycloak/conf/server.key.pem
     certificateFile: /opt/keycloak/conf/server.crt.pem
     trustStoreFile: /opt/keycloak/conf/truststore.jks
+    trustStorePassword: pempas
     existingSecret:
       enabled: false
       name: keycloak-secrets
@@ -136,9 +141,9 @@ keycloak:
   db:
     type: postgres
     username: postgres
-    password: postgres
     url: jdbc:postgresql://issuer-keycloak-postgres/cred
     port: 5432
+    password: postgres
     existingSecret:
       enabled: false
       name: keycloak-secrets

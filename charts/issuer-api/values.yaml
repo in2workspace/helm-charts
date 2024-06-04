@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   repository: in2workspace/issuer-api
   # Overrides the image tag whose default is the chart appVersion.
-  tag: v0.7.0-SNAPSHOT
+  tag: v0.8.0-SNAPSHOT
   pullPolicy: Always
 
 imagePullSecrets: []
@@ -38,7 +38,7 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 8080
+  port: 80
 
 readinessProbe:
   path: /health
@@ -110,6 +110,7 @@ affinity: {}
 app:
   profile: default
   logLevel: DEBUG
+  internalServerPort: 8080
   mail:
     host: host.docker.internal
     port: 1025
@@ -126,6 +127,9 @@ app:
     realm: CredentialIssuer
     client:
       clientId: oidc4vci-wallet-client
+      clientSecret: oidc4vci-wallet-client-secret
+      username: user
+      password: user
       existingSecret:
         enabled: false
         name: issuer-api-secrets
@@ -142,9 +146,10 @@ db:
   port: 5432
   name: issuer
   username: postgres
+  password: password
   existingSecret:
     enabled: false
     name: issuer-api-secrets
-    passwordKey: dbPassword
+    key: db-password
 
   

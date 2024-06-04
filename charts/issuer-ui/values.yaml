@@ -113,3 +113,6 @@ tolerations: []
 
 affinity: {}
 
+app:
+  internalServerPort: 8080
+

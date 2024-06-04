@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "issuer-keycloak-plugin.fullname" . }}
+  namespace: {{ $.Release.Namespace | quote }}
   labels:
     {{- include "issuer-keycloak-plugin.labels" . | nindent 4 }}
 spec:
@@ -18,10 +19,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "issuer-keycloak-plugin.labels" . | nindent 8 }}
-        {{- with .Values.podLabels }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
+        {{- include "issuer-keycloak-plugin.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -34,17 +32,26 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ .Values.service.port }}
+              containerPort: {{ .Values.app.internalServerPort }}
               protocol: TCP
           livenessProbe:
-            {{- toYaml .Values.livenessProbe | nindent 12 }}
+            httpGet:
+              path: {{ .Values.livenessProbe.path }}
+              port: {{ .Values.app.internalServerPort }}
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
           readinessProbe:
-            {{- toYaml .Values.readinessProbe | nindent 12 }}
-
+            httpGet:
+              path: {{ .Values.readinessProbe.path }}
+              port: {{ .Values.app.internalServerPort }}
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           env:
             - name: KEYCLOAK_ADMIN
               value: {{ .Values.keycloak.admin.username }}
@@ -82,40 +89,18 @@ spec:
             - name: KC_DB_URL
               value: {{ .Values.keycloak.db.url }}
             - name: DB_PORT
-              value: {{ .Values.keycloak.db.port }}
+              value: "{{ .Values.keycloak.db.port }}"
             - name: ISSUER_API_URL
               value: {{ .Values.issuerApi.url }}
             - name: ISSUER_API_EXTERNAL_URL
               value: {{ .Values.issuerApi.externalUrl }}
             - name: PRE_AUTH_LIFESPAN
-              value: {{ .Values.preAuth.lifespan }}
+              value: "{{ .Values.preAuth.lifespan }}"
             - name: PRE_AUTH_LIFESPAN_TIME_UNIT
               value: {{ .Values.preAuth.lifespanTimeUnit }}
             - name: TX_CODE_SIZE
-              value: {{ .Values.txCode.size }}
+              value: "{{ .Values.txCode.size }}"
             - name: TX_CODE_DESCRIPTION
               value: {{ .Values.txCode.description }}
             - name: TOKEN_EXPIRATION
-              value: {{ .Values.token.expiration }}
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-          {{- with .Values.volumeMounts }}
-          volumeMounts:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-      {{- with .Values.volumes }}
-      volumes:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+              value: "{{ .Values.token.expiration }}"
