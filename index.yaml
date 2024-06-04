@@ -3,9 +3,9 @@ entries:
   desmos:
   - apiVersion: v2
     appVersion: v0.7.0
-    created: "2024-06-04T06:14:06.386811054Z"
+    created: "2024-06-04T06:17:17.938412824Z"
     description: A Helm chart for Kubernetes
-    digest: 1b5fc4e51109915ebe53c80889b94d3ea986753965e91b2b39e8c7349cb76567
+    digest: 6b2ff77bc1370a6c6e7db6f266d9571979e0765c2b8c9d7300dd96c8809917bc
     maintainers:
     - email: domesupport@in2.es
       name: IN2 Team
@@ -19,12 +19,12 @@ entries:
   issuer-api:
   - apiVersion: v2
     appVersion: v0.7.0
-    created: "2024-06-04T06:14:06.387274701Z"
+    created: "2024-06-04T06:17:17.938849082Z"
     description: A Helm chart for Kubernetes
-    digest: 999dce69680fcdeeee66e39a2ca936feca61b3793317dab3877565fbddd707e1
+    digest: 852121020fe5499365b5c53360b44d2a36fe9bd5849af66382e52526f16fba61
     maintainers:
-    - email: oriol.canades@in2.es
-      name: Oriol Canadés
+    - email: domesupport@in2.es
+      name: IN2 Team
     name: issuer-api
     sources:
     - https://github.com/in2workspace/issuer-api
@@ -35,12 +35,12 @@ entries:
   issuer-keycloak-plugin:
   - apiVersion: v2
     appVersion: v1.1.0
-    created: "2024-06-04T06:14:06.387765098Z"
+    created: "2024-06-04T06:17:17.939496816Z"
     description: A Helm chart for Kubernetes
-    digest: 0f74cbf11f6081b037ebf93cda7b693bd997ff5ec1eb5a8169bceddc75a1c03a
+    digest: 29e62fa9c8ad509572b588c24c6fdb6a675bd53775c3ea9e9fddead9099d60ab
     maintainers:
-    - email: oriol.canades@in2.es
-      name: Oriol Canadés
+    - email: domesupport@in2.es
+      name: IN2 Team
     name: issuer-keycloak-plugin
     sources:
     - https://github.com/in2workspace/issuer-keycloak-plugin
@@ -51,12 +51,12 @@ entries:
   issuer-ui:
   - apiVersion: v2
     appVersion: v0.6.0
-    created: "2024-06-04T06:14:06.388121815Z"
+    created: "2024-06-04T06:17:17.939821395Z"
     description: A Helm chart for Kubernetes
-    digest: 91cc7ad8ed000c3ab5cad857eaa5a241cec22cad3d09f12f27320586941dd02e
+    digest: db3e8b709ae63d8953a8f3c51f9a05aa850e4b1427ef5e9c08e71d2c09b429e4
     maintainers:
-    - email: oriol.canades@in2.es
-      name: Oriol Canadés
+    - email: domesupport@in2.es
+      name: IN2 Team
     name: issuer-ui
     sources:
     - https://github.com/in2workspace/issuer-ui
@@ -67,7 +67,7 @@ entries:
   wallet-driving-application:
   - apiVersion: v2
     appVersion: v1.0.0
-    created: "2024-06-04T06:14:06.388380608Z"
+    created: "2024-06-04T06:17:17.940103584Z"
     description: A Helm chart for Kubernetes
     digest: 0b1a7ab828c55ac23374f433da4dc76bff007d1a7b9ec39b26f4b86e4e31fdd3
     maintainers:
@@ -83,7 +83,7 @@ entries:
   wallet-server:
   - apiVersion: v2
     appVersion: v1.0.0
-    created: "2024-06-04T06:14:06.388920628Z"
+    created: "2024-06-04T06:17:17.948630473Z"
     description: A Helm chart for Kubernetes
     digest: b22dfbd82a9672ba6daabc09fe540b908d9279f5a43fcb79d4a0f6ef383285fa
     maintainers:
@@ -96,4 +96,4 @@ entries:
     urls:
     - https://in2workspace.github.io/helm-charts/wallet-server-0.1.0.tgz
     version: 0.1.0
-generated: "2024-06-04T06:14:06.386192618Z"
+generated: "2024-06-04T06:17:17.937785699Z"
