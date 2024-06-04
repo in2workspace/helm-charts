@@ -3,12 +3,8 @@ kind: Deployment
 metadata:
   name: {{ include "wallet-ui.fullname" . }}
   namespace: {{ $.Release.Namespace | quote }}
-  annotations:
-    kompose.cmd: kompose convert -c
-    kompose.version: 1.32.0 (765fde254)
   labels:
     {{- include "wallet-ui.labels" . | nindent 4 }}
-    io.kompose.service: wallet-ui
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
@@ -16,47 +12,46 @@ spec:
   selector:
     matchLabels:
       {{- include "wallet-ui.selectorLabels" . | nindent 6 }}
-      io.kompose.service: wallet-ui
   template:
     metadata:
       {{- with .Values.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
-        kompose.cmd: kompose convert -c
-        kompose.version: 1.32.0 (765fde254)
       {{- end }}
       labels:
         {{- include "wallet-ui.labels" . | nindent 8 }}
-        {{- with .Values.podLabels }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
-        io.kompose.network/kompose-default: "true"
-        io.kompose.service: wallet-ui
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      serviceAccountName: {{ include "wallet-ui.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
-          securityContext: {}
-          image: "{{ .Values.image.repository | default "in2workspace/wallet-ui"}}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - name: http 
-              containerPort: 8088
-              hostPort: {{ .Values.service.port }}
+            - name: http
+              containerPort: {{ .Values.app.internalServerPort }}
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /
-              port: http
+              path: {{ .Values.livenessProbe.path }}
+              port: {{ .Values.app.internalServerPort }}
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
           readinessProbe:
             httpGet:
-              path: /
-              port: http
+              path: {{ .Values.readinessProbe.path }}
+              port: {{ .Values.app.internalServerPort }}
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           env:
             - name: WALLET_API_INTERNAL_DOMAIN
               value: {{.Values.app.walletApi.internalDomain}}
@@ -82,26 +77,3 @@ spec:
               value: {{.Values.app.iam.external_domain}}
             - name: IAM_REALM_PATH
               value: {{.Values.app.iam.realm_path}}
-          resources:
-            { { - toYaml .Values.resources | nindent 12 } }
-              { { - with .Values.volumeMounts } }
-          volumeMounts:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-      {{- with .Values.volumes }}
-      volumes:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      restartPolicy: Always
