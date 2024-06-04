@@ -58,14 +58,14 @@ spec:
             - name: KEYCLOAK_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "wallet-keycloak.secretName" . }}
+                  name: {{ include "wallet-keycloak.keycloakSecretName" . }}
                   key: {{ include "wallet-keycloak.passwordKey" . }}
             - name: KC_DB_USERNAME
               value: {{.Values.db.name}}
             - name: KC_DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "wallet-keycloak.secretName" . }}
+                  name: {{ include "wallet-keycloak.dbSecretName" . }}
                   key: {{ include "wallet-keycloak.db-passwordKey" . }}
             - name: KC_DB
               value: {{.Values.db.name}}

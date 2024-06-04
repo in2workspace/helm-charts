@@ -64,7 +64,7 @@ Create the name of the service account to use
 {{/*
 Support for existing database secret 
 */}}
-{{- define "wallet-keycloak.secretName" -}}
+{{- define "wallet-keycloak.dbSecretName" -}}
     {{- if .Values.db.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.db.existingSecret.name $) -}}
     {{- else -}}
@@ -77,6 +77,14 @@ Support for existing database secret
         {{- printf "%s" (tpl .Values.db.existingSecret.key $) -}}
     {{- else -}}
         {{- printf "keycloak-db-password" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "wallet-keycloak.keycloakSecretName" -}}
+    {{- if .Values.app.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.db.existingSecret.name $) -}}
+    {{- else -}}
+        {{- printf "%s" (include "wallet-keycloak.fullname" .) -}}
     {{- end -}}
 {{- end -}}
 
