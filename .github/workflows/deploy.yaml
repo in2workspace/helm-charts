@@ -20,7 +20,11 @@ jobs:
           ref: ${{ github.head_ref }}
 
       - name: Package Helm Chart
-        run: helm package charts/desmos
+        run: | 
+          helm package charts/desmos
+          helm package charts/issuer-api
+          helm package charts/issuer-keycloak-plugin
+          helm package charts/issuer-ui
 
       - name: Upload Helm Repository Index
         run: helm repo index . --url https://in2workspace.github.io/helm-charts
