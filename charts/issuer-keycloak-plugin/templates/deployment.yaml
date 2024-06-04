@@ -1,0 +1,121 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "issuer-keycloak-plugin.fullname" . }}
+  labels:
+    {{- include "issuer-keycloak-plugin.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "issuer-keycloak-plugin.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "issuer-keycloak-plugin.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "issuer-keycloak-plugin.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          livenessProbe:
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
+
+          env:
+            - name: KEYCLOAK_ADMIN
+              value: {{ .Values.keycloak.admin.username }}
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "keycloak.secretName.admin" . }}
+                  key: {{ include "keycloak.passwordKey.admin" . }}
+            - name: KC_HOSTNAME_URL
+              value: {{ .Values.keycloak.hostname.url }}
+            - name: KC_HOSTNAME_ADMIN_URL
+              value: {{ .Values.keycloak.hostname.adminUrl }}
+            - name: KC_HTTPS_CERTIFICATE_KEY_FILE
+              value: {{ .Values.keycloak.https.certificateKeyFile }}
+            - name: KC_HTTPS_CERTIFICATE_FILE
+              value: {{ .Values.keycloak.https.certificateFile }}
+            - name: KC_HTTPS_TRUST_STORE_FILE
+              value: {{ .Values.keycloak.https.trustStoreFile }}
+            - name: KC_HTTPS_TRUST_STORE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "keycloak.secretName.https" . }}
+                  key: {{ include "keycloak.trustStorePasswordKey.https" . }}
+            - name: KC_HTTPS_CLIENT_AUTH
+              value: {{ .Values.keycloak.https.clientAuth }}
+            - name: KC_DB
+              value: {{ .Values.keycloak.db.type }}
+            - name: KC_DB_USERNAME
+              value: {{ .Values.keycloak.db.username }}
+            - name: KC_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "keycloak.secretName.db" . }}
+                  key: {{ include "keycloak.passwordKey.db" . }}
+            - name: KC_DB_URL
+              value: {{ .Values.keycloak.db.url }}
+            - name: DB_PORT
+              value: {{ .Values.keycloak.db.port }}
+            - name: ISSUER_API_URL
+              value: {{ .Values.issuerApi.url }}
+            - name: ISSUER_API_EXTERNAL_URL
+              value: {{ .Values.issuerApi.externalUrl }}
+            - name: PRE_AUTH_LIFESPAN
+              value: {{ .Values.preAuth.lifespan }}
+            - name: PRE_AUTH_LIFESPAN_TIME_UNIT
+              value: {{ .Values.preAuth.lifespanTimeUnit }}
+            - name: TX_CODE_SIZE
+              value: {{ .Values.txCode.size }}
+            - name: TX_CODE_DESCRIPTION
+              value: {{ .Values.txCode.description }}
+            - name: TOKEN_EXPIRATION
+              value: {{ .Values.token.expiration }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- with .Values.volumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.volumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
