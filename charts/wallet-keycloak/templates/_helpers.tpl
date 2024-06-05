@@ -68,7 +68,7 @@ Support for existing database secret
     {{- if .Values.db.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.db.existingSecret.name $) -}}
     {{- else -}}
-        {{- printf "%s" (include "wallet-keycloak.fullname" .) -}}
+        {{- printf "wallet-keycloak-db-secret" -}}
     {{- end -}}
 {{- end -}}
 
@@ -84,7 +84,7 @@ Support for existing database secret
     {{- if .Values.app.keycloak.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.db.existingSecret.name $) -}}
     {{- else -}}
-        {{- printf "%s" (include "wallet-keycloak.fullname" .) -}}
+        {{- printf "wallet-keycloak-secret" -}}
     {{- end -}}
 {{- end -}}
 
