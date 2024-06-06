@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "wallet-keycloak.fullname" . }}
+  name: {{ include "dome-wallet-keycloak.fullname" . }}
   namespace: {{ $.Release.Namespace | quote }}
   labels:
-    {{- include "wallet-keycloak.labels" . | nindent 4 }}
+    {{- include "dome-wallet-keycloak.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "wallet-keycloak.selectorLabels" . | nindent 6 }}
+      {{- include "dome-wallet-keycloak.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -19,13 +19,13 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "wallet-keycloak.labels" . | nindent 8 }}
+        {{- include "dome-wallet-keycloak.labels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "wallet-keycloak.serviceAccountName" . }}
+      serviceAccountName: {{ include "dome-wallet-keycloak.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -58,15 +58,15 @@ spec:
             - name: KEYCLOAK_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "wallet-keycloak.keycloakSecretName" . }}
-                  key: {{ include "wallet-keycloak.keycloak-passwordKey" . }}
+                  name: {{ include "dome-wallet-keycloak.keycloakSecretName" . }}
+                  key: {{ include "dome-wallet-keycloak.keycloak-passwordKey" . }}
             - name: KC_DB_USERNAME
               value: {{.Values.db.name}}
             - name: KC_DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "wallet-keycloak.dbSecretName" . }}
-                  key: {{ include "wallet-keycloak.db-passwordKey" . }}
+                  name: {{ include "dome-wallet-keycloak.dbSecretName" . }}
+                  key: {{ include "dome-wallet-keycloak.db-passwordKey" . }}
             - name: KC_DB
               value: {{.Values.db.name}}
             - name: KC_DB_URL

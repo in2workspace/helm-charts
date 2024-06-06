@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "wallet-keycloak.name" -}}
+{{- define "dome-wallet-keycloak.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "wallet-keycloak.fullname" -}}
+{{- define "dome-wallet-keycloak.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,16 +26,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "wallet-keycloak.chart" -}}
+{{- define "dome-wallet-keycloak.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "wallet-keycloak.labels" -}}
-helm.sh/chart: {{ include "wallet-keycloak.chart" . }}
-{{ include "wallet-keycloak.selectorLabels" . }}
+{{- define "dome-wallet-keycloak.labels" -}}
+helm.sh/chart: {{ include "dome-wallet-keycloak.chart" . }}
+{{ include "dome-wallet-keycloak.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -45,17 +45,17 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "wallet-keycloak.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "wallet-keycloak.name" . }}
+{{- define "dome-wallet-keycloak.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "dome-wallet-keycloak.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "wallet-keycloak.serviceAccountName" -}}
+{{- define "dome-wallet-keycloak.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "wallet-keycloak.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "dome-wallet-keycloak.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
@@ -64,15 +64,15 @@ Create the name of the service account to use
 {{/*
 Support for existing database secret 
 */}}
-{{- define "wallet-keycloak.dbSecretName" -}}
+{{- define "dome-wallet-keycloak.dbSecretName" -}}
     {{- if .Values.db.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.db.existingSecret.name $) -}}
     {{- else -}}
-        {{- printf "wallet-keycloak-db-secret" -}}
+        {{- printf "dome-wallet-keycloak-db-secret" -}}
     {{- end -}}
 {{- end -}}
 
-{{- define "wallet-keycloak.db-passwordKey" -}}
+{{- define "dome-wallet-keycloak.db-passwordKey" -}}
     {{- if .Values.db.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.db.existingSecret.key $) -}}
     {{- else -}}
@@ -80,15 +80,15 @@ Support for existing database secret
     {{- end -}}
 {{- end -}}
 
-{{- define "wallet-keycloak.keycloakSecretName" -}}
+{{- define "dome-wallet-keycloak.keycloakSecretName" -}}
     {{- if .Values.app.keycloak.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.db.existingSecret.name $) -}}
     {{- else -}}
-        {{- printf "wallet-keycloak-secret" -}}
+        {{- printf "dome-wallet-keycloak-secret" -}}
     {{- end -}}
 {{- end -}}
 
-{{- define "wallet-keycloak.keycloak-passwordKey" -}}
+{{- define "dome-wallet-keycloak.keycloak-passwordKey" -}}
     {{- if .Values.app.keycloak.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.keycloak.existingSecret.key $) -}}
     {{- else -}}
