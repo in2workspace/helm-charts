@@ -118,8 +118,9 @@ app:
   authServer:
     external:
       scheme: https
-      domain: wallet.dome-marketplace-sbx.org/keycloak
-      path: /realms/wallet
+      domain: wallet.dome-marketplace-sbx.org
+      port: 443
+      path: /keycloak/realms/wallet
     internal:
       scheme: http
       domain: wallet-keycloak

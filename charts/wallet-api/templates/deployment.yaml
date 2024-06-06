@@ -65,6 +65,8 @@ spec:
               value: {{.Values.app.authServer.external.scheme}}
             - name: AUTH_SERVER_EXTERNAL_URL_DOMAIN
               value: {{.Values.app.authServer.external.domain}}
+            - name: AUTH_SERVER_EXTERNAL_URL_PORT
+              value: {{quote .Values.app.authServer.external.port}}
             - name: AUTH_SERVER_EXTERNAL_URL_PATH
               value: {{.Values.app.authServer.external.path}}
             - name: AUTH_SERVER_INTERNAL_URL_SCHEME
