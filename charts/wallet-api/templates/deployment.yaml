@@ -1,0 +1,120 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "wallet-api.fullname" . }}
+  namespace: {{ $.Release.Namespace | quote }}
+  labels:
+    {{- include "wallet-api.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "wallet-api.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "wallet-api.labels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "wallet-api.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.app.internalServerPort }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.livenessProbe.path }}
+              port: {{ .Values.app.internalServerPort }}
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.readinessProbe.path }}
+              port: {{ .Values.app.internalServerPort }}
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          env:
+            - name: LOGGING_LEVEL_ES_IN2_WALLET_API
+              value: {{.Values.app.logLevel}}
+            # CORS
+            - name: WALLET_WDA_URLS_0_SCHEME
+              value: {{.Values.app.walletUi.scheme}}
+            - name: WALLET_WDA_URLS_0_DOMAIN
+              value: {{.Values.app.walletUi.domain}}
+            # AUTH SERVER
+            - name: AUTH_SERVER_EXTERNAL_URL_SCHEME
+              value: {{.Values.app.authServer.external.scheme}}
+            - name: AUTH_SERVER_EXTERNAL_URL_DOMAIN
+              value: {{.Values.app.authServer.external.domain}}
+            - name: AUTH_SERVER_EXTERNAL_URL_PORT
+              value: {{quote .Values.app.authServer.external.port}}
+            - name: AUTH_SERVER_EXTERNAL_URL_PATH
+              value: {{.Values.app.authServer.external.path}}
+            - name: AUTH_SERVER_INTERNAL_URL_SCHEME
+              value: {{.Values.app.authServer.internal.scheme}}
+            - name: AUTH_SERVER_INTERNAL_URL_DOMAIN
+              value: {{.Values.app.authServer.internal.domain}}
+            - name: AUTH_SERVER_INTERNAL_URL_PORT
+              value: {{quote .Values.app.authServer.internal.port}}
+            - name: AUTH_SERVER_INTERNAL_URL_PATH
+              value: {{.Values.app.authServer.internal.path}}
+            - name: AUTH_SERVER_JWT_DECODER_PATH
+              value: {{.Values.app.authServer.jwtDecoderPath}}
+            # EBSI TESTS
+            - name: EBSI_TEST_URL
+              value: {{.Values.app.ebsiTest.url}}
+            - name: EBSI_TEST_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "wallet-api.clientSecretName" . }}
+                  key: {{ include "wallet-api.client-passwordKey" . }}
+            - name: EBSI_TEST_CLIENT_ID
+              value: {{.Values.app.ebsiTest.client.id}}
+            - name: EBSI_TEST_USERNAME
+              value: {{.Values.app.ebsiTest.userData.name}}
+            - name: EBSI_TEST_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "wallet-api.userSecretName" . }}
+                  key: {{ include "wallet-api.user-passwordKey" . }}
+            # BROKER
+            - name: BROKER_PROVIDER
+              value: {{.Values.app.broker.provider}}
+            - name: BROKER_INTERNAL_URL_SCHEME
+              value: {{.Values.app.broker.internal.scheme}}
+            - name: BROKER_INTERNAL_URL_DOMAIN
+              value: {{.Values.app.broker.internal.domain}}
+            - name: BROKER_INTERNAL_URL_PORT
+              value: {{quote .Values.app.broker.internal.port}}
+            - name: BROKER_PATHS_ENTITIES
+              value: {{.Values.app.broker.pathsEntities}}
+            # VAULT
+            - name: VAULT_PROVIDER_NAME
+              value: {{.Values.app.vault.provider}}
+            - name: HASHICORP_VAULT_HOST
+              value: {{.Values.app.vault.host}}
+            - name: HASHICORP_VAULT_SCHEME
+              value: {{.Values.app.vault.scheme}}
+            - name: HASHICORP_VAULT_PORT
+              value: {{quote .Values.app.vault.port}}
+            - name: HASHICORP_VAULT_TOKEN
+              value: {{.Values.app.vault.token}}

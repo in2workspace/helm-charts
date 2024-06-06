@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "wallet-driving-application.name" -}}
+{{- define "dome-wallet-ui.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "wallet-driving-application.fullname" -}}
+{{- define "dome-wallet-ui.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,16 +26,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "wallet-driving-application.chart" -}}
+{{- define "dome-wallet-ui.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "wallet-driving-application.labels" -}}
-helm.sh/chart: {{ include "wallet-driving-application.chart" . }}
-{{ include "wallet-driving-application.selectorLabels" . }}
+{{- define "dome-wallet-ui.labels" -}}
+helm.sh/chart: {{ include "dome-wallet-ui.chart" . }}
+{{ include "dome-wallet-ui.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -45,17 +45,17 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "wallet-driving-application.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "wallet-driving-application.name" . }}
+{{- define "dome-wallet-ui.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "dome-wallet-ui.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "wallet-driving-application.serviceAccountName" -}}
+{{- define "dome-wallet-ui.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "wallet-driving-application.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "dome-wallet-ui.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
