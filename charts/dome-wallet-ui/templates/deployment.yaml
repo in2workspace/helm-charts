@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "wallet-ui.fullname" . }}
+  name: {{ include "dome-wallet-ui.fullname" . }}
   namespace: {{ $.Release.Namespace | quote }}
   labels:
-    {{- include "wallet-ui.labels" . | nindent 4 }}
+    {{- include "dome-wallet-ui.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "wallet-ui.selectorLabels" . | nindent 6 }}
+      {{- include "dome-wallet-ui.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -19,13 +19,13 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "wallet-ui.labels" . | nindent 8 }}
+        {{- include "dome-wallet-ui.labels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "wallet-ui.serviceAccountName" . }}
+      serviceAccountName: {{ include "dome-wallet-ui.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:

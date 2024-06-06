@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: in2workspace/wallet-ui
+  repository: in2workspace/dome-wallet-ui
   # Overrides the image tag whose default is the chart appVersion.
   tag: v1.2.0
   pullPolicy: Always
