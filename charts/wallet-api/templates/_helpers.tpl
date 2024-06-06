@@ -60,3 +60,38 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Support for existing database secret 
+*/}}
+{{- define "wallet-api.clientSecretName" -}}
+    {{- if .Values.app.ebsiTest.client.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.ebsiTest.client.existingSecret.name $) -}}
+    {{- else -}}
+        {{- printf "wallet-api-client-secret" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "wallet-api.client-passwordKey" -}}
+    {{- if .Values.app.ebsiTest.client.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.ebsiTest.client.existingSecret.key $) -}}
+    {{- else -}}
+        {{- printf "client-secret" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "wallet-api.userSecretName" -}}
+    {{- if .Values.app.ebsiTest.userData.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.ebsiTest.userData.existingSecret.name $) -}}
+    {{- else -}}
+        {{- printf "wallet-api-user-password" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "wallet-api.user-passwordKey" -}}
+    {{- if .Values.app.ebsiTest.userData.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.ebsiTest.userData.existingSecret.key $) -}}
+    {{- else -}}
+        {{- printf "user-password" -}}
+    {{- end -}}
+{{- end -}}

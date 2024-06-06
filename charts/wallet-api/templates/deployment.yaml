@@ -3,12 +3,8 @@ kind: Deployment
 metadata:
   name: {{ include "wallet-api.fullname" . }}
   namespace: {{ $.Release.Namespace | quote }}
-  annotations:
-    kompose.cmd: kompose convert -c
-    kompose.version: 1.32.0 (765fde254)
   labels:
     {{- include "wallet-api.labels" . | nindent 4 }}
-    io.kompose.service: wallet-api
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
@@ -16,7 +12,6 @@ spec:
   selector:
     matchLabels:
       {{- include "wallet-api.selectorLabels" . | nindent 6 }}
-      io.kompose.service: wallet-api
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -25,75 +20,89 @@ spec:
       {{- end }}
       labels:
         {{- include "wallet-api.labels" . | nindent 8 }}
-          {{- with .Values.podLabels }}
-          {{- toYaml . | nindent 8 }}
-          {{- end }}
-          io.kompose.network/kompose-default: "true"
-          io.kompose.service: wallet-api
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      serviceAccountName: {{ include "wallet-api.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ .Values.service.port }}
+              containerPort: {{ .Values.app.internalServerPort }}
               protocol: TCP
           livenessProbe:
-            {{- toYaml .Values.livenessProbe | nindent 12 }}
+            httpGet:
+              path: {{ .Values.livenessProbe.path }}
+              port: {{ .Values.app.internalServerPort }}
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
           readinessProbe:
-            {{- toYaml .Values.readinessProbe | nindent 12 }}
+            httpGet:
+              path: {{ .Values.readinessProbe.path }}
+              port: {{ .Values.app.internalServerPort }}
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           env:
             - name: LOGGING_LEVEL_ES_IN2_WALLET_API
               value: {{.Values.app.logLevel}}
             # CORS
             - name: WALLET_WDA_URLS_0_SCHEME
-              value: {{.Values.app.walletUi.schema}}
+              value: {{.Values.app.walletUi.scheme}}
             - name: WALLET_WDA_URLS_0_DOMAIN
               value: {{.Values.app.walletUi.domain}}
             # AUTH SERVER
-            - name: AUTH_SERVER_EXTERNAL_URL_SCHEMA
-              value: {{.Values.app.authServer.external.schema}}
+            - name: AUTH_SERVER_EXTERNAL_URL_SCHEME
+              value: {{.Values.app.authServer.external.scheme}}
             - name: AUTH_SERVER_EXTERNAL_URL_DOMAIN
               value: {{.Values.app.authServer.external.domain}}
             - name: AUTH_SERVER_EXTERNAL_URL_PATH
               value: {{.Values.app.authServer.external.path}}
-            - name: AUTH_SERVER_INTERNAL_URL_SCHEMA
-              value: {{.Values.app.authServer.internal.schema}}
+            - name: AUTH_SERVER_INTERNAL_URL_SCHEME
+              value: {{.Values.app.authServer.internal.scheme}}
             - name: AUTH_SERVER_INTERNAL_URL_DOMAIN
               value: {{.Values.app.authServer.internal.domain}}
             - name: AUTH_SERVER_INTERNAL_URL_PORT
-              value: {{.Values.app.authServer.internal.port}}
+              value: {{quote .Values.app.authServer.internal.port}}
             - name: AUTH_SERVER_INTERNAL_URL_PATH
               value: {{.Values.app.authServer.internal.path}}
             - name: AUTH_SERVER_JWT_DECODER_PATH
               value: {{.Values.app.authServer.jwtDecoderPath}}
             # EBSI TESTS
             - name: EBSI_TEST_URL
-              value: {{.Values.app.ebsiTest.jwtDecoderPath}}
+              value: {{.Values.app.ebsiTest.url}}
             - name: EBSI_TEST_CLIENT_SECRET
-              value: {{.Values.app.ebsiTest.client.secret}}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "wallet-api.clientSecretName" . }}
+                  key: {{ include "wallet-api.client-passwordKey" . }}
             - name: EBSI_TEST_CLIENT_ID
               value: {{.Values.app.ebsiTest.client.id}}
             - name: EBSI_TEST_USERNAME
-              value: {{.Values.app.ebsiTest.username.name}}
+              value: {{.Values.app.ebsiTest.userData.name}}
             - name: EBSI_TEST_PASSWORD
-              value: {{.Values.app.ebsiTest.username.password}}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "wallet-api.userSecretName" . }}
+                  key: {{ include "wallet-api.user-passwordKey" . }}
             # BROKER
             - name: BROKER_PROVIDER
               value: {{.Values.app.broker.provider}}
-            - name: BROKER_EXTERNAL_URL_DOMAIN
-              value: {{.Values.app.broker.external.domain}}
-            - name: BROKER_EXTERNAL_URL_PORT
-              value: {{.Values.app.broker.external.port}}
+            - name: BROKER_INTERNAL_URL_SCHEME
+              value: {{.Values.app.broker.internal.scheme}}
+            - name: BROKER_INTERNAL_URL_DOMAIN
+              value: {{.Values.app.broker.internal.domain}}
+            - name: BROKER_INTERNAL_URL_PORT
+              value: {{quote .Values.app.broker.internal.port}}
             - name: BROKER_PATHS_ENTITIES
               value: {{.Values.app.broker.pathsEntities}}
             # VAULT
@@ -102,31 +111,8 @@ spec:
             - name: HASHICORP_VAULT_HOST
               value: {{.Values.app.vault.host}}
             - name: HASHICORP_VAULT_SCHEME
-              value: {{.Values.app.vault.schema}}
+              value: {{.Values.app.vault.scheme}}
             - name: HASHICORP_VAULT_PORT
-              value: {{.Values.app.vault.port}}
+              value: {{quote .Values.app.vault.port}}
             - name: HASHICORP_VAULT_TOKEN
               value: {{.Values.app.vault.token}}
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-          {{- with .Values.volumeMounts }}
-          volumeMounts:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-      {{- with .Values.volumes }}
-      volumes:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      restartPolicy: Always
