@@ -6,7 +6,7 @@ version: 1.2.0
 appVersion: "v1.2.0"
 
 sources:
-  - https://github.com/in2workspace/dome-dome-wallet-ui
+  - https://github.com/in2workspace/wallet-ui
 
 maintainers:
   - name: IN2 Team
