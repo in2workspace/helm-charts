@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "issuer-keycloak-plugin.fullname" . }}
+  name: {{ include "dome-issuer-keycloak.fullname" . }}
   namespace: {{ $.Release.Namespace | quote }}
   labels:
-    {{- include "issuer-keycloak-plugin.labels" . | nindent 4 }}
+    {{- include "dome-issuer-keycloak.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "issuer-keycloak-plugin.selectorLabels" . | nindent 6 }}
+      {{- include "dome-issuer-keycloak.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -19,13 +19,13 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "issuer-keycloak-plugin.selectorLabels" . | nindent 8 }}
+        {{- include "dome-issuer-keycloak.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "issuer-keycloak-plugin.serviceAccountName" . }}
+      serviceAccountName: {{ include "dome-issuer-keycloak.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
