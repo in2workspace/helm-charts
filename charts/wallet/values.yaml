@@ -1,352 +1,148 @@
-## Identity Provider (Keycloak) configuartion - see https://github.com/bitnami/charts/tree/main/bitnami/keycloak
-wallet-identity-provider:
+## configuration for the wallet-api
+wallet-api:
+  # -- should be enabled?
+  enabled: true
+  # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
+  fullnameOverride: wallet-api
+  ## deployment specific configuration
+  app:
+    internalServerPort: 8080
+    logLevel: DEBUG
+    walletUi:
+      scheme: https
+      domain: wallet.dome-marketplace-sbx.org
+    authServer:
+      external:
+        scheme: https
+        domain: wallet.dome-marketplace-sbx.org
+        port: 443
+        path: /keycloak/realms/wallet
+      internal:
+        scheme: http
+        domain: wallet-keycloak
+        port: 8080
+        path: /realms/wallet
+      jwtDecoderPath: /protocol/openid-connect/certs
+    ebsiTest:
+      url: http://wallet-keycloak:8080/realms/wallet/protocol/openid-connect/token
+      client:
+        id: user-registry-client
+        secret: defaultSecret
+        existingSecret:
+          # -- should an existing secret be used
+          enabled: false
+          # -- name of the secret
+          name: wallet-api-client-secret
+          # -- key to retrieve the password from
+          key: client-secret
+      userData:
+        name: admin
+        password: defaultPassword
+        existingSecret:
+          # -- should an existing secret be used
+          enabled: false
+          # -- name of the secret
+          name: wallet-api-user-password
+          # -- key to retrieve the password from
+          key: user-password
+    vault:
+      provider: hashicorp
+      host: vault
+      scheme: http
+      port: 8200
+      token: token
+    broker:
+      provider: scorpio
+      internal:
+        scheme: http
+        domain: scorpio
+        port: 9090
+      pathsEntities: /ngsi-ld/v1/entities
+
+## configuration for the dome-wallet-ui
+dome-wallet-ui:
   # -- should be enabled?
   enabled: true
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
   fullnameOverride: wallet-identity-provider
-  ## Keycloak authentication parameters
-  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/keycloak#admin-credentials
-  auth:
-    ## @param auth.adminUser Keycloak administrator user
-    ##
-    adminUser: admin
-    ## @param auth.adminPassword Keycloak administrator password for the new user
-    ##
-    adminPassword: "1234"
-  ## @param containerPorts.http Keycloak HTTP container port
-  ## @param containerPorts.https Keycloak HTTPS container port
-  ## @param containerPorts.infinispan Keycloak infinispan container port
-  containerPorts:
-    http: 9099
-  ## PostgreSQL chart configuration
-  ## ref: https://github.com/bitnami/charts/blob/main/bitnami/postgresql/values.yaml
-  ## @param postgresql.enabled Switch to enable or disable the PostgreSQL helm chart
-  ## @param postgresql.auth.postgresPassword Password for the "postgres" admin user. Ignored if `auth.existingSecret` with key `postgres-password` is provided
-  ## @param postgresql.auth.username Name for a custom user to create
-  ## @param postgresql.auth.password Password for the custom user to create
-  ## @param postgresql.auth.database Name for a custom database to create
-  ## @param postgresql.auth.existingSecret Name of existing secret to use for PostgreSQL credentials
-  ## @param postgresql.architecture PostgreSQL architecture (`standalone` or `replication`)
-  postgresql:
-    enabled: true
-    auth:
-      postgresPassword: ""
-      username: "user"
-      password: "1234"
-      database: "keycloak"
-      existingSecret: ""
-    architecture: standalone
-  ## @param extraEnvVars Extra environment variables to be set on Keycloak container
-  extraEnvVars:
-    ## Import ./identity-provider/imports/wallet-realm.json
-    - name: KEYCLOAK_EXTRA_ARGS
-      value: "-Dkeycloak.import=/config/realm.json"
-  ## @param extraVolumes Optionally specify extra list of additional volumes for Keycloak pods
-  extraVolumes:
-    - name: config
-      configMap:
-        name: keycloak-realm
-        items:
-          - key: "realm.json"
-            path: "/identity-provider/imports/wallet-realm.json"
-  ## @param server.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Vault Server container(s)
-  extraVolumeMounts:
-    - name: config
-      mountPath: "./identity-provider"
-      readOnly: true
-  ingress:
-    enabled: true
-    hosts:
-      - name: keycloak.local
-        path: /
-        tls: false
-    annotations:
-      kubernetes.io/ingress.class: public
-
-## Wallet UI configuration - see https://github.com/in2workspace/helm-charts/tree/main/charts/wallet-ui
-wallet-ui:
-  # -- should be enabled?
-  enabled: true
-  ## @param appVersion App Version
-  appVersion: "v1.0.0"
-  service:
-    ## @param service.type Type of service
-    type: ClusterIP
-    ## @param service.port Port to service
-    port: 4202
-
-  ## @section App parameters
-  ## Wallet Driving Application (WDA) Application parameters
+  ## deployment specific configuration
   app:
-    ## @section Wallet Server API parameters
-    server:
-      ## @param app.server.url Url to Server
-      url: http://wallet-api:8080
-    ## @section Identity & Access Manager parameters
+    internalServerPort: 8080
+    walletApi:
+      internalDomain: https://wallet.dome-marketplace-sbx.org/wallet-api
+      websocketExternalDomain: wss://wallet.dome-marketplace-sbx.org/wallet-api
+      websocketPath: /api/v1/pin
+      executeContentPath: /api/v1/execute-content
+      requestCredentialPath: /api/v1/request-credential
+      verifiablePresentationPath: /api/v1/vp
+      credentialsPath: /api/v1/credentials
+      credentialsByIdPath: /api/v1/credentials?credentialId=
+      requestSignedCredentialPath: /api/v1/request-signed-credential
+      cborPath: /api/v1/vp/cbor
     iam:
-      ## @param app.iam.url Url to the Identity Provider
-      url: http://wallet-identity-provider:9099
-      ## @param app.iam.url Uri to the Identity Provider Realm
-      uri: /realms/wallet
-    executionContext:
-      ## @param app.executionContext.uri URI for Execution Context
-      uri: /api/v2/execute-content
-    verifiablePresentation:
-      ## @param app.verifiablePresentation.uri URI for Verifiable Presentation
-      uri: /api/v2/verifiable-presentation
-    credentials:
-      ## @param app.credentials.uri URI for Credentials
-      uri: /api/v2/credentials
-    credentialsId:
-      ## @param app.credentialsId.uri URI for Credential ID
-      uri: /api/v2/credentials?credentialId=
-    user:
-      ## @param app.user.uri URI for User
-      uri: /api/v2/users
-    ## @section Identity & Access Manager Websocket parameters
-    websocket:
-      ## @param app.websocket.url WebSocket URL to Server
-      url: ws://wallet-api:8080
-      ## @param app.websocket.uri URI for WebSocket
-      uri: /api/v1/pin
+      external_domain: https://wallet.dome-marketplace-sbx.org/keycloak
+      realm_path: /realms/wallet
 
-## Wallet Server configuration - see https://github.com/in2workspace/helm-charts/tree/main/charts/wallet-api
-wallet-api:
+## configuration for the dome-wallet-keycloak
+dome-wallet-keycloak:
   # -- should be enabled?
   enabled: true
-  ## @param appVersion App Version
-  appVersion: "v1.2.0"
+  # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
+  fullnameOverride: dome-wallet-keycloak
+  ## deployment specific configuration
+  app:
+    internalServerPort: 8080
+    keycloak:
+      admin: admin
+      password: admin
+      existingSecret:
+        # -- should an existing secret be used
+        enabled: false
+        # -- name of the secret
+        name: dome-wallet-keycloak-secret
+        # -- key to retrieve the password from
+        key: keycloak-password
+  db:
+    name: postgres
+    url: jdbc:postgresql://wallet-keycloak-postgres/keycloak
+    port: 5432
+    username: postgres
+    password: postgres
+    existingSecret:
+      # -- should an existing secret be used
+      enabled: false
+      # -- name of the secret
+      name: dome-wallet-keycloak-db-secret
+      # -- key to retrieve the password from
+      key: keycloak-db-password
 
-  image:
-    repository: in2workspace/wallet-api
-    pullPolicy: Always
-    # Overrides the image tag whose default is the chart appVersion.
-    tag: "v1.2.0"
-
-  imagePullSecrets: []
-  nameOverride: ""
-  fullnameOverride: ""
-
-  serviceAccount:
-    # Specifies whether a service account should be created
-    create: true
-    # Automatically mount a ServiceAccount's API credentials?
-    automount: true
-    # Annotations to add to the service account
-    annotations: {}
-    # The name of the service account to use.
-    # If not set and create is true, a name is generated using the fullname template
-    name: ""
-
-  podAnnotations: {}
-  podLabels: {}
-
-  podSecurityContext:
-    {}
-    # fsGroup: 2000
-
-  securityContext:
-    {}
-    # capabilities:
-    #   drop:
-    #   - ALL
-    # readOnlyRootFilesystem: true
-    # runAsNonRoot: true
-    # runAsUser: 1000
-
-  service:
-    type: ClusterIP
-    port: 8080
-
-  ingress:
-    enabled: false
-    className: ""
-    annotations:
-      {}
-      # kubernetes.io/ingress.class: nginx
-      # kubernetes.io/tls-acme: "true"
-    hosts:
-      - host: chart-example.local
-        paths:
-          - path: /
-            pathType: ImplementationSpecific
-    tls: []
-    #  - secretName: chart-example-tls
-    #    hosts:
-    #      - chart-example.local
-
-  resources: {}
-
-  livenessProbe:
-    httpGet:
-      path: /health
-      port: http
-    initialDelaySeconds: 40
-    failureThreshold: 6
-    periodSeconds: 10
-
-  readinessProbe:
-    httpGet:
-      path: /health
-      port: http
-    initialDelaySeconds: 40
-    failureThreshold: 6
-    periodSeconds: 10
-  autoscaling:
-    enabled: false
-    minReplicas: 1
-    maxReplicas: 100
-    targetCPUUtilizationPercentage: 80
-    # targetMemoryUtilizationPercentage: 80
-
-  # Additional volumes on the output Deployment definition.
-  volumes: []
-
-  # Additional volumeMounts on the output Deployment definition.
-  volumeMounts: []
-
-  nodeSelector: {}
-
-  tolerations: []
-
-  affinity: {}
-
-  env:
-    - name: LOGGING_LEVEL_ES_IN2_WALLET_SERVER
-      value: "DEBUG"
-    - name: OPENAPI_SERVER_URL
-      value: "https://wallet-api:8080"
-    - name: OPENAPI_SERVER_DESCRIPTION
-      value: "Wallet Server"
-    - name: OPENAPI_INFO_TITLE
-      value: "Wallet Server"
-    - name: OPENAPI_INFO_DESCRIPTION
-      value: "Wallet Server Component"
-    - name: OPENAPI_INFO_VERSION
-      value: "1.0.0"
-    - name: OPENAPI_INFO_TERMS_OF_SERVICE
-      value: "https://example.com/terms"
-    - name: OPENAPI_INFO_LICENSE_NAME
-      value: "Apache 2.0"
-    - name: OPENAPI_INFO_LICENSE_URL
-      value: "https://www.apache.org/licenses/LICENSE-2.0.html"
-    - name: OPENAPI_INFO_CONTACT_NAME
-      value: "IN2, Ingeniería de la Información"
-    - name: OPENAPI_INFO_CONTACT_URL
-      value: "https://in2.es"
-    - name: OPENAPI_INFO_CONTACT_EMAIL
-      value: "contacto@in2.es"
-    - name: WALLET_WDA_URL
-      value: "http://wallet-ui:4202"
-    - name: AUTH_SERVER_DOMAIN
-      value: "https://issuerkeycloak.demo.in2.es/realms/EAAProvider"
-    - name: AUTH_SERVER_TOKEN_ENDPOINT
-      value: "https://issuerkeycloak.demo.in2.es/realms/EAAProvider/verifiable-credential/did:key:z6MkqmaCT2JqdUtLeKah7tEVfNXtDXtQyj4yxEgV11Y5CqUa/token"
-    - name: IDENTITY_PROVIDER_URL
-      value: "http://wallet-identity-provider:9099/realms/wallet/protocol/openid-connect/token"
-    - name: IDENTITY_PROVIDER_CLIENT_SECRET
-      value: "fV51P8jFBo8VnFKMMuP3imw3H3i5mNck"
-    - name: IDENTITY_PROVIDER_CLIENT_ID
-      value: "user-registry-client"
-    - name: IDENTITY_PROVIDER_USERNAME
-      value: "adminWallet"
-    - name: IDENTITY_PROVIDER_PASSWORD
-      value: "adminPass"
-    - name: BROKER_PROVIDER
-      value: "scorpio"
-    - name: BROKER_EXTERNALDOMAIN
-      value: "http://scorpio:9090"
-    - name: BROKER_INTERNALDOMAIN
-      value: "http://scorpiot:9090"
-    - name: BROKER_PATHS_ENTITIES
-      value: "/ngsi-ld/v1/entities"
-    - name: VAULT_PROVIDER_NAME
-      value: "hashicorp"
-    - name: SPRING_CLOUD_VAULT_AUTHENTICATION
-      value: "token"
-    - name: SPRING_CLOUD_VAULT_TOKEN
-      value: ""
-    - name: SPRING_CLOUD_VAULT_HOST
-      value: "vault"
-    - name: SPRING_CLOUD_VAULT_SCHEME
-      value: "http"
-    - name: SPRING_CLOUD_VAULT_PORT
-      value: "8201"
-    - name: SPRING_CLOUD_VAULT_KV_ENABLED
-      value: "true"
-
-## Hashicorp Vault
-vault:
-  # -- should be enabled?
+## configuration of postgres to be used for the blockchain-connector - see https://github.com/bitnami/charts/tree/main/bitnami/postgresql for details
+postgresql:
+  # -- should the postgresql deployment be enabled
   enabled: true
-  ## Configure Container Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param server.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param server.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param server.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
-  ## @param server.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
-  ## @param server.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
-  ## @param server.containerSecurityContext.privileged Set container's Security Context privileged
-  ## @param server.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
-  ## @param server.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
-  ## @param server.containerSecurityContext.capabilities.drop List of capabilities to be dropped
-  ## @param server.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
-  ##
-  containerSecurityContext:
-    enabled: true
-    seLinuxOptions: null
-    runAsUser: 1001
-    runAsGroup: 1001
-    runAsNonRoot: true
-    privileged: false
-    readOnlyRootFilesystem: true
-    allowPrivilegeEscalation: false
-    capabilities:
-      add: ["IPC_LOCK"]
-    seccompProfile:
-      type: "RuntimeDefault"
-  ## @param server.command Override default container command (useful when using custom images)
-  command: ["/bin/sh", "/config/init.sh"]
-  ## @param server.config [string] Vault server configuration (evaluated as a template)
-  config: |
-    "listener": {
-      "tcp": {
-        "address": "0.0.0.0:8201",
-        "tls_disable": "true"
-      }
-    },
-    "storage": {
-      "file": {
-        "path": "/vault/file"
-      }
-    },
-    "default_lease_ttl": "168h",
-    "max_lease_ttl": "0h",
-    "api_addr": "http://0.0.0.0:8201"
-  ## @param extraVolumes Optionally specify extra list of additional volumes for Keycloak pods
-  extraVolumes:
-    - name: config
-      configMap:
-        name: vault-config
-        items:
-          - key: "init.sh"
-            path: "/config/init.sh"
-  ## @param server.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Vault Server container(s)
-  extraVolumeMounts:
-    - name: config
-      mountPath: "/vault"
-
-## System Config Service configuration in case to be used by kafka - see https://github.com/bitnami/charts/tree/main/bitnami/zookeeper
-zookeeper:
-  # -- should kafka be enabled?
-  enabled: false
-
-## Event Streaming configuration in case to be used by scorpio - see https://github.com/bitnami/charts/tree/main/bitnami/kafka
-kafka:
-  # -- should kafka be enabled?
-  enabled: false
-
-## Context Broker configuration - see https://github.com/FIWARE/helm-charts/tree/main/charts/scorpio-broker-aaio for details
+  # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
+  fullnameOverride: postgresql-connector
+  # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
+  nameOverride: postgresql-connector
+  ## auth configuration for the database
+  auth:
+    # -- username to be used
+    username: postgres
+    # -- should the default postgres user be enabled
+    enablePostgresUser: true
+    # -- password to be used
+    password: postgres
+  ## configuration of the postgres primary replica
+  primary:
+    ## provide db initialization
+    initdb:
+      ## provide scripts for initialization
+      scripts:
+        # -- create the database as expected by the blockchain-connector
+        create.sh: |
+          psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE mktdb;"
+          
+## configuration of the context-broker - see https://github.com/FIWARE/helm-charts/tree/main/charts/scorpio-broker-aaio for details
 scorpio:
   # -- should scorpio be enabled
   enabled: true
@@ -379,7 +175,7 @@ scorpio:
     # -- ClusterIP is the recommended type for most clusters
     type: ClusterIP
 
-## Context Broker Database configuration - see https://github.com/bitnami/charts/tree/main/bitnami/postgresql for details
+## configuration of postgis to be used for scorpio - see https://github.com/bitnami/charts/tree/main/bitnami/postgresql for details
 postgis:
   # -- should postgis be enabled
   enabled: true
