@@ -23,7 +23,7 @@ jobs:
         run: | 
           helm package charts/desmos
           helm package charts/issuer-api
-          helm package charts/issuer-keycloak-plugin
+          helm package charts/dome-issuer-keycloak
           helm package charts/issuer-ui
 
       - name: Upload Helm Repository Index
