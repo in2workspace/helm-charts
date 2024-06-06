@@ -130,7 +130,7 @@ app:
     url: http://wallet-keycloak:8080/realms/wallet/protocol/openid-connect/token
     client:
       id: user-registry-client
-      secret: <the secret>
+      secret: defaultSecret
       existingSecret:
         # -- should an existing secret be used
         enabled: false
@@ -140,7 +140,7 @@ app:
         key: client-secret
     userData:
       name: admin
-      password: <the password>
+      password: defaultPassword
       existingSecret:
         # -- should an existing secret be used
         enabled: false

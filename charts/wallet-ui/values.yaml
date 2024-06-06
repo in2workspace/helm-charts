@@ -112,8 +112,8 @@ affinity: {}
 app:
   internalServerPort: 8080
   walletApi:
-    internalDomain: https://<the dns domain>
-    websocketExternalDomain: wss://<the dns domain>
+    internalDomain: https://wallet.dome-marketplace-sbx.org/wallet-api
+    websocketExternalDomain: wss://wallet.dome-marketplace-sbx.org/wallet-api
     websocketPath: /api/v1/pin
     executeContentPath: /api/v1/execute-content
     requestCredentialPath: /api/v1/request-credential
@@ -123,5 +123,5 @@ app:
     requestSignedCredentialPath: /api/v1/request-signed-credential
     cborPath: /api/v1/vp/cbor
   iam:
-    external_domain: https://<the domain>
+    external_domain: https://wallet.dome-marketplace-sbx.org/keycloak
     realm_path: /realms/wallet
