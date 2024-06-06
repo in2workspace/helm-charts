@@ -1,0 +1,112 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "issuer-api.fullname" . }}
+  namespace: {{ $.Release.Namespace | quote }}
+  labels:
+    {{- include "issuer-api.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "issuer-api.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "issuer-api.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "issuer-api.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.app.internalServerPort }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.livenessProbe.path }}
+              port: {{ .Values.app.internalServerPort }}
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.readinessProbe.path }}
+              port: {{ .Values.app.internalServerPort }}
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: {{ .Values.app.profile }}
+            - name: LOGGING_LEVEL_ROOT
+              value: {{ .Values.app.logLevel }}
+            - name: SPRING_R2DBC_URL
+              value: r2dbc:postgresql://{{ .Values.db.host }}:{{ .Values.db.port }}/{{ .Values.db.name }}
+            - name: SPRING_R2DBC_USERNAME
+              value: {{ .Values.db.username }}
+            - name: SPRING_R2DBC_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-api.secretName" . }}
+                  key: {{ include "issuer-api.passwordKey" . }}
+            - name: SPRING_FLYWAY_URL
+              value: jdbc:postgresql://{{ .Values.db.host }}:{{ .Values.db.port }}/{{ .Values.db.name }}
+            - name: SPRING_MAIL_HOST
+              value: {{ .Values.app.mail.host }}
+            - name: SPRING_MAIL_PORT
+              value: "{{ .Values.app.mail.port }}" # Convert to string
+            - name: API_EXTERNAL_DOMAIN
+              value: {{ .Values.app.api.externalDomain }}
+            - name: API_INTERNAL_DOMAIN
+              value: {{ .Values.app.api.internalDomain }}
+            - name: API_CONFIG_SOURCE
+              value: {{ .Values.app.api.configSource }}
+            - name: API_CACHE_LIFETIME_CREDENTIAL_OFFER
+              value: "{{ .Values.app.api.cacheLifetimeCredentialOffer }}" # Convert to string
+            - name: API_CACHE_LIFETIME_VERIFIABLE_CREDENTIAL
+              value: "{{ .Values.app.api.cacheLifetimeVerifiableCredential }}" # Convert to string
+            - name: AUTH_SERVER_PROVIDER
+              value: {{ .Values.app.authServer.provider }}
+            - name: AUTH_SERVER_EXTERNAL_DOMAIN
+              value: {{ .Values.app.authServer.externalDomain }}
+            - name: AUTH_SERVER_INTERNAL_DOMAIN
+              value: {{ .Values.app.authServer.internalDomain }}
+            - name: AUTH_SERVER_REALM
+              value: {{ .Values.app.authServer.realm }}
+            - name: AUTH_SERVER_CLIENT_CLIENT_ID
+              value: {{ .Values.app.authServer.client.clientId }}
+            - name: AUTH_SERVER_CLIENT_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-api.secretName.authServerClient" . }}
+                  key: {{ include "issuer-api.clientSecretKey.authServerClient" . }}
+            - name: AUTH_SERVER_PATHS_TOKEN_PATH
+              value: {{ .Values.app.authServer.paths.tokenPath }}
+            - name: AUTH_SERVER_CLIENT_USERNAME
+              value: {{ .Values.app.authServer.client.username }}
+            - name: AUTH_SERVER_CLIENT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-api.secretName.authServerClient" . }}
+                  key: {{ include "issuer-api.clientPasswordKey.authServerClient" . }}
+            - name: ISSUER_UI_EXTERNAL_DOMAIN
+              value: {{ .Values.app.ui.externalDomain }}
+            - name: ISSUER_UI_INTERNAL_DOMAIN
+              value: {{ .Values.app.ui.internalDomain }}

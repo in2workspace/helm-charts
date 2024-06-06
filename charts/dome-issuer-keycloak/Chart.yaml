@@ -1,0 +1,13 @@
+apiVersion: v2
+name: dome-issuer-keycloak
+description: A Helm chart for Kubernetes
+type: application
+version: 1.0.0
+appVersion: v1.1.0
+
+sources:
+  - https://github.com/in2workspace/dome-issuer-keycloak
+
+maintainers:
+  - name: IN2 Team
+    email: domesupport@in2.es
