@@ -28,6 +28,7 @@ jobs:
           helm package charts/wallet-api
           helm package charts/dome-wallet-keycloak
           helm package charts/dome-wallet-ui
+          helm dependency build charts/wallet
           helm package charts/wallet
 
       - name: Upload Helm Repository Index
