@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "desmos.fullname" . }}
+  name: {{ include "issuer-api.fullname" . }}
   namespace: {{ $.Release.Namespace | quote }}
   labels:
-    {{- include "desmos.labels" . | nindent 4 }}
+    {{- include "issuer-api.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -13,4 +13,4 @@ spec:
       protocol: TCP
       name: http
   selector:
-    {{- include "desmos.selectorLabels" . | nindent 4 }}
+    {{- include "issuer-api.selectorLabels" . | nindent 4 }}

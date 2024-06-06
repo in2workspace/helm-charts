@@ -57,19 +57,19 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ .Values.service.port }}
+              containerPort: {{ .Values.app.internalServerPort }}
               protocol: TCP
           livenessProbe:
             httpGet:
               path: {{ .Values.livenessProbe.path }}
-              port: 8080
+              port: {{ .Values.app.internalServerPort }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
           readinessProbe:
             httpGet:
               path: {{ .Values.readinessProbe.path }}
-              port: 8080
+              port: {{ .Values.app.internalServerPort }}
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
@@ -78,6 +78,8 @@ spec:
               value: {{.Values.app.profile}}
             - name: LOGGING_LEVEL_ROOT
               value: {{.Values.app.logLevel}}
+            - name: SERVER_PORT
+              value: {{ quote .Values.app.internalServerPort}}
             - name: SPRING_R2DBC_URL
               value: "r2dbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}"
             - name: SPRING_R2DBC_USERNAME
@@ -98,7 +100,7 @@ spec:
             - name: BROKER_INTERNAL_DOMAIN
               value: {{.Values.app.broker.internalDomain}}
             - name: NGSI_SUBSCRIPTION_NOTIFICATION_ENDPOINT
-              value: {{.Values.app.ngsiSubscription.notificationEndpoint}}
+              value: "http://{{.Chart.Name}}:{{.Values.app.internalServerPort}}{{.Values.app.ngsiSubscription.notificationEndpoint}}"
             - name: NGSI_SUBSCRIPTION_ENTITY_TYPES
               value: {{.Values.app.ngsiSubscription.entityTypes}}
             - name: DLT_ADAPTER_PROVIDER
@@ -108,6 +110,6 @@ spec:
             - name: DLT_ADAPTER_EXTERNAL_DOMAIN
               value: {{.Values.app.dltAdapter.externalDomain}}
             - name: TX_SUBSCRIPTION_NOTIFICATION_ENDPOINT
-              value: {{.Values.app.txSubscription.notificationEndpoint}}
+              value: "http://{{.Chart.Name}}:{{.Values.app.internalServerPort}}{{.Values.app.txSubscription.notificationEndpoint}}"
             - name: TX_SUBSCRIPTION_ENTITY_TYPES
               value: {{.Values.app.txSubscription.entityTypes}}

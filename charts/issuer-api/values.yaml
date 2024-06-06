@@ -1,13 +1,9 @@
-# Default values for example.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
 replicaCount: 1
 
 image:
-  repository: in2workspace/desmos-api
+  repository: in2workspace/issuer-api
   # Overrides the image tag whose default is the chart appVersion.
-  tag: v0.6.0
+  tag: v0.8.0-SNAPSHOT
   pullPolicy: Always
 
 imagePullSecrets: []
@@ -24,6 +20,7 @@ serviceAccount:
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
   name: ""
+
 
 podAnnotations: {}
 podLabels: {}
@@ -71,6 +68,7 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
+
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
@@ -110,37 +108,48 @@ tolerations: []
 affinity: {}
 
 app:
-  profile: test
+  profile: default
   logLevel: DEBUG
   internalServerPort: 8080
-  operator:
-    organizationIdentifier: VATES-S9999999E
-  broker:
-    provider: scorpio
-    internalDomain: http://scorpio:9090
-    externalDomain: http://scorpio:9090
-  ngsiSubscription:
-    notificationEndpoint: /api/v1/notifications/broker
-    entityTypes: catalog,product-offering,category,individual,organization,product,service-specification,product-offering-price,resource-specification,product-specification
-  dltAdapter:
-    provider: digitelts
-    internalDomain: http://dlt-adapter:8080
-    externalDomain: http://dlt-adapter:8080
-  txSubscription:
-    notificationEndpoint: /api/v1/notifications/dlt
-    entityTypes: catalog,product-offering,category,individual,organization,product,service-specification,product-offering-price,resource-specification,product-specification
+  mail:
+    host: host.docker.internal
+    port: 1025
+  api:
+    externalDomain: http://dome.saas.local
+    internalDomain: http://issuer-api:8080
+    configSource: yaml
+    cacheLifetimeCredentialOffer: 10
+    cacheLifetimeVerifiableCredential: 10
+  authServer:
+    provider: keycloak
+    externalDomain: http://localhost:8081
+    internalDomain: http://issuer-keycloak:8080
+    realm: CredentialIssuer
+    client:
+      clientId: oidc4vci-wallet-client
+      clientSecret: oidc4vci-wallet-client-secret
+      username: user
+      password: user
+      existingSecret:
+        enabled: false
+        name: issuer-api-secrets
+        clientSecretKey: authServerClientSecret
+        clientPasswordKey: authServerClientPassword
+    paths:
+      tokenPath: /realms/CredentialIssuer/protocol/openid-connect/token
+  ui:
+    externalDomain: http://localhost:4201
+    internalDomain: http://wallet-ui:8080
 
 db:
-  host: postgresql-connector
+  host: issuer-postgres
   port: 5432
-  externalService: false
-  name: mktdb
+  name: issuer
   username: postgres
-  password: postgres
+  password: password
   existingSecret:
-      # -- should an existing secret be used
     enabled: false
-    # -- name of the secret
-    name: desmos-secret
-    # -- key to retrieve the password from
-    key: desmos-db-password
+    name: issuer-api-secrets
+    key: db-password
+
+  
