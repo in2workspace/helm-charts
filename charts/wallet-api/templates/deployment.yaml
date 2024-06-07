@@ -117,7 +117,6 @@ spec:
             - name: HASHICORP_VAULT_PORT
               value: {{quote .Values.app.vault.port}}
             - name: HASHICORP_VAULT_TOKEN
-              value: {{.Values.app.vault.token}}
               valueFrom:
                 secretKeyRef:
                   name: {{ include "wallet-api.vaultTokenSecretName" . }}
