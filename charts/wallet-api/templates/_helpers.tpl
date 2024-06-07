@@ -95,3 +95,19 @@ Support for existing database secret
         {{- printf "user-password" -}}
     {{- end -}}
 {{- end -}}
+
+{{- define "wallet-api.vaultTokenSecretName" -}}
+    {{- if .Values.app.vault.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.vault.existingSecret.name $) -}}
+    {{- else -}}
+        {{- printf "wallet-api-token-secret" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "wallet-api.user-tokenKey" -}}
+    {{- if .Values.app.vault.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.vault.existingSecret.key $) -}}
+    {{- else -}}
+        {{- printf "token" -}}
+    {{- end -}}
+{{- end -}}
