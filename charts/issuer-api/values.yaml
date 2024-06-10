@@ -150,7 +150,7 @@ db:
   password: postgres
   existingSecret:
     enabled: false
-    name: issuer-api-secrets
+    name: issuer-api-db-secrets
     key: db-password
 
   

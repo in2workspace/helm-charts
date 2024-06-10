@@ -123,7 +123,7 @@ keycloak:
     password: admin
     existingSecret:
       enabled: false
-      name: keycloak-secrets
+      name: keycloak-secrets-admin
       passwordKey: keycloakAdminPassword
   hostname:
     url: http://localhost:7001
@@ -135,7 +135,7 @@ keycloak:
     trustStorePassword: pempas
     existingSecret:
       enabled: false
-      name: keycloak-secrets
+      name: keycloak-secrets-https
       trustStorePasswordKey: keycloakTrustStorePassword
     clientAuth: request
   db:
@@ -146,7 +146,7 @@ keycloak:
     password: postgres
     existingSecret:
       enabled: false
-      name: keycloak-secrets
+      name: keycloak-secrets-db
       passwordKey: keycloakDbPassword
 
 # Issuer API Configuration
