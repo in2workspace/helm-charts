@@ -110,7 +110,7 @@ Support for existing auth server client secret
 {{/*
 Support for existing mail secret 
 */}}
-{{- define "issuer-api.secretName" -}}
+{{- define "issuer-api.secretName.mail" -}}
     {{- if .Values.mail.password.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.mail.password.existingSecret.name $) -}}
     {{- else -}}
@@ -118,7 +118,7 @@ Support for existing mail secret
     {{- end -}}
 {{- end -}}
 
-{{- define "issuer-api.passwordKey" -}}
+{{- define "issuer-api.mailPasswordKey" -}}
     {{- if .Values.mail.password.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.mail.password.existingSecret.key $) -}}
     {{- else -}}
