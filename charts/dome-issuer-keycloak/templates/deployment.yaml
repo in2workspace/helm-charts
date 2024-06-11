@@ -36,11 +36,11 @@ spec:
             - |
               #!/bin/sh
 
-              # Configurar repositorios
+              # Configure repositories
               echo "https://dl-cdn.alpinelinux.org/alpine/v3.18/main" > /etc/apk/repositories
               echo "https://dl-cdn.alpinelinux.org/alpine/v3.18/community" >> /etc/apk/repositories
 
-              # Instalar paquetes necesarios
+              # Install packages
               apk update
               apk add --no-cache curl openjdk11-jre openssl
 
