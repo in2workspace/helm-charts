@@ -119,7 +119,7 @@ Support for existing mail secret
 {{- end -}}
 
 {{- define "issuer-api.mailPasswordKey" -}}
-    {{- if .Values.mail.password.existingSecret.enabled -}}
+    {{- if .Values.app.mail.password.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.mail.password.existingSecret.key $) -}}
     {{- else -}}
         {{- printf "mail-password" -}}
