@@ -72,6 +72,19 @@ spec:
               value: {{ .Values.app.mail.host }}
             - name: SPRING_MAIL_PORT
               value: "{{ .Values.app.mail.port }}" # Convert to string
+            - name: SPRING_MAIL_USERNAME
+              value: {{ .Values.app.mail.username }}
+            - name: SPRING_MAIL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-api.secretName.mail" . }}
+                  key: {{ include "issuer-api.mailPasswordKey" . }}
+            - name: SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH
+              value: "{{ .Values.app.mail.properties.mail.smtp.auth }}" # Convert to string
+            - name: SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE
+              value: "{{ .Values.app.mail.properties.mail.smtp.starttls.enable }}" # Convert to string
+            - name: SPRING_MAIL_PROPERTIES_MAIL_SMTP_SSL_TRUST
+              value: {{ .Values.app.mail.properties.mail.smtp.ssl.trust }}
             - name: API_EXTERNAL_DOMAIN
               value: {{ .Values.app.api.externalDomain }}
             - name: API_INTERNAL_DOMAIN

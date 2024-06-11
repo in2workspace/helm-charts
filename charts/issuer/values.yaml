@@ -6,6 +6,20 @@ issuer-api:
     mail:
       host: smtp.example.org
       port: 587
+      username: user
+      password:
+        existingSecret:
+          enabled: false
+          name: mail-secret
+          key: mail-password
+      properties:
+        mail:
+          smtp:
+            auth: true
+            starttls:
+              enable: true
+            ssl:
+              trust: smtp.example.org
     api:
       externalDomain: http://dome.saas.local
       internalDomain: http://issuer-api:8080
@@ -24,7 +38,7 @@ issuer-api:
         password: user
         existingSecret:
           enabled: false
-          name: issuer-api-secrets
+          name: auth-secret
           clientSecretKey: authServerClientSecret
           clientPasswordKey: authServerClientPassword
       paths:
@@ -36,12 +50,13 @@ issuer-api:
   db:
     host: issuer-postgres
     port: 5432
+    externalService: false
     name: issuer
     username: postgres
     password: postgres
     existingSecret:
       enabled: false
-      name: issuer-api-secrets
+      name: db-secret
       key: db-password
 
 dome-issuer-keycloak:

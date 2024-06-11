@@ -114,6 +114,20 @@ app:
   mail:
     host: smtp.example.org
     port: 587
+    username: user
+    password:
+      existingSecret:
+        enabled: false
+        name: mail-secret
+        key: mail-password
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            trust: smtp.example.org
   api:
     externalDomain: http://dome.saas.local
     internalDomain: http://issuer-api:8080
