@@ -30,13 +30,18 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       initContainers:
         - name: certificate-init
-          image: alpine:latest
-          command: ["/bin/sh", "-c"]
+          image: alpine:3.18
+          command: ["/bin/sh", "-c", "apk add --no-cache curl openjdk11-jre openssl"]
           args:
             - |
               #!/bin/sh
 
-              # Install required packages
+              # Configurar repositorios
+              echo "https://dl-cdn.alpinelinux.org/alpine/v3.18/main" > /etc/apk/repositories
+              echo "https://dl-cdn.alpinelinux.org/alpine/v3.18/community" >> /etc/apk/repositories
+
+              # Instalar paquetes necesarios
+              apk update
               apk add --no-cache curl openjdk11-jre openssl
 
               # Create a temporal storage
