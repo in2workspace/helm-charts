@@ -205,31 +205,21 @@ spec:
             - name: TOKEN_EXPIRATION
               value: "{{ .Values.token.expiration }}"
           volumeMounts:
-            - name: truststore
-              mountPath: /opt/keycloak/conf/truststore.jks
-              subPath: truststore.jks
-            - name: server-key
-              mountPath: /opt/keycloak/conf/server.key.pem
-              subPath: server.key.pem
-            - name: server-crt
-              mountPath: /opt/keycloak/conf/server.crt.pem
-              subPath: server.crt.pem
+            - name: truststore-volume
+              mountPath: /opt/keycloak/conf
       volumes:
-        - name: truststore
-          configMap:
-            name: {{ include "dome-issuer-keycloak.fullname" . }}-config
-            items:
-              - key: truststore.jks
-                path: /opt/keycloak/conf/truststore.jks
+        - name: truststore-volume
+          persistentVolumeClaim:
+            claimName: truststore-pvc
         - name: server-key
           configMap:
             name: {{ include "dome-issuer-keycloak.fullname" . }}-config
             items:
               - key: localhost-key.pem
-                path: /opt/keycloak/conf/server.key.pem
+                path: server.key.pem
         - name: server-crt
           configMap:
             name: {{ include "dome-issuer-keycloak.fullname" . }}-config
             items:
               - key: localhost-crt.pem
-                path: /opt/keycloak/conf/server.crt.pem
+                path: server.crt.pem
