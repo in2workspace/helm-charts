@@ -4,14 +4,14 @@ issuer-api:
     logLevel: DEBUG
     internalServerPort: 8080
     mail:
-      host: smtp.example.org
+      host: smtp.ionos.de
       port: 587
       username: user
-      password:
-        existingSecret:
-          enabled: false
-          name: mail-secret
-          key: mail-password
+      password: password
+      existingSecret:
+        enabled: false
+        name: mail-secret
+        key: mail-password
       properties:
         mail:
           smtp:
@@ -19,7 +19,7 @@ issuer-api:
             starttls:
               enable: true
             ssl:
-              trust: smtp.example.org
+              trust: smtp.ionos.de
     api:
       externalDomain: http://dome.saas.local
       internalDomain: http://issuer-api:8080

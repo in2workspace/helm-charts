@@ -31,14 +31,10 @@ spec:
       initContainers:
         - name: certificate-init
           image: alpine:3.18
-          command: ["/bin/sh", "-c", "apk add --no-cache curl openjdk11-jre openssl"]
+          command: ["/bin/sh", "-c"]
           args:
             - |
               #!/bin/sh
-
-              # Configure repositories
-              echo "https://dl-cdn.alpinelinux.org/alpine/v3.18/main" > /etc/apk/repositories
-              echo "https://dl-cdn.alpinelinux.org/alpine/v3.18/community" >> /etc/apk/repositories
 
               # Install packages
               apk update
@@ -87,9 +83,9 @@ spec:
                 if [ -s "$file" ]; then
                   echo "$file does exist."
                 else
-                  echo "-----BEGIN CERTIFICATE-----
-                  $certificate
-                    -----END CERTIFICATE-----" > "$file"
+                  echo "-----BEGIN CERTIFICATE-----" > "$file"
+                  echo "$certificate" | fold -w 64 >> "$file"
+                  echo "-----END CERTIFICATE-----" >> "$file"
                 fi
 
                 # Validate that the PEM file was created successfully
@@ -103,18 +99,13 @@ spec:
                 cat "$file"
 
                 # Generate a DER file from the PEM file
-                openssl x509 -in "$file" -out "cert_$count.der" -outform DER
-
-                # Validate that the DER file was created successfully
-                if [ ! -f "cert_$count.der" ]; then
+                if ! openssl x509 -in "$file" -out "cert_$count.der" -outform DER; then
                   echo "Failed to create cert_$count.der"
                   exit 1
                 fi
 
                 # Import the DER file to the truststore
-                echo "yes" | keytool -import -alias "cert_$count" -file "cert_$count.der" -keystore /opt/keycloak/conf/truststore.jks -storepass pempas
-
-                if [ $? -ne 0 ]; then
+                if ! echo "yes" | keytool -import -alias "cert_$count" -file "cert_$count.der" -keystore /opt/keycloak/conf/truststore.jks -storepass pempas; then
                   echo "Failed to import cert_$count.der to truststore.jks"
                   exit 1
                 fi
@@ -133,6 +124,7 @@ spec:
               rm -f cert_* eu-lotl.xml
 
               echo "Cleanup completed."
+
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
