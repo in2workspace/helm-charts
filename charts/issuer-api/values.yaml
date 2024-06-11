@@ -112,8 +112,22 @@ app:
   logLevel: DEBUG
   internalServerPort: 8080
   mail:
-    host: host.docker.internal
-    port: 1025
+    host: smtp.example.org
+    port: 587
+    username: user
+    password: password
+    existingSecret:
+      enabled: false
+      name: mail-secret
+      key: mail-password
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            trust: smtp.example.org
   api:
     externalDomain: http://dome.saas.local
     internalDomain: http://issuer-api:8080
@@ -132,7 +146,7 @@ app:
       password: user
       existingSecret:
         enabled: false
-        name: issuer-api-secrets
+        name: auth-secret
         clientSecretKey: authServerClientSecret
         clientPasswordKey: authServerClientPassword
     paths:
@@ -144,12 +158,13 @@ app:
 db:
   host: issuer-postgres
   port: 5432
+  externalService: false
   name: issuer
   username: postgres
-  password: password
+  password: postgres
   existingSecret:
     enabled: false
-    name: issuer-api-secrets
+    name: db-secret
     key: db-password
 
   

@@ -1,0 +1,164 @@
+issuer-api:
+  app:
+    profile: default
+    logLevel: DEBUG
+    internalServerPort: 8080
+    mail:
+      host: smtp.example.org
+      port: 587
+      username: user
+      password:
+        existingSecret:
+          enabled: false
+          name: mail-secret
+          key: mail-password
+      properties:
+        mail:
+          smtp:
+            auth: true
+            starttls:
+              enable: true
+            ssl:
+              trust: smtp.example.org
+    api:
+      externalDomain: http://dome.saas.local
+      internalDomain: http://issuer-api:8080
+      configSource: yaml
+      cacheLifetimeCredentialOffer: 10
+      cacheLifetimeVerifiableCredential: 10
+    authServer:
+      provider: keycloak
+      externalDomain: http://localhost:8081
+      internalDomain: http://issuer-keycloak:8080
+      realm: CredentialIssuer
+      client:
+        clientId: oidc4vci-wallet-client
+        clientSecret: oidc4vci-wallet-client-secret
+        username: user
+        password: user
+        existingSecret:
+          enabled: false
+          name: auth-secret
+          clientSecretKey: authServerClientSecret
+          clientPasswordKey: authServerClientPassword
+      paths:
+        tokenPath: /realms/CredentialIssuer/protocol/openid-connect/token
+    ui:
+      externalDomain: http://localhost:4201
+      internalDomain: http://wallet-ui:8080
+
+  db:
+    host: issuer-postgres
+    port: 5432
+    externalService: false
+    name: issuer
+    username: postgres
+    password: postgres
+    existingSecret:
+      enabled: false
+      name: db-secret
+      key: db-password
+
+dome-issuer-keycloak:
+  # Keycloak Configuration
+  keycloak:
+    admin:
+      username: admin
+      password: admin
+      existingSecret:
+        enabled: false
+        name: keycloak-secrets
+        passwordKey: keycloakAdminPassword
+    hostname:
+      url: http://localhost:7001
+      adminUrl: http://localhost:7001
+    https:
+      certificateKeyFile: /opt/keycloak/conf/server.key.pem
+      certificateFile: /opt/keycloak/conf/server.crt.pem
+      trustStoreFile: /opt/keycloak/conf/truststore.jks
+      trustStorePassword: pempas
+      existingSecret:
+        enabled: false
+        name: keycloak-secrets
+        trustStorePasswordKey: keycloakTrustStorePassword
+      clientAuth: request
+    db:
+      type: postgres
+      username: postgres
+      url: jdbc:postgresql://issuer-keycloak-postgres/cred
+      port: 5432
+      password: postgres
+      existingSecret:
+        enabled: false
+        name: keycloak-secrets
+        passwordKey: keycloakDbPassword
+
+  # Issuer API Configuration
+  issuerApi:
+    url: http://issuer-api:8080
+    externalUrl: http://dome.saas.local
+
+  # Pre-authorization Configuration
+  preAuth:
+    lifespan: 10
+    lifespanTimeUnit: MINUTES
+
+  # Transaction Code Configuration
+  txCode:
+    size: 4
+    description: Enter the PIN code
+
+  # Token Configuration
+  token:
+    expiration: 2592000
+
+issuer-postgres:
+    # -- should the postgresql deployment be enabled
+    enabled: true
+    # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
+    fullnameOverride: issuer-postgres
+    # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
+    nameOverride: issuer-postgres
+    ## auth configuration for the database
+    auth:
+      # -- username to be used
+      username: postgres
+      # -- should the default postgres user be enabled
+      enablePostgresUser: true
+      # -- password to be used
+      password: postgres
+    ## configuration of the postgres primary replica
+    primary:
+      ## provide db initialization
+      initdb:
+        ## provide scripts for initialization
+        scripts:
+          # -- create the database
+          create.sh: |
+            psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE issuer;"
+
+
+issuer-keycloak-postgres:
+    # -- should the postgresql deployment be enabled
+    enabled: true
+    # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
+    fullnameOverride: issuer-keycloak-postgres
+    # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
+    nameOverride: issuer-keycloak-postgres
+    ## auth configuration for the database
+    auth:
+      # -- username to be used
+      username: postgres
+      # -- should the default postgres user be enabled
+      enablePostgresUser: true
+      # -- password to be used
+      password: postgres
+    ## configuration of the postgres primary replica
+    primary:
+      ## provide db initialization
+      initdb:
+        ## provide scripts for initialization
+        scripts:
+          # -- create the database
+          create.sh: |
+            psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE cred;"

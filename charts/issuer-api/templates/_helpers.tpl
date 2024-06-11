@@ -68,7 +68,7 @@ Support for existing database secret
     {{- if .Values.db.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.db.existingSecret.name $) -}}
     {{- else -}}
-        {{- printf "%s" (include "issuer-api.fullname" .) -}}
+        {{- printf "db-secret" -}}
     {{- end -}}
 {{- end -}}
 
@@ -87,7 +87,7 @@ Support for existing auth server client secret
     {{- if .Values.app.authServer.client.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.authServer.client.existingSecret.name $) -}}
     {{- else -}}
-        {{- printf "%s" (include "issuer-api.fullname" .) -}}
+        {{- printf "auth-secret" -}}
     {{- end -}}
 {{- end -}}
 
@@ -104,5 +104,24 @@ Support for existing auth server client secret
         {{- printf "%s" (tpl .Values.app.authServer.client.existingSecret.clientPasswordKey $) -}}
     {{- else -}}
         {{- printf "auth-server-client-password" -}}
+    {{- end -}}
+{{- end -}}
+
+{{/*
+Support for existing mail secret 
+*/}}
+{{- define "issuer-api.secretName.mail" -}}
+    {{- if .Values.app.mail.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.mail.existingSecret.name $) -}}
+    {{- else -}}
+        {{- printf "mail-secret" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "issuer-api.mailPasswordKey" -}}
+    {{- if .Values.app.mail.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.mail.existingSecret.key $) -}}
+    {{- else -}}
+        {{- printf "mail-password" -}}
     {{- end -}}
 {{- end -}}

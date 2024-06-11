@@ -58,7 +58,7 @@ spec:
             - name: LOGGING_LEVEL_ROOT
               value: {{ .Values.app.logLevel }}
             - name: SPRING_R2DBC_URL
-              value: r2dbc:postgresql://{{ .Values.db.host }}:{{ .Values.db.port }}/{{ .Values.db.name }}
+              value: "r2dbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}"
             - name: SPRING_R2DBC_USERNAME
               value: {{ .Values.db.username }}
             - name: SPRING_R2DBC_PASSWORD
@@ -67,11 +67,24 @@ spec:
                   name: {{ include "issuer-api.secretName" . }}
                   key: {{ include "issuer-api.passwordKey" . }}
             - name: SPRING_FLYWAY_URL
-              value: jdbc:postgresql://{{ .Values.db.host }}:{{ .Values.db.port }}/{{ .Values.db.name }}
+              value: "jdbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}"
             - name: SPRING_MAIL_HOST
               value: {{ .Values.app.mail.host }}
             - name: SPRING_MAIL_PORT
               value: "{{ .Values.app.mail.port }}" # Convert to string
+            - name: SPRING_MAIL_USERNAME
+              value: {{ .Values.app.mail.username }}
+            - name: SPRING_MAIL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-api.secretName.mail" . }}
+                  key: {{ include "issuer-api.mailPasswordKey" . }}
+            - name: SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH
+              value: "{{ .Values.app.mail.properties.mail.smtp.auth }}" # Convert to string
+            - name: SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE
+              value: "{{ .Values.app.mail.properties.mail.smtp.starttls.enable }}" # Convert to string
+            - name: SPRING_MAIL_PROPERTIES_MAIL_SMTP_SSL_TRUST
+              value: {{ .Values.app.mail.properties.mail.smtp.ssl.trust }}
             - name: API_EXTERNAL_DOMAIN
               value: {{ .Values.app.api.externalDomain }}
             - name: API_INTERNAL_DOMAIN
