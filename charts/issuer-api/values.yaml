@@ -115,11 +115,11 @@ app:
     host: smtp.example.org
     port: 587
     username: user
-    password:
-      existingSecret:
-        enabled: false
-        name: mail-secret
-        key: mail-password
+    password: password
+    existingSecret:
+      enabled: false
+      name: mail-secret
+      key: mail-password
     properties:
       mail:
         smtp:
