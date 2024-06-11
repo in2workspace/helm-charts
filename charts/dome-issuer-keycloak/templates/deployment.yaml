@@ -30,33 +30,35 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       initContainers:
         - name: certificate-init
-          image: alpine:3.18
+          image: openjdk:11-jre-slim
           command: ["/bin/sh", "-c"]
           args:
             - |
               #!/bin/sh
 
-              # Install packages
-              apk update
-              apk add --no-cache curl openjdk11-jre openssl
+              set -e
 
-              # Create a temporal storage
+              # Instalar paquetes necesarios
+              apt-get update
+              apt-get install -y --no-install-recommends curl openssl
+
+              # Crear almacenamiento temporal
               echo "Creating temporal storage..."
               mkdir -p /opt/keycloak/conf/tmp
               cd /opt/keycloak/conf/tmp
 
-              # Delete previous data: truststore, certificates and eu-lotl.xml
+              # Eliminar datos anteriores: truststore, certificados y eu-lotl.xml
               echo "Deleting previous data: truststore, certificates and eu-lotl.xml"
               rm -f cert_* truststore.jks eu-lotl.xml
 
-              # Create an empty truststore.jks if it doesn't exist
+              # Crear un truststore.jks vacío si no existe
               if [ ! -f /opt/keycloak/conf/truststore.jks ]; then
                 echo "Creating an empty truststore.jks"
                 keytool -genkey -alias tempkey -keystore /opt/keycloak/conf/truststore.jks -storepass pempas -keypass pempas -dname "CN=Temp, OU=Temp, O=Temp, L=Temp, ST=Temp, C=US"
                 keytool -delete -alias tempkey -keystore /opt/keycloak/conf/truststore.jks -storepass pempas
               fi
 
-              # Download eu-lotl.xml file
+              # Descargar el archivo eu-lotl.xml
               echo "Downloading eu-lotl.xml file..."
               curl -s https://sedediatid.mineco.gob.es/Prestadores/TSL/TSL.xml -o eu-lotl.xml
 
@@ -65,7 +67,7 @@ spec:
                 exit 1
               fi
 
-              # Validate that the file was downloaded successfully
+              # Validar que el archivo se descargó correctamente
               if [ ! -f eu-lotl.xml ]; then
                 echo "eu-lotl.xml not found after download."
                 exit 1
@@ -73,7 +75,7 @@ spec:
 
               echo "eu-lotl.xml downloaded successfully."
 
-              # Extract certificates from eu-lotl.xml
+              # Extraer certificados del archivo eu-lotl.xml
               certificates=$(grep -o '<X509Certificate>[^<]*</X509Certificate>' eu-lotl.xml | sed -e 's/<X509Certificate>//g' -e 's/<\/X509Certificate>//g')
               count=1
 
@@ -88,23 +90,23 @@ spec:
                   echo "-----END CERTIFICATE-----" >> "$file"
                 fi
 
-                # Validate that the PEM file was created successfully
+                # Validar que el archivo PEM se creó correctamente
                 if [ ! -f "$file" ]; then
                   echo "Failed to create $file"
                   exit 1
                 fi
 
-                # Validate that the PEM file is not empty
+                # Validar que el archivo PEM no esté vacío
                 echo "Content of $file:"
                 cat "$file"
 
-                # Generate a DER file from the PEM file
+                # Generar un archivo DER desde el archivo PEM
                 if ! openssl x509 -in "$file" -out "cert_$count.der" -outform DER; then
                   echo "Failed to create cert_$count.der"
                   exit 1
                 fi
 
-                # Import the DER file to the truststore
+                # Importar el archivo DER al truststore
                 if ! echo "yes" | keytool -import -alias "cert_$count" -file "cert_$count.der" -keystore /opt/keycloak/conf/truststore.jks -storepass pempas; then
                   echo "Failed to import cert_$count.der to truststore.jks"
                   exit 1
@@ -115,11 +117,11 @@ spec:
 
               echo "Certificates imported to truststore."
 
-              # List the content of the truststore
+              # Listar el contenido del truststore
               echo "Truststore content:"
               keytool -list -keystore /opt/keycloak/conf/truststore.jks -storepass pempas
 
-              # Clean up temporary files
+              # Limpiar archivos temporales
               echo "Cleaning up temporary files."
               rm -f cert_* eu-lotl.xml
 
