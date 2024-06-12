@@ -68,8 +68,6 @@ spec:
                   name: {{ include "dome-wallet-keycloak.dbSecretName" . }}
                   key: {{ include "dome-wallet-keycloak.db-passwordKey" . }}
             - name: KC_DB
-              value: {{.Values.db.name}}
+              value: {{.Values.db.type}}
             - name: KC_DB_URL
-              value: {{.Values.db.url}}
-            - name: KC_DB_URL_PORT
-              value: {{quote .Values.db.port}}
+              value: "r2dbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}"
