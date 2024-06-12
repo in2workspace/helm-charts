@@ -70,4 +70,4 @@ spec:
             - name: KC_DB
               value: {{.Values.db.type}}
             - name: KC_DB_URL
-              value: "r2dbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}"
+              value: "jdbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}"
