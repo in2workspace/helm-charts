@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: in2workspace/wallet-ui
   # Overrides the image tag whose default is the chart appVersion.
-  tag: v1.2.0
+  tag: v1.2.0-SNAPSHOT
   pullPolicy: Always
 
 imagePullSecrets: []
@@ -41,7 +41,7 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 80
+  port: 8080
 
 readinessProbe:
   path: /health

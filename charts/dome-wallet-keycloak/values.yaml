@@ -41,7 +41,7 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 80
+  port: 8080
 
 readinessProbe:
   path: /health
@@ -122,9 +122,11 @@ app:
       # -- key to retrieve the password from
       key: keycloak-password
 db:
-  name: postgres
-  url: jdbc:postgresql://wallet-keycloak-postgres/keycloak
+  type: postgres
+  host: dome-wallet-keycloak-postgres
   port: 5432
+  externalService: false
+  name: keycloak
   username: postgres
   password: postgres
   existingSecret:
