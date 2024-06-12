@@ -41,7 +41,7 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 80
+  port: 8080
 
 readinessProbe:
   path: /health
@@ -123,7 +123,7 @@ app:
       key: keycloak-password
 db:
   name: postgres
-  url: jdbc:postgresql://wallet-keycloak-postgres/keycloak
+  url: jdbc:postgresql://dome-wallet-keycloak-postgres/keycloak
   port: 5432
   username: postgres
   password: postgres

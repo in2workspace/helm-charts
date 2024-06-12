@@ -41,7 +41,7 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 80
+  port: 8080
 
 readinessProbe:
   path: /health
@@ -112,6 +112,7 @@ affinity: {}
 app:
   internalServerPort: 8080
   logLevel: DEBUG
+  basePath: /wallet-api
   walletUi:
     scheme: https
     domain: wallet.dome-marketplace-sbx.org
@@ -123,12 +124,12 @@ app:
       path: /keycloak/realms/wallet
     internal:
       scheme: http
-      domain: wallet-keycloak
+      domain: dome-wallet-keycloak
       port: 8080
       path: /realms/wallet
     jwtDecoderPath: /protocol/openid-connect/certs
   ebsiTest:
-    url: http://wallet-keycloak:8080/realms/wallet/protocol/openid-connect/token
+    url: http://dome-wallet-keycloak:8080/realms/wallet/protocol/openid-connect/token
     client:
       id: user-registry-client
       secret: defaultSecret
@@ -151,7 +152,7 @@ app:
         key: user-password
   vault:
     provider: hashicorp
-    host: vault
+    host: vault-server
     scheme: http
     port: 8200
     token: defaultToken
