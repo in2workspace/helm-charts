@@ -124,7 +124,7 @@ postgresql:
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
   fullnameOverride: dome-wallet-keycloak-postgres
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
-  nameOverride: postgresql-connector
+  nameOverride: dome-wallet-keycloak-postgres
   ## auth configuration for the database
   auth:
     # -- username to be used
@@ -141,8 +141,8 @@ postgresql:
       scripts:
         # -- create the database as expected by the blockchain-connector
         create.sh: |
-          psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE mktdb;"
-          
+          psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE keycloak;"
+
 ## configuration of the context-broker - see https://github.com/FIWARE/helm-charts/tree/main/charts/scorpio-broker-aaio for details
 scorpio:
   # -- should scorpio be enabled
