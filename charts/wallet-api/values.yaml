@@ -64,12 +64,13 @@ ingress:
   hosts:
     - host: chart-example.local
       paths:
-        - path: /
-          pathType: ImplementationSpecific
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+        - path: /wallet-api
+          pathType: Prefix
+  tls:
+    - hosts:
+        - example-host
+      secretName: example-secret
+
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
