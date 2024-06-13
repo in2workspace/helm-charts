@@ -119,7 +119,8 @@ app:
     existingSecret:
       enabled: false
       name: mail-secret
-      key: mail-password
+      userKey: mail-user
+      passwordKey: mail-password
     properties:
       mail:
         smtp:

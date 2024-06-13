@@ -118,9 +118,17 @@ Support for existing mail secret
     {{- end -}}
 {{- end -}}
 
+{{- define "issuer-api.mailUserKey" -}}
+    {{- if .Values.app.mail.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.mail.existingSecret.userKey $) -}}
+    {{- else -}}
+        {{- printf "mail-username" -}}
+    {{- end -}}
+{{- end -}}
+
 {{- define "issuer-api.mailPasswordKey" -}}
     {{- if .Values.app.mail.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.mail.existingSecret.key $) -}}
+        {{- printf "%s" (tpl .Values.app.mail.existingSecret.passwordKey $) -}}
     {{- else -}}
         {{- printf "mail-password" -}}
     {{- end -}}
