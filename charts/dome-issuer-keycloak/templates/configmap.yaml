@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "dome-issuer-keycloak.fullname" . }}
+  name: {{ include "dome-issuer-keycloak.fullname" . }}-config
   namespace: {{ $.Release.Namespace | quote }}
 data:
   localhost-crt.pem: |-
