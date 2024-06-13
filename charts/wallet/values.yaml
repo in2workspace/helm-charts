@@ -4,7 +4,6 @@ wallet-api:
   enabled: true
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
   fullnameOverride: wallet-api
-
   ## ingress specific configuration
   ingress:
     enabled: false
@@ -21,7 +20,6 @@ wallet-api:
       - hosts:
           - example-host
         secretName: example-secret
-
   ## deployment specific configuration
   app:
     internalServerPort: 8080
