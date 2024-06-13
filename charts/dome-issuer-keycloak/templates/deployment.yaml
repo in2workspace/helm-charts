@@ -208,8 +208,3 @@ spec:
         - name: truststore-volume
           configMap:
             name: {{ include "dome-issuer-keycloak.fullname" . }}-config
-            items:
-              - key: localhost-key.pem
-                path: server.key.pem
-              - key: localhost-crt.pem
-                path: server.crt.pem
