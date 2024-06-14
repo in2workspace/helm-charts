@@ -149,8 +149,8 @@ app:
       existingSecret:
         enabled: false
         name: auth-secret
-        clientSecretKey: authServerClientSecret
-        clientPasswordKey: authServerClientPassword
+        clientSecretKey: client-secret
+        passwordKey: password
     paths:
       tokenPath: /realms/CredentialIssuer/protocol/openid-connect/token
   ui:
@@ -167,6 +167,6 @@ db:
   existingSecret:
     enabled: false
     name: db-secret
-    key: db-password
+    key: password
 
   
