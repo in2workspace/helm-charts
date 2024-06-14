@@ -103,7 +103,7 @@ Support for existing auth server client secret
     {{- if .Values.app.authServer.client.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.authServer.client.existingSecret.passwordKey $) -}}
     {{- else -}}
-        {{- printf password" -}}
+        {{- printf "password" -}}
     {{- end -}}
 {{- end -}}
 
