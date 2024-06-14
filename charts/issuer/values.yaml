@@ -11,7 +11,8 @@ issuer-api:
       existingSecret:
         enabled: false
         name: mail-secret
-        key: mail-password
+        userKey: mail-username
+        passwordKey: mail-password
       properties:
         mail:
           smtp:

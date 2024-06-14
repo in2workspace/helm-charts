@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: in2workspace/wallet-api
   # Overrides the image tag whose default is the chart appVersion.
-  tag: v1.2.0
+  tag: v1.2.0-SNAPSHOT
   pullPolicy: Always
 
 imagePullSecrets: []
@@ -41,16 +41,16 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 80
+  port: 8080
 
 readinessProbe:
-  path: /health
+  path: /wallet-api/health
   initialDelaySeconds: 40
   failureThreshold: 6
   periodSeconds: 10
 
 livenessProbe:
-  path: /health
+  path: /wallet-api/health
   initialDelaySeconds: 40
   failureThreshold: 6
   periodSeconds: 10
@@ -64,12 +64,13 @@ ingress:
   hosts:
     - host: chart-example.local
       paths:
-        - path: /
-          pathType: ImplementationSpecific
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+        - path: /wallet-api
+          pathType: Prefix
+  tls:
+    - hosts:
+        - example-host
+      secretName: example-secret
+
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
@@ -112,6 +113,7 @@ affinity: {}
 app:
   internalServerPort: 8080
   logLevel: DEBUG
+  basePath: /wallet-api
   walletUi:
     scheme: https
     domain: wallet.dome-marketplace-sbx.org
@@ -123,12 +125,12 @@ app:
       path: /keycloak/realms/wallet
     internal:
       scheme: http
-      domain: wallet-keycloak
+      domain: dome-wallet-keycloak
       port: 8080
       path: /realms/wallet
     jwtDecoderPath: /protocol/openid-connect/certs
   ebsiTest:
-    url: http://wallet-keycloak:8080/realms/wallet/protocol/openid-connect/token
+    url: http://dome-wallet-keycloak:8080/realms/wallet/protocol/openid-connect/token
     client:
       id: user-registry-client
       secret: defaultSecret
@@ -151,7 +153,7 @@ app:
         key: user-password
   vault:
     provider: hashicorp
-    host: vault
+    host: vault-server
     scheme: http
     port: 8200
     token: defaultToken

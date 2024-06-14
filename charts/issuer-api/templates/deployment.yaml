@@ -73,7 +73,10 @@ spec:
             - name: SPRING_MAIL_PORT
               value: "{{ .Values.app.mail.port }}" # Convert to string
             - name: SPRING_MAIL_USERNAME
-              value: {{ .Values.app.mail.username }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-api.secretName.mail" . }}
+                  key: {{ include "issuer-api.mailUserKey" . }}
             - name: SPRING_MAIL_PASSWORD
               valueFrom:
                 secretKeyRef:
