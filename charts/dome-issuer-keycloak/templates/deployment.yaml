@@ -205,10 +205,13 @@ spec:
             - name: TOKEN_EXPIRATION
               value: "{{ .Values.token.expiration }}"
           volumeMounts:
+            - name: pem-volume
+              mountPath: /opt/keycloak/pem
             - name: truststore-volume
-              mountPath: /opt/keycloak/conf
+              mountPath: /opt/keycloak/truststore
+
       volumes:
-        - name: truststore-volume
+        - name: pem-volume
           secret:
             secretName: pem-secret
             items:
@@ -216,3 +219,4 @@ spec:
                 path: server.key.pem
               - key: localhost-crt.pem
                 path: server.crt.pem
+        - name: truststore-volume
