@@ -68,7 +68,7 @@ Support for existing keycloak admin secret
     {{- if .Values.keycloak.admin.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.keycloak.admin.existingSecret.name $) -}}
     {{- else -}}
-        {{- printf "admin-secret" -}}
+        {{- printf "issuer-keycloak-admin-secret" -}}
     {{- end -}}
 {{- end -}}
 
@@ -87,7 +87,7 @@ Support for existing keycloak https secret
     {{- if .Values.keycloak.https.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.keycloak.https.existingSecret.name $) -}}
     {{- else -}}
-        {{- printf "trust-store-secrets" -}}
+        {{- printf "issuer-keycloak-trust-store-secrets" -}}
     {{- end -}}
 {{- end -}}
 
@@ -106,7 +106,7 @@ Support for existing keycloak db secret
     {{- if .Values.keycloak.db.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.keycloak.db.existingSecret.name $) -}}
     {{- else -}}
-        {{- printf "db-secret" -}}
+        {{- printf "issuer-keycloak-db-secret" -}}
     {{- end -}}
 {{- end -}}
 
