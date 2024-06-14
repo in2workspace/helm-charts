@@ -41,7 +41,7 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 80
+  port: 8080
 
 ingress:
   enabled: false
@@ -52,12 +52,12 @@ ingress:
   hosts:
     - host: chart-example.local
       paths:
-        - path: /
+        - path: /keycloak
           pathType: ImplementationSpecific
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+  tls:
+    - hosts:
+        - example-host
+      secretName: example-secret
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
@@ -126,8 +126,8 @@ keycloak:
       name: keycloak-admin-password-secret
       passwordKey: keycloakAdminPassword
   hostname:
-    url: http://localhost:7001
-    adminUrl: http://localhost:7001
+    url: https://issuer.dome-marketplace-sbx.org/keycloak
+    adminUrl: https://issuer.dome-marketplace-sbx.org/keycloak
   https:
     certificateKeyFile: /opt/keycloak/pem/server.key.pem
     certificateFile: /opt/keycloak/pem/server.crt.pem
@@ -152,7 +152,7 @@ keycloak:
 # Issuer API Configuration
 issuerApi:
   url: http://issuer-api:8080
-  externalUrl: http://dome.saas.local
+  externalUrl: https://issuer.dome-marketplace-sbx.org/issuer-api
 
 # Pre-authorization Configuration
 preAuth:

@@ -158,8 +158,8 @@ spec:
             - name: KEYCLOAK_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "keycloak.secretName.admin" . }}
-                  key: {{ include "keycloak.passwordKey.admin" . }}
+                  name: {{ include "keycloak.admin-secretName" . }}
+                  key: {{ include "keycloak.admin-passwordKey" . }}
             - name: KC_HOSTNAME_URL
               value: {{ .Values.keycloak.hostname.url }}
             - name: KC_HOSTNAME_ADMIN_URL
@@ -173,8 +173,8 @@ spec:
             - name: KC_HTTPS_TRUST_STORE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "keycloak.secretName.https" . }}
-                  key: {{ include "keycloak.trustStorePasswordKey.https" . }}
+                  name: {{ include "keycloak.https-secretName" . }}
+                  key: {{ include "keycloak.https-trustStorePasswordKey" . }}
             - name: KC_HTTPS_CLIENT_AUTH
               value: {{ .Values.keycloak.https.clientAuth }}
             - name: KC_DB
@@ -184,8 +184,8 @@ spec:
             - name: KC_DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "keycloak.secretName.db" . }}
-                  key: {{ include "keycloak.passwordKey.db" . }}
+                  name: {{ include "keycloak.db-secretName" . }}
+                  key: {{ include "keycloak.db-passwordKey" . }}
             - name: KC_DB_URL
               value: {{ .Values.keycloak.db.url }}
             - name: DB_PORT

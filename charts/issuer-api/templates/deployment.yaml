@@ -57,6 +57,8 @@ spec:
               value: {{ .Values.app.profile }}
             - name: LOGGING_LEVEL_ROOT
               value: {{ .Values.app.logLevel }}
+            - name: SPRING_WEBFLUX_BASEPATH
+              value: {{ .Values.app.basePath }}
             - name: SPRING_R2DBC_URL
               value: "r2dbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}"
             - name: SPRING_R2DBC_USERNAME
@@ -64,8 +66,8 @@ spec:
             - name: SPRING_R2DBC_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "issuer-api.secretName" . }}
-                  key: {{ include "issuer-api.passwordKey" . }}
+                  name: {{ include "issuer-api.db-secretName" . }}
+                  key: {{ include "issuer-api.db-passwordKey" . }}
             - name: SPRING_FLYWAY_URL
               value: "jdbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}"
             - name: SPRING_MAIL_HOST
@@ -75,13 +77,13 @@ spec:
             - name: SPRING_MAIL_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "issuer-api.secretName.mail" . }}
-                  key: {{ include "issuer-api.mailUserKey" . }}
+                  name: {{ include "issuer-api.mail-secretName" . }}
+                  key: {{ include "issuer-api.mail-userKey" . }}
             - name: SPRING_MAIL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "issuer-api.secretName.mail" . }}
-                  key: {{ include "issuer-api.mailPasswordKey" . }}
+                  name: {{ include "issuer-api.mail-secretName" . }}
+                  key: {{ include "issuer-api.mail-passwordKey" . }}
             - name: SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH
               value: "{{ .Values.app.mail.properties.mail.smtp.auth }}" # Convert to string
             - name: SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE
@@ -111,8 +113,8 @@ spec:
             - name: AUTH_SERVER_CLIENT_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "issuer-api.secretName.authServerClient" . }}
-                  key: {{ include "issuer-api.clientSecretKey.authServerClient" . }}
+                  name: {{ include "issuer-api.authServerClient-secretName" . }}
+                  key: {{ include "issuer-api.authServerClient-clientSecretKey" . }}
             - name: AUTH_SERVER_PATHS_TOKEN_PATH
               value: {{ .Values.app.authServer.paths.tokenPath }}
             - name: AUTH_SERVER_CLIENT_USERNAME
@@ -120,8 +122,8 @@ spec:
             - name: AUTH_SERVER_CLIENT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "issuer-api.secretName.authServerClient" . }}
-                  key: {{ include "issuer-api.clientPasswordKey.authServerClient" . }}
+                  name: {{ include "issuer-api.authServerClient-secretName" . }}
+                  key: {{ include "issuer-api.authServerClient-passwordKey" . }}
             - name: ISSUER_UI_EXTERNAL_DOMAIN
               value: {{ .Values.app.ui.externalDomain }}
             - name: ISSUER_UI_INTERNAL_DOMAIN

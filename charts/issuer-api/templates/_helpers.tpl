@@ -64,7 +64,7 @@ Create the name of the service account to use
 {{/*
 Support for existing database secret 
 */}}
-{{- define "issuer-api.secretName" -}}
+{{- define "issuer-api.db-secretName" -}}
     {{- if .Values.db.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.db.existingSecret.name $) -}}
     {{- else -}}
@@ -72,18 +72,18 @@ Support for existing database secret
     {{- end -}}
 {{- end -}}
 
-{{- define "issuer-api.passwordKey" -}}
+{{- define "issuer-api.db-passwordKey" -}}
     {{- if .Values.db.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.db.existingSecret.key $) -}}
     {{- else -}}
-        {{- printf "db-password" -}}
+        {{- printf "password" -}}
     {{- end -}}
 {{- end -}}
 
 {{/*
 Support for existing auth server client secret 
 */}}
-{{- define "issuer-api.secretName.authServerClient" -}}
+{{- define "issuer-api.authServerClient-secretName" -}}
     {{- if .Values.app.authServer.client.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.authServer.client.existingSecret.name $) -}}
     {{- else -}}
@@ -91,26 +91,26 @@ Support for existing auth server client secret
     {{- end -}}
 {{- end -}}
 
-{{- define "issuer-api.clientSecretKey.authServerClient" -}}
+{{- define "issuer-api.authServerClient-clientSecretKey" -}}
     {{- if .Values.app.authServer.client.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.authServer.client.existingSecret.clientSecretKey $) -}}
     {{- else -}}
-        {{- printf "auth-server-client-secret" -}}
+        {{- printf "client-secret" -}}
     {{- end -}}
 {{- end -}}
 
-{{- define "issuer-api.clientPasswordKey.authServerClient" -}}
+{{- define "issuer-api.authServerClient-passwordKey" -}}
     {{- if .Values.app.authServer.client.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.authServer.client.existingSecret.clientPasswordKey $) -}}
+        {{- printf "%s" (tpl .Values.app.authServer.client.existingSecret.passwordKey $) -}}
     {{- else -}}
-        {{- printf "auth-server-client-password" -}}
+        {{- printf "password" -}}
     {{- end -}}
 {{- end -}}
 
 {{/*
 Support for existing mail secret 
 */}}
-{{- define "issuer-api.secretName.mail" -}}
+{{- define "issuer-api.mail-secretName" -}}
     {{- if .Values.app.mail.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.mail.existingSecret.name $) -}}
     {{- else -}}
@@ -118,18 +118,18 @@ Support for existing mail secret
     {{- end -}}
 {{- end -}}
 
-{{- define "issuer-api.mailUserKey" -}}
+{{- define "issuer-api.mail-userKey" -}}
     {{- if .Values.app.mail.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.mail.existingSecret.userKey $) -}}
     {{- else -}}
-        {{- printf "mail-username" -}}
+        {{- printf "username" -}}
     {{- end -}}
 {{- end -}}
 
-{{- define "issuer-api.mailPasswordKey" -}}
+{{- define "issuer-api.mail-passwordKey" -}}
     {{- if .Values.app.mail.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.mail.existingSecret.passwordKey $) -}}
     {{- else -}}
-        {{- printf "mail-password" -}}
+        {{- printf "password" -}}
     {{- end -}}
 {{- end -}}
