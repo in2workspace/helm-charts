@@ -41,7 +41,7 @@ service:
   port: 80
 
 readinessProbe:
-  path: /health
+  path: /issuer-api/health
   initialDelaySeconds: 40
   failureThreshold: 6
   periodSeconds: 10
@@ -61,12 +61,12 @@ ingress:
   hosts:
     - host: chart-example.local
       paths:
-        - path: /
+        - path: /issuer-api
           pathType: ImplementationSpecific
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+  tls:
+    - hosts:
+        - example-host
+      secretName: example-secret
 
 
 resources: {}
@@ -110,6 +110,7 @@ affinity: {}
 app:
   profile: default
   logLevel: DEBUG
+  basePath: /issuer-api
   internalServerPort: 8080
   mail:
     host: smtp.example.org

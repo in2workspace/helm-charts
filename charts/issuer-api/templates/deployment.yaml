@@ -57,6 +57,8 @@ spec:
               value: {{ .Values.app.profile }}
             - name: LOGGING_LEVEL_ROOT
               value: {{ .Values.app.logLevel }}
+            - name: SPRING_WEBFLUX_BASEPATH
+              value: {{ .Values.app.basePath}}
             - name: SPRING_R2DBC_URL
               value: "r2dbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}"
             - name: SPRING_R2DBC_USERNAME
