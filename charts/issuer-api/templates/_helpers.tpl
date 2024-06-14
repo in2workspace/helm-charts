@@ -68,7 +68,7 @@ Support for existing database secret
     {{- if .Values.db.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.db.existingSecret.name $) -}}
     {{- else -}}
-        {{- printf "db-secret" -}}
+        {{- printf "issuer-api-db-secret" -}}
     {{- end -}}
 {{- end -}}
 
@@ -87,7 +87,7 @@ Support for existing auth server client secret
     {{- if .Values.app.authServer.client.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.authServer.client.existingSecret.name $) -}}
     {{- else -}}
-        {{- printf "auth-secret" -}}
+        {{- printf "issuer-api-auth-secret" -}}
     {{- end -}}
 {{- end -}}
 
@@ -114,7 +114,7 @@ Support for existing mail secret
     {{- if .Values.app.mail.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.mail.existingSecret.name $) -}}
     {{- else -}}
-        {{- printf "mail-secret" -}}
+        {{- printf "issuer-api-mail-secret" -}}
     {{- end -}}
 {{- end -}}
 
