@@ -64,56 +64,56 @@ Create the name of the service account to use
 {{/*
 Support for existing keycloak admin secret 
 */}}
-{{- define "keycloak.secretName.admin" -}}
+{{- define "keycloak.admin-secretName" -}}
     {{- if .Values.keycloak.admin.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.keycloak.admin.existingSecret.name $) -}}
     {{- else -}}
-        {{- printf "keycloak-admin-password-secret" -}}
+        {{- printf "admin-secret" -}}
     {{- end -}}
 {{- end -}}
 
-{{- define "keycloak.passwordKey.admin" -}}
+{{- define "keycloak.admin-passwordKey" -}}
     {{- if .Values.keycloak.admin.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.keycloak.admin.existingSecret.passwordKey $) -}}
     {{- else -}}
-        {{- printf "keycloak-admin-password" -}}
+        {{- printf "password" -}}
     {{- end -}}
 {{- end -}}
 
 {{/*
 Support for existing keycloak https secret 
 */}}
-{{- define "keycloak.secretName.https" -}}
+{{- define "keycloak.https-secretName" -}}
     {{- if .Values.keycloak.https.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.keycloak.https.existingSecret.name $) -}}
     {{- else -}}
-        {{- printf "keycloak-trust-store-secrets" -}}
+        {{- printf "trust-store-secrets" -}}
     {{- end -}}
 {{- end -}}
 
-{{- define "keycloak.trustStorePasswordKey.https" -}}
+{{- define "keycloak.https-trustStorePasswordKey" -}}
     {{- if .Values.keycloak.https.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.keycloak.https.existingSecret.trustStorePasswordKey $) -}}
     {{- else -}}
-        {{- printf "keycloak-trust-store-password" -}}
+        {{- printf "trust-store-password" -}}
     {{- end -}}
 {{- end -}}
 
 {{/*
 Support for existing keycloak db secret 
 */}}
-{{- define "keycloak.secretName.db" -}}
+{{- define "keycloak.db-secretName" -}}
     {{- if .Values.keycloak.db.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.keycloak.db.existingSecret.name $) -}}
     {{- else -}}
-        {{- printf "keycloak-db-secret" -}}
+        {{- printf "db-secret" -}}
     {{- end -}}
 {{- end -}}
 
-{{- define "keycloak.passwordKey.db" -}}
+{{- define "keycloak.db-passwordKey" -}}
     {{- if .Values.keycloak.db.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.keycloak.db.existingSecret.passwordKey $) -}}
     {{- else -}}
-        {{- printf "keycloak-db-password" -}}
+        {{- printf "password" -}}
     {{- end -}}
 {{- end -}}
