@@ -74,9 +74,9 @@ dome-issuer-keycloak:
       url: http://localhost:7001
       adminUrl: http://localhost:7001
     https:
-      certificateKeyFile: /opt/keycloak/conf/server.key.pem
-      certificateFile: /opt/keycloak/conf/server.crt.pem
-      trustStoreFile: /opt/keycloak/conf/truststore.jks
+      certificateKeyFile: /opt/keycloak/pem/server.key.pem
+      certificateFile: /opt/keycloak/pem/server.crt.pem
+      trustStoreFile: /opt/keycloak/truststore/truststore.jks
       trustStorePassword: pempas
       existingSecret:
         enabled: false
