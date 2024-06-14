@@ -125,6 +125,9 @@ spec:
 
               echo "Cleanup completed."
 
+          volumeMounts:
+            - name: truststore-volume
+              mountPath: /opt/keycloak/conf
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -206,8 +209,8 @@ spec:
               mountPath: /opt/keycloak/conf
       volumes:
         - name: truststore-volume
-          configMap:
-            name: {{ include "dome-issuer-keycloak.fullname" . }}-config
+          secret:
+            secretName: pem-secret
             items:
               - key: localhost-key.pem
                 path: server.key.pem
