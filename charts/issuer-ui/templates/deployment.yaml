@@ -52,3 +52,24 @@ spec:
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          env:
+            - name: LOGIN_URL
+              value: {{ .Values.app.loginUrl }}
+            - name: CLIENT_ID
+              value: {{ .Values.app.clientId }}
+            - name: SCOPE
+              value: {{ .Values.app.scope }}
+            - name: GRANT_TYPE
+              value: {{ .Values.app.grantType }}
+            - name: BASE_URL
+              value: {{ .Values.app.baseUrl }}
+            - name: WALLET_URL
+              value: {{ .Values.app.walletUrl }}
+            - name: PROCEDURES
+              value: {{ .Values.app.procedures }}
+            - name: SAVE_CREDENTIAL
+              value: {{ .Values.app.saveCredential }}
+            - name: CREDENTIAL_OFFER_URL
+              value: {{ .Values.app.credentialOfferUrl }}
+            - name: NOTIFICATION
+              value: {{ .Values.app.notification }}
