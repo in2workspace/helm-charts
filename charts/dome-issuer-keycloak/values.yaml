@@ -126,8 +126,24 @@ keycloak:
       name: keycloak-admin-password-secret
       passwordKey: keycloakAdminPassword
   hostname:
-    url: https://issuer.dome-marketplace-sbx.org/keycloak
-    adminUrl: https://issuer.dome-marketplace-sbx.org/keycloak
+    url:
+      # if deployed locally set to false
+      externalService: true
+      scheme: http
+      # change by the external url or set to localhost if deployed locally
+      host: example.org
+      # internalPort is only used if externalService is false
+      internalPort: 30002
+      path: /
+    adminUrl:
+      # if deployed locally set to false
+      externalService: true
+      scheme: http
+      # change by the external url or set to localhost if deployed locally
+      host: example.org
+      # internalPort is only used if externalService is false
+      internalPort: 30002
+      path: /
   https:
     certificateKeyFile: /opt/keycloak/pem/server.key.pem
     certificateFile: /opt/keycloak/pem/server.crt.pem
@@ -139,20 +155,30 @@ keycloak:
       trustStorePasswordKey: keycloakTrustStorePassword
     clientAuth: request
   db:
-    type: postgres
-    username: postgres
-    url: jdbc:postgresql://issuer-keycloak-postgres/cred
+    host: issuer-keycloak-postgres
     port: 5432
+    externalService: true
+    name: cred
+    username: postgres
     password: postgres
     existingSecret:
       enabled: false
       name: keycloak-db-secret
       passwordKey: keycloakDbPassword
+    type: postgres
 
 # Issuer API Configuration
 issuerApi:
   url: http://issuer-api:8080
-  externalUrl: https://issuer.dome-marketplace-sbx.org/issuer-api
+  externalUrl:
+    # if deployed locally set to false
+    externalService: true
+    scheme: http
+    # change by the external url or set to localhost if deployed locally
+    host: example.org
+    # internalPort is only used if externalService is false
+    internalPort: 30001
+    path: /
 
 # Pre-authorization Configuration
 preAuth:

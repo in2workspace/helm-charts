@@ -115,12 +115,36 @@ affinity: {}
 
 app:
   internalServerPort: 8080
-  loginUrl: "https://issuer.dome-marketplace-sbx.org/keycloak/realms/CredentialIssuer"
+  loginUrl:
+    # if deployed locally set to false
+    externalService: true
+    scheme: http
+    # change by the external url or set to localhost if deployed locally
+    host: example.org
+    # internalPort is only used if externalService is false
+    internalPort: 30002
+    path: /realms/CredentialIssuer
   clientId: account-console
   scope: openid profile email offline_access
   grantType: code
-  baseUrl: "https://issuer.dome-marketplace-sbx.org/issuer-api"
-  walletUrl: "https://wallet.dome-marketplace-sbx.org"
+  baseUrl:
+    # if deployed locally set to false
+    externalService: true
+    scheme: http
+    # change by the external url or set to localhost if deployed locally
+    host: example.org
+    # internalPort is only used if externalService is false
+    internalPort: 30001
+    path: /
+  walletUrl:
+    # if deployed locally set to false
+    externalService: true
+    scheme: http
+    # change by the external url or set to localhost if deployed locally
+    host: example.org
+    # internalPort is only used if externalService is false
+    internalPort: 30003
+    path: /
   procedures: /api/v1/procedures
   saveCredential: /api/v1/credentials?type=LEARCredentialEmployee
   credentialOfferUrl: /api/v1/credential-offer

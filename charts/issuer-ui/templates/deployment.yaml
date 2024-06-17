@@ -54,7 +54,7 @@ spec:
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           env:
             - name: LOGIN_URL
-              value: {{ .Values.app.loginUrl }}
+              value: "{{ .Values.app.loginUrl.scheme }}://{{ .Values.app.loginUrl.host }}{{ if not .Values.app.loginUrl.externalService }}:{{ .Values.app.loginUrl.internalPort }}{{ end }}{{ .Values.app.loginUrl.path }}"
             - name: CLIENT_ID
               value: {{ .Values.app.clientId }}
             - name: SCOPE
@@ -62,9 +62,9 @@ spec:
             - name: GRANT_TYPE
               value: {{ .Values.app.grantType }}
             - name: BASE_URL
-              value: {{ .Values.app.baseUrl }}
+              value: "{{ .Values.app.baseUrl.scheme }}://{{ .Values.app.baseUrl.host }}{{ if not .Values.app.baseUrl.externalService }}:{{ .Values.app.baseUrl.internalPort }}{{ end }}{{ .Values.app.baseUrl.path }}"
             - name: WALLET_URL
-              value: {{ .Values.app.walletUrl }}
+              value: "{{ .Values.app.walletUrl.scheme }}://{{ .Values.app.walletUrl.host }}{{ if not .Values.app.walletUrl.externalService }}:{{ .Values.app.walletUrl.internalPort }}{{ end }}{{ .Values.app.walletUrl.path }}"
             - name: PROCEDURES
               value: {{ .Values.app.procedures }}
             - name: SAVE_CREDENTIAL
