@@ -126,8 +126,18 @@ keycloak:
       name: keycloak-admin-password-secret
       passwordKey: keycloakAdminPassword
   hostname:
-    url: https://issuer.dome-marketplace-sbx.org/keycloak
-    adminUrl: https://issuer.dome-marketplace-sbx.org/keycloak
+    url:
+      externalService: false
+      scheme: http
+      host: localhost
+      internalPort: 30002
+      path: /
+    adminUrl:
+      externalService: false
+      scheme: http
+      host: localhost
+      internalPort: 30002
+      path: /
   https:
     certificateKeyFile: /opt/keycloak/pem/server.key.pem
     certificateFile: /opt/keycloak/pem/server.crt.pem
@@ -154,7 +164,12 @@ keycloak:
 # Issuer API Configuration
 issuerApi:
   url: http://issuer-api:8080
-  externalUrl: https://issuer.dome-marketplace-sbx.org/issuer-api
+  externalUrl:
+    externalService: false
+    scheme: http
+    host: localhost
+    internalPort: 30001
+    path: /
 
 # Pre-authorization Configuration
 preAuth:
