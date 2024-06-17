@@ -138,16 +138,28 @@ keycloak:
       name: keycloak-trust-store-secrets
       trustStorePasswordKey: keycloakTrustStorePassword
     clientAuth: request
-  db:
-    type: postgres
-    username: postgres
-    url: jdbc:postgresql://issuer-keycloak-postgres/cred
-    port: 5432
-    password: postgres
-    existingSecret:
-      enabled: false
-      name: keycloak-db-secret
-      passwordKey: keycloakDbPassword
+    db:
+      host: issuer-keycloak-postgres
+      port: 5432
+      externalService: false
+      name: cred
+      username: postgres
+      password: postgres
+      existingSecret:
+        enabled: false
+        name: keycloak-db-secret
+        passwordKey: keycloakDbPassword
+      type: postgres
+#  db:
+#    type: postgres
+#    username: postgres
+#    url: jdbc:postgresql://issuer-keycloak-postgres/cred
+#    port: 5432
+#    password: postgres
+#    existingSecret:
+#      enabled: false
+#      name: keycloak-db-secret
+#      passwordKey: keycloakDbPassword
 
 # Issuer API Configuration
 issuerApi:
