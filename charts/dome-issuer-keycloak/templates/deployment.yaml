@@ -187,7 +187,7 @@ spec:
                   name: {{ include "keycloak.db-secretName" . }}
                   key: {{ include "keycloak.db-passwordKey" . }}
             - name: KC_DB_URL
-              value: "jdbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}"
+              value: "jdbc:postgresql://{{ .Values.keycloak.db.host }}{{ if not .Values.keycloak.db.externalService }}:{{ .Values.keycloak.db.port }}{{ end }}/{{ .Values.keycloak.db.name }}"
             - name: ISSUER_API_URL
               value: {{ .Values.issuerApi.url }}
             - name: ISSUER_API_EXTERNAL_URL
