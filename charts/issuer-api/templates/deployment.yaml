@@ -91,7 +91,7 @@ spec:
             - name: SPRING_MAIL_PROPERTIES_MAIL_SMTP_SSL_TRUST
               value: {{ .Values.app.mail.properties.mail.smtp.ssl.trust }}
             - name: API_EXTERNAL_DOMAIN
-              value: {{ .Values.app.api.externalDomain }}
+              value: "{{ .Values.app.api.externalDomain.scheme }}://{{ .Values.app.api.externalDomain.host }}{{ if not .Values.app.api.externalDomain.externalService }}:{{ .Values.app.api.externalDomain.internalPort }}{{ end }}{{ .Values.app.api.externalDomain.path }}"
             - name: API_INTERNAL_DOMAIN
               value: {{ .Values.app.api.internalDomain }}
             - name: API_CONFIG_SOURCE
@@ -103,7 +103,7 @@ spec:
             - name: AUTH_SERVER_PROVIDER
               value: {{ .Values.app.authServer.provider }}
             - name: AUTH_SERVER_EXTERNAL_DOMAIN
-              value: {{ .Values.app.authServer.externalDomain }}
+              value: "{{ .Values.app.authServer.externalDomain.scheme }}://{{ .Values.app.authServer.externalDomain.host }}{{ if not .Values.app.authServer.externalDomain.externalService }}:{{ .Values.app.authServer.externalDomain.internalPort }}{{ end }}{{ .Values.app.authServer.externalDomain.path }}"
             - name: AUTH_SERVER_INTERNAL_DOMAIN
               value: {{ .Values.app.authServer.internalDomain }}
             - name: AUTH_SERVER_REALM
@@ -125,6 +125,6 @@ spec:
                   name: {{ include "issuer-api.authServerClient-secretName" . }}
                   key: {{ include "issuer-api.authServerClient-passwordKey" . }}
             - name: ISSUER_UI_EXTERNAL_DOMAIN
-              value: {{ .Values.app.ui.externalDomain }}
+              value: "{{ .Values.app.ui.externalDomain.scheme }}://{{ .Values.app.ui.externalDomain.host }}{{ if not .Values.app.ui.externalDomain.externalService }}:{{ .Values.app.ui.externalDomain.internalPort }}{{ end }}{{ .Values.app.ui.externalDomain.path }}"
             - name: ISSUER_UI_INTERNAL_DOMAIN
               value: {{ .Values.app.ui.internalDomain }}

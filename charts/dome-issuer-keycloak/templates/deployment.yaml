@@ -161,9 +161,9 @@ spec:
                   name: {{ include "keycloak.admin-secretName" . }}
                   key: {{ include "keycloak.admin-passwordKey" . }}
             - name: KC_HOSTNAME_URL
-              value: {{ .Values.keycloak.hostname.url }}
+              value: "{{ .Values.keycloak.hostname.url.scheme }}://{{ .Values.keycloak.hostname.url.host }}{{ if not .Values.keycloak.hostname.url.externalService }}:{{ .Values.keycloak.hostname.url.internalPort }}{{ end }}{{ .Values.keycloak.hostname.url.path }}"
             - name: KC_HOSTNAME_ADMIN_URL
-              value: {{ .Values.keycloak.hostname.adminUrl }}
+              value: "{{ .Values.keycloak.hostname.adminUrl.scheme }}://{{ .Values.keycloak.hostname.adminUrl.host }}{{ if not .Values.keycloak.hostname.adminUrl.externalService }}:{{ .Values.keycloak.hostname.adminUrl.internalPort }}{{ end }}{{ .Values.keycloak.hostname.adminUrl.path }}"
             - name: KC_HTTPS_CERTIFICATE_KEY_FILE
               value: {{ .Values.keycloak.https.certificateKeyFile }}
             - name: KC_HTTPS_CERTIFICATE_FILE
@@ -189,7 +189,7 @@ spec:
             - name: KC_DB_URL
               value: "jdbc:postgresql://{{ .Values.keycloak.db.host }}{{ if not .Values.keycloak.db.externalService }}:{{ .Values.keycloak.db.port }}{{ end }}/{{ .Values.keycloak.db.name }}"
             - name: ISSUER_API_URL
-              value: {{ .Values.issuerApi.url }}
+              value: "{{ .Values.issuerApi.externalUrl.scheme }}://{{ .Values.issuerApi.externalUrl.host }}{{ if not .Values.issuerApi.externalUrl.externalService }}:{{ .Values.issuerApi.externalUrl.internalPort }}{{ end }}{{ .Values.issuerApi.externalUrl.path }}"
             - name: ISSUER_API_EXTERNAL_URL
               value: {{ .Values.issuerApi.externalUrl }}
             - name: PRE_AUTH_LIFESPAN
