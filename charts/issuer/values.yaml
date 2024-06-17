@@ -47,7 +47,6 @@ issuer-api:
     ui:
       externalDomain: https://issuer.dome-marketplace-sbx.org
       internalDomain: http://wallet-ui:8080
-
   db:
     host: issuer-postgres
     port: 5432
@@ -59,6 +58,20 @@ issuer-api:
       enabled: false
       name: db-secret
       key: db-password
+
+issuer-ui:
+  app:
+    internalServerPort: 8080
+    loginUrl: "https://issuer.dome-marketplace-sbx.org/keycloak/realms/CredentialIssuer"
+    clientId: account-console
+    scope: openid profile email offline_access
+    grantType: code
+    baseUrl: "https://issuer.dome-marketplace-sbx.org/issuer-api"
+    walletUrl: "https://wallet.dome-marketplace-sbx.org"
+    procedures: /api/v1/procedures
+    saveCredential: /api/v1/credentials?type=LEARCredentialEmployee
+    credentialOfferUrl: /api/v1/credential-offer
+    notification: /api/v1/notifications
 
 dome-issuer-keycloak:
   # Keycloak Configuration
