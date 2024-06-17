@@ -127,15 +127,21 @@ keycloak:
       passwordKey: keycloakAdminPassword
   hostname:
     url:
-      externalService: false
+      # if deployed locally set to false
+      externalService: true
       scheme: http
-      host: localhost
+      # change by the external url or set to localhost if deployed locally
+      host: example.org
+      # internalPort is only used if externalService is false
       internalPort: 30002
       path: /
     adminUrl:
-      externalService: false
+      # if deployed locally set to false
+      externalService: true
       scheme: http
-      host: localhost
+      # change by the external url or set to localhost if deployed locally
+      host: example.org
+      # internalPort is only used if externalService is false
       internalPort: 30002
       path: /
   https:
@@ -151,7 +157,7 @@ keycloak:
   db:
     host: issuer-keycloak-postgres
     port: 5432
-    externalService: false
+    externalService: true
     name: cred
     username: postgres
     password: postgres
@@ -165,9 +171,12 @@ keycloak:
 issuerApi:
   url: http://issuer-api:8080
   externalUrl:
-    externalService: false
+    # if deployed locally set to false
+    externalService: true
     scheme: http
-    host: localhost
+    # change by the external url or set to localhost if deployed locally
+    host: example.org
+    # internalPort is only used if externalService is false
     internalPort: 30001
     path: /
 

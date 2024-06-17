@@ -132,9 +132,12 @@ app:
             trust: smtp.example.org
   api:
     externalDomain:
-      externalService: false
+      # if deployed locally set to false
+      externalService: true
       scheme: http
-      host: localhost
+      # change by the external url or set to localhost if deployed locally
+      host: example.org
+      # internalPort is only used if externalService is false
       internalPort: 30001
       path: /
     internalDomain: http://issuer-api:8080
@@ -144,9 +147,12 @@ app:
   authServer:
     provider: keycloak
     externalDomain:
-      externalService: false
+      # if deployed locally set to false
+      externalService: true
       scheme: http
-      host: localhost
+      # change by the external url or set to localhost if deployed locally
+      host: example.org
+      # internalPort is only used if externalService is false
       internalPort: 30002
       path: /
     internalDomain: http://dome-issuer-keycloak:8080
@@ -165,9 +171,12 @@ app:
       tokenPath: /realms/CredentialIssuer/protocol/openid-connect/token
   ui:
     externalDomain:
-      externalService: false
+      # if deployed locally set to false
+      externalService: true
       scheme: http
-      host: localhost
+      # change by the external url or set to localhost if deployed locally
+      host: example.org
+      # internalPort is only used if externalService is false
       internalPort: 30000
       path: /
     internalDomain: http://issuer-ui:8080
@@ -175,7 +184,7 @@ app:
 db:
   host: issuer-postgres
   port: 5432
-  externalService: false
+  externalService: true
   name: issuer
   username: postgres
   password: postgres

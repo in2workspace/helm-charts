@@ -11,7 +11,7 @@ spec:
     - port: {{ .Values.service.port }}
       targetPort: {{.Values.app.internalServerPort}}
       {{ if eq .Values.service.type "NodePort" }}
-      nodePort: 30001
+      nodePort: 30000
       {{ end }}
       protocol: TCP
       name: http
