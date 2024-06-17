@@ -22,14 +22,30 @@ issuer-api:
             ssl:
               trust: smtp.ionos.de
     api:
-      externalDomain: https://issuer.dome-marketplace-sbx.org/issuer-api
+      externalDomain:
+        # if deployed locally set to false
+        externalService: true
+        scheme: http
+        # change by the external url or set to localhost if deployed locally
+        host: example.org
+        # internalPort is only used if externalService is false
+        internalPort: 30001
+        path: /
       internalDomain: http://issuer-api:8080
       configSource: yaml
       cacheLifetimeCredentialOffer: 10
       cacheLifetimeVerifiableCredential: 10
     authServer:
       provider: keycloak
-      externalDomain: https://issuer.dome-marketplace-sbx.org/keycloak
+      externalDomain:
+        # if deployed locally set to false
+        externalService: true
+        scheme: http
+        # change by the external url or set to localhost if deployed locally
+        host: example.org
+        # internalPort is only used if externalService is false
+        internalPort: 30002
+        path: /
       internalDomain: http://issuer-keycloak:8080
       realm: CredentialIssuer
       client:
@@ -45,7 +61,15 @@ issuer-api:
       paths:
         tokenPath: /realms/CredentialIssuer/protocol/openid-connect/token
     ui:
-      externalDomain: https://issuer.dome-marketplace-sbx.org
+      externalDomain:
+        # if deployed locally set to false
+        externalService: true
+        scheme: http
+        # change by the external url or set to localhost if deployed locally
+        host: example.org
+        # internalPort is only used if externalService is false
+        internalPort: 30000
+        path: /
       internalDomain: http://wallet-ui:8080
   db:
     host: issuer-postgres
@@ -62,12 +86,36 @@ issuer-api:
 issuer-ui:
   app:
     internalServerPort: 8080
-    loginUrl: "https://issuer.dome-marketplace-sbx.org/keycloak/realms/CredentialIssuer"
+    loginUrl:
+      # if deployed locally set to false
+      externalService: true
+      scheme: http
+      # change by the external url or set to localhost if deployed locally
+      host: example.org
+      # internalPort is only used if externalService is false
+      internalPort: 30002
+      path: /realms/CredentialIssuer
     clientId: account-console
     scope: openid profile email offline_access
     grantType: code
-    baseUrl: "https://issuer.dome-marketplace-sbx.org/issuer-api"
-    walletUrl: "https://wallet.dome-marketplace-sbx.org"
+    baseUrl:
+      # if deployed locally set to false
+      externalService: true
+      scheme: http
+      # change by the external url or set to localhost if deployed locally
+      host: example.org
+      # internalPort is only used if externalService is false
+      internalPort: 30001
+      path: /
+    walletUrl:
+      # if deployed locally set to false
+      externalService: true
+      scheme: http
+      # change by the external url or set to localhost if deployed locally
+      host: example.org
+      # internalPort is only used if externalService is false
+      internalPort: 30003
+      path: /
     procedures: /api/v1/procedures
     saveCredential: /api/v1/credentials?type=LEARCredentialEmployee
     credentialOfferUrl: /api/v1/credential-offer
@@ -84,8 +132,24 @@ dome-issuer-keycloak:
         name: keycloak-secrets
         passwordKey: keycloakAdminPassword
     hostname:
-      url: https://issuer.dome-marketplace-sbx.org/keycloak
-      adminUrl: https://issuer.dome-marketplace-sbx.org/keycloak
+      url:
+        # if deployed locally set to false
+        externalService: true
+        scheme: http
+        # change by the external url or set to localhost if deployed locally
+        host: example.org
+        # internalPort is only used if externalService is false
+        internalPort: 30002
+        path: /
+      adminUrl:
+        # if deployed locally set to false
+        externalService: true
+        scheme: http
+        # change by the external url or set to localhost if deployed locally
+        host: example.org
+        # internalPort is only used if externalService is false
+        internalPort: 30002
+        path: /
     https:
       certificateKeyFile: /opt/keycloak/pem/server.key.pem
       certificateFile: /opt/keycloak/pem/server.crt.pem
@@ -110,7 +174,15 @@ dome-issuer-keycloak:
   # Issuer API Configuration
   issuerApi:
     url: http://issuer-api:8080
-    externalUrl: https://issuer.dome-marketplace-sbx.org/issuer-api
+    externalUrl:
+      # if deployed locally set to false
+      externalService: true
+      scheme: http
+      # change by the external url or set to localhost if deployed locally
+      host: example.org
+      # internalPort is only used if externalService is false
+      internalPort: 30001
+      path: /
 
   # Pre-authorization Configuration
   preAuth:
