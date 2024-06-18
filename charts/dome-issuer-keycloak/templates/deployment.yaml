@@ -255,7 +255,7 @@ spec:
               value: "{{ .Values.token.expiration }}"
           volumeMounts:
             - name: pem-volume
-              mountPath: /opt/keycloak/conf
+              mountPath: /opt/keycloak/pem
             - name: truststore-volume
               mountPath: /opt/keycloak/truststore
 
