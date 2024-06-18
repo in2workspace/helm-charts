@@ -5,10 +5,10 @@
 replicaCount: 1
 
 image:
-  repository: in2workspace/issuer-keycloak-plugin
+  repository: in2workspace/dome-issuer-keycloak
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: v1.1.0-SNAPSHOT
+  tag: v1.0.0-SNAPSHOT
 
 imagePullSecrets: []
 nameOverride: ""
