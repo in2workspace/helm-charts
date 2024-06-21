@@ -58,7 +58,7 @@ spec:
             - name: KC_HTTP_RELATIVE_PATH
               value: {{.Values.app.keycloak.relativePath}}
             - name: KC_PROXY_HEADERS
-              value: forwarded
+              value: {{.Values.app.keycloak.proxy}}
             - name: KEYCLOAK_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
