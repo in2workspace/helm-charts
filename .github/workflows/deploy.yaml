@@ -30,6 +30,8 @@ jobs:
           helm package charts/dome-wallet-ui
           helm dependency build charts/wallet
           helm package charts/wallet
+          helm dependency build charts/issuer
+          helm package charts/issuer
 
       - name: Upload Helm Repository Index
         run: helm repo index . --url https://in2workspace.github.io/helm-charts
