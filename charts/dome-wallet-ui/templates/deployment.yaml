@@ -62,11 +62,11 @@ spec:
             - name: WALLET_API_EXECUTE_CONTENT_PATH
               value: {{.Values.app.walletApi.executeContentPath}}
             - name: WALLET_API_REQUEST_CREDENTIAL_PATH
-              value: {{.Values.app.walletApi.verifiablePresentationPath}}
+              value: {{.Values.app.walletApi.requestCredentialPath}}
             - name: WALLET_API_VERIFIABLE_PRESENTATION_PATH
-              value: {{.Values.app.walletApi.credentialsPath}}
+              value: {{.Values.app.walletApi.verifiablePresentationPath}}
             - name: WALLET_API_CREDENTIALS_PATH
-              value: {{.Values.app.walletApi.credentialsByIdPath}}
+              value: {{.Values.app.walletApi.credentialsPath}}
             - name: WALLET_API_CREDENTIALS_BY_ID_PATH
               value: {{.Values.app.walletApi.credentialsByIdPath}}
             - name: WALLET_API_REQUEST_SIGNED_CREDENTIAL_PATH
