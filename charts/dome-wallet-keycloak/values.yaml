@@ -112,6 +112,8 @@ affinity: {}
 app:
   internalServerPort: 8080
   keycloak:
+    hostnameUrl: "http://dome-wallet-keycloak/keycloak"
+    adminUrl: "http://dome-wallet-keycloak/keycloak/admin"
     relativePath: /keycloak
     admin: admin
     password: admin
