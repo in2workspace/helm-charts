@@ -73,3 +73,7 @@ spec:
               value: {{.Values.db.type}}
             - name: KC_DB_URL
               value: "jdbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}"
+            - name: KC_HOSTNAME_URL
+              value: {{.Values.app.keycloak.hostnameUrl}}
+            - name: KC_HOSTNAME_ADMIN_URL
+              value: {{.Values.app.keycloak.adminUrl}}
