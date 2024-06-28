@@ -147,7 +147,7 @@ dome-wallet-keycloak:
     internalServerPort: 8080
     keycloak:
       hostnameUrl: "http://dome-wallet-keycloak/keycloak"
-      adminUrl: "http://dome-wallet-keycloak/keycloak/admin"
+      adminUrl: "http://dome-wallet-keycloak/keycloak"
       relativePath: /keycloak
       admin: admin
       password: admin
