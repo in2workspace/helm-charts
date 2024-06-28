@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: in2workspace/wallet-api
   # Overrides the image tag whose default is the chart appVersion.
-  tag: v1.2.0-SNAPSHOT
+  tag: v1.2.0
   pullPolicy: Always
 
 imagePullSecrets: []
