@@ -225,6 +225,34 @@ spec:
               value: {{ .Values.txCode.description }}
             - name: TOKEN_EXPIRATION
               value: "{{ .Values.token.expiration }}"
+
+            - name: SMTP_HOST
+              value: {{ .Values.app.mail.host }}
+            - name: SMTP_PORT
+              value: "{{ .Values.app.mail.port }}" # Convert to string
+            - name: SMTP_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "keycloak.mail-secretName" . }}
+                  key: {{ include "keycloak.mail-userKey" . }}
+            - name: SMTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "keycloak.mail-secretName" . }}
+                  key: {{ include "keycloak.mail-passwordKey" . }}
+            - name: SMTP_FROM
+              value: {{ .Values.app.mail.properties.mail.from }}
+            - name: SMTP_FROM_DISPLAY_NAME
+              value: {{ .Values.app.mail.properties.mail.fromDisplayName }}
+            - name: SMTP_REPLY_TO
+              value: {{ .Values.app.mail.properties.mail.replyTo }}
+            - name: SMTP_AUTH
+              value: "{{ .Values.app.mail.properties.mail.smtp.auth }}" # Convert to string
+            - name: SMTP_STARTTLS
+              value: "{{ .Values.app.mail.properties.mail.smtp.starttls.enable }}" # Convert to string
+            - name: SMTP_SSL
+              value: {{ .Values.app.mail.properties.mail.smtp.ssl.enable }}
+
           volumeMounts:
             - name: pem-volume
               mountPath: /opt/keycloak/pem
