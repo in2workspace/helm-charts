@@ -131,6 +131,7 @@ dome-issuer-keycloak:
         enabled: false
         name: keycloak-secrets
         passwordKey: keycloakAdminPassword
+    relativePath: /keycloak
     hostname:
       url:
         # if deployed locally set to false
