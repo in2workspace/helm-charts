@@ -183,6 +183,8 @@ spec:
                 secretKeyRef:
                   name: {{ include "keycloak.admin-secretName" . }}
                   key: {{ include "keycloak.admin-passwordKey" . }}
+            - name: KC_HTTP_RELATIVE_PATH
+              value: {{.Values.keycloak.relativePath}}
             - name: KC_HOSTNAME_URL
               value: "{{ .Values.keycloak.hostname.url.scheme }}://{{ .Values.keycloak.hostname.url.host }}{{ if not .Values.keycloak.hostname.url.externalService }}:{{ .Values.keycloak.hostname.url.internalPort }}{{ end }}{{ .Values.keycloak.hostname.url.path }}"
             - name: KC_HOSTNAME_ADMIN_URL
