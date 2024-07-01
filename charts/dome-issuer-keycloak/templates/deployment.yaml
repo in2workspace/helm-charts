@@ -252,7 +252,7 @@ spec:
             - name: SMTP_STARTTLS
               value: "{{ .Values.app.mail.properties.mail.smtp.starttls.enable }}" # Convert to string
             - name: SMTP_SSL
-              value: {{ .Values.app.mail.properties.mail.smtp.ssl.enable }}
+              value: "{{ .Values.app.mail.properties.mail.smtp.ssl.enable }}"
           volumeMounts:
             - name: pem-volume
               mountPath: /opt/keycloak/pem
