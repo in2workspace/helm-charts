@@ -125,6 +125,7 @@ keycloak:
       enabled: false
       name: keycloak-admin-password-secret
       passwordKey: keycloakAdminPassword
+  relativePath: /keycloak
   hostname:
     url:
       # if deployed locally set to false
