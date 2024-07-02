@@ -66,10 +66,6 @@ spec:
               value: "{{ .Values.keycloak.hostname.url.scheme }}://{{ .Values.keycloak.hostname.url.host }}{{ if not .Values.keycloak.hostname.url.externalService }}:{{ .Values.keycloak.hostname.url.internalPort }}{{ end }}{{ .Values.keycloak.hostname.url.path }}"
             - name: KC_HOSTNAME_ADMIN_URL
               value: "{{ .Values.keycloak.hostname.adminUrl.scheme }}://{{ .Values.keycloak.hostname.adminUrl.host }}{{ if not .Values.keycloak.hostname.adminUrl.externalService }}:{{ .Values.keycloak.hostname.adminUrl.internalPort }}{{ end }}{{ .Values.keycloak.hostname.adminUrl.path }}"
-            - name: KC_HTTPS_CERTIFICATE_KEY_FILE
-              value: {{ .Values.keycloak.https.certificateKeyFile }}
-            - name: KC_HTTPS_CERTIFICATE_FILE
-              value: {{ .Values.keycloak.https.certificateFile }}
             - name: KC_HTTPS_TRUST_STORE_FILE
               value: {{ .Values.keycloak.https.trustStoreFile }}
             - name: KC_HTTPS_TRUST_STORE_PASSWORD
