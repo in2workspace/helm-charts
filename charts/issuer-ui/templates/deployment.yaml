@@ -55,6 +55,8 @@ spec:
           env:
             - name: LOGIN_URL
               value: "{{ .Values.app.loginUrl.scheme }}://{{ .Values.app.loginUrl.host }}{{ if not .Values.app.loginUrl.externalService }}:{{ .Values.app.loginUrl.internalPort }}{{ end }}{{ .Values.app.loginUrl.path }}"
+            - name: LOGIN_URL
+              value: "{{ .Values.app.loginUrl.scheme }}://{{ .Values.app.loginUrl.host }}{{ if not .Values.app.loginUrl.externalService }}:{{ .Values.app.loginUrl.internalPort }}{{ end }}{{ .Values.app.loginUrl.path }}"
             - name: CLIENT_ID
               value: {{ .Values.app.clientId }}
             - name: SCOPE
