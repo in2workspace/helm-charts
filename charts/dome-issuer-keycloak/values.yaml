@@ -120,6 +120,7 @@ app:
 keycloak:
   proxy: edge
   logsCertsLevel: TRACE
+  logLevel: DEBUG
   admin:
     username: admin
     password: admin
