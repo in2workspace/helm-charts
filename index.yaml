@@ -3,9 +3,9 @@ entries:
   desmos:
   - apiVersion: v2
     appVersion: v0.7.0
-    created: "2024-07-03T06:44:00.147139848Z"
+    created: "2024-07-03T06:57:09.052269149Z"
     description: A Helm chart for Kubernetes
-    digest: fc21ef36a813ea0c222a03059e057a72ac013e431e02907c75eec045ee24ee2f
+    digest: 0d1351b8966b92daf4a044cafb8511e99ea206d99e0f85ee8b0921bb7b4a1512
     maintainers:
     - email: domesupport@in2.es
       name: IN2 Team
@@ -18,7 +18,7 @@ entries:
     version: 0.8.0
   - apiVersion: v2
     appVersion: v0.7.0
-    created: "2024-07-03T06:44:00.145785812Z"
+    created: "2024-07-03T06:57:09.051094228Z"
     description: A Helm chart for Kubernetes
     digest: 16be8d55df93987a67efb7509dd25588f365b6bca284d7218f751c2c546cdad4
     maintainers:
@@ -34,9 +34,24 @@ entries:
   dome-issuer-keycloak:
   - apiVersion: v2
     appVersion: v1.1.0
-    created: "2024-07-03T06:44:00.151790897Z"
+    created: "2024-07-03T06:57:09.057634898Z"
     description: A Helm chart for Kubernetes
-    digest: 191b8630cd0f31a0ae2f9ddca67d0eeee7699f14f5b377b42c413e53f5522cb5
+    digest: cf60f3a6c1895a12516dee2a676c522893cca12ab14bfbab9639876adc622a2a
+    maintainers:
+    - email: domesupport@in2.es
+      name: IN2 Team
+    name: dome-issuer-keycloak
+    sources:
+    - https://github.com/in2workspace/dome-issuer-keycloak
+    type: application
+    urls:
+    - https://in2workspace.github.io/helm-charts/dome-issuer-keycloak-1.0.5.tgz
+    version: 1.0.5
+  - apiVersion: v2
+    appVersion: v1.1.0
+    created: "2024-07-03T06:57:09.057045514Z"
+    description: A Helm chart for Kubernetes
+    digest: dc1743b8e8ebb8bf46688fdd4e18506e4789dd9437fb584b63c861ee03f857cd
     maintainers:
     - email: domesupport@in2.es
       name: IN2 Team
@@ -49,7 +64,7 @@ entries:
     version: 1.0.4
   - apiVersion: v2
     appVersion: v1.1.0
-    created: "2024-07-03T06:44:00.151205329Z"
+    created: "2024-07-03T06:57:09.05615093Z"
     description: A Helm chart for Kubernetes
     digest: ed54ba2811c92696fcf2881f00e9fb0b1c34a9c36e98e338384991e52000a1a4
     maintainers:
@@ -64,7 +79,7 @@ entries:
     version: 1.0.3
   - apiVersion: v2
     appVersion: v1.1.0
-    created: "2024-07-03T06:44:00.149913889Z"
+    created: "2024-07-03T06:57:09.055249662Z"
     description: A Helm chart for Kubernetes
     digest: 576d04c9edb6bdf235583f8de30c4033d61077193be51486d5c986b75ac22962
     maintainers:
@@ -79,7 +94,7 @@ entries:
     version: 1.0.2
   - apiVersion: v2
     appVersion: v1.1.0
-    created: "2024-07-03T06:44:00.149337929Z"
+    created: "2024-07-03T06:57:09.054692889Z"
     description: A Helm chart for Kubernetes
     digest: 6524864f8c301e99b00f4975da4c8a4cb2b100ad217449faff7814ea5ad6fda3
     maintainers:
@@ -94,7 +109,7 @@ entries:
     version: 1.0.1
   - apiVersion: v2
     appVersion: v1.1.0
-    created: "2024-07-03T06:44:00.148770065Z"
+    created: "2024-07-03T06:57:09.054076594Z"
     description: A Helm chart for Kubernetes
     digest: d30555edcf862bcf732d7d71b949b66ed97ca607b264ff5e5f9e7e425eb5a542
     maintainers:
@@ -110,9 +125,9 @@ entries:
   dome-wallet-keycloak:
   - apiVersion: v2
     appVersion: v1.0.2
-    created: "2024-07-03T06:44:00.153044828Z"
+    created: "2024-07-03T06:57:09.058960902Z"
     description: A Helm chart for Kubernetes
-    digest: 680f2ad73f0138e8178aea4b80d9f4921d23c7f6a65ab2a5a350234a46c54262
+    digest: 29bb50a1c12f91a56efa49bb1293a1af10d8e6f48b0a0eaa24f98344993089fa
     maintainers:
     - email: domesupport@in2.es
       name: IN2 Team
@@ -125,7 +140,7 @@ entries:
     version: 0.1.2
   - apiVersion: v2
     appVersion: v1.0.1
-    created: "2024-07-03T06:44:00.152625953Z"
+    created: "2024-07-03T06:57:09.058489499Z"
     description: A Helm chart for Kubernetes
     digest: 71e44b9bbc1a66bf6441851ecee31a5c3374335f91b8e90d2ea7d3b13d991463
     maintainers:
@@ -140,7 +155,7 @@ entries:
     version: 0.1.1
   - apiVersion: v2
     appVersion: v1.0.0
-    created: "2024-07-03T06:44:00.152209512Z"
+    created: "2024-07-03T06:57:09.058061227Z"
     description: A Helm chart for Kubernetes
     digest: bdb773f65d91f4b765c9818b727139f4ebe18d5fd8db7fc625654b742bc1cd26
     maintainers:
@@ -156,9 +171,9 @@ entries:
   dome-wallet-ui:
   - apiVersion: v2
     appVersion: v1.2.1
-    created: "2024-07-03T06:44:00.15407533Z"
+    created: "2024-07-03T06:57:09.059781028Z"
     description: A Helm chart for Kubernetes
-    digest: 68f2eef6fec560ced97f8bb4e68fc3d32e64c86c419aac3df1882754549e9c24
+    digest: 85ef9db8908d6a8abba013859ca7a41308cd7b39994d31082443aaf6cb4f5f77
     maintainers:
     - email: domesupport@in2.es
       name: IN2 Team
@@ -171,7 +186,7 @@ entries:
     version: 0.1.1
   - apiVersion: v2
     appVersion: v1.2.0
-    created: "2024-07-03T06:44:00.153555456Z"
+    created: "2024-07-03T06:57:09.059373084Z"
     description: A Helm chart for Kubernetes
     digest: 57433566e6f2e6bf7c87578b67aee3295a9577cf970939f9ea66351c3923650c
     maintainers:
@@ -187,7 +202,7 @@ entries:
   issuer:
   - apiVersion: v2
     appVersion: v1.0.1
-    created: "2024-07-03T06:44:00.198616868Z"
+    created: "2024-07-03T06:57:09.104076363Z"
     dependencies:
     - alias: issuer-api
       condition: issuer-api.enabled
@@ -215,7 +230,7 @@ entries:
       repository: oci://registry-1.docker.io/bitnamicharts
       version: 13.1.5
     description: Umbrella Helm chart for the issuer
-    digest: 976ca850da301a3da8e05b8f8ee528e11b360089ee9622affeacaac58ae7f677
+    digest: 878b1c6bbc2f95066bd6cff0103aee1ead54d54c102a013c4c3b7fe5581d5b6c
     name: issuer
     type: application
     urls:
@@ -223,7 +238,7 @@ entries:
     version: 1.0.7
   - apiVersion: v2
     appVersion: v1.0.1
-    created: "2024-07-03T06:44:00.192225014Z"
+    created: "2024-07-03T06:57:09.098364463Z"
     dependencies:
     - alias: issuer-api
       condition: issuer-api.enabled
@@ -259,7 +274,7 @@ entries:
     version: 1.0.6
   - apiVersion: v2
     appVersion: v1.0.1
-    created: "2024-07-03T06:44:00.186782509Z"
+    created: "2024-07-03T06:57:09.092435778Z"
     dependencies:
     - alias: issuer-api
       condition: issuer-api.enabled
@@ -295,7 +310,7 @@ entries:
     version: 1.0.5
   - apiVersion: v2
     appVersion: v1.0.1
-    created: "2024-07-03T06:44:00.180207822Z"
+    created: "2024-07-03T06:57:09.086171324Z"
     dependencies:
     - alias: issuer-api
       condition: issuer-api.enabled
@@ -331,7 +346,7 @@ entries:
     version: 1.0.3
   - apiVersion: v2
     appVersion: v1.0.1
-    created: "2024-07-03T06:44:00.174525607Z"
+    created: "2024-07-03T06:57:09.080813748Z"
     dependencies:
     - alias: issuer-api
       condition: issuer-api.enabled
@@ -367,7 +382,7 @@ entries:
     version: 1.0.2
   - apiVersion: v2
     appVersion: v1.0.1
-    created: "2024-07-03T06:44:00.168535345Z"
+    created: "2024-07-03T06:57:09.074529496Z"
     dependencies:
     - alias: issuer-api
       condition: issuer-api.enabled
@@ -403,7 +418,7 @@ entries:
     version: 1.0.1
   - apiVersion: v2
     appVersion: v1.0.0
-    created: "2024-07-03T06:44:00.16118858Z"
+    created: "2024-07-03T06:57:09.067253055Z"
     dependencies:
     - alias: issuer-api
       condition: issuer-api.enabled
@@ -440,9 +455,9 @@ entries:
   issuer-api:
   - apiVersion: v2
     appVersion: v0.8.0
-    created: "2024-07-03T06:44:00.200589206Z"
+    created: "2024-07-03T06:57:09.106050862Z"
     description: A Helm chart for Kubernetes
-    digest: 4475f072c17904eb2ef515c19828c67dea3956c9c8abbb8692e5517fa59a5d16
+    digest: 444c70b51c54fe7fda78e53cf2fedc3b72ffb3b125421d861cc79bd75f1664f0
     maintainers:
     - email: domesupport@in2.es
       name: IN2 Team
@@ -455,7 +470,7 @@ entries:
     version: 1.0.1
   - apiVersion: v2
     appVersion: v0.8.0
-    created: "2024-07-03T06:44:00.200055275Z"
+    created: "2024-07-03T06:57:09.105514978Z"
     description: A Helm chart for Kubernetes
     digest: b3472100b23d177d2ad8f23525530ee6127ca289c2ad6f85148461643d631b37
     maintainers:
@@ -470,7 +485,7 @@ entries:
     version: 1.0.0
   - apiVersion: v2
     appVersion: v0.8.0
-    created: "2024-07-03T06:44:00.199518669Z"
+    created: "2024-07-03T06:57:09.104967782Z"
     description: A Helm chart for Kubernetes
     digest: b21630517356d28e7c6cccac3ed5a966a3d612ac5ce88cf02e4f6fbe521bff66
     maintainers:
@@ -485,7 +500,7 @@ entries:
     version: 0.8.0
   - apiVersion: v2
     appVersion: v0.7.0
-    created: "2024-07-03T06:44:00.199070178Z"
+    created: "2024-07-03T06:57:09.104520505Z"
     description: A Helm chart for Kubernetes
     digest: 852121020fe5499365b5c53360b44d2a36fe9bd5849af66382e52526f16fba61
     maintainers:
@@ -501,7 +516,7 @@ entries:
   issuer-keycloak-plugin:
   - apiVersion: v2
     appVersion: v1.1.0
-    created: "2024-07-03T06:44:00.201048608Z"
+    created: "2024-07-03T06:57:09.106511634Z"
     description: A Helm chart for Kubernetes
     digest: 8440d394b07c87667b182b2ee9a22b37a8c7ac7d9b48ef51e7b343599838d8bf
     maintainers:
@@ -517,9 +532,9 @@ entries:
   issuer-ui:
   - apiVersion: v2
     appVersion: v0.6.0
-    created: "2024-07-03T06:44:00.202223831Z"
+    created: "2024-07-03T06:57:09.107741468Z"
     description: A Helm chart for Kubernetes
-    digest: b8515472657e0e7b54b36d9b27fea31e00f371bf0fb1a52b85394d6ddbebc409
+    digest: 39bf1fac6cf14ea588ffa322151960d286631be4ddb51c6270801bd7392d26bd
     maintainers:
     - email: domesupport@in2.es
       name: IN2 Team
@@ -532,7 +547,7 @@ entries:
     version: 1.0.1
   - apiVersion: v2
     appVersion: v0.6.0
-    created: "2024-07-03T06:44:00.201816036Z"
+    created: "2024-07-03T06:57:09.107328355Z"
     description: A Helm chart for Kubernetes
     digest: 57261088f0e92bdc06d70dc6cfa5c14fea6d6da792cba3ba3577a3a9dfc903d5
     maintainers:
@@ -547,7 +562,7 @@ entries:
     version: 1.0.0
   - apiVersion: v2
     appVersion: v0.6.0
-    created: "2024-07-03T06:44:00.201378736Z"
+    created: "2024-07-03T06:57:09.106884413Z"
     description: A Helm chart for Kubernetes
     digest: 007d38ebf7168feee4a94e4e5e3338cab5328b15602a7fa6bfcafa73de7c358f
     maintainers:
@@ -563,7 +578,7 @@ entries:
   wallet:
   - apiVersion: v2
     appVersion: v0.0.4
-    created: "2024-07-03T06:44:00.227304731Z"
+    created: "2024-07-03T06:57:09.132424797Z"
     dependencies:
     - condition: wallet-api.enabled
       name: wallet-api
@@ -593,7 +608,7 @@ entries:
       repository: oci://registry-1.docker.io/bitnamicharts
       version: 13.1.5
     description: Umbrella Helm chart for the Wallet
-    digest: 546c0cd033f427f4c9f29fdf9aca80a89d223013bceb37b52422f5b8895f4c5b
+    digest: 36ea3c2eede3c93455567ed68d9623ae4a3f1752e60cf7357dedda5ba9da6748
     name: wallet
     type: application
     urls:
@@ -601,7 +616,7 @@ entries:
     version: 0.1.3
   - apiVersion: v2
     appVersion: v0.0.3
-    created: "2024-07-03T06:44:00.220559862Z"
+    created: "2024-07-03T06:57:09.125809355Z"
     dependencies:
     - condition: wallet-api.enabled
       name: wallet-api
@@ -639,7 +654,7 @@ entries:
     version: 0.1.2
   - apiVersion: v2
     appVersion: v0.0.2
-    created: "2024-07-03T06:44:00.215052696Z"
+    created: "2024-07-03T06:57:09.120191Z"
     dependencies:
     - condition: wallet-api.enabled
       name: wallet-api
@@ -677,7 +692,7 @@ entries:
     version: 0.1.1
   - apiVersion: v2
     appVersion: v0.0.1
-    created: "2024-07-03T06:44:00.208494761Z"
+    created: "2024-07-03T06:57:09.114022474Z"
     dependencies:
     - condition: wallet-api.enabled
       name: wallet-api
@@ -716,9 +731,9 @@ entries:
   wallet-api:
   - apiVersion: v2
     appVersion: v1.2.1
-    created: "2024-07-03T06:44:00.228336445Z"
+    created: "2024-07-03T06:57:09.133453163Z"
     description: A Helm chart for Kubernetes
-    digest: f247638aaaebe60b0984297159da247aa493fd88982f41f5090f5fef1fad0e4b
+    digest: b2291a8e3a4eabcc2340991b9b09d5303302508ba9f6f2f41409db1eb8d84b97
     maintainers:
     - email: domesupport@in2.es
       name: IN2 Team
@@ -731,7 +746,7 @@ entries:
     version: 0.1.1
   - apiVersion: v2
     appVersion: v1.2.0
-    created: "2024-07-03T06:44:00.227828683Z"
+    created: "2024-07-03T06:57:09.132948788Z"
     description: A Helm chart for Kubernetes
     digest: 8333c7e9cf50846885405b768bd6101975cc4d8f792b14605a6e79a49f0532e2
     maintainers:
@@ -747,7 +762,7 @@ entries:
   wallet-driving-application:
   - apiVersion: v2
     appVersion: v1.0.0
-    created: "2024-07-03T06:44:00.228606963Z"
+    created: "2024-07-03T06:57:09.133725092Z"
     description: A Helm chart for Kubernetes
     digest: 0b1a7ab828c55ac23374f433da4dc76bff007d1a7b9ec39b26f4b86e4e31fdd3
     maintainers:
@@ -763,7 +778,7 @@ entries:
   wallet-server:
   - apiVersion: v2
     appVersion: v1.0.0
-    created: "2024-07-03T06:44:00.22911753Z"
+    created: "2024-07-03T06:57:09.134234336Z"
     description: A Helm chart for Kubernetes
     digest: b22dfbd82a9672ba6daabc09fe540b908d9279f5a43fcb79d4a0f6ef383285fa
     maintainers:
@@ -776,4 +791,4 @@ entries:
     urls:
     - https://in2workspace.github.io/helm-charts/wallet-server-0.1.0.tgz
     version: 0.1.0
-generated: "2024-07-03T06:44:00.145123419Z"
+generated: "2024-07-03T06:57:09.050290192Z"

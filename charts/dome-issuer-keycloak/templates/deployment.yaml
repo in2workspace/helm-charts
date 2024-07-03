@@ -60,6 +60,8 @@ spec:
                 secretKeyRef:
                   name: {{ include "keycloak.admin-secretName" . }}
                   key: {{ include "keycloak.admin-passwordKey" . }}
+            - name: KC_PROXY
+              value: {{.Values.keycloak.proxy}}
             - name: KC_HTTP_RELATIVE_PATH
               value: {{.Values.keycloak.relativePath}}
             - name: KC_HOSTNAME_URL
