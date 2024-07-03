@@ -104,6 +104,8 @@ spec:
               value: "{{ .Values.token.expiration }}"
             - name: QUARKUS_LOG_CATEGORY__ORG_KEYCLOAK_SERVICES_X509__LEVEL
               value: "{{ .Values.keycloak.logsCertsLevel }}"
+            - name: KEYCLOAK_LOGLEVEL
+              value: "{{ .Values.keycloak.logLevel }}"
           volumeMounts:
             - name: truststore-volume
               mountPath: /opt/keycloak/truststore
