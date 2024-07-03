@@ -40,7 +40,7 @@ dependencies:
     alias: dome-issuer-keycloak
     condition: dome-issuer-keycloak.enabled
     repository: https://in2workspace.github.io/helm-charts
-    version: 1.0.3
+    version: 1.0.4
 
   - name: postgresql
     condition: issuer-postgres.enabled
