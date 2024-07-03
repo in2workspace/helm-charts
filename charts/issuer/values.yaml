@@ -124,6 +124,8 @@ issuer-ui:
 dome-issuer-keycloak:
   # Keycloak Configuration
   keycloak:
+    proxy: edge
+    logsCertsLevel: TRACE
     admin:
       username: admin
       password: admin
