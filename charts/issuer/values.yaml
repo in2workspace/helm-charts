@@ -124,6 +124,7 @@ issuer-ui:
 dome-issuer-keycloak:
   # Keycloak Configuration
   keycloak:
+    proxy: edge
     admin:
       username: admin
       password: admin
