@@ -118,6 +118,7 @@ app:
 
 # Keycloak Configuration
 keycloak:
+  proxy: edge
   admin:
     username: admin
     password: admin
