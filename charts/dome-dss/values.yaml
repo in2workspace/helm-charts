@@ -52,7 +52,7 @@ ingress:
   hosts:
     - host: chart-example.local
       paths:
-        - path: /
+        - path: /dome-dss
           pathType: ImplementationSpecific
   tls: []
   #  - secretName: chart-example-tls
@@ -72,13 +72,13 @@ resources: {}
   #   memory: 128Mi
 
 readinessProbe:
-  path: /health
+  path: /dome-dss/health
   initialDelaySeconds: 40
   failureThreshold: 6
   periodSeconds: 10
 
 livenessProbe:
-  path: /health
+  path: /dome-dss/health
   initialDelaySeconds: 40
   failureThreshold: 6
   periodSeconds: 10
