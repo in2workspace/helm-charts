@@ -116,16 +116,3 @@ authServer:
   internalDomain: "http://localhost:8081"
   externalDomain: "http://localhost:8081"
   realm: CredentialIssuer
-
-certificate:
-  keyStorePath: "classpath:certs/zeus.p12"
-  keyStorePassword: "SAVeJ2Sf"
-  keyStoreType: "PKCS12"
-  certAlias: "zeus olimpos"
-  privateKeyPassword: "SAVeJ2Sf"
-  existingSecret:
-    enabled: false
-    name: dss-key-store-secret
-    passwordKey: keyStorePassword
-    privatePasswordKey: privateKeyPassword
-

@@ -59,22 +59,6 @@ spec:
               value: {{ .Values.authServer.externalDomain }}
             - name: AUTH_SERVER_REALM
               value: {{ .Values.authServer.realm }}
-            - name: CERTIFICATE_KEY_STORE_PATH
-              value: {{ .Values.certificate.keyStorePath }}
-            - name: CERTIFICATE_KEY_STORE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "dome-dss.key-store-secretName" . }}
-                  key: {{ include "dome-dss.key-passwordKey" . }}
-            - name: CERTIFICATE_KEY_STORE_TYPE
-              value: {{ .Values.certificate.keyStoreType }}
-            - name: CERTIFICATE_CERT_ALIAS
-              value: {{ .Values.certificate.certAlias }}
-            - name: CERTIFICATE_PRIVATE_KEY_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "dome-dss.key-store-secretName" . }}
-                  key: {{ include "dome-dss.key-privatePasswordKey" . }}
           {{- with .Values.volumeMounts }}
           volumeMounts:
             {{- toYaml . | nindent 12 }}
