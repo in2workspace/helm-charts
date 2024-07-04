@@ -60,30 +60,3 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name | quote -}}
 {{- end -}}
 {{- end }}
-
-{{/*
-Support for existing key-store secret
-*/}}
-{{- define "dome-dss.key-store-secretName" -}}
-{{- if .Values.certificate.existingSecret.enabled -}}
-{{- printf "%s" (tpl .Values.certificate.existingSecret.name $) -}}
-{{- else -}}
-{{- printf "dome-dss-key-store-secret" -}}
-{{- end -}}
-{{- end }}
-
-{{- define "dome-dss.key-passwordKey" -}}
-{{- if .Values.certificate.existingSecret.enabled -}}
-{{- printf "%s" (tpl .Values.certificate.existingSecret.passwordKey $) -}}
-{{- else -}}
-{{- printf "keyStorePassword" -}}
-{{- end -}}
-{{- end }}
-
-{{- define "dome-dss.key-privatePasswordKey" -}}
-{{- if .Values.certificate.existingSecret.enabled -}}
-{{- printf "%s" (tpl .Values.certificate.existingSecret.privatePasswordKey $) -}}
-{{- else -}}
-{{- printf "privateKeyPassword" -}}
-{{- end -}}
-{{- end }}
