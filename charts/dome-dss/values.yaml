@@ -5,10 +5,10 @@
 replicaCount: 1
 
 image:
-  repository: nginx
-  pullPolicy: IfNotPresent
+  repository: in2workspace/remote-signature-ms
+  tag: v0.5.0
+  pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
 
 imagePullSecrets: []
 nameOverride: ""
@@ -106,17 +106,17 @@ tolerations: []
 
 affinity: {}
 
-auth-server:
-  internal-domain: "http://localhost:8081"
-  external-domain: "http://localhost:8081"
+authServer:
+  internalDomain: "http://localhost:8081"
+  externalDomain: "http://localhost:8081"
   realm: CredentialIssuer
 
 certificate:
-  key-store-path: "classpath:certs/zeus.p12"
-  key-store-password: "SAVeJ2Sf"
-  key-store-type: "PKCS12"
-  cert-alias: "zeus olimpos"
-  private-key-password: "SAVeJ2Sf"
+  keyStorePath: "classpath:certs/zeus.p12"
+  keyStorePassword: "SAVeJ2Sf"
+  keyStoreType: "PKCS12"
+  certAlias: "zeus olimpos"
+  privateKeyPassword: "SAVeJ2Sf"
   existingSecret:
     enabled: false
     name: dss-key-store-secret

@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "dome-dss.fullname" . }}
+  namespace: {{ $.Release.Namespace | quote }}
   labels:
     {{- include "dome-dss.labels" . | nindent 4 }}
 spec:
@@ -18,10 +19,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "dome-dss.labels" . | nindent 8 }}
-        {{- with .Values.podLabels }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
+        {{- include "dome-dss.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -34,36 +32,44 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ .Values.service.port }}
+              containerPort: {{ .Values.app.internalServerPort }}
               protocol: TCP
           livenessProbe:
-            {{- toYaml .Values.livenessProbe | nindent 12 }}
+            httpGet:
+              path: {{ .Values.livenessProbe.path }}
+              port: {{ .Values.app.internalServerPort }}
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
           readinessProbe:
-            {{- toYaml .Values.readinessProbe | nindent 12 }}
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            httpGet:
+              path: {{ .Values.readinessProbe.path }}
+              port: {{ .Values.app.internalServerPort }}
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           env:
             - name: AUTH_SERVER_INTERNAL_DOMAIN
-              value: {{ .Values.auth-server.internal-domain }}
+              value: {{ .Values.authServer.internalDomain }}
             - name: AUTH_SERVER_EXTERNAL_DOMAIN
-              value: {{ .Values.auth-server.external-domain }}
+              value: {{ .Values.authServer.externalDomain }}
             - name: AUTH_SERVER_REALM
-              value: {{ .Values.auth-server.realm }}
+              value: {{ .Values.authServer.realm }}
             - name: CERTIFICATE_KEY_STORE_PATH
-              value: {{ .Values.certificate.key-store-path }}
+              value: {{ .Values.certificate.keyStorePath }}
             - name: CERTIFICATE_KEY_STORE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "dome-dss.key-store-secretName" . }}
                   key: {{ include "dome-dss.key-passwordKey" . }}
             - name: CERTIFICATE_KEY_STORE_TYPE
-              value: {{ .Values.certificate.key-store-type }}
+              value: {{ .Values.certificate.keyStoreType }}
             - name: CERTIFICATE_CERT_ALIAS
-              value: {{ .Values.certificate.cert-alias }}
+              value: {{ .Values.certificate.certAlias }}
             - name: CERTIFICATE_PRIVATE_KEY_PASSWORD
               valueFrom:
                 secretKeyRef:
