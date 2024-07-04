@@ -50,41 +50,40 @@ app.kubernetes.io/name: {{ include "dome-dss.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
-
 {{/*
 Create the name of the service account to use
 */}}
 {{- define "dome-dss.serviceAccountName" -}}
-    {{- if .Values.serviceAccount.create }}
-        {{- default (include "dome-dss.fullname" .) .Values.serviceAccount.name }}
-    {{- else }}
-{{- default "default" .Values.serviceAccount.name }}
-    {{- end }}
+{{- if .Values.serviceAccount.create -}}
+{{- default (include "dome-dss.fullname" .) .Values.serviceAccount.name | quote -}}
+{{- else -}}
+{{- default "default" .Values.serviceAccount.name | quote -}}
+{{- end -}}
 {{- end }}
 
 {{/*
 Support for existing key-store secret
 */}}
 {{- define "dome-dss.key-store-secretName" -}}
-    {{- if .Values.certificate.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.certificate.existingSecret.name $) -}}
-    {{- else -}}
-        {{- printf "dome-dss-key-store-secret" -}}
-    {{- end -}}
+{{- if .Values.certificate.existingSecret.enabled -}}
+{{- printf "%s" (tpl .Values.certificate.existingSecret.name $) -}}
+{{- else -}}
+{{- printf "dome-dss-key-store-secret" -}}
 {{- end -}}
+{{- end }}
 
-{{- define "dome-dss.key-passwordKey -}}
-    {{- if .Values.certificate.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.certificate.existingSecret.passwordKey $) -}}
-    {{- else -}}
-        {{- printf "keyStorePassword" -}}
-    {{- end -}}
+{{- define "dome-dss.key-passwordKey" -}}
+{{- if .Values.certificate.existingSecret.enabled -}}
+{{- printf "%s" (tpl .Values.certificate.existingSecret.passwordKey $) -}}
+{{- else -}}
+{{- printf "keyStorePassword" -}}
 {{- end -}}
+{{- end }}
 
-{{- define "dome-dss.key-privatePasswordKey -}}
-    {{- if .Values.certificate.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.certificate.existingSecret.privatePasswordKey $) -}}
-    {{- else -}}
-        {{- printf "privateKeyPassword" -}}
-    {{- end -}}
+{{- define "dome-dss.key-privatePasswordKey" -}}
+{{- if .Values.certificate.existingSecret.enabled -}}
+{{- printf "%s" (tpl .Values.certificate.existingSecret.privatePasswordKey $) -}}
+{{- else -}}
+{{- printf "privateKeyPassword" -}}
 {{- end -}}
+{{- end }}

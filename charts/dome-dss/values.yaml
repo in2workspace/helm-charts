@@ -52,7 +52,7 @@ ingress:
   hosts:
     - host: chart-example.local
       paths:
-        - path: /
+        - path: /dome-dss
           pathType: ImplementationSpecific
   tls: []
   #  - secretName: chart-example-tls
@@ -71,14 +71,17 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
-livenessProbe:
-  httpGet:
-    path: /
-    port: http
 readinessProbe:
-  httpGet:
-    path: /
-    port: http
+  path: /dome-dss/health
+  initialDelaySeconds: 40
+  failureThreshold: 6
+  periodSeconds: 10
+
+livenessProbe:
+  path: /dome-dss/health
+  initialDelaySeconds: 40
+  failureThreshold: 6
+  periodSeconds: 10
 
 autoscaling:
   enabled: false
@@ -105,6 +108,9 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+app:
+  internalServerPort: 8080
 
 authServer:
   internalDomain: "http://localhost:8081"
