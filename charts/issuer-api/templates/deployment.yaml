@@ -128,3 +128,7 @@ spec:
               value: "{{ .Values.app.ui.externalDomain.scheme }}://{{ .Values.app.ui.externalDomain.host }}{{ if not .Values.app.ui.externalDomain.externalService }}:{{ .Values.app.ui.externalDomain.internalPort }}{{ end }}{{ .Values.app.ui.externalDomain.path }}"
             - name: ISSUER_UI_INTERNAL_DOMAIN
               value: {{ .Values.app.ui.internalDomain }}
+            - name: REMOTE_SIGNATURE_INTERNAL_DOMAIN
+              value: {{ .Values.remoteSignature.internalDomain }}
+            - name: REMOTE_SIGNATURE_EXTERNAL_DOMAIN
+              value: "{{ .Values.remoteSignature.externalDomain.scheme }}://{{ .Values.remoteSignature.externalDomain.host }}{{ if not .Values.remoteSignature.externalDomain.externalService }}:{{ .Values.remoteSignature.externalDomain.internalPort }}{{ end }}{{ .Values.remoteSignature.externalDomain.path }}"
