@@ -89,9 +89,9 @@ spec:
             - name: KC_DB_URL
               value: "jdbc:postgresql://{{ .Values.keycloak.db.host }}{{ if not .Values.keycloak.db.externalService }}:{{ .Values.keycloak.db.port }}{{ end }}/{{ .Values.keycloak.db.name }}"
             - name: ISSUER_API_URL
-              value: "{{ .Values.issuerApi.externalUrl.scheme }}://{{ .Values.issuerApi.externalUrl.host }}{{ if not .Values.issuerApi.externalUrl.externalService }}:{{ .Values.issuerApi.externalUrl.internalPort }}{{ end }}{{ .Values.issuerApi.externalUrl.path }}"
+              value: {{ .Values.issuerApi.url }}
             - name: ISSUER_API_EXTERNAL_URL
-              value: {{ .Values.issuerApi.externalUrl }}
+              value: "{{ .Values.issuerApi.externalUrl.scheme }}://{{ .Values.issuerApi.externalUrl.host }}{{ if not .Values.issuerApi.externalUrl.externalService }}:{{ .Values.issuerApi.externalUrl.internalPort }}{{ end }}{{ .Values.issuerApi.externalUrl.path }}"
             - name: PRE_AUTH_LIFESPAN
               value: "{{ .Values.preAuth.lifespan }}"
             - name: PRE_AUTH_LIFESPAN_TIME_UNIT
