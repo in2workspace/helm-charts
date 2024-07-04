@@ -109,6 +109,9 @@ tolerations: []
 
 affinity: {}
 
+app:
+  internalServerPort: 8080
+
 authServer:
   internalDomain: "http://localhost:8081"
   externalDomain: "http://localhost:8081"
