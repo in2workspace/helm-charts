@@ -68,6 +68,41 @@ ingress:
         - example-host
       secretName: example-secret
 
+ingressWellKnown:
+  enabled: false
+  className: ""
+  annotations: {}
+  # kubernetes.io/ingress.class: nginx
+  # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /issuer-api
+          pathType: ImplementationSpecific
+          serviceName: service1
+          servicePort: 80
+  tls:
+    - hosts:
+        - example-host
+      secretName: example-secret
+
+ingressToken:
+  enabled: false
+  className: ""
+  annotations: {}
+  # kubernetes.io/ingress.class: nginx
+  # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /issuer-api
+          pathType: ImplementationSpecific
+          serviceName: service1
+          servicePort: 80
+  tls:
+    - hosts:
+        - example-host
+      secretName: example-secret
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
