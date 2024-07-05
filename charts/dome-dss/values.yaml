@@ -72,13 +72,13 @@ resources: {}
   #   memory: 128Mi
 
 readinessProbe:
-  path: /dome-dss/health
+  path: /health
   initialDelaySeconds: 40
   failureThreshold: 6
   periodSeconds: 10
 
 livenessProbe:
-  path: /dome-dss/health
+  path: /health
   initialDelaySeconds: 40
   failureThreshold: 6
   periodSeconds: 10
@@ -110,7 +110,7 @@ tolerations: []
 affinity: {}
 
 app:
-  internalServerPort: 8080
+  internalServerPort: 8050
 
 authServer:
   internalDomain: "http://localhost:8081"
