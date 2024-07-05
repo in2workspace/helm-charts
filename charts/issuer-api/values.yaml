@@ -176,7 +176,7 @@ app:
         enabled: false
         name: auth-secret
         clientSecretKey: client-secret
-        passwordKey: password
+        clientPasswordKey: password
     paths:
       tokenPath: /realms/CredentialIssuer/protocol/openid-connect/token
   ui:
