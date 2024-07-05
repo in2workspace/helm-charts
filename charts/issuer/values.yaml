@@ -173,10 +173,11 @@ dome-issuer-keycloak:
         trustStorePasswordKey: keycloakTrustStorePassword
       clientAuth: request
     db:
-      type: postgres
-      username: postgres
-      url: jdbc:postgresql://issuer-keycloak-postgres/cred
+      host: issuer-keycloak-postgres
       port: 5432
+      externalService: true
+      name: cred
+      username: postgres
       password: postgres
       existingSecret:
         enabled: false
