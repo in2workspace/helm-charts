@@ -101,7 +101,7 @@ Support for existing auth server client secret
 
 {{- define "issuer-api.authServerClient-passwordKey" -}}
     {{- if .Values.app.authServer.client.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.authServer.client.existingSecret.passwordKey $) -}}
+        {{- printf "%s" (tpl .Values.app.authServer.client.existingSecret.clientPasswordKey $) -}}
     {{- else -}}
         {{- printf "password" -}}
     {{- end -}}
