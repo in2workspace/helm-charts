@@ -40,12 +40,6 @@ spec:
             name: {{ $fullName }}
             port:
               number: {{ $servicePort }}
-        {{ - if .Values.ingress.annotations }}
-        annotations:
-          {{ - with .Values.ingress.annotations }}
-            {{ - toYaml . | nindent 4 }}
-            {{ - end }}
-        {{ - end }}
       {{- end }}
   {{- end }}
   {{- end }}
