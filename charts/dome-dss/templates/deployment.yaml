@@ -59,6 +59,8 @@ spec:
               value: {{ .Values.authServer.externalDomain }}
             - name: AUTH_SERVER_REALM
               value: {{ .Values.authServer.realm }}
+            - name: APP_CONFIG_SOURCE_NAME
+              value: {{.Values.app.config.sourceName}}
             # CERTIFICATE
             - name: CERTIFICATE_KEY_STORE_PASSWORD
               valueFrom:
