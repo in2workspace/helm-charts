@@ -111,6 +111,8 @@ affinity: {}
 
 app:
   internalServerPort: 8050
+  config:
+    sourceName: yaml
   certificate:
     password: password
     existingSecret:
@@ -120,7 +122,6 @@ app:
       name: dome-dss-certificate-secret
       # -- key to retrieve the token from
       key: password
-
   vault:
     provider: hashicorp
     host: vault-server
