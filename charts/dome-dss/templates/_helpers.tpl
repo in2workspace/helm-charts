@@ -60,3 +60,35 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name | quote -}}
 {{- end -}}
 {{- end }}
+
+{{- define "dome-dss.vaultTokenSecretName" -}}
+    {{- if .Values.app.vault.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.vault.existingSecret.name $) -}}
+    {{- else -}}
+        {{- printf "dome-dss-token-secret" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "dome-dss.user-tokenKey" -}}
+    {{- if .Values.app.vault.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.vault.existingSecret.key $) -}}
+    {{- else -}}
+        {{- printf "token" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "dome-dss.certificateSecretName" -}}
+    {{- if .Values.app.certificate.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.certificate.existingSecret.name $) -}}
+    {{- else -}}
+        {{- printf "dome-dss-certificate-secret" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "dome-dss.certificate-passwordKey" -}}
+    {{- if .Values.app.certificate.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.certificate.existingSecret.key $) -}}
+    {{- else -}}
+        {{- printf "password" -}}
+    {{- end -}}
+{{- end -}}
