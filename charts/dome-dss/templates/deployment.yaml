@@ -59,6 +59,26 @@ spec:
               value: {{ .Values.authServer.externalDomain }}
             - name: AUTH_SERVER_REALM
               value: {{ .Values.authServer.realm }}
+            # CERTIFICATE
+            - name: CERTIFICATE_KEY_STORE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-dss.certificateSecretName" . }}
+                  key: {{ include "dome-dss.certificate-passwordKey" . }}
+            # VAULT
+            - name: VAULT_PROVIDER_NAME
+              value: {{.Values.app.vault.provider}}
+            - name: HASHICORP_VAULT_HOST
+              value: {{.Values.app.vault.host}}
+            - name: HASHICORP_VAULT_SCHEME
+              value: {{.Values.app.vault.scheme}}
+            - name: HASHICORP_VAULT_PORT
+              value: {{quote .Values.app.vault.port}}
+            - name: HASHICORP_VAULT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-dss.vaultTokenSecretName" . }}
+                  key: {{ include "dome-dss.user-tokenKey" . }}
           {{- with .Values.volumeMounts }}
           volumeMounts:
             {{- toYaml . | nindent 12 }}
