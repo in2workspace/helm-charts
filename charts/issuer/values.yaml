@@ -183,6 +183,24 @@ dome-issuer-keycloak:
         enabled: false
         name: keycloak-secrets
         passwordKey: keycloakDbPassword
+    mail:
+      host: smtp.ionos.de
+      port: 587
+      username: user
+      password: password
+      existingSecret:
+        enabled: false
+        name: mail-secret
+        userKey: mail-username
+        passwordKey: mail-password
+      properties:
+        mail:
+          smtp:
+            auth: true
+            starttls:
+              enable: true
+            ssl:
+              trust: smtp.ionos.de
 
   # Issuer API Configuration
   issuerApi:
@@ -212,52 +230,52 @@ dome-issuer-keycloak:
     expiration: 2592000
 
 issuer-postgres:
-    # -- should the postgresql deployment be enabled
-    enabled: true
-    # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
-    fullnameOverride: issuer-postgres
-    # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
-    nameOverride: issuer-postgres
-    ## auth configuration for the database
-    auth:
-      # -- username to be used
-      username: postgres
-      # -- should the default postgres user be enabled
-      enablePostgresUser: true
-      # -- password to be used
-      password: postgres
-    ## configuration of the postgres primary replica
-    primary:
-      ## provide db initialization
-      initdb:
-        ## provide scripts for initialization
-        scripts:
-          # -- create the database
-          create.sh: |
-            psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE issuer;"
+  # -- should the postgresql deployment be enabled
+  enabled: true
+  # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
+  fullnameOverride: issuer-postgres
+  # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
+  nameOverride: issuer-postgres
+  ## auth configuration for the database
+  auth:
+    # -- username to be used
+    username: postgres
+    # -- should the default postgres user be enabled
+    enablePostgresUser: true
+    # -- password to be used
+    password: postgres
+  ## configuration of the postgres primary replica
+  primary:
+    ## provide db initialization
+    initdb:
+      ## provide scripts for initialization
+      scripts:
+        # -- create the database
+        create.sh: |
+          psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE issuer;"
 
 
 issuer-keycloak-postgres:
-    # -- should the postgresql deployment be enabled
-    enabled: true
-    # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
-    fullnameOverride: issuer-keycloak-postgres
-    # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
-    nameOverride: issuer-keycloak-postgres
-    ## auth configuration for the database
-    auth:
-      # -- username to be used
-      username: postgres
-      # -- should the default postgres user be enabled
-      enablePostgresUser: true
-      # -- password to be used
-      password: postgres
-    ## configuration of the postgres primary replica
-    primary:
-      ## provide db initialization
-      initdb:
-        ## provide scripts for initialization
-        scripts:
-          # -- create the database
-          create.sh: |
-            psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE cred;"
+  # -- should the postgresql deployment be enabled
+  enabled: true
+  # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
+  fullnameOverride: issuer-keycloak-postgres
+  # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
+  nameOverride: issuer-keycloak-postgres
+  ## auth configuration for the database
+  auth:
+    # -- username to be used
+    username: postgres
+    # -- should the default postgres user be enabled
+    enablePostgresUser: true
+    # -- password to be used
+    password: postgres
+  ## configuration of the postgres primary replica
+  primary:
+    ## provide db initialization
+    initdb:
+      ## provide scripts for initialization
+      scripts:
+        # -- create the database
+        create.sh: |
+          psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE cred;"
