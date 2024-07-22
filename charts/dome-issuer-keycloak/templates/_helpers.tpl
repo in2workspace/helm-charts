@@ -117,3 +117,30 @@ Support for existing keycloak db secret
         {{- printf "password" -}}
     {{- end -}}
 {{- end -}}
+
+{{/*
+Support for existing mail secret
+*/}}
+{{- define "keycloak.mail-secretName" -}}
+    {{- if .Values.keycloak.mail.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.keycloak.mail.existingSecret.name $) -}}
+    {{- else -}}
+        {{- printf "issuer-keycloak-mail-secret" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "keycloak.mail-userKey" -}}
+    {{- if .Values.keycloak.mail.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.keycloak.mail.existingSecret.userKey $) -}}
+    {{- else -}}
+        {{- printf "username" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "keycloak.mail-passwordKey" -}}
+    {{- if .Values.keycloak.mail.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.keycloak.mail.existingSecret.passwordKey $) -}}
+    {{- else -}}
+        {{- printf "password" -}}
+    {{- end -}}
+{{- end -}}

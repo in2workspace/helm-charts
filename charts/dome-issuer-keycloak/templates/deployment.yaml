@@ -106,6 +106,32 @@ spec:
               value: "{{ .Values.keycloak.logsCertsLevel }}"
             - name: KEYCLOAK_LOGLEVEL
               value: "{{ .Values.keycloak.logLevel }}"
+            - name: SMTP_HOST
+              value: {{ .Values.keycloak.mail.host }}
+            - name: SMTP_PORT
+              value: "{{ .Values.keycloak.mail.port }}" # Convert to string
+            - name: SMTP_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "keycloak.mail-secretName" . }}
+                  key: {{ include "keycloak.mail-userKey" . }}
+            - name: SMTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "keycloak.mail-secretName" . }}
+                  key: {{ include "keycloak.mail-passwordKey" . }}
+            - name: SMTP_FROM
+              value: {{ .Values.keycloak.mail.properties.mail.from }}
+            - name: SMTP_FROM_DISPLAY_NAME
+              value: {{ .Values.keycloak.mail.properties.mail.fromDisplayName }}
+            - name: SMTP_REPLY_TO
+              value: {{ .Values.keycloak.mail.properties.mail.replyTo }}
+            - name: SMTP_AUTH
+              value: "{{ .Values.keycloak.mail.properties.mail.smtp.auth }}" # Convert to string
+            - name: SMTP_STARTTLS
+              value: "{{ .Values.keycloak.mail.properties.mail.smtp.starttls.enable }}" # Convert to string
+            - name: SMTP_SSL
+              value: "{{ .Values.keycloak.mail.properties.mail.smtp.ssl.enable }}"
           volumeMounts:
             - name: truststore-volume
               mountPath: /opt/keycloak/truststore

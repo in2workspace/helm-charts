@@ -5,10 +5,10 @@
 replicaCount: 1
 
 image:
-  repository: in2workspace/dome-issuer-keycloak
+  repository: <your-image-repository>
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: v1.0.0-SNAPSHOT
+  tag: <your-image-tag>
 
 imagePullSecrets: []
 nameOverride: ""
@@ -168,6 +168,27 @@ keycloak:
       name: keycloak-db-secret
       passwordKey: keycloakDbPassword
     type: postgres
+  mail:
+    host: smtp.example.org
+    port: 587
+    from: example@example.org
+    fromDisplayName: Example
+    replyTo: example@example.org
+    username: user
+    password: password
+    existingSecret:
+      enabled: false
+      name: mail-secret
+      userKey: mail-user
+      passwordKey: mail-password
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            enable: false
 
 # Issuer API Configuration
 issuerApi:
