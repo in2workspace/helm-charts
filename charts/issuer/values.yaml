@@ -200,7 +200,7 @@ dome-issuer-keycloak:
             starttls:
               enable: true
             ssl:
-              trust: smtp.ionos.de
+              enable: false
 
   # Issuer API Configuration
   issuerApi:
