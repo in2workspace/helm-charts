@@ -121,11 +121,11 @@ spec:
                   name: {{ include "keycloak.mail-secretName" . }}
                   key: {{ include "keycloak.mail-passwordKey" . }}
             - name: SMTP_FROM
-              value: {{ .Values.keycloak.mail.properties.mail.from }}
+              value: "{{ .Values.keycloak.mail.from }}"
             - name: SMTP_FROM_DISPLAY_NAME
-              value: {{ .Values.keycloak.mail.properties.mail.fromDisplayName }}
+              value: "{{ .Values.keycloak.mail.fromDisplayName }}"
             - name: SMTP_REPLY_TO
-              value: {{ .Values.keycloak.mail.properties.mail.replyTo }}
+              value: "{{ .Values.keycloak.mail.replyTo }}"
             - name: SMTP_AUTH
               value: "{{ .Values.keycloak.mail.properties.mail.smtp.auth }}" # Convert to string
             - name: SMTP_STARTTLS
