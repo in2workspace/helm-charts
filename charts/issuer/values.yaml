@@ -186,6 +186,9 @@ dome-issuer-keycloak:
     mail:
       host: smtp.ionos.de
       port: 587
+      from: example@example.org
+      fromDisplayName: Example
+      replyTo: example@example.org
       username: user
       password: password
       existingSecret:
