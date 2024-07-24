@@ -113,3 +113,7 @@ spec:
               value: {{.Values.app.txSubscription.notificationEndpoint}}
             - name: TX_SUBSCRIPTION_ENTITY_TYPES
               value: {{.Values.app.txSubscription.entityTypes}}
+            - name: EXTERNAL-ACCESS-NODES_URLS
+              value: {{.Values.app.externalAccessNodesUrls}}
+            - name: OPERATOR_EXTERNAL_DOMAIN
+              value: {{.Values.app.operatorExternalDomain}}
