@@ -158,6 +158,27 @@ dome-wallet-keycloak:
         name: dome-wallet-keycloak-secret
         # -- key to retrieve the password from
         key: keycloak-password
+      mail:
+        host: smtp.example.org
+        port: 587
+        from: example@example.org
+        fromDisplayName: Example
+        replyTo: example@example.org
+        username: user
+        password: password
+        existingSecret:
+          enabled: false
+          name: mail-secret
+          userKey: mail-user
+          passwordKey: mail-password
+        properties:
+          mail:
+            smtp:
+              auth: true
+              starttls:
+                enable: true
+              ssl:
+                enable: false
   db:
     type: postgres
     host: dome-wallet-keycloak-postgres
