@@ -129,6 +129,8 @@ app:
   txSubscription:
     notificationEndpoint: http://desmos:8080/api/v1/notifications/dlt
     entityTypes: catalog,product-offering,category,individual,organization,product,service-specification,product-offering-price,resource-specification,product-specification
+  externalAccessNodesUrls: "http://example-external-access-node.org"
+  operatorExternalDomain: "http://example-operator-external.org"
 
 db:
   host: postgresql-connector
