@@ -132,3 +132,5 @@ spec:
               value: {{ .Values.app.remoteSignature.internalDomain }}
             - name: REMOTE_SIGNATURE_EXTERNAL_DOMAIN
               value: "{{ .Values.app.remoteSignature.externalDomain.scheme }}://{{ .Values.app.remoteSignature.externalDomain.host }}{{ if not .Values.app.remoteSignature.externalDomain.externalService }}:{{ .Values.app.remoteSignature.externalDomain.internalPort }}{{ end }}{{ .Values.app.remoteSignature.externalDomain.path }}"
+            - name: WALLET_URL
+              value: {{ .Values.app.wallet.url }}
