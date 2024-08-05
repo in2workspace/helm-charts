@@ -81,6 +81,8 @@ issuer-api:
         internalPort: 30000
         path: /
       internalDomain: http://wallet-ui:8080
+    wallet:
+      url: http://wallet:8080
   db:
     host: issuer-postgres
     port: 5432
