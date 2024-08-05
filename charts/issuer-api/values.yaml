@@ -225,6 +225,9 @@ app:
       internalPort: 30000
       path: /
     internalDomain: http://issuer-ui:8080
+  wallet:
+    # change by the external url or set to localhost if deployed locally
+    url: http://wallet:8080
 
 db:
   host: issuer-postgres
