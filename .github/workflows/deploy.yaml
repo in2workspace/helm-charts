@@ -34,8 +34,8 @@ jobs:
           helm package charts/issuer
           helm dependency build charts/dome-dss
           helm package charts/dome-dss
-          helm package charts/access-node
           helm dependency build charts/access-node
+          helm package charts/access-node
 
       - name: Upload Helm Repository Index
         run: helm repo index . --url https://in2workspace.github.io/helm-charts
