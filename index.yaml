@@ -3,7 +3,7 @@ entries:
   access-node:
   - apiVersion: v2
     appVersion: 0.0.1
-    created: "2024-08-13T13:59:56.366247362Z"
+    created: "2024-08-13T19:28:08.347005367Z"
     dependencies:
     - condition: desmos.enabled
       name: desmos
@@ -45,7 +45,49 @@ entries:
     version: 1.0.0-PRE-29
   - apiVersion: v2
     appVersion: 0.0.1
-    created: "2024-08-13T13:59:56.34734534Z"
+    created: "2024-08-13T19:28:08.328042069Z"
+    dependencies:
+    - condition: desmos.enabled
+      name: desmos
+      repository: https://in2workspace.github.io/helm-charts
+      version: 0.11.0
+    - condition: dlt-adapter.enabled
+      name: dlt-adapter
+      repository: https://alastria.github.io/helm-charts
+      version: 5.0.0
+    - condition: kafka.enabled
+      name: kafka
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 26.0.0
+    - alias: postgis
+      condition: postgis.enabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 13.1.5
+    - alias: postgresql
+      condition: postgresql.enabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 13.1.5
+    - alias: scorpio
+      condition: scorpio.enabled
+      name: scorpio-broker-aaio
+      repository: https://fiware.github.io/helm-charts
+      version: 0.4.10
+    - condition: tm-forum-api.enabled
+      name: tm-forum-api
+      repository: https://fiware.github.io/helm-charts
+      version: 0.9.0
+    description: Umbrella Chart for the DOME Marketplace access-node
+    digest: 0fff2037991f08db85d5a7fc29cf6981cf2204c8c0b7b00b7525ce7eaf15607e
+    name: access-node
+    type: application
+    urls:
+    - https://in2workspace.github.io/helm-charts/access-node-0.1.3-PRE-31.tgz
+    version: 0.1.3-PRE-31
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2024-08-13T19:28:08.309978742Z"
     dependencies:
     - condition: desmos.enabled
       name: desmos
@@ -87,7 +129,7 @@ entries:
     version: 0.1.3-PRE-30
   - apiVersion: v2
     appVersion: 0.0.1
-    created: "2024-08-13T13:59:56.328869258Z"
+    created: "2024-08-13T19:28:08.291023554Z"
     dependencies:
     - condition: desmos.enabled
       name: desmos
@@ -129,7 +171,7 @@ entries:
     version: 0.1.3-PRE-28
   - apiVersion: v2
     appVersion: 0.0.1
-    created: "2024-08-13T13:59:56.311200161Z"
+    created: "2024-08-13T19:28:08.273460682Z"
     dependencies:
     - condition: desmos.enabled
       name: desmos
@@ -172,9 +214,9 @@ entries:
   desmos:
   - apiVersion: v2
     appVersion: v1.0.0
-    created: "2024-08-13T13:59:56.367251079Z"
+    created: "2024-08-13T19:28:08.348053607Z"
     description: A Helm chart for Kubernetes
-    digest: 74db043c0bad1cebd13d484b0be5750707b44605ac4bad610efb5e38c7a716be
+    digest: 6ec1389775945e97451445295fa9d6de9237a0e2f32d4b24fc642a73276438d5
     maintainers:
     - email: domesupport@in2.es
       name: IN2 Team
@@ -187,7 +229,7 @@ entries:
     version: 0.11.0
   - apiVersion: v2
     appVersion: v1.0.0
-    created: "2024-08-13T13:59:56.366754245Z"
+    created: "2024-08-13T19:28:08.347537893Z"
     description: A Helm chart for Kubernetes
     digest: 8de6d5b611fe77772b169c2fe07eda24bbd1e64d2da09c64f54f8bff185fdec7
     maintainers:
@@ -202,7 +244,7 @@ entries:
     version: 0.10.0
   - apiVersion: v2
     appVersion: v0.8.0
-    created: "2024-08-13T13:59:56.368615084Z"
+    created: "2024-08-13T19:28:08.349470948Z"
     description: A Helm chart for Kubernetes
     digest: 56e9722b10cbd85ce9a5e8a97cf0371fbe647b844c2211aa767cbd7d4e063796
     maintainers:
@@ -217,7 +259,7 @@ entries:
     version: 0.9.0
   - apiVersion: v2
     appVersion: v0.7.0
-    created: "2024-08-13T13:59:56.368129801Z"
+    created: "2024-08-13T19:28:08.349000959Z"
     description: A Helm chart for Kubernetes
     digest: 80c59d47c3f758118fef38ec6926ebbaebbe4d0c4d7fb93fc4df039cb308f116
     maintainers:
@@ -232,7 +274,7 @@ entries:
     version: 0.8.0
   - apiVersion: v2
     appVersion: v0.7.0
-    created: "2024-08-13T13:59:56.367692068Z"
+    created: "2024-08-13T19:28:08.348502938Z"
     description: A Helm chart for Kubernetes
     digest: 16be8d55df93987a67efb7509dd25588f365b6bca284d7218f751c2c546cdad4
     maintainers:
@@ -248,9 +290,9 @@ entries:
   dome-dss:
   - apiVersion: v2
     appVersion: v0.6.0
-    created: "2024-08-13T13:59:56.370520838Z"
+    created: "2024-08-13T19:28:08.351539476Z"
     description: A Helm chart for Kubernetes
-    digest: 296d2144711cdffcb5ac3fcbae5ea6585c2f7e55b536d7ff93f80bbe2352d8fd
+    digest: d2d916eefe080a6ea5b01fbdd3f2c8e140ae65f78bb19564f7a971de2b0a1eca
     maintainers:
     - email: domesupport@in2.es
       name: IN2 Team
@@ -263,7 +305,7 @@ entries:
     version: 0.0.5
   - apiVersion: v2
     appVersion: v0.5.0
-    created: "2024-08-13T13:59:56.370106158Z"
+    created: "2024-08-13T19:28:08.351056894Z"
     description: A Helm chart for Kubernetes
     digest: f6a810caa67c8a8b5ea4133edbf5d9fb8bdacc2843d46e5e0e76c49ea2756409
     maintainers:
@@ -278,7 +320,7 @@ entries:
     version: 0.0.4
   - apiVersion: v2
     appVersion: v0.5.0
-    created: "2024-08-13T13:59:56.369702399Z"
+    created: "2024-08-13T19:28:08.350574091Z"
     description: A Helm chart for Kubernetes
     digest: 66d80638d6348758ec7545dd2d251317ce85d8baaddc581f398c1ee3f6effc4b
     maintainers:
@@ -293,7 +335,7 @@ entries:
     version: 0.0.3
   - apiVersion: v2
     appVersion: v0.5.0
-    created: "2024-08-13T13:59:56.369357259Z"
+    created: "2024-08-13T19:28:08.350187408Z"
     description: A Helm chart for Kubernetes
     digest: b9681f8a9d8b64b9fb23cde66ea58fc8f1ba0d7fe86676e2fffa7f15c0534e95
     maintainers:
@@ -308,7 +350,7 @@ entries:
     version: 0.0.2
   - apiVersion: v2
     appVersion: v0.5.0
-    created: "2024-08-13T13:59:56.369003955Z"
+    created: "2024-08-13T19:28:08.349833847Z"
     description: A Helm chart for Kubernetes
     digest: 44e63752d4e99fa3d2979fd55f97130559756dab223cb7396f3952a2b1cf555d
     maintainers:
@@ -324,9 +366,9 @@ entries:
   dome-issuer-keycloak:
   - apiVersion: v2
     appVersion: v1.1.0
-    created: "2024-08-13T13:59:56.375433527Z"
+    created: "2024-08-13T19:28:08.357572849Z"
     description: A Helm chart for Kubernetes
-    digest: c006413e1b50d2a0fe1faa0b9fc649178bf8e45afbc728e6238286a89f7d0dfa
+    digest: 6a127439c886d0a2e711636ccf38d6f73635ca753119a28cc3d24a45cbdb4fed
     maintainers:
     - email: domesupport@in2.es
       name: IN2 Team
@@ -339,7 +381,7 @@ entries:
     version: 1.0.12
   - apiVersion: v2
     appVersion: v1.1.0
-    created: "2024-08-13T13:59:56.374732248Z"
+    created: "2024-08-13T19:28:08.356923174Z"
     description: A Helm chart for Kubernetes
     digest: 25f971eec95187afe566e6a1fbeaa445edc0afeb838c26245e09238f46da6c3e
     maintainers:
@@ -354,7 +396,7 @@ entries:
     version: 1.0.11
   - apiVersion: v2
     appVersion: v1.1.0
-    created: "2024-08-13T13:59:56.374060145Z"
+    created: "2024-08-13T19:28:08.356209259Z"
     description: A Helm chart for Kubernetes
     digest: e7299d22c1f3c121cfec14fe6df3d782fc47c04094fa65295cb364c94573fcd3
     maintainers:
@@ -369,7 +411,7 @@ entries:
     version: 1.0.10
   - apiVersion: v2
     appVersion: v1.1.0
-    created: "2024-08-13T13:59:56.380124017Z"
+    created: "2024-08-13T19:28:08.362261828Z"
     description: A Helm chart for Kubernetes
     digest: 88507dcacc6f64b32f0383594a786fd8053ae04aa946aaf36b5bc3d3ad99bc59
     maintainers:
@@ -384,7 +426,7 @@ entries:
     version: 1.0.9
   - apiVersion: v2
     appVersion: v1.1.0
-    created: "2024-08-13T13:59:56.379544447Z"
+    created: "2024-08-13T19:28:08.361666695Z"
     description: A Helm chart for Kubernetes
     digest: 6ea0b6d45d0e77e10aad0865990100a245b0ecb8251faf8c5e6a435159d23f28
     maintainers:
@@ -399,7 +441,7 @@ entries:
     version: 1.0.8
   - apiVersion: v2
     appVersion: v1.1.0
-    created: "2024-08-13T13:59:56.378838169Z"
+    created: "2024-08-13T19:28:08.361088183Z"
     description: A Helm chart for Kubernetes
     digest: 7dc59d2284f11bacc450d953329a16bbe1ec2935aceb52437fd0e0d9053910f1
     maintainers:
@@ -414,7 +456,7 @@ entries:
     version: 1.0.7
   - apiVersion: v2
     appVersion: v1.1.0
-    created: "2024-08-13T13:59:56.378267907Z"
+    created: "2024-08-13T19:28:08.360474635Z"
     description: A Helm chart for Kubernetes
     digest: a7c3200547accd29bef8792371f75248403a833a5540872db7d9f74b570c2c6e
     maintainers:
@@ -429,7 +471,7 @@ entries:
     version: 1.0.6
   - apiVersion: v2
     appVersion: v1.1.0
-    created: "2024-08-13T13:59:56.377703495Z"
+    created: "2024-08-13T19:28:08.359902125Z"
     description: A Helm chart for Kubernetes
     digest: cf60f3a6c1895a12516dee2a676c522893cca12ab14bfbab9639876adc622a2a
     maintainers:
@@ -444,7 +486,7 @@ entries:
     version: 1.0.5
   - apiVersion: v2
     appVersion: v1.1.0
-    created: "2024-08-13T13:59:56.377134686Z"
+    created: "2024-08-13T19:28:08.359313744Z"
     description: A Helm chart for Kubernetes
     digest: dc1743b8e8ebb8bf46688fdd4e18506e4789dd9437fb584b63c861ee03f857cd
     maintainers:
@@ -459,7 +501,7 @@ entries:
     version: 1.0.4
   - apiVersion: v2
     appVersion: v1.1.0
-    created: "2024-08-13T13:59:56.37656769Z"
+    created: "2024-08-13T19:28:08.35864847Z"
     description: A Helm chart for Kubernetes
     digest: ed54ba2811c92696fcf2881f00e9fb0b1c34a9c36e98e338384991e52000a1a4
     maintainers:
@@ -474,7 +516,7 @@ entries:
     version: 1.0.3
   - apiVersion: v2
     appVersion: v1.1.0
-    created: "2024-08-13T13:59:56.376000814Z"
+    created: "2024-08-13T19:28:08.358111286Z"
     description: A Helm chart for Kubernetes
     digest: 576d04c9edb6bdf235583f8de30c4033d61077193be51486d5c986b75ac22962
     maintainers:
@@ -489,7 +531,7 @@ entries:
     version: 1.0.2
   - apiVersion: v2
     appVersion: v1.1.0
-    created: "2024-08-13T13:59:56.372886747Z"
+    created: "2024-08-13T19:28:08.355521513Z"
     description: A Helm chart for Kubernetes
     digest: 6524864f8c301e99b00f4975da4c8a4cb2b100ad217449faff7814ea5ad6fda3
     maintainers:
@@ -504,7 +546,7 @@ entries:
     version: 1.0.1
   - apiVersion: v2
     appVersion: v1.1.0
-    created: "2024-08-13T13:59:56.372127268Z"
+    created: "2024-08-13T19:28:08.354877508Z"
     description: A Helm chart for Kubernetes
     digest: d30555edcf862bcf732d7d71b949b66ed97ca607b264ff5e5f9e7e425eb5a542
     maintainers:
@@ -520,9 +562,9 @@ entries:
   dome-wallet-keycloak:
   - apiVersion: v2
     appVersion: v1.0.2
-    created: "2024-08-13T13:59:56.382670575Z"
+    created: "2024-08-13T19:28:08.364060472Z"
     description: A Helm chart for Kubernetes
-    digest: 3c0272f0ec224911ba2d090a384cd844a80b2d37390dbd2ca45d267bc537ebbd
+    digest: 2d829c694b047fea917d279dbd7782a1b77e9e8ff2e31ddc3ac15927d32dbcd7
     maintainers:
     - email: domesupport@in2.es
       name: IN2 Team
@@ -535,7 +577,7 @@ entries:
     version: 0.1.3
   - apiVersion: v2
     appVersion: v1.0.2
-    created: "2024-08-13T13:59:56.382144707Z"
+    created: "2024-08-13T19:28:08.363571367Z"
     description: A Helm chart for Kubernetes
     digest: 423994dcd04b8534ee11966f6fafbd23967b1889576d113f0ba04133b89ef9ef
     maintainers:
@@ -550,7 +592,7 @@ entries:
     version: 0.1.2
   - apiVersion: v2
     appVersion: v1.0.1
-    created: "2024-08-13T13:59:56.381010895Z"
+    created: "2024-08-13T19:28:08.363129831Z"
     description: A Helm chart for Kubernetes
     digest: 71e44b9bbc1a66bf6441851ecee31a5c3374335f91b8e90d2ea7d3b13d991463
     maintainers:
@@ -565,7 +607,7 @@ entries:
     version: 0.1.1
   - apiVersion: v2
     appVersion: v1.0.0
-    created: "2024-08-13T13:59:56.38058324Z"
+    created: "2024-08-13T19:28:08.362704235Z"
     description: A Helm chart for Kubernetes
     digest: bdb773f65d91f4b765c9818b727139f4ebe18d5fd8db7fc625654b742bc1cd26
     maintainers:
@@ -581,9 +623,9 @@ entries:
   dome-wallet-ui:
   - apiVersion: v2
     appVersion: v1.2.1
-    created: "2024-08-13T13:59:56.383495136Z"
+    created: "2024-08-13T19:28:08.365777718Z"
     description: A Helm chart for Kubernetes
-    digest: 16e138a222f9963ca36f4e17669493b13044855df5a504ca1b8f285dd5dbeede
+    digest: ba84718011077323287c90c7ffcf8080a30acb9ea68dc22b4027f930c8de25a2
     maintainers:
     - email: domesupport@in2.es
       name: IN2 Team
@@ -596,7 +638,7 @@ entries:
     version: 0.1.1
   - apiVersion: v2
     appVersion: v1.2.0
-    created: "2024-08-13T13:59:56.383086227Z"
+    created: "2024-08-13T19:28:08.364469837Z"
     description: A Helm chart for Kubernetes
     digest: 57433566e6f2e6bf7c87578b67aee3295a9577cf970939f9ea66351c3923650c
     maintainers:
@@ -612,7 +654,7 @@ entries:
   issuer:
   - apiVersion: v2
     appVersion: v1.0.3
-    created: "2024-08-13T13:59:56.495203034Z"
+    created: "2024-08-13T19:28:08.478683881Z"
     dependencies:
     - alias: issuer-api
       condition: issuer-api.enabled
@@ -640,7 +682,7 @@ entries:
       repository: oci://registry-1.docker.io/bitnamicharts
       version: 13.1.5
     description: Umbrella Helm chart for the issuer
-    digest: 50560ecff2ed3a14204f8a74604869596e6c240069b4a22c68cf2ebbc9818479
+    digest: 0c8ee3501ffaa39afb9ae5ccb6fc9eea3394520516be73639396a1888b42ac8b
     name: issuer
     type: application
     urls:
@@ -648,7 +690,7 @@ entries:
     version: 1.0.23
   - apiVersion: v2
     appVersion: v1.0.3
-    created: "2024-08-13T13:59:56.488569597Z"
+    created: "2024-08-13T19:28:08.47266173Z"
     dependencies:
     - alias: issuer-api
       condition: issuer-api.enabled
@@ -684,7 +726,7 @@ entries:
     version: 1.0.22
   - apiVersion: v2
     appVersion: v1.0.3
-    created: "2024-08-13T13:59:56.482226588Z"
+    created: "2024-08-13T19:28:08.465870179Z"
     dependencies:
     - alias: issuer-api
       condition: issuer-api.enabled
@@ -720,7 +762,7 @@ entries:
     version: 1.0.21
   - apiVersion: v2
     appVersion: v1.0.3
-    created: "2024-08-13T13:59:56.476533693Z"
+    created: "2024-08-13T19:28:08.459991896Z"
     dependencies:
     - alias: issuer-api
       condition: issuer-api.enabled
@@ -756,7 +798,7 @@ entries:
     version: 1.0.20
   - apiVersion: v2
     appVersion: v1.0.3
-    created: "2024-08-13T13:59:56.458934962Z"
+    created: "2024-08-13T19:28:08.447681885Z"
     dependencies:
     - alias: issuer-api
       condition: issuer-api.enabled
@@ -792,7 +834,7 @@ entries:
     version: 1.0.19
   - apiVersion: v2
     appVersion: v1.0.3
-    created: "2024-08-13T13:59:56.453315525Z"
+    created: "2024-08-13T19:28:08.441444235Z"
     dependencies:
     - alias: issuer-api
       condition: issuer-api.enabled
@@ -828,7 +870,7 @@ entries:
     version: 1.0.18
   - apiVersion: v2
     appVersion: v1.0.3
-    created: "2024-08-13T13:59:56.446756562Z"
+    created: "2024-08-13T19:28:08.435678864Z"
     dependencies:
     - alias: issuer-api
       condition: issuer-api.enabled
@@ -864,7 +906,7 @@ entries:
     version: 1.0.17
   - apiVersion: v2
     appVersion: v1.0.3
-    created: "2024-08-13T13:59:56.441288941Z"
+    created: "2024-08-13T19:28:08.429255877Z"
     dependencies:
     - alias: issuer-api
       condition: issuer-api.enabled
@@ -900,7 +942,7 @@ entries:
     version: 1.0.16
   - apiVersion: v2
     appVersion: v1.0.3
-    created: "2024-08-13T13:59:56.434903243Z"
+    created: "2024-08-13T19:28:08.4229777Z"
     dependencies:
     - alias: issuer-api
       condition: issuer-api.enabled
@@ -936,7 +978,7 @@ entries:
     version: 1.0.15
   - apiVersion: v2
     appVersion: v1.0.3
-    created: "2024-08-13T13:59:56.428688541Z"
+    created: "2024-08-13T19:28:08.417360816Z"
     dependencies:
     - alias: issuer-api
       condition: issuer-api.enabled
@@ -972,7 +1014,7 @@ entries:
     version: 1.0.14
   - apiVersion: v2
     appVersion: v1.0.3
-    created: "2024-08-13T13:59:56.423132212Z"
+    created: "2024-08-13T19:28:08.410989607Z"
     dependencies:
     - alias: issuer-api
       condition: issuer-api.enabled
@@ -1008,7 +1050,7 @@ entries:
     version: 1.0.13
   - apiVersion: v2
     appVersion: v1.0.3
-    created: "2024-08-13T13:59:56.416835318Z"
+    created: "2024-08-13T19:28:08.404478146Z"
     dependencies:
     - alias: issuer-api
       condition: issuer-api.enabled
@@ -1044,7 +1086,7 @@ entries:
     version: 1.0.12
   - apiVersion: v2
     appVersion: v1.0.3
-    created: "2024-08-13T13:59:56.411458818Z"
+    created: "2024-08-13T19:28:08.396669433Z"
     dependencies:
     - alias: issuer-api
       condition: issuer-api.enabled
@@ -1080,7 +1122,7 @@ entries:
     version: 1.0.11
   - apiVersion: v2
     appVersion: v1.0.2
-    created: "2024-08-13T13:59:56.40457786Z"
+    created: "2024-08-13T19:28:08.387030372Z"
     dependencies:
     - alias: issuer-api
       condition: issuer-api.enabled
@@ -1116,7 +1158,7 @@ entries:
     version: 1.0.10
   - apiVersion: v2
     appVersion: v1.0.1
-    created: "2024-08-13T13:59:56.530635125Z"
+    created: "2024-08-13T19:28:08.514046892Z"
     dependencies:
     - alias: issuer-api
       condition: issuer-api.enabled
@@ -1152,7 +1194,7 @@ entries:
     version: 1.0.9
   - apiVersion: v2
     appVersion: v1.0.1
-    created: "2024-08-13T13:59:56.524313439Z"
+    created: "2024-08-13T19:28:08.508618931Z"
     dependencies:
     - alias: issuer-api
       condition: issuer-api.enabled
@@ -1188,7 +1230,7 @@ entries:
     version: 1.0.8
   - apiVersion: v2
     appVersion: v1.0.1
-    created: "2024-08-13T13:59:56.518010837Z"
+    created: "2024-08-13T19:28:08.502343426Z"
     dependencies:
     - alias: issuer-api
       condition: issuer-api.enabled
@@ -1224,7 +1266,7 @@ entries:
     version: 1.0.7
   - apiVersion: v2
     appVersion: v1.0.1
-    created: "2024-08-13T13:59:56.512656368Z"
+    created: "2024-08-13T19:28:08.496080167Z"
     dependencies:
     - alias: issuer-api
       condition: issuer-api.enabled
@@ -1260,7 +1302,7 @@ entries:
     version: 1.0.6
   - apiVersion: v2
     appVersion: v1.0.1
-    created: "2024-08-13T13:59:56.506414983Z"
+    created: "2024-08-13T19:28:08.490747555Z"
     dependencies:
     - alias: issuer-api
       condition: issuer-api.enabled
@@ -1296,7 +1338,7 @@ entries:
     version: 1.0.5
   - apiVersion: v2
     appVersion: v1.0.1
-    created: "2024-08-13T13:59:56.500538547Z"
+    created: "2024-08-13T19:28:08.484456251Z"
     dependencies:
     - alias: issuer-api
       condition: issuer-api.enabled
@@ -1332,7 +1374,7 @@ entries:
     version: 1.0.3
   - apiVersion: v2
     appVersion: v1.0.1
-    created: "2024-08-13T13:59:56.46939784Z"
+    created: "2024-08-13T19:28:08.453805036Z"
     dependencies:
     - alias: issuer-api
       condition: issuer-api.enabled
@@ -1368,7 +1410,7 @@ entries:
     version: 1.0.2
   - apiVersion: v2
     appVersion: v1.0.1
-    created: "2024-08-13T13:59:56.39921738Z"
+    created: "2024-08-13T19:28:08.381591851Z"
     dependencies:
     - alias: issuer-api
       condition: issuer-api.enabled
@@ -1404,7 +1446,7 @@ entries:
     version: 1.0.1
   - apiVersion: v2
     appVersion: v1.0.0
-    created: "2024-08-13T13:59:56.391355867Z"
+    created: "2024-08-13T19:28:08.373827975Z"
     dependencies:
     - alias: issuer-api
       condition: issuer-api.enabled
@@ -1441,9 +1483,9 @@ entries:
   issuer-api:
   - apiVersion: v2
     appVersion: v1.1.1
-    created: "2024-08-13T13:59:56.535699658Z"
+    created: "2024-08-13T19:28:08.520413252Z"
     description: A Helm chart for Kubernetes
-    digest: a936045139a1d8d4b4f59192997d700c84e1127436d4653e4dad665e6945b003
+    digest: 016111b6da2648dc0f99f98365e918b9de6e462c28a4dd3587a26eb35b3853f8
     maintainers:
     - email: domesupport@in2.es
       name: IN2 Team
@@ -1456,7 +1498,7 @@ entries:
     version: 1.0.6
   - apiVersion: v2
     appVersion: v1.1.0
-    created: "2024-08-13T13:59:56.535056499Z"
+    created: "2024-08-13T19:28:08.519650335Z"
     description: A Helm chart for Kubernetes
     digest: 2f619ac59ec0b271e598193631a2aec421619220ce772f6c09212bfbb6eec904
     maintainers:
@@ -1471,7 +1513,7 @@ entries:
     version: 1.0.5
   - apiVersion: v2
     appVersion: v1.1.0
-    created: "2024-08-13T13:59:56.534416435Z"
+    created: "2024-08-13T19:28:08.518998006Z"
     description: A Helm chart for Kubernetes
     digest: ceb88739efec91cd18374bafdb5c2d45995a4f4e865c9b15dfba0124818fb728
     maintainers:
@@ -1486,7 +1528,7 @@ entries:
     version: 1.0.4
   - apiVersion: v2
     appVersion: v1.1.0
-    created: "2024-08-13T13:59:56.533771653Z"
+    created: "2024-08-13T19:28:08.518346217Z"
     description: A Helm chart for Kubernetes
     digest: fc92020a813070b28ecbf651ab9f2b478a71a4a00731daf92a26d4fd70c1c298
     maintainers:
@@ -1501,7 +1543,7 @@ entries:
     version: 1.0.3
   - apiVersion: v2
     appVersion: v1.1.0
-    created: "2024-08-13T13:59:56.533218352Z"
+    created: "2024-08-13T19:28:08.517778134Z"
     description: A Helm chart for Kubernetes
     digest: 274ccf5889485bf403bcd72ff7d21dc860fe50b4e73566651593be6f430ea7ec
     maintainers:
@@ -1516,7 +1558,7 @@ entries:
     version: 1.0.2
   - apiVersion: v2
     appVersion: v0.8.0
-    created: "2024-08-13T13:59:56.532657087Z"
+    created: "2024-08-13T19:28:08.517200124Z"
     description: A Helm chart for Kubernetes
     digest: 5d6336fb007f798d6a25d31dfab8fa6276a6021f8bb5ea77e1abcfe63ba3a3fc
     maintainers:
@@ -1531,7 +1573,7 @@ entries:
     version: 1.0.1
   - apiVersion: v2
     appVersion: v0.8.0
-    created: "2024-08-13T13:59:56.532083258Z"
+    created: "2024-08-13T19:28:08.516629937Z"
     description: A Helm chart for Kubernetes
     digest: b3472100b23d177d2ad8f23525530ee6127ca289c2ad6f85148461643d631b37
     maintainers:
@@ -1546,7 +1588,7 @@ entries:
     version: 1.0.0
   - apiVersion: v2
     appVersion: v0.8.0
-    created: "2024-08-13T13:59:56.531538914Z"
+    created: "2024-08-13T19:28:08.515942411Z"
     description: A Helm chart for Kubernetes
     digest: b21630517356d28e7c6cccac3ed5a966a3d612ac5ce88cf02e4f6fbe521bff66
     maintainers:
@@ -1561,7 +1603,7 @@ entries:
     version: 0.8.0
   - apiVersion: v2
     appVersion: v0.7.0
-    created: "2024-08-13T13:59:56.531085522Z"
+    created: "2024-08-13T19:28:08.514520828Z"
     description: A Helm chart for Kubernetes
     digest: 852121020fe5499365b5c53360b44d2a36fe9bd5849af66382e52526f16fba61
     maintainers:
@@ -1577,7 +1619,7 @@ entries:
   issuer-keycloak-plugin:
   - apiVersion: v2
     appVersion: v1.1.0
-    created: "2024-08-13T13:59:56.536168249Z"
+    created: "2024-08-13T19:28:08.520933956Z"
     description: A Helm chart for Kubernetes
     digest: 8440d394b07c87667b182b2ee9a22b37a8c7ac7d9b48ef51e7b343599838d8bf
     maintainers:
@@ -1593,9 +1635,9 @@ entries:
   issuer-ui:
   - apiVersion: v2
     appVersion: v0.6.0
-    created: "2024-08-13T13:59:56.538371474Z"
+    created: "2024-08-13T19:28:08.522116888Z"
     description: A Helm chart for Kubernetes
-    digest: f18bbbc1746b2d493a074b9f2926bcf482b250d93195ce28655002bd37a924df
+    digest: 6235b130553b9709d47c0397ed1dddbaaca6ef2b3767069f5b2f17e23e1c8323
     maintainers:
     - email: domesupport@in2.es
       name: IN2 Team
@@ -1608,7 +1650,7 @@ entries:
     version: 1.0.1
   - apiVersion: v2
     appVersion: v0.6.0
-    created: "2024-08-13T13:59:56.537906369Z"
+    created: "2024-08-13T19:28:08.521699237Z"
     description: A Helm chart for Kubernetes
     digest: 57261088f0e92bdc06d70dc6cfa5c14fea6d6da792cba3ba3577a3a9dfc903d5
     maintainers:
@@ -1623,7 +1665,7 @@ entries:
     version: 1.0.0
   - apiVersion: v2
     appVersion: v0.6.0
-    created: "2024-08-13T13:59:56.537389888Z"
+    created: "2024-08-13T19:28:08.52128375Z"
     description: A Helm chart for Kubernetes
     digest: 007d38ebf7168feee4a94e4e5e3338cab5328b15602a7fa6bfcafa73de7c358f
     maintainers:
@@ -1639,7 +1681,7 @@ entries:
   wallet:
   - apiVersion: v2
     appVersion: v0.0.4
-    created: "2024-08-13T13:59:56.571358793Z"
+    created: "2024-08-13T19:28:08.55407369Z"
     dependencies:
     - condition: wallet-api.enabled
       name: wallet-api
@@ -1669,7 +1711,7 @@ entries:
       repository: oci://registry-1.docker.io/bitnamicharts
       version: 13.1.5
     description: Umbrella Helm chart for the Wallet
-    digest: 5b3a7f180590c494e13c74964596b25fad863c5e6438f18cc77f6240faef28d0
+    digest: 1d5e0ff480d57fbc5c589e9cf29ccdeca9ad49555bfedbd60e0eb0a5de6f8944
     name: wallet
     type: application
     urls:
@@ -1677,7 +1719,7 @@ entries:
     version: 0.1.4
   - apiVersion: v2
     appVersion: v0.0.4
-    created: "2024-08-13T13:59:56.565726021Z"
+    created: "2024-08-13T19:28:08.547374417Z"
     dependencies:
     - condition: wallet-api.enabled
       name: wallet-api
@@ -1715,7 +1757,7 @@ entries:
     version: 0.1.3
   - apiVersion: v2
     appVersion: v0.0.3
-    created: "2024-08-13T13:59:56.55933876Z"
+    created: "2024-08-13T19:28:08.54190023Z"
     dependencies:
     - condition: wallet-api.enabled
       name: wallet-api
@@ -1753,7 +1795,7 @@ entries:
     version: 0.1.2
   - apiVersion: v2
     appVersion: v0.0.2
-    created: "2024-08-13T13:59:56.553010143Z"
+    created: "2024-08-13T19:28:08.535402348Z"
     dependencies:
     - condition: wallet-api.enabled
       name: wallet-api
@@ -1791,7 +1833,7 @@ entries:
     version: 0.1.1
   - apiVersion: v2
     appVersion: v0.0.1
-    created: "2024-08-13T13:59:56.546784995Z"
+    created: "2024-08-13T19:28:08.528394234Z"
     dependencies:
     - condition: wallet-api.enabled
       name: wallet-api
@@ -1830,9 +1872,9 @@ entries:
   wallet-api:
   - apiVersion: v2
     appVersion: v1.2.1
-    created: "2024-08-13T13:59:56.57240493Z"
+    created: "2024-08-13T19:28:08.55510595Z"
     description: A Helm chart for Kubernetes
-    digest: 4522e780c0d8982a355f5db4b1ca85a5ac63866beacb045eb1c0af8871f683bf
+    digest: e94234e9ce81cde33bd6ad7b0efed97d11e39579c5a49128bc99ad50c94df5b8
     maintainers:
     - email: domesupport@in2.es
       name: IN2 Team
@@ -1845,7 +1887,7 @@ entries:
     version: 0.1.1
   - apiVersion: v2
     appVersion: v1.2.0
-    created: "2024-08-13T13:59:56.571872298Z"
+    created: "2024-08-13T19:28:08.554597399Z"
     description: A Helm chart for Kubernetes
     digest: 8333c7e9cf50846885405b768bd6101975cc4d8f792b14605a6e79a49f0532e2
     maintainers:
@@ -1861,7 +1903,7 @@ entries:
   wallet-driving-application:
   - apiVersion: v2
     appVersion: v1.0.0
-    created: "2024-08-13T13:59:56.572677883Z"
+    created: "2024-08-13T19:28:08.555376927Z"
     description: A Helm chart for Kubernetes
     digest: 0b1a7ab828c55ac23374f433da4dc76bff007d1a7b9ec39b26f4b86e4e31fdd3
     maintainers:
@@ -1877,7 +1919,7 @@ entries:
   wallet-server:
   - apiVersion: v2
     appVersion: v1.0.0
-    created: "2024-08-13T13:59:56.57319205Z"
+    created: "2024-08-13T19:28:08.555897741Z"
     description: A Helm chart for Kubernetes
     digest: b22dfbd82a9672ba6daabc09fe540b908d9279f5a43fcb79d4a0f6ef383285fa
     maintainers:
@@ -1890,4 +1932,4 @@ entries:
     urls:
     - https://in2workspace.github.io/helm-charts/wallet-server-0.1.0.tgz
     version: 0.1.0
-generated: "2024-08-13T13:59:56.291956828Z"
+generated: "2024-08-13T19:28:08.25479838Z"
