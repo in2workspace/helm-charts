@@ -79,3 +79,22 @@ Support for existing database secret
         {{- printf "desmos-db-password" -}}
     {{- end -}}
 {{- end -}}
+
+{{/*
+Support for private key secret
+*/}}
+{{- define "desmos.privateKey-secretName" -}}
+    {{- if .Values.app.privateKey.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.privateKey.existingSecret.name $) -}}
+    {{- else -}}
+        {{- printf "desmos-private-key-secret" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "desmos.privateKey-privateKey" -}}
+    {{- if .Values.app.privateKey.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.privateKey.existingSecret.key $) -}}
+    {{- else -}}
+        {{- printf "privateKey" -}}
+    {{- end -}}
+{{- end -}}
