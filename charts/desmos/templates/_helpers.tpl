@@ -87,7 +87,7 @@ Support for private key secret
     {{- if .Values.app.privateKey.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.privateKey.existingSecret.name $) -}}
     {{- else -}}
-        {{- printf "%s" (include "desmos-private-key-secret" .) -}}
+        {{- printf "desmos-private-key-secret" -}}
     {{- end -}}
 {{- end -}}
 
