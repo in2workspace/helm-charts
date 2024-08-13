@@ -122,3 +122,5 @@ spec:
                 secretKeyRef:
                   name: {{ include "desmos.privateKey-secretName" . }}
                   key: {{ include "desmos.privateKey-privateKey" . }}
+            - name: ACCESS_NODE_PREFIX_DIRECTORY
+              value: {{ .Values.app.accessNodePrefixDirectory }}
