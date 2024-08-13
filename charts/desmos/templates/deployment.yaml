@@ -115,5 +115,10 @@ spec:
               value: {{.Values.app.txSubscription.entityTypes}}
             - name: EXTERNAL-ACCESS-NODES_URLS
               value: {{.Values.app.externalAccessNodesUrls}}
-            - name: OPERATOR_EXTERNAL_DOMAIN
-              value: {{.Values.app.operatorExternalDomain}}
+            - name: API_EXTERNAL_DOMAIN
+              value: {{.Values.app.externalDomain}}
+            - name: SECURITY_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "desmos.privateKey-secretName" . }}
+                  key: {{ include "desmos.privateKey-privateKey" . }}
