@@ -137,6 +137,7 @@ app:
       enabled: false
       name: private-key-secret
       key: private-key
+  accessNodePrefixDirectory: https://raw.githubusercontent.com/DOME-Marketplace/dome-access-node-directory/main/access-node-directory-
 
 
 db:
