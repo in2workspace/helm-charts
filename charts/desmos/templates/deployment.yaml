@@ -113,8 +113,10 @@ spec:
               value: {{.Values.app.txSubscription.notificationEndpoint}}
             - name: TX_SUBSCRIPTION_ENTITY_TYPES
               value: {{.Values.app.txSubscription.entityTypes}}
+            {{- if .Values.app.externalAccessNodesUrls.enableCustomUrls }}
             - name: EXTERNAL-ACCESS-NODES_URLS
-              value: {{.Values.app.externalAccessNodesUrls}}
+              value: {{.Values.app.externalAccessNodesUrls.customUrls}}
+            {{- end }}
             - name: API_EXTERNAL_DOMAIN
               value: {{.Values.app.externalDomain}}
             - name: SECURITY_PRIVATE_KEY
