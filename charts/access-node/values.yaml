@@ -45,8 +45,6 @@ desmos:
       # -- a list of entity-types the connector is interested in
       entityTypes: catalog,product-offering,category,individual,organization,product,service-specification,product-offering-price,resource-specification,product-specification
       # -- a list of external access node with which to synchronize
-      externalAccessNodesUrls: "http://example-external-access-node.org"
-      # -- a list of external access node with which to synchronize
       externalDomain: "http://example-external-domain.org"
       # -- configuration to set your private key
       privateKey:
