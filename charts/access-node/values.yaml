@@ -45,18 +45,21 @@ desmos:
       # -- a list of entity-types the connector is interested in
       entityTypes: catalog,product-offering,category,individual,organization,product,service-specification,product-offering-price,resource-specification,product-specification
       # -- a list of external access node with which to synchronize
-      externalDomain: "http://example-external-domain.org"
-      # -- configuration to set your private key
-      privateKey:
-        # -- your Ethereum private key
-        value: your-private-key
-        existingSecret:
-          # -- should an existing secret be used
-          enabled: false
-          # -- name of the secret
-          name: private-key-secret
-          # -- key to retrieve the password from
-          key: private-key
+    externalDomain: "http://example-external-domain.org"
+    externalAccessNodesUrls:
+      enableCustomUrls: false
+      customUrls: "http://your-custom-url.org"
+    # -- configuration to set your private key
+    privateKey:
+      # -- your Ethereum private key
+      value: your-private-key
+      existingSecret:
+        # -- should an existing secret be used
+        enabled: false
+        # -- name of the secret
+        name: private-key-secret
+        # -- key to retrieve the password from
+        key: private-key
     ## configuration of the database to be used by the blockchain-connector
   db:
     # -- host of the db
