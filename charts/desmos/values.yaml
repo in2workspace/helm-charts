@@ -45,9 +45,9 @@ service:
 
 readinessProbe:
   path: /health
-  initialDelaySeconds: 40
+  initialDelaySeconds: 5
   failureThreshold: 6
-  periodSeconds: 10
+  periodSeconds: 2
 
 livenessProbe:
   path: /health
