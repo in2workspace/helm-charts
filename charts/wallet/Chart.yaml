@@ -2,8 +2,8 @@ apiVersion: v2
 name: wallet
 description: Umbrella Helm chart for the Wallet
 type: application
-version: 0.1.4
-appVersion: "v0.0.4"
+version: 0.1.5
+appVersion: "v0.0.5"
 
 dependencies:
   - name: wallet-api
@@ -14,7 +14,7 @@ dependencies:
   - name: dome-wallet-ui
     condition: dome-wallet-ui.enabled
     repository: https://in2workspace.github.io/helm-charts
-    version: 0.1.1
+    version: 0.1.2
 
   - name: dome-wallet-keycloak
     condition: dome-wallet-keycloak.enabled
