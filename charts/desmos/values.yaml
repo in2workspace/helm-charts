@@ -5,9 +5,9 @@
 replicaCount: 1
 
 image:
-  repository: in2workspace/in2-desmos-api
+  repository: <your-image-repository>
   # Overrides the image tag whose default is the chart appVersion.
-  tag: v1.0.0
+  tag: <your-image-tag>
   pullPolicy: Always
 
 imagePullSecrets: []
