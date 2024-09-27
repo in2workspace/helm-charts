@@ -67,7 +67,7 @@ spec:
               value: {{ quote .Values.app.accessToken.expirationTime}}
             - name: CLIENTS_REPOSITORY_URI
               value: {{ .Values.app.clientsRepository.uri}}
-            - name: TRUSTED_ISSUER_LIST
+            - name: TRUSTED_ISSUER_LIST_URI
               value: {{ .Values.app.trustedIssuerList.uri}}
             # PRIVATE KEY
             - name: CRYPTO_PRIVATE_KEY
