@@ -118,10 +118,10 @@ app:
     expirationUnitTime: DAYS
     expirationTime: 30
   externalDomain: "https://example-external-domain.org"
-  trustFramework:
-    allowedIssuersUri: "https://example-external-domain.org/issuers.txt"
-    allowedParticipantsUri: "https://example-external-domain.org/participants.txt"
-    allowedClientsUri: "https://example-external-domain.org/clients.json"
+  clientsRepository:
+    uri: "https://raw.example-external-domain.com/path/to/file/filename-"
+  trustedIssuerList:
+    uri: "https://example-external-domain.org/v4/issuers/"
   privateKey:
     value: your-private-key
     existingSecret:
