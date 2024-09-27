@@ -65,12 +65,10 @@ spec:
               value: {{ .Values.app.accessToken.expirationUnitTime }}
             - name: SECURITY_TOKEN_ACCESS_TOKEN_EXPIRATION
               value: {{ quote .Values.app.accessToken.expirationTime}}
-            - name: TRUST_FRAMEWORK_ISSUERS_LIST_URI
-              value: {{ .Values.app.trustFramework.allowedIssuersUri }}
-            - name: TRUST_FRAMEWORK_PARTICIPANTS_LIST_URI
-              value: {{ .Values.app.trustFramework.allowedParticipantsUri }}
-            - name: TRUST_FRAMEWORK_CLIENTS_LIST_URI
-              value: {{ .Values.app.trustFramework.allowedClientsUri }}
+            - name: CLIENTS_REPOSITORY_URI
+              value: {{ .Values.app.clientsRepository.uri}}
+            - name: TRUSTED_ISSUER_LIST
+              value: {{ .Values.app.trustedIssuerList.uri}}
             # PRIVATE KEY
             - name: CRYPTO_PRIVATE_KEY
               valueFrom:
