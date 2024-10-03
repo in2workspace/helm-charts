@@ -228,6 +228,32 @@ app:
   wallet:
     # change by the external url or set to localhost if deployed locally
     url: http://wallet:8080
+  defaultSigner:
+    commonName: <COMMON_NAME>
+    country: <COUNTRY>
+    email: <EMAIL>
+    organizationIdentifier: <ORGANIZATION_IDENTIFIER>
+    organization: <ORGANIZATION>
+    serialNumber: <SERIAL_NUMBER>
+  verifier:
+    verifierDidKey: <VERIFIER_DID_KEY>
+    externalDomain: <VERIFIER_EXTERNAL_DOMAIN>
+    credentialSubjectKey: <VERIFIER_DID_KEY>
+    vc: <ENCRYPTED_VC>
+    crypto:
+      privateKey: <PRIVATE_KEY>
+    existingSecret:
+      enabled: false
+      name: verifier-secret
+      vcKey: vc
+      cryptoPrivateKey: private-key
+    clientAssertion:
+      token:
+        cronUnit: MINUTES
+        expiration: 30
+    paths:
+      tokenPath: /oidc/token
+      resolveDid: /oidc/did
 
 db:
   host: issuer-postgres
