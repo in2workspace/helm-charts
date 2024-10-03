@@ -75,6 +75,8 @@ wallet-api:
         domain: scorpio
         port: 9090
       pathsEntities: /ngsi-ld/v1/entities
+    trustedIssuerList:
+      uri: "https://example-external-domain.org/v4/issuers/"
 
 ## configuration for the dome-wallet-ui
 dome-wallet-ui:
