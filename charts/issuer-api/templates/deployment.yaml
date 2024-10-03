@@ -134,3 +134,39 @@ spec:
               value: "{{ .Values.app.remoteSignature.externalDomain.scheme }}://{{ .Values.app.remoteSignature.externalDomain.host }}{{ if not .Values.app.remoteSignature.externalDomain.externalService }}:{{ .Values.app.remoteSignature.externalDomain.internalPort }}{{ end }}{{ .Values.app.remoteSignature.externalDomain.path }}"
             - name: WALLET_URL
               value: {{ .Values.app.wallet.url }}
+            - name: DEFAULT_SIGNER_COMMON_NAME
+              value: {{ .Values.app.defaultSigner.commonName }}
+            - name: DEFAULT_SIGNER_COUNTRY
+              value: {{ .Values.app.defaultSigner.country }}
+            - name: DEFAULT_SIGNER_EMAIL
+              value: {{ .Values.app.defaultSigner.email }}
+            - name: DEFAULT_SIGNER_ORGANIZATION_IDENTIFIER
+              value: {{ .Values.app.defaultSigner.organizationIdentifier }}
+            - name: DEFAULT_SIGNER_ORGANIZATION
+              value: {{ .Values.app.defaultSigner.organization }}
+            - name: DEFAULT_SIGNER_SERIAL_NUMBER
+              value: {{ .Values.app.defaultSigner.serialNumber }}
+            - name: VERIFIER_EXTERNAL_DOMAIN
+              value: {{ .Values.app.verifier.externalDomain }}
+            - name: VERIFIER_INTERNAL_DOMAIN
+              value: {{ .Values.app.verifier.internalDomain }}
+            - name: VERIFIER_VERIFIER_KEY
+              value: {{ .Values.app.verifier.verifierKey }}
+            - name: VERIFIER_VC
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-api.verifier-secretName" . }}
+                  key: {{ include "issuer-api.verifier-vcKey" . }}
+            - name: VERIFIER_CRYPTO_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-api.verifier-secretName" . }}
+                  key: {{ include "issuer-api.verifier-cryptoPrivateKey" . }}
+            - name: VERIFIER_CLIENT_ASSERTION_TOKEN_CRON_UNIT
+              value: {{ .Values.app.verifier.clientAssertion.token.cronUnit }}
+            - name: VERIFIER_CLIENT_ASSERTION_TOKEN_EXPIRATION
+              value: {{ .Values.app.verifier.clientAssertion.token.expiration }}
+            - name: VERIFIER_PATHS_TOKEN_PATH
+              value: {{ .Values.app.verifier.paths.tokenPaths }}
+            - name: VERIFIER_PATHS_RESOLVE_DID
+              value: {{ .Values.app.verifier.paths.resolveDid }}
