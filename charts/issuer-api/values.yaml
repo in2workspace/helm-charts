@@ -251,9 +251,6 @@ app:
       token:
         cronUnit: MINUTES
         expiration: 30
-    paths:
-      tokenPath: /oidc/token
-      resolveDid: /oidc/did
 
 db:
   host: issuer-postgres
