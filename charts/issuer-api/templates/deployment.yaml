@@ -166,7 +166,3 @@ spec:
               value: {{ .Values.app.verifier.clientAssertion.token.cronUnit }}
             - name: VERIFIER_CLIENT_ASSERTION_TOKEN_EXPIRATION
               value: {{ .Values.app.verifier.clientAssertion.token.expiration }}
-            - name: VERIFIER_PATHS_TOKEN_PATH
-              value: {{ .Values.app.verifier.paths.tokenPaths }}
-            - name: VERIFIER_PATHS_RESOLVE_DID
-              value: {{ .Values.app.verifier.paths.resolveDid }}
