@@ -83,6 +83,29 @@ issuer-api:
       internalDomain: http://wallet-ui:8080
     wallet:
       url: http://wallet:8080
+    defaultSigner:
+      commonName: <COMMON_NAME>
+      country: <COUNTRY>
+      email: <EMAIL>
+      organizationIdentifier: <ORGANIZATION_IDENTIFIER>
+      organization: <ORGANIZATION>
+      serialNumber: <SERIAL_NUMBER>
+    verifier:
+      verifierDidKey: <VERIFIER_DID_KEY>
+      externalDomain: <VERIFIER_EXTERNAL_DOMAIN>
+      credentialSubjectKey: <VERIFIER_DID_KEY>
+      vc: <ENCRYPTED_VC>
+      crypto:
+        privateKey: <PRIVATE_KEY>
+      existingSecret:
+        enabled: false
+        name: verifier-secret
+        vcKey: vc
+        cryptoPrivateKey: private-key
+      clientAssertion:
+        token:
+          cronUnit: MINUTES
+          expiration: 30
   db:
     host: issuer-postgres
     port: 5432
