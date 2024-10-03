@@ -146,12 +146,12 @@ spec:
               value: {{ .Values.app.defaultSigner.organization }}
             - name: DEFAULT_SIGNER_SERIAL_NUMBER
               value: {{ .Values.app.defaultSigner.serialNumber }}
+            - name: VERIFIER_VERIFIER_DID_KEY
+              value: {{ .Values.app.verifier.verifierDidKey }}
             - name: VERIFIER_EXTERNAL_DOMAIN
               value: {{ .Values.app.verifier.externalDomain }}
-            - name: VERIFIER_INTERNAL_DOMAIN
-              value: {{ .Values.app.verifier.internalDomain }}
-            - name: VERIFIER_VERIFIER_KEY
-              value: {{ .Values.app.verifier.verifierKey }}
+            - name: VERIFIER_CREDENTIAL_SUBJECT_KEY
+              value: {{ .Values.app.verifier.credentialSubjectKey }}
             - name: VERIFIER_VC
               valueFrom:
                 secretKeyRef:

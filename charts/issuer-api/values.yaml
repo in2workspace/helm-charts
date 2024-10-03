@@ -236,9 +236,9 @@ app:
     organization: <ORGANIZATION>
     serialNumber: <SERIAL_NUMBER>
   verifier:
+    verifierDidKey: <VERIFIER_DID_KEY>
     externalDomain: <VERIFIER_EXTERNAL_DOMAIN>
-    internalDomain: <VERIFIER_INTERNAL_DOMAIN>
-    verifierKey: <VERIFIER_DID_KEY>
+    credentialSubjectKey: <VERIFIER_DID_KEY>
     vc: <ENCRYPTED_VC>
     crypto:
       privateKey: <PRIVATE_KEY>
