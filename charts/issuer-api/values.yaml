@@ -250,7 +250,7 @@ app:
     clientAssertion:
       token:
         cronUnit: MINUTES
-        expiration: 30
+        expiration: 2
 
 db:
   host: issuer-postgres
