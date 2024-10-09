@@ -112,6 +112,7 @@ affinity: {}
 
 app:
   internalServerPort: 8080
+  logsEnabled: false
   walletApi:
     internalDomain: https://wallet.dome-marketplace-sbx.org/wallet-api
     websocketExternalDomain: wss://wallet.dome-marketplace-sbx.org/wallet-api
