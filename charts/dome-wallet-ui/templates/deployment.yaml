@@ -73,6 +73,8 @@ spec:
               value: {{.Values.app.walletApi.requestSignedCredentialPath}}
             - name: WALLET_API_CBOR_PATH
               value: {{.Values.app.walletApi.cborPath}}
+            - name: LOGS_ENABLED
+              value: {{ .Values.app.logsEnabled }}
             - name: IAM_EXTERNAL_DOMAIN
               value: {{.Values.app.iam.external_domain}}
             - name: IAM_REALM_PATH
