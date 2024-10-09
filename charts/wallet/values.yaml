@@ -104,6 +104,7 @@ dome-wallet-ui:
 
   ## deployment specific configuration
   app:
+    logsEnabled: false
     internalServerPort: 8080
     walletApi:
       internalDomain: https://wallet.dome-marketplace-sbx.org/wallet-api
