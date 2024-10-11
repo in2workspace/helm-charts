@@ -128,3 +128,7 @@ app:
       enabled: false
       name: private-key-secret
       key: private-key
+  verifierUiLoginUris:
+    onboardingUri: "https://knowledge-base.example.org"
+    supportUri: "https://ticketing.example.org"
+    walletUri: "https://wallet.example.org"

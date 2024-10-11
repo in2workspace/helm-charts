@@ -69,6 +69,13 @@ spec:
               value: {{ .Values.app.clientsRepository.uri}}
             - name: TRUSTED_ISSUER_LIST_URI
               value: {{ .Values.app.trustedIssuerList.uri}}
+            - name: VERIFIER_UI_LOGIN_URIS_ONBOARDING_URI
+              value: {{ .Values.app.verifierUiLoginUris.onboardingUri }}
+            - name: VERIFIER_UI_LOGIN_URIS_SUPPORT_URI
+              value: {{ .Values.app.verifierUiLoginUris.supportUri }}
+            - name: VERIFIER_UI_LOGIN_URIS_WALLET_URI
+              value: {{ .Values.app.verifierUiLoginUris.walletUri }}
+
             # PRIVATE KEY
             - name: CRYPTO_PRIVATE_KEY
               valueFrom:
