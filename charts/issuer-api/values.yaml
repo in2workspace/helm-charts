@@ -228,6 +228,8 @@ app:
   wallet:
     # change by the external url or set to localhost if deployed locally
     url: http://wallet:8080
+  trustFramework:
+    url: "http://localhost:8080"
   defaultSigner:
     commonName: <COMMON_NAME>
     country: <COUNTRY>

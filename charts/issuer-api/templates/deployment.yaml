@@ -134,6 +134,8 @@ spec:
               value: "{{ .Values.app.remoteSignature.externalDomain.scheme }}://{{ .Values.app.remoteSignature.externalDomain.host }}{{ if not .Values.app.remoteSignature.externalDomain.externalService }}:{{ .Values.app.remoteSignature.externalDomain.internalPort }}{{ end }}{{ .Values.app.remoteSignature.externalDomain.path }}"
             - name: WALLET_URL
               value: {{ .Values.app.wallet.url }}
+            - name: TRUST_FRAMEWORK_URL
+              value: {{.Values.app.trustFramework.url}}
             - name: DEFAULT_SIGNER_COMMON_NAME
               value: {{ .Values.app.defaultSigner.commonName }}
             - name: DEFAULT_SIGNER_COUNTRY
