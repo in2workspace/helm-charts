@@ -83,6 +83,8 @@ issuer-api:
       internalDomain: http://wallet-ui:8080
     wallet:
       url: http://wallet:8080
+    trustFramework:
+      url: "http://localhost:8080"
     defaultSigner:
       commonName: <COMMON_NAME>
       country: <COUNTRY>
