@@ -75,6 +75,10 @@ spec:
               value: {{ .Values.app.verifierUiLoginUris.supportUri }}
             - name: VERIFIER_UI_LOGIN_URIS_WALLET_URI
               value: {{ .Values.app.verifierUiLoginUris.walletUri }}
+            - name: SECURITY_LOGIN_CODE_EXPIRATION_PROPERTIES_CRON_UNIT
+              value: {{ .Values.app.loginQrCode.expirationUnitTime }}
+            - name: SECURITY_LOGIN_CODE_EXPIRATION_PROPERTIES_EXPIRATION
+              value: {{ quote .Values.app.loginQrCode.expirationTime}}
 
             # PRIVATE KEY
             - name: CRYPTO_PRIVATE_KEY
