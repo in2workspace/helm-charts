@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: in2workspace/in2-verifier-api
   # Overrides the image tag whose default is the chart appVersion.
-  tag: v1.0.2-snapshot
+  tag: v1.0.3-snapshot
   pullPolicy: Always
 
 imagePullSecrets: []
@@ -122,9 +122,11 @@ app:
     expirationTime: 5
   externalDomain: "https://example-external-domain.org"
   clientsRepository:
-    uri: "https://raw.example-external-domain.com/path/to/file/filename-"
+    uri: "https://raw.example-external-domain.com/path/to/file/filename.yaml"
   trustedIssuerList:
     uri: "https://example-external-domain.org/v4/issuers/"
+  revocationList:
+    uri: "https://raw.example-external-domain.com/path/to/file/filename.yaml"
   privateKey:
     value: your-private-key
     existingSecret:

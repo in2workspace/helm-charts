@@ -65,10 +65,12 @@ spec:
               value: {{ .Values.app.accessToken.expirationUnitTime }}
             - name: SECURITY_TOKEN_ACCESS_TOKEN_EXPIRATION
               value: {{ quote .Values.app.accessToken.expirationTime}}
-            - name: CLIENTS_REPOSITORY_URI
+            - name: TRUST_FRAMEWORK_CLIENTS_REPOSITORY_URI
               value: {{ .Values.app.clientsRepository.uri}}
-            - name: TRUSTED_ISSUER_LIST_URI
+            - name: TRUST_FRAMEWORK_TRUSTED_ISSUER_LIST_URI
               value: {{ .Values.app.trustedIssuerList.uri}}
+            - name: TRUST_FRAMEWORK_REVOCATION_LIST_URI
+              value: {{ .Values.app.revocationList.uri}}
             - name: VERIFIER_UI_LOGIN_URIS_ONBOARDING_URI
               value: {{ .Values.app.verifierUiLoginUris.onboardingUri }}
             - name: VERIFIER_UI_LOGIN_URIS_SUPPORT_URI
