@@ -171,5 +171,3 @@ app:
       domain: scorpio
       port: 9090
     pathsEntities: /ngsi-ld/v1/entities
-  trustedIssuerList:
-    uri: "https://example-external-domain.org/v4/issuers/"
