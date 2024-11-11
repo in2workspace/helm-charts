@@ -57,8 +57,14 @@ spec:
               value: {{ quote .Values.app.internalServerPort}}
             - name: SPRING_PROFILES_ACTIVE
               value: {{.Values.app.profile}}
-            - name: LOGGING_LEVEL_ROOT
+            - name: LOGGING_LEVEL_ES_IN2_VCVERIFIER
               value: {{.Values.app.logLevel}}
+            - name: ORG_SPRINGFRAMEWORK.SECURITY
+              value: {{.Values.app.logLevel.security}}
+            - name: ORG_SPRINGFRAMEWORK.SECURITY.OAUTH2
+              value: {{.Values.app.logLevel.securityOauth2}}
+            - name: ORG_SPRINGFRAMEWORK.WEB.FILTER
+              value: {{.Values.app.logLevel.webFilter}}
             - name: SECURITY_AUTHORIZATION_SERVER
               value: {{ .Values.app.externalDomain }}
             - name: SECURITY_TOKEN_ACCESS_TOKEN_CRON_UNIT

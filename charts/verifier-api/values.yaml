@@ -113,7 +113,11 @@ affinity: {}
 app:
   profile: test
   internalServerPort: 8080
-  logLevel: DEBUG
+  logLevel:
+    app: INFO
+    security: INFO
+    securityOauth2: INFO
+    webFilter: INFO
   accessToken:
     expirationUnitTime: DAYS
     expirationTime: 30
