@@ -59,11 +59,11 @@ spec:
               value: {{.Values.app.profile}}
             - name: LOGGING_LEVEL_ES_IN2_VCVERIFIER
               value: {{.Values.app.logLevel.app}}
-            - name: ORG_SPRINGFRAMEWORK_SECURITY
+            - name: LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY
               value: {{.Values.app.logLevel.security}}
-            - name: ORG_SPRINGFRAMEWORK_SECURITY_OAUTH2
+            - name: LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY_OAUTH2
               value: {{.Values.app.logLevel.securityOauth2}}
-            - name: ORG_SPRINGFRAMEWORK_WEB_FILTER
+            - name: LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_WEB_FILTER
               value: {{.Values.app.logLevel.webFilter}}
             - name: SECURITY_AUTHORIZATION_SERVER
               value: {{ .Values.app.externalDomain }}
