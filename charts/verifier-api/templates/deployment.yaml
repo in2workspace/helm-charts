@@ -58,7 +58,7 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: {{.Values.app.profile}}
             - name: LOGGING_LEVEL_ES_IN2_VCVERIFIER
-              value: {{.Values.app.logLevel}}
+              value: {{.Values.app.logLevel.app}}
             - name: ORG_SPRINGFRAMEWORK.SECURITY
               value: {{.Values.app.logLevel.security}}
             - name: ORG_SPRINGFRAMEWORK.SECURITY.OAUTH2
