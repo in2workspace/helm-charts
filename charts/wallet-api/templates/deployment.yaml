@@ -123,6 +123,3 @@ spec:
                 secretKeyRef:
                   name: {{ include "wallet-api.vaultTokenSecretName" . }}
                   key: {{ include "wallet-api.user-tokenKey" . }}
-            # TRUST FRAMEWORK
-            - name: TRUSTED_ISSUER_LIST_URI
-              value: {{ .Values.app.trustedIssuerList.uri}}
