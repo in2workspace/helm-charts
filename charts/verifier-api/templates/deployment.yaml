@@ -71,6 +71,10 @@ spec:
               value: {{ .Values.app.accessToken.expirationUnitTime }}
             - name: SECURITY_TOKEN_ACCESS_TOKEN_EXPIRATION
               value: {{ quote .Values.app.accessToken.expirationTime}}
+            - name: SECURITY_TOKEN_ID_TOKEN_CRON_UNIT
+              value: {{ .Values.app.idToken.expirationUnitTime }}
+            - name: SECURITY_TOKEN_ID_TOKEN_EXPIRATION
+              value: {{ quote .Values.app.idToken.expirationTime}}
             - name: TRUST_FRAMEWORK_CLIENTS_REPOSITORY_URI
               value: {{ .Values.app.clientsRepository.uri}}
             - name: TRUST_FRAMEWORK_TRUSTED_ISSUER_LIST_URI
