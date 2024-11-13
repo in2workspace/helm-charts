@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: in2workspace/in2-verifier-api
   # Overrides the image tag whose default is the chart appVersion.
-  tag: v1.0.3-snapshot
+  tag: v1.0.5-snapshot
   pullPolicy: Always
 
 imagePullSecrets: []
@@ -119,8 +119,11 @@ app:
     securityOauth2: INFO
     webFilter: INFO
   accessToken:
-    expirationUnitTime: DAYS
+    expirationUnitTime: MINUTES
     expirationTime: 30
+  idToken:
+    expirationUnitTime: MINUTES
+    expirationTime: 5
   loginQrCode:
     expirationUnitTime: MINUTES
     expirationTime: 5
