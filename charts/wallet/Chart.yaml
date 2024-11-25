@@ -2,7 +2,7 @@ apiVersion: v2
 name: wallet
 description: Umbrella Helm chart for the Wallet
 type: application
-version: 0.1.10
+version: 1.0.0
 appVersion: "v0.0.5"
 
 dependencies:

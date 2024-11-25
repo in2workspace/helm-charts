@@ -22,6 +22,7 @@ wallet-api:
         secretName: example-secret
   ## deployment specific configuration
   app:
+    profile: prod
     internalServerPort: 8080
     logLevel: DEBUG
     basePath: /wallet-api
