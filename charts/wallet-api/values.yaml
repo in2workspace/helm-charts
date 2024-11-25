@@ -111,6 +111,7 @@ tolerations: []
 affinity: {}
 
 app:
+  profile: prod
   internalServerPort: 8080
   logLevel: DEBUG
   basePath: /wallet-api
