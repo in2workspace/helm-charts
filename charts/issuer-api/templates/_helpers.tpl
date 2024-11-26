@@ -133,30 +133,3 @@ Support for existing mail secret
         {{- printf "password" -}}
     {{- end -}}
 {{- end -}}
-
-{{/*
-Support for existing verifier secret
-*/}}
-{{- define "issuer-api.verifier-secretName" -}}
-    {{- if .Values.app.verifier.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.verifier.existingSecret.name $) -}}
-    {{- else -}}
-        {{- printf "issuer-api-verifier-secret" -}}
-    {{- end -}}
-{{- end -}}
-
-{{- define "issuer-api.verifier-vcKey" -}}
-    {{- if .Values.app.verifier.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.verifier.existingSecret.vcKey $) -}}
-    {{- else -}}
-        {{- printf "vc" -}}
-    {{- end -}}
-{{- end -}}
-
-{{- define "issuer-api.verifier-cryptoPrivateKey" -}}
-    {{- if .Values.app.verifier.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.verifier.existingSecret.cryptoPrivateKey $) -}}
-    {{- else -}}
-        {{- printf "private-key" -}}
-    {{- end -}}
-{{- end -}}
