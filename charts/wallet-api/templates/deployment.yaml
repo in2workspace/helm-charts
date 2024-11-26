@@ -60,10 +60,8 @@ spec:
             - name: SPRING_WEBFLUX_BASEPATH
               value: {{.Values.app.basePath}}
             # CORS
-            - name: WALLET_WDA_URLS_0_SCHEME
-              value: {{.Values.app.walletUi.scheme}}
-            - name: WALLET_WDA_URLS_0_DOMAIN
-              value: {{.Values.app.walletUi.domain}}
+            - name: CORS_ALLOWED_ORIGINS
+              value: {{.Values.app.cors.allowedOrigins}}
             # AUTH SERVER
             - name: AUTH_SERVER_EXTERNAL_URL_SCHEME
               value: {{.Values.app.authServer.external.scheme}}

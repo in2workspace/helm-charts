@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: in2workspace/wallet-api
   # Overrides the image tag whose default is the chart appVersion.
-  tag: v1.2.0
+  tag: v1.3.5
   pullPolicy: Always
 
 imagePullSecrets: []
@@ -115,9 +115,8 @@ app:
   internalServerPort: 8080
   logLevel: DEBUG
   basePath: /wallet-api
-  walletUi:
-    scheme: https
-    domain: wallet.dome-marketplace-sbx.org
+  cors:
+    allowedOrigins:
   authServer:
     external:
       scheme: https
