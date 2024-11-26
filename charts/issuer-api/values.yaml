@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   repository: in2workspace/issuer-api
   # Overrides the image tag whose default is the chart appVersion.
-  tag: v1.1.1-SNAPSHOT
+  tag: v1.2.0
   pullPolicy: Always
 
 imagePullSecrets: []
@@ -143,8 +143,10 @@ tolerations: []
 affinity: {}
 
 app:
-  profile: default
-  logLevel: DEBUG
+  profile: prod
+  logLevel:
+    app: INFO
+    security: INFO
   basePath: /issuer-api
   internalServerPort: 8080
   mail:
@@ -238,21 +240,7 @@ app:
     organization: <ORGANIZATION>
     serialNumber: <SERIAL_NUMBER>
   verifier:
-    verifierDidKey: <VERIFIER_DID_KEY>
-    externalDomain: <VERIFIER_EXTERNAL_DOMAIN>
-    credentialSubjectKey: <VERIFIER_DID_KEY>
-    vc: <ENCRYPTED_VC>
-    crypto:
-      privateKey: <PRIVATE_KEY>
-    existingSecret:
-      enabled: false
-      name: verifier-secret
-      vcKey: vc
-      cryptoPrivateKey: private-key
-    clientAssertion:
-      token:
-        cronUnit: MINUTES
-        expiration: 2
+    didKey: <DID_KEY>
 
 db:
   host: issuer-postgres
