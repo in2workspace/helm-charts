@@ -115,8 +115,6 @@ app:
   internalServerPort: 8080
   logLevel: DEBUG
   basePath: /wallet-api
-  cors:
-    allowedOrigins:
   authServer:
     external:
       scheme: https
