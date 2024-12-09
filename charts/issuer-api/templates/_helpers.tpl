@@ -141,7 +141,7 @@ Support for existing issuer identity secret
     {{- if .Values.app.issuerIdentity.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.issuerIdentity.existingSecret.name $) -}}
     {{- else -}}
-        {{- printf "issuer-api-issuerIdentity-secret" -}}
+        {{- printf "issuer-api-issuer-identity-secret" -}}
     {{- end -}}
 {{- end -}}
 
@@ -149,13 +149,13 @@ Support for existing issuer identity secret
     {{- if .Values.app.issuerIdentity.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.issuerIdentity.existingSecret.cryptoPrivateKey $) -}}
     {{- else -}}
-        {{- printf "private key" -}}
+        {{- printf "private-key" -}}
     {{- end -}}
 {{- end -}}
 
 {{- define "issuer-api.issuerIdentity-vc" -}}
     {{- if .Values.app.issuerIdentity.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.issuerIdentity.existingSecret.vcJwt $) -}}
+        {{- printf "%s" (tpl .Values.app.issuerIdentity.existingSecret.vc $) -}}
     {{- else -}}
         {{- printf "vc" -}}
     {{- end -}}
@@ -165,7 +165,7 @@ Support for existing issuer identity secret
     {{- if .Values.app.issuerIdentity.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.issuerIdentity.existingSecret.credentialDidKey $) -}}
     {{- else -}}
-        {{- printf "did-key" -}}
+        {{- printf "credential-did-key" -}}
     {{- end -}}
 {{- end -}}
 
@@ -176,7 +176,7 @@ Support for existing default signer secret
     {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.defaultSigner.existingSecret.name $) -}}
     {{- else -}}
-        {{- printf "issuer-api-defaultSigner-secret" -}}
+        {{- printf "issuer-api-default-signer-secret" -}}
     {{- end -}}
 {{- end -}}
 
@@ -224,6 +224,6 @@ Support for existing default signer secret
     {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.defaultSigner.existingSecret.serialNumber $) -}}
     {{- else -}}
-        {{- printf "serial number" -}}
+        {{- printf "serial-number" -}}
     {{- end -}}
 {{- end -}}

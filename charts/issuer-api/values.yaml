@@ -1,9 +1,9 @@
 replicaCount: 1
 
 image:
-  repository: in2workspace/issuer-api
+  repository: in2workspace/in2-issuer-api
   # Overrides the image tag whose default is the chart appVersion.
-  tag: v1.1.1-SNAPSHOT
+  tag: v1.2.0-snapshot
   pullPolicy: Always
 
 imagePullSecrets: []
@@ -255,9 +255,9 @@ app:
       privateKey: <PRIVATE_KEY>
     existingSecret:
       enabled: false
-      name: verifier-secret
-      vcJwt: vc-jwt
-      cryptoPrivateKey: private-key
+      name: issuer-identity-secret
+      vc: vc
+      privateKey: private-key
       credentialDidKey: credential-did-key
 
 db:
