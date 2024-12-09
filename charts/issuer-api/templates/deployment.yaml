@@ -55,8 +55,10 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: {{ .Values.app.profile }}
-            - name: LOGGING_LEVEL_ROOT
-              value: {{ .Values.app.logLevel }}
+            - name: LOGGING_LEVEL_ES_IN2_ISSUER
+              value: {{ .Values.app.logLevel.app }}
+            - name: LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY
+              value: {{ .Values.app.logLevel.security }}
             - name: SPRING_WEBFLUX_BASEPATH
               value: {{ .Values.app.basePath }}
             - name: SPRING_R2DBC_URL
@@ -137,34 +139,47 @@ spec:
             - name: TRUST_FRAMEWORK_URL
               value: {{.Values.app.trustFramework.url}}
             - name: DEFAULT_SIGNER_COMMON_NAME
-              value: {{ .Values.app.defaultSigner.commonName }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-api.defaultSigner-secretName" . }}
+                  key: {{ include "issuer-api.defaultSigner-commonName" . }}
             - name: DEFAULT_SIGNER_COUNTRY
-              value: {{ .Values.app.defaultSigner.country }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-api.defaultSigner-secretName" . }}
+                  key: {{ include "issuer-api.defaultSigner-country" . }}
             - name: DEFAULT_SIGNER_EMAIL
-              value: {{ .Values.app.defaultSigner.email }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-api.defaultSigner-secretName" . }}
+                  key: {{ include "issuer-api.defaultSigner-email" . }}
             - name: DEFAULT_SIGNER_ORGANIZATION_IDENTIFIER
-              value: {{ .Values.app.defaultSigner.organizationIdentifier }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-api.defaultSigner-secretName" . }}
+                  key: {{ include "issuer-api.defaultSigner-organizationIdentifier" . }}
             - name: DEFAULT_SIGNER_ORGANIZATION
-              value: {{ .Values.app.defaultSigner.organization }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-api.defaultSigner-secretName" . }}
+                  key: {{ include "issuer-api.defaultSigner-organization" . }}
             - name: DEFAULT_SIGNER_SERIAL_NUMBER
-              value: {{ .Values.app.defaultSigner.serialNumber }}
-            - name: VERIFIER_VERIFIER_DID_KEY
-              value: {{ .Values.app.verifier.verifierDidKey }}
-            - name: VERIFIER_EXTERNAL_DOMAIN
-              value: {{ .Values.app.verifier.externalDomain }}
-            - name: VERIFIER_CREDENTIAL_SUBJECT_KEY
-              value: {{ .Values.app.verifier.credentialSubjectKey }}
-            - name: VERIFIER_VC
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "issuer-api.verifier-secretName" . }}
-                  key: {{ include "issuer-api.verifier-vcKey" . }}
-            - name: VERIFIER_CRYPTO_PRIVATE_KEY
+                  name: {{ include "issuer-api.defaultSigner-secretName" . }}
+                  key: {{ include "issuer-api.defaultSigner-serialNumber" . }}
+            - name: ISSUER_IDENTITY_CREDENTIAL_SUBJECT_DID_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "issuer-api.verifier-secretName" . }}
-                  key: {{ include "issuer-api.verifier-cryptoPrivateKey" . }}
-            - name: VERIFIER_CLIENT_ASSERTION_TOKEN_CRON_UNIT
-              value: {{ .Values.app.verifier.clientAssertion.token.cronUnit }}
-            - name: VERIFIER_CLIENT_ASSERTION_TOKEN_EXPIRATION
-              value: "{{ .Values.app.verifier.clientAssertion.token.expiration }}" # Convert to string
+                  name: {{ include "issuer-api.issuerIdentity-secretName" . }}
+                  key: {{ include "issuer-api.issuerIdentity-credentialDidKey" . }}
+            - name: ISSUER_IDENTITY_JWT_CREDENTIAL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-api.issuerIdentity-secretName" . }}
+                  key: {{ include "issuer-api.issuerIdentity-vc" . }}
+            - name: ISSUER_IDENTITY_CRYPTO_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-api.issuerIdentity-secretName" . }}
+                  key: {{ include "issuer-api.issuerIdentity-privateKey" . }}

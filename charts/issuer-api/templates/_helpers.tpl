@@ -135,28 +135,95 @@ Support for existing mail secret
 {{- end -}}
 
 {{/*
-Support for existing verifier secret
+Support for existing issuer identity secret
 */}}
-{{- define "issuer-api.verifier-secretName" -}}
-    {{- if .Values.app.verifier.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.verifier.existingSecret.name $) -}}
+{{- define "issuer-api.issuerIdentity-secretName" -}}
+    {{- if .Values.app.issuerIdentity.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.issuerIdentity.existingSecret.name $) -}}
     {{- else -}}
-        {{- printf "issuer-api-verifier-secret" -}}
+        {{- printf "issuer-api-issuerIdentity-secret" -}}
     {{- end -}}
 {{- end -}}
 
-{{- define "issuer-api.verifier-vcKey" -}}
-    {{- if .Values.app.verifier.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.verifier.existingSecret.vcKey $) -}}
+{{- define "issuer-api.issuerIdentity-privateKey" -}}
+    {{- if .Values.app.issuerIdentity.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.issuerIdentity.existingSecret.cryptoPrivateKey $) -}}
+    {{- else -}}
+        {{- printf "private key" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "issuer-api.issuerIdentity-vc" -}}
+    {{- if .Values.app.issuerIdentity.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.issuerIdentity.existingSecret.vcJwt $) -}}
     {{- else -}}
         {{- printf "vc" -}}
     {{- end -}}
 {{- end -}}
 
-{{- define "issuer-api.verifier-cryptoPrivateKey" -}}
-    {{- if .Values.app.verifier.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.verifier.existingSecret.cryptoPrivateKey $) -}}
+{{- define "issuer-api.issuerIdentity-credentialDidKey" -}}
+    {{- if .Values.app.issuerIdentity.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.issuerIdentity.existingSecret.credentialDidKey $) -}}
     {{- else -}}
-        {{- printf "private-key" -}}
+        {{- printf "did-key" -}}
+    {{- end -}}
+{{- end -}}
+
+{{/*
+Support for existing default signer secret
+*/}}
+{{- define "issuer-api.defaultSigner-secretName" -}}
+    {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.defaultSigner.existingSecret.name $) -}}
+    {{- else -}}
+        {{- printf "issuer-api-defaultSigner-secret" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "issuer-api.defaultSigner-commonName" -}}
+    {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.defaultSigner.existingSecret.commonName $) -}}
+    {{- else -}}
+        {{- printf "common-name" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "issuer-api.defaultSigner-organization" -}}
+    {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.defaultSigner.existingSecret.organization $) -}}
+    {{- else -}}
+        {{- printf "organization" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "issuer-api.defaultSigner-country" -}}
+    {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.defaultSigner.existingSecret.country $) -}}
+    {{- else -}}
+        {{- printf "country" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "issuer-api.defaultSigner-email" -}}
+    {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.defaultSigner.existingSecret.email $) -}}
+    {{- else -}}
+        {{- printf "email" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "issuer-api.defaultSigner-organizationIdentifier" -}}
+    {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.defaultSigner.existingSecret.organizationIdentifier $) -}}
+    {{- else -}}
+        {{- printf "organization-identifier" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "issuer-api.defaultSigner-serialNumber" -}}
+    {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.defaultSigner.existingSecret.serialNumber $) -}}
+    {{- else -}}
+        {{- printf "serial number" -}}
     {{- end -}}
 {{- end -}}
