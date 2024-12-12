@@ -168,6 +168,7 @@ issuer-ui:
       # internalPort is only used if externalService is false
       internalPort: 30004
       path: /
+    profile: local
     procedures: /api/v1/procedures
     saveCredential: /api/v1/credentials?type=LEARCredentialEmployee
     credentialOfferUrl: /api/v1/credential-offer
