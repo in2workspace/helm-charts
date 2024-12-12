@@ -67,6 +67,8 @@ spec:
               value: "{{ .Values.app.walletUrl.scheme }}://{{ .Values.app.walletUrl.host }}{{ if not .Values.app.walletUrl.externalService }}:{{ .Values.app.walletUrl.internalPort }}{{ end }}{{ .Values.app.walletUrl.path }}"
             - name: KNOWLEDGEBASE_URL
               value: "{{ .Values.app.knowledgebaseUrl.scheme }}://{{ .Values.app.knowledgebaseUrl.host }}{{ if not .Values.app.knowledgebaseUrl.externalService }}:{{ .Values.app.knowledgebaseUrl.internalPort }}{{ end }}{{ .Values.app.knowledgebaseUrl.path }}"
+            - name: PROFILE
+              value: {{ .Values.app.profile }}
             - name: PROCEDURES
               value: {{ .Values.app.procedures }}
             - name: SAVE_CREDENTIAL
