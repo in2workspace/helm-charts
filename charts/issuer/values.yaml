@@ -83,10 +83,10 @@ issuer-api:
         internalPort: 30000
         path: /
       internalDomain: http://wallet-ui:8080
-    wallet:
-      url: http://wallet:8080
     trustFramework:
       url: "http://localhost:8080"
+    knowledgebase:
+      url: "http://knowledgebase.com"
     defaultSigner:
       commonName: <COMMON_NAME>
       country: <COUNTRY>
