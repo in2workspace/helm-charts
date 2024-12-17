@@ -44,13 +44,13 @@ service:
   port: 8080
 
 readinessProbe:
-  path: /api/health
+  path: /wallet-api/health
   initialDelaySeconds: 40
   failureThreshold: 6
   periodSeconds: 10
 
 livenessProbe:
-  path: /api/health
+  path: /wallet-api/health
   initialDelaySeconds: 40
   failureThreshold: 6
   periodSeconds: 10
@@ -64,7 +64,7 @@ ingress:
   hosts:
     - host: chart-example.local
       paths:
-        - path: /api
+        - path: /wallet-api
           pathType: Prefix
   tls:
     - hosts:
@@ -114,7 +114,7 @@ app:
   profile: prod
   internalServerPort: 8080
   logLevel: DEBUG
-  basePath: /api
+  basePath: /wallet-api
   authServer:
     external:
       scheme: https
