@@ -114,8 +114,8 @@ app:
   internalServerPort: 8080
   logsEnabled: false
   walletApi:
-    internalDomain: https://wallet.dome-marketplace-sbx.org/wallet-api
-    websocketExternalDomain: wss://wallet.dome-marketplace-sbx.org/wallet-api
+    internalDomain: https://wallet.dome-marketplace-sbx.org/api
+    websocketExternalDomain: wss://wallet.dome-marketplace-sbx.org/api
     websocketPath: /api/v1/pin
     executeContentPath: /api/v1/execute-content
     requestCredentialPath: /api/v1/request-credential
