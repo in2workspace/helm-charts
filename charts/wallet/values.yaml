@@ -14,7 +14,7 @@ wallet-api:
     hosts:
       - host: chart-example.local
         paths:
-          - path: /wallet-api
+          - path: /api
             pathType: Prefix
     tls:
       - hosts:
@@ -25,7 +25,7 @@ wallet-api:
     profile: prod
     internalServerPort: 8080
     logLevel: DEBUG
-    basePath: /wallet-api
+    basePath: /api
     authServer:
       external:
         scheme: https
@@ -103,8 +103,8 @@ dome-wallet-ui:
     logsEnabled: false
     internalServerPort: 8080
     walletApi:
-      internalDomain: https://wallet.dome-marketplace-sbx.org/wallet-api
-      websocketExternalDomain: wss://wallet.dome-marketplace-sbx.org/wallet-api
+      internalDomain: https://wallet.dome-marketplace-sbx.org/api
+      websocketExternalDomain: wss://wallet.dome-marketplace-sbx.org/api
       websocketPath: /api/v1/pin
       executeContentPath: /api/v1/execute-content
       requestCredentialPath: /api/v1/request-credential
