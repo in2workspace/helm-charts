@@ -266,11 +266,6 @@ dome-issuer-keycloak:
     lifespan: 10
     lifespanTimeUnit: MINUTES
 
-  # Transaction Code Configuration
-  txCode:
-    size: 4
-    description: Enter the PIN code
-
   # Token Configuration
   token:
     expiration: 2592000
