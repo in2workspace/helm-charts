@@ -96,10 +96,6 @@ spec:
               value: "{{ .Values.preAuth.lifespan }}"
             - name: PRE_AUTH_LIFESPAN_TIME_UNIT
               value: {{ .Values.preAuth.lifespanTimeUnit }}
-            - name: TX_CODE_SIZE
-              value: "{{ .Values.txCode.size }}"
-            - name: TX_CODE_DESCRIPTION
-              value: {{ .Values.txCode.description }}
             - name: TOKEN_EXPIRATION
               value: "{{ .Values.token.expiration }}"
             - name: QUARKUS_LOG_CATEGORY__ORG_KEYCLOAK_SERVICES_X509__LEVEL
