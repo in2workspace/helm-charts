@@ -101,8 +101,6 @@ spec:
               value: {{.Values.app.broker.internalDomain}}
             - name: NGSI_SUBSCRIPTION_NOTIFICATION_ENDPOINT
               value: {{.Values.app.ngsiSubscription.notificationEndpoint}}
-            - name: NGSI_SUBSCRIPTION_ENTITY_TYPES
-              value: {{.Values.app.ngsiSubscription.entityTypes}}
             - name: DLT_ADAPTER_PROVIDER
               value: {{.Values.app.dltAdapter.provider}}
             - name: DLT_ADAPTER_INTERNAL_DOMAIN
@@ -111,8 +109,6 @@ spec:
               value: {{.Values.app.dltAdapter.externalDomain}}
             - name: TX_SUBSCRIPTION_NOTIFICATION_ENDPOINT
               value: {{.Values.app.txSubscription.notificationEndpoint}}
-            - name: TX_SUBSCRIPTION_ENTITY_TYPES
-              value: {{.Values.app.txSubscription.entityTypes}}
             {{- if .Values.app.externalAccessNodesUrls.enableCustomUrls }}
             - name: EXTERNAL-ACCESS-NODES_URLS
               value: {{.Values.app.externalAccessNodesUrls.customUrls}}
