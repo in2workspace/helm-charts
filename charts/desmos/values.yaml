@@ -121,14 +121,12 @@ app:
     externalDomain: http://scorpio:9090
   ngsiSubscription:
     notificationEndpoint: http://desmos:8080/api/v1/notifications/broker
-    entityTypes: catalog,product-offering,category,individual,organization,product,service-specification,product-offering-price,resource-specification,product-specification
   dltAdapter:
     provider: digitelts
     internalDomain: http://dlt-adapter:8080
     externalDomain: http://dlt-adapter:8080
   txSubscription:
     notificationEndpoint: http://desmos:8080/api/v1/notifications/dlt
-    entityTypes: catalog,product-offering,category,individual,organization,product,service-specification,product-offering-price,resource-specification,product-specification
   externalDomain: "http://example-external-domain.org"
   externalAccessNodesUrls:
     enableCustomUrls: false
