@@ -107,7 +107,7 @@ dome-wallet-ui:
       websocketExternalDomain: wss://wallet.dome-marketplace-sbx.org/wallet-api
       websocketPath: /api/v1/pin
       executeContentPath: /api/v1/execute-content
-      requestCredentialPath: /api/v1/request-credential
+      requestCredentialPath: /api/v1/openid-credential-offer
       verifiablePresentationPath: /api/v1/vp
       credentialsPath: /api/v1/credentials
       credentialsByIdPath: /api/v1/credentials?credentialId=
