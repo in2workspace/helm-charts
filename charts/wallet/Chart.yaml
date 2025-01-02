@@ -14,7 +14,7 @@ dependencies:
   - name: dome-wallet-ui
     condition: dome-wallet-ui.enabled
     repository: https://in2workspace.github.io/helm-charts
-    version: 0.1.4
+    version: 0.1.5
 
   - name: dome-wallet-keycloak
     condition: dome-wallet-keycloak.enabled
