@@ -111,7 +111,9 @@ affinity: {}
 
 app:
   profile: test
-  logLevel: DEBUG
+  logLevel:
+    root: INFO
+    app: INFO
   internalServerPort: 8080
   operator:
     organizationIdentifier: VATES-S9999999E
