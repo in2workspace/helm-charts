@@ -41,16 +41,20 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 80
+  port: 8080
 
 readinessProbe:
-  path: /health
+  httpGet:
+    path: /health
+    port: 8080
   initialDelaySeconds: 5
   failureThreshold: 6
   periodSeconds: 2
 
 livenessProbe:
-  path: /health
+  httpGet:
+    path: /health
+    port: 8080
   initialDelaySeconds: 40
   failureThreshold: 6
   periodSeconds: 10
