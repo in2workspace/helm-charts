@@ -65,6 +65,8 @@ spec:
               value: "{{ .Values.app.baseUrl.scheme }}://{{ .Values.app.baseUrl.host }}{{ if not .Values.app.baseUrl.externalService }}:{{ .Values.app.baseUrl.internalPort }}{{ end }}{{ .Values.app.baseUrl.path }}"
             - name: WALLET_URL
               value: "{{ .Values.app.walletUrl.scheme }}://{{ .Values.app.walletUrl.host }}{{ if not .Values.app.walletUrl.externalService }}:{{ .Values.app.walletUrl.internalPort }}{{ end }}{{ .Values.app.walletUrl.path }}"
+            - name: WALLET_URL_TEST
+              value: "{{ .Values.app.walletUrlTest.scheme }}://{{ .Values.app.walletUrlTest.host }}{{ if not .Values.app.walletUrlTest.externalService }}:{{ .Values.app.walletUrlTest.internalPort }}{{ end }}{{ .Values.app.walletUrlTest.path }}"
             - name: KNOWLEDGEBASE_URL
               value: "{{ .Values.app.knowledgebaseUrl.scheme }}://{{ .Values.app.knowledgebaseUrl.host }}{{ if not .Values.app.knowledgebaseUrl.externalService }}:{{ .Values.app.knowledgebaseUrl.internalPort }}{{ end }}{{ .Values.app.knowledgebaseUrl.path }}"
             - name: PROFILE
