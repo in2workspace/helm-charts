@@ -115,9 +115,10 @@ issuer-api:
         privateKey: private-key
         credentialDidKey: credential-did-key
   db:
+    externalService: false
+    schema: public
     host: issuer-postgres
     port: 5432
-    externalService: false
     name: issuer
     username: postgres
     password: postgres
@@ -302,7 +303,10 @@ issuer-postgres:
       scripts:
         # -- create the database
         create.sh: |
+          {{- if not .Values.db.externalService }}
           psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE issuer;"
+          psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432/issuer -c "CREATE SCHEMA IF NOT EXISTS public AUTHORIZATION postgres;"
+          {{- end }}
 
 
 issuer-keycloak-postgres:
