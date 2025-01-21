@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "portal-ui.fullname" . }}
+  namespace: {{ $.Release.Namespace | quote }}
+  labels:
+    {{- include "portal-ui.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{.Values.app.internalServerPort}}
+      {{ if eq .Values.service.type "NodePort" }}
+      nodePort: 30000
+      {{ end }}
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "portal-ui.selectorLabels" . | nindent 4 }}
