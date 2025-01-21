@@ -282,7 +282,7 @@ dome-issuer-keycloak:
 
 issuer-postgres:
   # -- should the postgresql deployment be enabled
-  enabled: {{ if not .Values.db.externalService }}true{{ else }}false{{ end }}
+  enabled: true
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
   fullnameOverride: issuer-postgres
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
