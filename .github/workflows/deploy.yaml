@@ -37,6 +37,7 @@ jobs:
           helm dependency build charts/access-node
           helm package charts/access-node
           helm package charts/verifier-api
+          helm package charts/portal-ui
 
       - name: Upload Helm Repository Index
         run: helm repo index . --url https://in2workspace.github.io/helm-charts
