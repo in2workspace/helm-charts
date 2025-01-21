@@ -282,7 +282,7 @@ dome-issuer-keycloak:
 
 issuer-postgres:
   # -- should the postgresql deployment be enabled
-  enabled: true
+  enabled: {{ not .Values.db.externalService }}
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
   fullnameOverride: issuer-postgres
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
@@ -303,11 +303,8 @@ issuer-postgres:
       scripts:
         # -- create the database
         create.sh: |
-          {{- if not .Values.db.externalService }}
-          psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE issuer;"
-          psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432/issuer -c "CREATE SCHEMA IF NOT EXISTS public AUTHORIZATION postgres;"
-          {{- end }}
-
+          psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE {{ .Values.db.name }};"
+          psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432/{{ .Values.db.name }} -c "CREATE SCHEMA IF NOT EXISTS public AUTHORIZATION {{ .Values.db.schema }};"
 
 issuer-keycloak-postgres:
   # -- should the postgresql deployment be enabled
