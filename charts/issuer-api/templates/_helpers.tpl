@@ -228,27 +228,6 @@ Support for existing default signer secret
     {{- end -}}
 {{- end -}}
 
-{{/*Validate that the required values are set when db.externalService is true.*/}}
-{{- define "validateDatabaseConfig" -}}
-{{- if .Values.db.externalService }}
-  {{- if empty .Values.db.host }}
-    {{ fail "El valor 'db.host' no puede estar vacío cuando 'db.externalService' está habilitado." }}
-  {{- end }}
-  {{- if empty .Values.db.name }}
-    {{ fail "El valor 'db.name' no puede estar vacío cuando 'db.externalService' está habilitado." }}
-  {{- end }}
-  {{- if empty .Values.db.schema }}
-    {{ fail "El valor 'db.schema' no puede estar vacío cuando 'db.externalService' está habilitado." }}
-  {{- end }}
-  {{- if empty .Values.db.username }}
-    {{ fail "El valor 'db.username' no puede estar vacío cuando 'db.externalService' está habilitado." }}
-  {{- end }}
-  {{- if empty .Values.db.password }}
-    {{ fail "El valor 'db.password' no puede estar vacío cuando 'db.externalService' está habilitado." }}
-  {{- end }}
-{{- end }}
-{{- end }}
-
 {{/* Validate that the required values are set when db.externalService is true or false. */}}
 {{- define "validateDatabaseConfig" -}}
 {{- if .Values.db.externalService }}
