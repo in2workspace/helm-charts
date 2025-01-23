@@ -300,7 +300,6 @@ issuer-postgres:
         # -- !!Put the same database name and the same database schema
         create.sh: |
           psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE issuer;"
-          psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432/issuer -c "CREATE SCHEMA IF NOT EXISTS public AUTHORIZATION public;"
 
 issuer-keycloak-postgres:
   # -- should the postgresql deployment be enabled
