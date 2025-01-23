@@ -133,7 +133,7 @@ spec:
             - name: ISSUER_UI_INTERNAL_DOMAIN
               value: {{ .Values.app.ui.internalDomain }}
             - name: REMOTE_SIGNATURE_DOMAIN
-              value: "{{ .Values.app.remoteSignature.domain.scheme }}://{{ .Values.app.remoteSignature.domain.host }}{{ if not .Values.app.remoteSignature.domain.externalService }}:{{ .Values.app.remoteSignature.domain.internalPort }}{{ end }}{{ .Values.app.remoteSignature.domain.path }}"
+              value: "{{ .Values.app.remoteSignature.domain.scheme }}://{{ .Values.app.remoteSignature.domain.host }}{{ .Values.app.remoteSignature.domain.path }}"
             - name: TRUST_FRAMEWORK_URL
               value: {{.Values.app.trustFramework.url}}
             - name: KNOWLEDGEBASE_URL

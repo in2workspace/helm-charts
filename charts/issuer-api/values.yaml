@@ -169,13 +169,9 @@ app:
             trust: smtp.example.org
   remoteSignature:
     domain:
-      # if deployed locally set to false
-      externalService: true
       scheme: http
       # change by the external url or set to localhost if deployed locally
       host: example.org
-      # internalPort is only used if externalService is false
-      internalPort: 30003
   api:
     externalDomain:
       # if deployed locally set to false
