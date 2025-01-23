@@ -58,4 +58,4 @@ dependencies:
     alias: external-database
     condition: "!issuer-postgres.enabled"
     repository: oci://registry-1.docker.io/bitnamicharts
-    version: 8.1.2
+    version: 12.2.2
