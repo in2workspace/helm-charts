@@ -223,7 +223,7 @@ dome-issuer-keycloak:
     db:
       host: issuer-keycloak-postgres
       port: 5432
-      externalService: true
+      externalService: false
       name: cred
       username: postgres
       password: postgres
@@ -325,3 +325,19 @@ issuer-keycloak-postgres:
         # -- create the database
         create.sh: |
           psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE cred;"
+
+external-database:
+  # -- should the postgresql deployment be enabled
+  enabled: false
+  # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
+  fullnameOverride: external-database
+  # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
+  nameOverride: external-database
+  ## auth configuration for the database
+  auth:
+    # -- username to be used
+    username: postgres
+    # -- should the default postgres user be enabled
+    enablePostgresUser: true
+    # -- password to be used
+    password: postgres
