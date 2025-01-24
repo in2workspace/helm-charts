@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: in2workspace/wallet-api
   # Overrides the image tag whose default is the chart appVersion.
-  tag: v1.3.5
+  tag: v1.4.0
   pullPolicy: Always
 
 imagePullSecrets: []
@@ -162,10 +162,16 @@ app:
       name: wallet-api-token-secret
       # -- key to retrieve the token from
       key: token
-  broker:
-    provider: scorpio
-    internal:
-      scheme: http
-      domain: scorpio
-      port: 9090
-    pathsEntities: /ngsi-ld/v1/entities
+
+db:
+  externalService: false
+  schema: wallet
+  host: wallet-postgres
+  port: 5432
+  name: wallet
+  username: postgres
+  password: postgres
+  existingSecret:
+    enabled: false
+    name: db-secret
+    key: password
