@@ -2,14 +2,14 @@ apiVersion: v2
 name: wallet
 description: Umbrella Helm chart for the Wallet
 type: application
-version: 1.0.4
+version: 1.1.0
 appVersion: "v0.0.5"
 
 dependencies:
   - name: wallet-api
     condition: wallet-api.enabled
     repository: https://in2workspace.github.io/helm-charts
-    version: 1.0.2
+    version: 1.1.0
 
   - name: dome-wallet-ui
     condition: dome-wallet-ui.enabled
@@ -38,3 +38,9 @@ dependencies:
     alias: postgis
     repository: oci://registry-1.docker.io/bitnamicharts
     version: 13.1.5
+
+  - name: postgresql
+    condition: wallet-postgresql.enabled
+    alias: wallet-postgresql
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 16.3.0
