@@ -43,4 +43,4 @@ dependencies:
     condition: wallet-postgresql.enabled
     alias: wallet-postgresql
     repository: oci://registry-1.docker.io/bitnamicharts
-    version: 17.2.0
+    version: 16.4.5
