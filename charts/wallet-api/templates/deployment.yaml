@@ -120,7 +120,7 @@ spec:
                   name: {{ include "wallet-api.db-secretName" . }}
                   key: {{ include "wallet-api.db-passwordKey" . }}
             - name: SPRING_FLYWAY_URL
-              value: "r2dbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}?schema={{ .Values.db.schema }}"
+              value: "jdbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}?schema={{ .Values.db.schema }}"
             - name: SPRING_FLYWAY_USER
               value: {{ .Values.db.username }}
             - name: SPRING_FLYWAY_PASSWORD
