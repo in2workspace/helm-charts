@@ -111,3 +111,22 @@ Support for existing database secret
         {{- printf "token" -}}
     {{- end -}}
 {{- end -}}
+
+{{/*
+Support for existing database secret
+*/}}
+{{- define "wallet-api.db-secretName" -}}
+    {{- if .Values.db.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.db.existingSecret.name $) -}}
+    {{- else -}}
+        {{- printf "wallet-api-db-secret" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "wallet-api.db-passwordKey" -}}
+    {{- if .Values.db.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.db.existingSecret.key $) -}}
+    {{- else -}}
+        {{- printf "password" -}}
+    {{- end -}}
+{{- end -}}
