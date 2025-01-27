@@ -145,6 +145,12 @@ app:
       enabled: false
       name: private-key-secret
       key: private-key
+  learCredentialMachineInBase64:
+    value: your-lear-credential-machine-in-base64
+    existingSecret:
+      enabled: false
+      name: lear-credential-machine-secret
+      key: lear-credential-machine
   trustedAccessNodesList:
     enableCustomTrustedList: false
     customTrustedList: "https://raw.githubusercontent.com/DOME-Marketplace/dome-access-node-directory/main/access-node-directory-"
