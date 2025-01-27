@@ -120,8 +120,12 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "desmos.learCredentialMachine-secretName" . }}
-                  key: {{ include "desmos.learCredentialMachine-privateKey" . }}
+                  key: {{ include "desmos.learCredentialMachine-learCredentialMachine" . }}
             {{- if .Values.app.trustedAccessNodesList.enableCustomTrustedList }}
             - name: ACCESS_NODE_TRUSTED_ACCESS_NODES_LIST
               value: {{ .Values.app.trustedAccessNodesList.customTrustedList }}
+            {{- end }}
+            {{- if .Values.app.verifier.enableCustomVerifier }}
+            - name: VERIFIER_EXTERNAL_DOMAIN
+              value: {{ .Values.app.verifier.customVerifier }}
             {{- end }}

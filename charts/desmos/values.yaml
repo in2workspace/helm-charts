@@ -149,11 +149,14 @@ app:
     value: your-lear-credential-machine-in-base64
     existingSecret:
       enabled: false
-      name: lear-credential-machine-secret
+      name: desmos-lear-credential-machine-secret
       key: lear-credential-machine
   trustedAccessNodesList:
     enableCustomTrustedList: false
     customTrustedList: "https://raw.githubusercontent.com/DOME-Marketplace/dome-access-node-directory/main/access-node-directory-"
+  verifier:
+    enableCustomVerifier: false
+    customVerifier: "https://verifier.dome-marketplace-sbx.org"
 
 db:
   host: postgresql-connector
