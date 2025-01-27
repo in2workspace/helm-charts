@@ -210,6 +210,11 @@ postgresql:
   ## network policy configuration
   networkPolicy:
     enabled: false
+  ## persistence volume claim configuration retention policy
+  persistentVolumeClaimRetentionPolicy:
+    enabled: true
+    whenScaled: Retain
+    whenDeleted: Retain
   ## auth configuration for the database
   auth:
     # -- username to be used
@@ -239,6 +244,11 @@ wallet-postgresql:
   ## network policy configuration
   networkPolicy:
     enabled: false
+  ## persistence volume claim configuration retention policy
+  persistentVolumeClaimRetentionPolicy:
+    enabled: true
+    whenScaled: Retain
+    whenDeleted: Retain
   ## auth configuration for the database
   auth:
     # -- username to be used
@@ -253,7 +263,7 @@ wallet-postgresql:
       enabled: false
     initdb:
       scripts:
-        create-schema.sh: |ç
+        create-schema.sh: |
           psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE wallet;"
           psql postgresql://wallet_user:${POSTGRES_PASSWORD}@localhost:5432/wallet -c "CREATE SCHEMA wallet;"
 
