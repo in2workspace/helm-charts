@@ -116,6 +116,11 @@ spec:
                 secretKeyRef:
                   name: {{ include "desmos.privateKey-secretName" . }}
                   key: {{ include "desmos.privateKey-privateKey" . }}
+            - name: LEAR_CREDENTIAL_MACHINE_IN_BASE64
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "desmos.learCredentialMachine-secretName" . }}
+                  key: {{ include "desmos.learCredentialMachine-privateKey" . }}
             {{- if .Values.app.trustedAccessNodesList.enableCustomTrustedList }}
             - name: ACCESS_NODE_TRUSTED_ACCESS_NODES_LIST
               value: {{ .Values.app.trustedAccessNodesList.customTrustedList }}

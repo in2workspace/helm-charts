@@ -98,3 +98,22 @@ Support for private key secret
         {{- printf "privateKey" -}}
     {{- end -}}
 {{- end -}}
+
+{{/*
+Support for lear credential machine secret
+*/}}
+{{- define "desmos.learCredentialMachine-secretName" -}}
+    {{- if .Values.app.learCredentialMachineInBase64.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.learCredentialMachineInBase64.existingSecret.name $) -}}
+    {{- else -}}
+        {{- printf "desmos-lear-credential-machine-secret" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "desmos.learCredentialMachine-learCredentialMachine" -}}
+    {{- if .Values.app.learCredentialMachineInBase64.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.learCredentialMachineInBase64.existingSecret.key $) -}}
+    {{- else -}}
+        {{- printf "learCredentialMachine" -}}
+    {{- end -}}
+{{- end -}}
