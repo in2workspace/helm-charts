@@ -241,14 +241,6 @@ wallet-postgresql:
   fullnameOverride: wallet-postgres
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
   nameOverride: wallet-postgres
-  ## network policy configuration
-  networkPolicy:
-    enabled: false
-  ## persistence volume claim configuration retention policy
-  persistentVolumeClaimRetentionPolicy:
-    enabled: true
-    whenScaled: Retain
-    whenDeleted: Retain
   ## auth configuration for the database
   auth:
     # -- username to be used
@@ -257,13 +249,20 @@ wallet-postgresql:
     enablePostgresUser: true
     # -- password to be used
     password: postgres
+    # -- database name to be used
+    database: wallet
   ## configuration of the postgres primary replica
   primary:
+    ## network policy configuration
     networkPolicy:
       enabled: false
+    ## persistence volume claim configuration retention policy
+    persistentVolumeClaimRetentionPolicy:
+      enabled: true
+      whenScaled: Retain
+      whenDeleted: Retain
     initdb:
       scripts:
         create-schema.sh: |
-          psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE wallet;"
           psql postgresql://wallet_user:${POSTGRES_PASSWORD}@localhost:5432/wallet -c "CREATE SCHEMA wallet;"
 
