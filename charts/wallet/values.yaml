@@ -257,13 +257,12 @@ wallet-postgresql:
     enablePostgresUser: true
     # -- password to be used
     password: postgres
+    # -- database name to be used
+    database: wallet
   ## configuration of the postgres primary replica
   primary:
-    networkPolicy:
-      enabled: false
     initdb:
       scripts:
         create-schema.sh: |
-          psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE wallet;"
           psql postgresql://wallet_user:${POSTGRES_PASSWORD}@localhost:5432/wallet -c "CREATE SCHEMA wallet;"
 
