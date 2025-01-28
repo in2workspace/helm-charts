@@ -264,5 +264,5 @@ wallet-postgresql:
     initdb:
       scripts:
         create-schema.sh: |
-          psql postgresql://wallet_user:${POSTGRES_PASSWORD}@localhost:5432/wallet -c "CREATE SCHEMA wallet;"
+          psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432/wallet -c "CREATE SCHEMA wallet;"
 
