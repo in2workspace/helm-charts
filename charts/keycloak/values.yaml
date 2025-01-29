@@ -79,14 +79,14 @@ resources:
 
 readinessProbe:
   path: /health
-  port: 8080
+  port: 80
   initialDelaySeconds: 30
   failureThreshold: 6
   periodSeconds: 10
 
 livenessProbe:
   path: /health
-  port: 8080
+  port: 80
   initialDelaySeconds: 30
   failureThreshold: 6
   periodSeconds: 10
@@ -129,7 +129,7 @@ keycloak:
       enabled: false
       name: keycloak-secrets
       passwordKey: keycloakAdminPassword
-  relativePath: /keycloak
+  relativePath: /
   hostname:
     url:
       # if deployed locally set to false
@@ -199,10 +199,10 @@ keycloakExtension:
       path: /
 
 db:
-  host: host
+  host: postgres-keycloak
   port: 5432
   externalService: true
-  name: database-name
+  name: postgres_keycloak
   username: postgres
   password: postgres
   existingSecret:
@@ -222,9 +222,10 @@ postgresKeycloak:
   auth:
     # -- username to be used
     username: postgres
-    # -- should the default postgres user be enabled
-    enablePostgresUser: true
     # -- password to be used
     password: postgres
     # -- should the default postgres user be enabled
+    enablePostgresUser: true
+    # -- should the default postgres user be enabled
     database: postgres_keycloak
+
