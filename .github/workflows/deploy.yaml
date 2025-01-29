@@ -38,6 +38,7 @@ jobs:
           helm package charts/access-node
           helm package charts/verifier-api
           helm package charts/portal-ui
+          helm package charts/keycloak
 
       - name: Upload Helm Repository Index
         run: helm repo index . --url https://in2workspace.github.io/helm-charts
