@@ -29,7 +29,12 @@ jobs:
       - name: Create Output Directory
         run: mkdir -p helm-packages
 
-            - name: Package and Push Helm Charts
+      - name: List Helm Packages (Debug)
+        run: |
+          echo "📂 Listing contents of helm-packages/"
+          ls -lh helm-packages/
+
+      - name: Package and Push Helm Charts
         run: |
           CHARTS=(
             desmos
@@ -56,7 +61,7 @@ jobs:
               echo "📦 Packaging Helm Chart: $CHART"
               helm package "charts/$CHART" --destination helm-packages
 
-              # Extraer la versión desde el archivo generado
+              # Validar que el paquete fue generado antes de hacer push
               CHART_FILE=$(ls helm-packages/$CHART-*.tgz | head -n 1)
 
               if [[ -f "$CHART_FILE" ]]; then
