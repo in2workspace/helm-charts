@@ -80,7 +80,13 @@ jobs:
           git config --global user.name "oriolcanades"
           git config --global user.email "oriol.canades@in2.es"
             
-          git checkout gh-pages || git checkout -b gh-pages
+          if git ls-remote --exit-code --heads origin gh-pages; then
+            git checkout gh-pages
+            git pull --rebase origin gh-pages
+          else
+            git checkout -b gh-pages
+          fi
+            
           cp -r helm-packages/*.tgz .
           helm repo index . --url https://in2workspace.github.io/helm-charts
             
@@ -92,5 +98,6 @@ jobs:
             exit 0
           fi
             
-            git commit -m "Update Helm charts"
-            git push https://your-github-username:${GH_PAT}@github.com/${{ github.repository }}.git gh-pages
+          git commit -m "Update Helm charts"
+  
+          git push https://your-github-username:${GH_PAT}@github.com/${{ github.repository }}.git gh-pages
