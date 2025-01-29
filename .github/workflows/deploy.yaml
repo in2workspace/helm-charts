@@ -53,51 +53,27 @@ jobs:
       - name: Upload Helm Repository Index
         run: helm repo index helm-packages --url https://in2workspace.github.io/helm-charts
 
-      - name: Commit and Push Packages
-        run: |
-          git config --global user.name "$GITHUB_ACTOR"
-          git config --global user.email "$GITHUB_ACTOR@users.noreply.github.com"
-
-          git checkout gh-pages || git checkout -b gh-pages
-          cp -r helm-packages/*.tgz .
-          helm repo index . --url https://in2workspace.github.io/helm-charts
-
-          git add *.tgz
-          git add index.yaml
-
-          if git diff --cached --quiet; then
-            echo "No changes to commit."
-            exit 0
-          fi
-
-          git commit -m "Update Helm charts"
-          git push origin gh-pages
-
-      - name: Commit and Push Packages
+      - name: Commit and Push Packages to Main
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
         run: |
           git config --global user.name "oriolcanades"
           git config --global user.email "oriol.canades@in2.es"
-            
-          if git ls-remote --exit-code --heads origin gh-pages; then
-            git checkout gh-pages
-            git pull --rebase origin gh-pages
-          else
-            git checkout -b gh-pages
-          fi
-            
+
+          git checkout main
+          git pull --rebase origin main
+          
           cp -r helm-packages/*.tgz .
           helm repo index . --url https://in2workspace.github.io/helm-charts
-            
+          
           git add *.tgz
           git add index.yaml
-            
+          
           if git diff --cached --quiet; then
             echo "No changes to commit."
             exit 0
           fi
-            
+          
           git commit -m "Update Helm charts"
-  
-          git push https://your-github-username:${GH_PAT}@github.com/${{ github.repository }}.git gh-pages
+          git push https://your-github-username:${GH_PAT}@github.com/${{ github.repository }}.git main
+

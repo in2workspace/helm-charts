@@ -43,10 +43,13 @@ jobs:
 
           for CHART in "${CHARTS[@]}"; do
             if [ -d "charts/$CHART" ]; then
-              echo "Linting Helm Chart: $CHART"
+              echo "🔍 Checking dependencies for: $CHART"
+              helm dependency build "charts/$CHART"
+
+              echo "✅ Linting Helm Chart: $CHART"
               helm lint "charts/$CHART"
 
-              echo "Rendering Helm Template: $CHART"
+              echo "📜 Rendering Helm Template: $CHART"
               helm template "charts/$CHART" > /dev/null
             fi
           done
