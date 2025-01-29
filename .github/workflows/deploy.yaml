@@ -24,9 +24,6 @@ jobs:
           curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
           helm version
 
-      - name: Authenticate to GitHub Container Registry (GHCR)
-        run: echo "${{ secrets.GH_PAT }}" | helm registry login ghcr.io --username $GITHUB_ACTOR --password-stdin
-
       - name: Create Output Directory
         run: mkdir -p helm-packages
 
@@ -58,33 +55,19 @@ jobs:
               fi
             fi
           done
-
-      - name: Make Helm Charts Public
-        env:
-          GH_PAT: ${{ secrets.GH_PAT }}
-        run: |
-          CHARTS=$(find charts -mindepth 1 -maxdepth 1 -type d -printf "%f\n")
-
-          for CHART in $CHARTS; do
-            echo "🔓 Making $CHART public in GHCR"
-            curl -X PUT -H "Authorization: Bearer $GH_PAT" \
-                 -H "Accept: application/vnd.github.v3+json" \
-                 https://api.github.com/user/packages/container/helm-charts%2F$CHART/visibility \
-                 -d '{"visibility":"public"}'
-          done
-
+               
       - name: Generate index.yaml
         run: |
           echo "⚙️ Generating index.yaml..."
           helm repo index helm-packages --url https://in2workspace.github.io/helm-charts
           cp helm-packages/index.yaml index.yaml
-
+          
       - name: Create Pull Request for Helm Charts Update
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "oriolcanades"
+          git config --global user.email "oriol.canades@in2.es"
 
           # Crear y cambiar a una nueva rama
           BRANCH_NAME="update-helm-charts-${{ github.run_id }}"
@@ -102,10 +85,11 @@ jobs:
 
           # Commit y push a la nueva rama
           git commit -m "🚀 Update Helm Charts"
-          git push https://your-github-username:${GH_PAT}@github.com/${{ github.repository }}.git $BRANCH_NAME
+          git push https://oriolcanades:${GH_PAT}@github.com/${{ github.repository }}.git $BRANCH_NAME
 
-          # Crear una Pull Request hacia gh-pages
+          # Crear una Pull Request hacia gh-pages con tu usuario
           curl -X POST -H "Authorization: Bearer $GH_PAT" \
                -H "Accept: application/vnd.github.v3+json" \
-               -d "{\"title\":\"🚀 Update Helm Charts\",\"body\":\"Automated update from GitHub Actions\",\"head\":\"$BRANCH_NAME\",\"base\":\"gh-pages\"}" \
+               -d "{\"title\":\"🚀 Update Helm Charts\",\"body\":\"Automated update from GitHub Actions\",\"head\":\"$BRANCH_NAME\",\"base\":\"gh-pages\",\"maintainer_can_modify\":true}" \
                https://api.github.com/repos/${{ github.repository }}/pulls
+
