@@ -77,8 +77,8 @@ jobs:
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
         run: |
-          git config --global user.name "your-github-username"
-          git config --global user.email "your-email@users.noreply.github.com"
+          git config --global user.name "oriolcanades"
+          git config --global user.email "oriol.canades@in2.es"
             
           git checkout gh-pages || git checkout -b gh-pages
           cp -r helm-packages/*.tgz .
