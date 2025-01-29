@@ -24,6 +24,9 @@ jobs:
           curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
           helm version
 
+      - name: Authenticate to GitHub Container Registry (GHCR)
+        run: echo "${{ secrets.GH_PAT }}" | helm registry login ghcr.io --username $GITHUB_ACTOR --password-stdin
+
       - name: Create Output Directory
         run: mkdir -p helm-packages
 
