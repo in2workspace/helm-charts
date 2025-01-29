@@ -62,28 +62,13 @@ jobs:
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
         run: |
-          CHARTS=(
-            desmos
-            issuer-api
-            dome-issuer-keycloak
-            issuer-ui
-            wallet-api
-            dome-wallet-keycloak
-            dome-wallet-ui
-            wallet
-            issuer
-            dome-dss
-            access-node
-            verifier-api
-            portal-ui
-            keycloak
-          )
+          CHARTS=$(find charts -mindepth 1 -maxdepth 1 -type d -printf "%f\n")
 
-          for CHART in "${CHARTS[@]}"; do
+          for CHART in $CHARTS; do
             echo "🔓 Making $CHART public in GHCR"
-            curl -X PATCH -H "Authorization: Bearer $GH_PAT" \
+            curl -X PUT -H "Authorization: Bearer $GH_PAT" \
                  -H "Accept: application/vnd.github.v3+json" \
-                 https://api.github.com/orgs/${{ github.repository_owner }}/packages/container/helm-charts.$CHART \
+                 https://api.github.com/user/packages/container/helm-charts%2F$CHART/visibility \
                  -d '{"visibility":"public"}'
           done
           
