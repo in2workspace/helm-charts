@@ -1,13 +1,20 @@
 apiVersion: v2
 name: keycloak
-description: A Helm chart for Kubernetes
+description: Helm Chart for Keycloak and PostgreSQL
 type: application
 version: 1.0.0
-appVersion: v1.0.0
+appVersion: "v1.0.0"
 
 sources:
   - https://github.com/in2workspace/dome-issuer-keycloak
 
 maintainers:
-  - name: IN2 Team
-    email: domesupport@in2.es
+  - name: IN2 Kizuna DevTeam
+    email: contacto@in2.es
+
+dependencies:
+  - name: postgresql
+    alias: postgresKeycloak
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 16.4.5
+    condition: postgresKeycloak.enabled

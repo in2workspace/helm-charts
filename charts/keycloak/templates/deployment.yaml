@@ -36,19 +36,19 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ .Values.app.internalServerPort }}
+              containerPort: {{ .Values.keycloak.internalServerPort }}
               protocol: TCP
           livenessProbe:
             httpGet:
               path: {{ .Values.livenessProbe.path }}
-              port: {{ .Values.app.internalServerPort }}
+              port: {{ .Values.keycloak.internalServerPort }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
           readinessProbe:
             httpGet:
               path: {{ .Values.readinessProbe.path }}
-              port: {{ .Values.app.internalServerPort }}
+              port: {{ .Values.keycloak.internalServerPort }}
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
@@ -78,34 +78,34 @@ spec:
             - name: KC_HTTPS_CLIENT_AUTH
               value: {{ .Values.keycloak.https.clientAuth }}
             - name: KC_DB
-              value: {{ .Values.keycloak.db.type }}
+              value: {{ .Values.db.type }}
             - name: KC_DB_USERNAME
-              value: {{ .Values.keycloak.db.username }}
+              value: {{ .Values.db.username }}
             - name: KC_DB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "keycloak.db-secretName" . }}
                   key: {{ include "keycloak.db-passwordKey" . }}
             - name: KC_DB_URL
-              value: "jdbc:postgresql://{{ .Values.keycloak.db.host }}{{ if not .Values.keycloak.db.externalService }}:{{ .Values.keycloak.db.port }}{{ end }}/{{ .Values.keycloak.db.name }}"
+              value: "jdbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}"
             - name: ISSUER_API_URL
-              value: {{ .Values.issuerApi.url }}
+              value: {{ .Values.keycloakExtension.credentialIssuer.url }}
             - name: ISSUER_API_EXTERNAL_URL
-              value: "{{ .Values.issuerApi.externalUrl.scheme }}://{{ .Values.issuerApi.externalUrl.host }}{{ if not .Values.issuerApi.externalUrl.externalService }}:{{ .Values.issuerApi.externalUrl.internalPort }}{{ end }}{{ .Values.issuerApi.externalUrl.path }}"
+              value: "{{ .Values.keycloakExtension.credentialIssuer.externalUrl.scheme }}://{{ .Values.keycloakExtension.credentialIssuer.externalUrl.host }}{{ if not .Values.keycloakExtension.credentialIssuer.externalUrl.externalService }}:{{ .Values.keycloakExtension.credentialIssuer.externalUrl.internalPort }}{{ end }}{{ .Values.keycloakExtension.credentialIssuer.externalUrl.path }}"
             - name: PRE_AUTH_LIFESPAN
-              value: "{{ .Values.preAuth.lifespan }}"
+              value: "{{ .Values.keycloakExtension.preAuthorizedCode.lifespan }}"
             - name: PRE_AUTH_LIFESPAN_TIME_UNIT
-              value: {{ .Values.preAuth.lifespanTimeUnit }}
+              value: {{ .Values.keycloakExtension.preAuthorizedCode.lifespanTimeUnit }}
             - name: TOKEN_EXPIRATION
-              value: "{{ .Values.token.expiration }}"
+              value: "{{ .Values.keycloakExtension.token.expiration }}"
             - name: QUARKUS_LOG_CATEGORY__ORG_KEYCLOAK_SERVICES_X509__LEVEL
               value: "{{ .Values.keycloak.logsCertsLevel }}"
             - name: KEYCLOAK_LOGLEVEL
               value: "{{ .Values.keycloak.logLevel }}"
             - name: SMTP_HOST
-              value: {{ .Values.keycloak.mail.host }}
+              value: {{ .Values.mail.host }}
             - name: SMTP_PORT
-              value: "{{ .Values.keycloak.mail.port }}" # Convert to string
+              value: "{{ .Values.mail.port }}" # Convert to string
             - name: SMTP_USER
               valueFrom:
                 secretKeyRef:
@@ -117,17 +117,17 @@ spec:
                   name: {{ include "keycloak.mail-secretName" . }}
                   key: {{ include "keycloak.mail-passwordKey" . }}
             - name: SMTP_FROM
-              value: "{{ .Values.keycloak.mail.from }}"
+              value: "{{ .Values.mail.from }}"
             - name: SMTP_FROM_DISPLAY_NAME
-              value: "{{ .Values.keycloak.mail.fromDisplayName }}"
+              value: "{{ .Values.mail.fromDisplayName }}"
             - name: SMTP_REPLY_TO
-              value: "{{ .Values.keycloak.mail.replyTo }}"
+              value: "{{ .Values.mail.replyTo }}"
             - name: SMTP_AUTH
-              value: "{{ .Values.keycloak.mail.properties.mail.smtp.auth }}" # Convert to string
+              value: "{{ .Values.mail.properties.mail.smtp.auth }}" # Convert to string
             - name: SMTP_STARTTLS
-              value: "{{ .Values.keycloak.mail.properties.mail.smtp.starttls.enable }}" # Convert to string
+              value: "{{ .Values.mail.properties.mail.smtp.starttls.enable }}" # Convert to string
             - name: SMTP_SSL
-              value: "{{ .Values.keycloak.mail.properties.mail.smtp.ssl.enable }}"
+              value: "{{ .Values.mail.properties.mail.smtp.ssl.enable }}"
           volumeMounts:
             - name: truststore-volume
               mountPath: /opt/keycloak/truststore

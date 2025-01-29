@@ -103,16 +103,16 @@ Support for existing keycloak https secret
 Support for existing keycloak db secret 
 */}}
 {{- define "keycloak.db-secretName" -}}
-    {{- if .Values.keycloak.db.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.keycloak.db.existingSecret.name $) -}}
+    {{- if .Values.db.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.db.existingSecret.name $) -}}
     {{- else -}}
         {{- printf "issuer-keycloak-db-secret" -}}
     {{- end -}}
 {{- end -}}
 
 {{- define "keycloak.db-passwordKey" -}}
-    {{- if .Values.keycloak.db.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.keycloak.db.existingSecret.passwordKey $) -}}
+    {{- if .Values.db.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.db.existingSecret.passwordKey $) -}}
     {{- else -}}
         {{- printf "password" -}}
     {{- end -}}
@@ -122,24 +122,24 @@ Support for existing keycloak db secret
 Support for existing mail secret
 */}}
 {{- define "keycloak.mail-secretName" -}}
-    {{- if .Values.keycloak.mail.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.keycloak.mail.existingSecret.name $) -}}
+    {{- if .Values.mail.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.mail.existingSecret.name $) -}}
     {{- else -}}
         {{- printf "issuer-keycloak-mail-secret" -}}
     {{- end -}}
 {{- end -}}
 
 {{- define "keycloak.mail-userKey" -}}
-    {{- if .Values.keycloak.mail.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.keycloak.mail.existingSecret.userKey $) -}}
+    {{- if .Values.mail.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.mail.existingSecret.userKey $) -}}
     {{- else -}}
         {{- printf "username" -}}
     {{- end -}}
 {{- end -}}
 
 {{- define "keycloak.mail-passwordKey" -}}
-    {{- if .Values.keycloak.mail.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.keycloak.mail.existingSecret.passwordKey $) -}}
+    {{- if .Values.mail.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.mail.existingSecret.passwordKey $) -}}
     {{- else -}}
         {{- printf "password" -}}
     {{- end -}}

@@ -9,7 +9,7 @@ spec:
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
-      targetPort: {{.Values.app.internalServerPort}}
+      targetPort: {{.Values.keycloak.internalServerPort}}
       {{ if eq .Values.service.type "NodePort" }}
       nodePort: 30002
       {{ end }}
