@@ -29,7 +29,7 @@ jobs:
       - name: Create Output Directory
         run: mkdir -p helm-packages
 
-      - name: Package and Push Helm Charts
+            - name: Package and Push Helm Charts
         run: |
           CHARTS=(
             desmos
@@ -56,8 +56,15 @@ jobs:
               echo "📦 Packaging Helm Chart: $CHART"
               helm package "charts/$CHART" --destination helm-packages
 
-              echo "🚀 Pushing Helm Chart to GHCR"
-              helm push helm-packages/$CHART-*.tgz oci://ghcr.io/${{ github.repository_owner }}/helm-charts
+              # Extraer la versión desde el archivo generado
+              CHART_FILE=$(ls helm-packages/$CHART-*.tgz | head -n 1)
+
+              if [[ -f "$CHART_FILE" ]]; then
+                echo "🚀 Pushing Helm Chart to GHCR: $CHART_FILE"
+                helm push "$CHART_FILE" oci://ghcr.io/${{ github.repository_owner }}/helm-charts
+              else
+                echo "⚠️ No .tgz file found for $CHART, skipping push!"
+              fi
             fi
           done
 
