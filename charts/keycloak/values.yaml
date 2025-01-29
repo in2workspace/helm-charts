@@ -1,14 +1,14 @@
-# Default values for issuer-keycloak-plugin.
+# Default values for demo.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
 
 image:
-  repository: <your-image-repository>
-  pullPolicy: Always
+  repository: in2workspace/dome-issuer-keycloak
+  pullPolicy: Always # IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: <your-image-tag>
+  tag: v1.0.3
 
 imagePullSecrets: []
 nameOverride: ""
@@ -24,6 +24,12 @@ serviceAccount:
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
   name: ""
+
+# This defines the namespace where the application resources will be deployed.
+# If left empty (""), the namespace must be specified externally, for example,
+# via ArgoCD's Application manifest using the destination.namespace field
+# or in the Helm command with --namespace.
+namespace: ""
 
 podAnnotations: {}
 podLabels: {}
@@ -41,23 +47,7 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 8080
-
-readinessProbe:
-  path: /health
-  port: http
-  # IN2: Extra attributes for the readinessProbe
-  initialDelaySeconds: 40
-  failureThreshold: 6
-  periodSeconds: 10
-
-livenessProbe:
-  path: /health
-  port: http
-  # IN2: Extra attributes for the livenessProbe
-  initialDelaySeconds: 40
-  failureThreshold: 6
-  periodSeconds: 10
+  port: 80 # 8080
 
 ingress:
   enabled: false
@@ -68,7 +58,7 @@ ingress:
   hosts:
     - host: chart-example.local
       paths:
-        - path: /keycloak
+        - path: /
           pathType: ImplementationSpecific
   tls:
     - hosts:
@@ -86,6 +76,20 @@ resources:
   requests:
     cpu: 100m
     memory: 128Mi
+
+readinessProbe:
+  path: /health
+  port: 80
+  initialDelaySeconds: 30
+  failureThreshold: 6
+  periodSeconds: 10
+
+livenessProbe:
+  path: /health
+  port: 80
+  initialDelaySeconds: 30
+  failureThreshold: 6
+  periodSeconds: 10
 
 autoscaling:
   enabled: false
@@ -113,11 +117,8 @@ tolerations: []
 
 affinity: {}
 
-app:
-  internalServerPort: 8080
-
-# Keycloak Configuration
 keycloak:
+  internalServerPort: 8080
   proxy: edge
   logsCertsLevel: TRACE
   logLevel: DEBUG
@@ -128,7 +129,7 @@ keycloak:
       enabled: false
       name: keycloak-secrets
       passwordKey: keycloakAdminPassword
-  relativePath: /keycloak
+  relativePath: /
   hostname:
     url:
       # if deployed locally set to false
@@ -156,59 +157,75 @@ keycloak:
       name: keycloak-secrets
       trustStorePasswordKey: keycloakTrustStorePassword
     clientAuth: request
-  db:
-    host: host
-    port: 5432
-    externalService: true
-    name: database-name
+
+mail:
+  host: smtp.example.org
+  port: 587
+  from: example@example.org
+  fromDisplayName: Example
+  replyTo: example@example.org
+  username: user
+  password: password
+  existingSecret:
+    enabled: false
+    name: mail-secret
+    userKey: mail-user
+    passwordKey: mail-password
+  properties:
+    mail:
+      smtp:
+        auth: true
+        starttls:
+          enable: true
+        ssl:
+          enable: false
+
+keycloakExtension:
+  preAuthorizedCode: # preAuth
+    lifespan: 10
+    lifespanTimeUnit: MINUTES
+  token:
+    expiration: 2592000
+  credentialIssuer: # issuerApi
+    url: http://issuer-api:8080
+    externalUrl:
+      # if deployed locally set to false
+      externalService: true
+      scheme: http
+      # change by the external url or set to localhost if deployed locally
+      host: example.org
+      # internalPort is only used if externalService is false
+      internalPort: 30001
+      path: /
+
+db:
+  host: postgres-keycloak
+  port: 5432
+  externalService: true
+  name: postgres_keycloak
+  username: postgres
+  password: postgres
+  existingSecret:
+    enabled: false
+    name: keycloak-db-secret
+    passwordKey: keycloakDbPassword
+  type: postgres
+
+postgresKeycloak:
+  # -- should the postgresql deployment be enabled
+  enabled: true
+  # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
+  fullnameOverride: postgres-keycloak
+  # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
+  nameOverride: postgres-keycloak
+  ## auth configuration for the database
+  auth:
+    # -- username to be used
     username: postgres
+    # -- password to be used
     password: postgres
-    existingSecret:
-      enabled: false
-      name: keycloak-db-secret
-      passwordKey: keycloakDbPassword
-    type: postgres
-  mail:
-    host: smtp.example.org
-    port: 587
-    from: example@example.org
-    fromDisplayName: Example
-    replyTo: example@example.org
-    username: user
-    password: password
-    existingSecret:
-      enabled: false
-      name: mail-secret
-      userKey: mail-user
-      passwordKey: mail-password
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-          ssl:
-            enable: false
-
-# Issuer API Configuration
-issuerApi:
-  url: http://issuer-api:8080
-  externalUrl:
-    # if deployed locally set to false
-    externalService: true
-    scheme: http
-    # change by the external url or set to localhost if deployed locally
-    host: example.org
-    # internalPort is only used if externalService is false
-    internalPort: 30001
-    path: /
-
-# Pre-authorization Configuration
-preAuth:
-  lifespan: 10
-  lifespanTimeUnit: MINUTES
-
-# Token Configuration
-token:
-  expiration: 2592000
+    # -- should the default postgres user be enabled
+    enablePostgresUser: true
+    # -- should the default postgres user be enabled
+    database: postgres_keycloak
 
