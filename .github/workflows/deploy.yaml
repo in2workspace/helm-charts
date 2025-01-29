@@ -6,7 +6,10 @@ on:
       - main
 
 permissions:
+  id-token: write
   contents: write
+  packages: write
+  pull-requests: write
 
 jobs:
   package-and-publish:
@@ -21,83 +24,75 @@ jobs:
           curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
           helm version
 
+      - name: Authenticate to GitHub Container Registry (GHCR)
+        run: echo "${{ secrets.GH_PAT }}" | helm registry login ghcr.io --username $GITHUB_ACTOR --password-stdin
+
       - name: Create Output Directory
         run: mkdir -p helm-packages
 
-      - name: Package Helm Charts
+      - name: List Helm Packages (Debug)
         run: |
-          CHARTS=(
-            desmos
-            issuer-api
-            dome-issuer-keycloak
-            issuer-ui
-            wallet-api
-            dome-wallet-keycloak
-            dome-wallet-ui
-            wallet
-            issuer
-            dome-dss
-            access-node
-            verifier-api
-            portal-ui
-            keycloak
-          )
+          echo "📂 Listing contents of helm-packages/"
+          ls -lh helm-packages/
 
-          for CHART in "${CHARTS[@]}"; do
+      - name: Package and Push Helm Charts
+        run: |
+          CHARTS=$(find charts -mindepth 1 -maxdepth 1 -type d -printf "%f\n")
+
+          for CHART in $CHARTS; do
             if [ -d "charts/$CHART" ]; then
+              echo "📦 Building dependencies for $CHART"
               helm dependency build "charts/$CHART"
+
+              echo "📦 Packaging Helm Chart: $CHART"
               helm package "charts/$CHART" --destination helm-packages
+
+              # Validar que el paquete fue generado antes de hacer push
+              CHART_FILE=$(ls helm-packages/$CHART-*.tgz | head -n 1)
+
+              if [[ -f "$CHART_FILE" ]]; then
+                echo "🚀 Pushing Helm Chart to GHCR: $CHART_FILE"
+                helm push "$CHART_FILE" oci://ghcr.io/${{ github.repository_owner }}/helm-charts
+              else
+                echo "⚠️ No .tgz file found for $CHART, skipping push!"
+              fi
             fi
           done
-
-      - name: Upload Helm Repository Index
-        run: helm repo index helm-packages --url https://in2workspace.github.io/helm-charts
-
-      - name: Commit and Push Packages
+               
+      - name: Generate index.yaml
         run: |
-          git config --global user.name "$GITHUB_ACTOR"
-          git config --global user.email "$GITHUB_ACTOR@users.noreply.github.com"
-
-          git checkout gh-pages || git checkout -b gh-pages
-          cp -r helm-packages/*.tgz .
-          helm repo index . --url https://in2workspace.github.io/helm-charts
-
-          git add *.tgz
-          git add index.yaml
-
-          if git diff --cached --quiet; then
-            echo "No changes to commit."
-            exit 0
-          fi
-
-          git commit -m "Update Helm charts"
-          git push origin gh-pages
-
-      - name: Commit and Push Packages
+          echo "⚙️ Generating index.yaml..."
+          helm repo index helm-packages --url https://in2workspace.github.io/helm-charts
+          cp helm-packages/index.yaml index.yaml
+          
+      - name: Create Pull Request for Helm Charts Update
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
         run: |
           git config --global user.name "oriolcanades"
           git config --global user.email "oriol.canades@in2.es"
-            
-          if git ls-remote --exit-code --heads origin gh-pages; then
-            git checkout gh-pages
-            git pull --rebase origin gh-pages
-          else
-            git checkout -b gh-pages
-          fi
-            
+
+          # Crear y cambiar a una nueva rama
+          BRANCH_NAME="update-helm-charts-${{ github.run_id }}"
+          git checkout -b $BRANCH_NAME
+
+          # Copiar los archivos empaquetados
           cp -r helm-packages/*.tgz .
-          helm repo index . --url https://in2workspace.github.io/helm-charts
-            
-          git add *.tgz
-          git add index.yaml
-            
+          git add *.tgz index.yaml
+
+          # Verificar si hay cambios antes de hacer commit
           if git diff --cached --quiet; then
-            echo "No changes to commit."
+            echo "✅ No changes to commit."
             exit 0
           fi
-            
-          git commit -m "Update Helm charts"
-  
-          git push https://your-github-username:${GH_PAT}@github.com/${{ github.repository }}.git gh-pages
+
+          # Commit y push a la nueva rama
+          git commit -m "🚀 Update Helm Charts"
+          git push https://oriolcanades:${GH_PAT}@github.com/${{ github.repository }}.git $BRANCH_NAME
+
+          # Crear una Pull Request hacia gh-pages con tu usuario
+          curl -X POST -H "Authorization: Bearer $GH_PAT" \
+               -H "Accept: application/vnd.github.v3+json" \
+               -d "{\"title\":\"🚀 Update Helm Charts\",\"body\":\"Automated update from GitHub Actions\",\"head\":\"$BRANCH_NAME\",\"base\":\"gh-pages\",\"maintainer_can_modify\":true}" \
+               https://api.github.com/repos/${{ github.repository }}/pulls
+
