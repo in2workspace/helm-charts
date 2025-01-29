@@ -1,0 +1,52 @@
+name: Validate Helm Charts
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+
+jobs:
+  validate-helm:
+    name: Validate Helm Charts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Install Helm
+        run: |
+          curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+          helm version
+
+      - name: Lint and Template Helm Charts
+        run: |
+          CHARTS=(
+            desmos
+            issuer-api
+            dome-issuer-keycloak
+            issuer-ui
+            wallet-api
+            dome-wallet-keycloak
+            dome-wallet-ui
+            wallet
+            issuer
+            dome-dss
+            access-node
+            verifier-api
+            portal-ui
+            keycloak
+          )
+
+          for CHART in "${CHARTS[@]}"; do
+            if [ -d "charts/$CHART" ]; then
+              echo "Linting Helm Chart: $CHART"
+              helm lint "charts/$CHART"
+
+              echo "Rendering Helm Template: $CHART"
+              helm template "charts/$CHART" > /dev/null
+            fi
+          done
