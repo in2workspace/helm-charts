@@ -9,6 +9,7 @@ permissions:
   id-token: write
   contents: write
   packages: write
+  pull-requests: write
 
 jobs:
   package-and-publish:
@@ -38,7 +39,7 @@ jobs:
         run: |
           CHARTS=$(find charts -mindepth 1 -maxdepth 1 -type d -printf "%f\n")
 
-          for CHART in "${CHARTS[@]}"; do
+          for CHART in $CHARTS; do
             if [ -d "charts/$CHART" ]; then
               echo "📦 Building dependencies for $CHART"
               helm dependency build "charts/$CHART"
@@ -71,15 +72,40 @@ jobs:
                  https://api.github.com/user/packages/container/helm-charts%2F$CHART/visibility \
                  -d '{"visibility":"public"}'
           done
-          
+
       - name: Generate index.yaml
         run: |
           echo "⚙️ Generating index.yaml..."
-          helm repo index helm-packages --url oci://ghcr.io/${{ github.repository_owner }}/helm-charts
+          helm repo index helm-packages --url https://in2workspace.github.io/helm-charts
           cp helm-packages/index.yaml index.yaml
 
-      - name: Upload index.yaml as an artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: helm-index
-          path: index.yaml
+      - name: Create Pull Request for Helm Charts Update
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Crear y cambiar a una nueva rama
+          BRANCH_NAME="update-helm-charts-${{ github.run_id }}"
+          git checkout -b $BRANCH_NAME
+
+          # Copiar los archivos empaquetados
+          cp -r helm-packages/*.tgz .
+          git add *.tgz index.yaml
+
+          # Verificar si hay cambios antes de hacer commit
+          if git diff --cached --quiet; then
+            echo "✅ No changes to commit."
+            exit 0
+          fi
+
+          # Commit y push a la nueva rama
+          git commit -m "🚀 Update Helm Charts"
+          git push https://your-github-username:${GH_PAT}@github.com/${{ github.repository }}.git $BRANCH_NAME
+
+          # Crear una Pull Request hacia gh-pages
+          curl -X POST -H "Authorization: Bearer $GH_PAT" \
+               -H "Accept: application/vnd.github.v3+json" \
+               -d "{\"title\":\"🚀 Update Helm Charts\",\"body\":\"Automated update from GitHub Actions\",\"head\":\"$BRANCH_NAME\",\"base\":\"gh-pages\"}" \
+               https://api.github.com/repos/${{ github.repository }}/pulls
