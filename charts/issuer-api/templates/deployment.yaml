@@ -183,3 +183,7 @@ spec:
                 secretKeyRef:
                   name: {{ include "issuer-api.issuerIdentity-secretName" . }}
                   key: {{ include "issuer-api.issuerIdentity-privateKey" . }}
+            - name: CORS_DEFAULT_ALLOWED_ORIGINS
+              value: {{ .Values.app.cors.default.allowedOrigins }}
+            - name: CORS_EXTERNAL_ALLOWED_ORIGINS
+              value: {{ .Values.app.cors.external.allowedOrigins }}
