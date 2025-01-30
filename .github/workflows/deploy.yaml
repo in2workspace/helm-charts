@@ -62,18 +62,19 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
       
-          # Crear directorio temporal y mover los archivos antes de cambiar de rama
+          # Guardar temporalmente los cambios en archivos nuevos
+          cp index.yaml index.yaml.bak
           mkdir -p /tmp/helm-repo
           cp -r helm-packages/*.tgz /tmp/helm-repo/
-          cp index.yaml /tmp/helm-repo/
       
-          # Asegurar que la rama gh-pages existe
+          # Resetear cambios en index.yaml y hacer checkout seguro
+          git reset --hard
           git fetch origin gh-pages || git checkout --orphan gh-pages
           git checkout gh-pages
       
-          # Mover los archivos de vuelta después de cambiar de rama
+          # Restaurar los archivos después del cambio de rama
+          mv index.yaml.bak index.yaml
           mv /tmp/helm-repo/*.tgz .
-          mv /tmp/helm-repo/index.yaml .
       
           git add *.tgz index.yaml
       
