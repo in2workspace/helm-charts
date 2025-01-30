@@ -109,6 +109,11 @@ issuer-api:
         vc: vc
         privateKey: private-key
         credentialDidKey: credential-did-key
+    cors:
+      default:
+        allowedOrigins: "https://example.org"
+      external:
+        allowedOrigins: "https://new.example.org, https://example-2.org"
   db:
     externalService: false
     schema: public
