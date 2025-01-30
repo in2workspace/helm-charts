@@ -56,7 +56,7 @@ jobs:
         id: generate-version
         uses: zwaldowski/semver-release-action@v2
         with:
-          bump: ${{ steps.pr.outputs.labels }}
+          bump: patch
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish Helm Charts
