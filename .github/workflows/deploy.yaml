@@ -61,22 +61,27 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
+      
+          # Crear directorio temporal y mover los archivos antes de cambiar de rama
+          mkdir -p /tmp/helm-repo
+          cp -r helm-packages/*.tgz /tmp/helm-repo/
+          cp index.yaml /tmp/helm-repo/
+      
           # Asegurar que la rama gh-pages existe
           git fetch origin gh-pages || git checkout --orphan gh-pages
           git checkout gh-pages
-
-          # Copiar los archivos generados
-          cp -r helm-packages/*.tgz .
-          cp index.yaml .
-
+      
+          # Mover los archivos de vuelta después de cambiar de rama
+          mv /tmp/helm-repo/*.tgz .
+          mv /tmp/helm-repo/index.yaml .
+      
           git add *.tgz index.yaml
-
+      
           # Verificar si hay cambios antes de hacer commit
           if git diff --cached --quiet; then
             echo "✅ No changes to commit."
             exit 0
           fi
-
+      
           git commit -m "🚀 Update Helm Charts"
           git push origin gh-pages --force
