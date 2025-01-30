@@ -43,6 +43,9 @@ jobs:
       - name: Build Helm Chart Dependencies
         if: env.changed == 'true'
         run: |
+          helm repo add in2workspace https://in2workspace.github.io/helm-charts
+          helm repo update
+          
           CHARTS=$(find charts -mindepth 1 -maxdepth 1 -type d -printf "%f\n")
       
           for CHART in $CHARTS; do
