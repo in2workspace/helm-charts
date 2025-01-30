@@ -152,10 +152,6 @@ keycloak:
   https:
     trustStoreFile: /opt/keycloak/truststore/truststore.jks
     trustStorePassword: pempas
-    existingSecret:
-      enabled: false
-      name: keycloak-secrets
-      trustStorePasswordKey: keycloakTrustStorePassword
     clientAuth: request
 
 keycloakExtension:
