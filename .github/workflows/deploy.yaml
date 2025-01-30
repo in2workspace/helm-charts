@@ -26,7 +26,7 @@ jobs:
 
       - name: Check for changes in Helm Charts
         id: check-changes
-        uses: tj-actions/changed-files@v14.6
+        uses: tj-actions/changed-files@v42
 
       - name: Detect modified charts
         id: changes
@@ -66,10 +66,15 @@ jobs:
 
       - name: Generate Helm Chart Version
         id: generate-version
-        uses: zwaldowski/semver-release-action@v2
+        uses: zwaldowski/semver-release-action@v3
         with:
           bump: patch
           github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git User
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Publish Helm Charts
         if: env.changed == 'true'
