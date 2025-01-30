@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "test-21.fullname" . }}
+  name: {{ include "test-23.fullname" . }}
   labels:
-    {{- include "test-21.labels" . | nindent 4 }}
+    {{- include "test-23.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -12,4 +12,4 @@ spec:
       protocol: TCP
       name: http
   selector:
-    {{- include "test-21.selectorLabels" . | nindent 4 }}
+    {{- include "test-23.selectorLabels" . | nindent 4 }}
