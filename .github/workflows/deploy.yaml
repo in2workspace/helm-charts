@@ -9,7 +9,6 @@ permissions:
   id-token: write
   contents: write
   packages: write
-  pull-requests: write
 
 jobs:
   package-and-publish:
@@ -24,17 +23,11 @@ jobs:
           curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
           helm version
 
-        # Required to push Helm Charts into ghcr.io
       - name: Authenticate to GitHub Container Registry (GHCR)
         run: echo "${{ secrets.GH_PAT }}" | helm registry login ghcr.io --username $GITHUB_ACTOR --password-stdin
 
       - name: Create Output Directory
         run: mkdir -p helm-packages
-
-      - name: List Helm Packages (Debug)
-        run: |
-          echo "📂 Listing contents of helm-packages/"
-          ls -lh helm-packages/
 
       - name: Package and Push Helm Charts
         run: |
@@ -48,9 +41,7 @@ jobs:
               echo "📦 Packaging Helm Chart: $CHART"
               helm package "charts/$CHART" --destination helm-packages
 
-              # Validar que el paquete fue generado antes de hacer push
               CHART_FILE=$(ls helm-packages/$CHART-*.tgz | head -n 1)
-
               if [[ -f "$CHART_FILE" ]]; then
                 echo "🚀 Pushing Helm Chart to GHCR: $CHART_FILE"
                 helm push "$CHART_FILE" oci://ghcr.io/${{ github.repository_owner }}/helm-charts
@@ -59,26 +50,26 @@ jobs:
               fi
             fi
           done
-               
+
       - name: Generate index.yaml
         run: |
           echo "⚙️ Generating index.yaml..."
           helm repo index helm-packages --url https://in2workspace.github.io/helm-charts
           cp helm-packages/index.yaml index.yaml
-          
-      - name: Create Pull Request for Helm Charts Update
-        env:
-          GH_PAT: ${{ secrets.GH_PAT }}
+
+      - name: Commit and Push to gh-pages
         run: |
-          git config --global user.name "oriolcanades"
-          git config --global user.email "oriol.canades@in2.es"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Crear y cambiar a una nueva rama
-          BRANCH_NAME="update-helm-charts-${{ github.run_id }}"
-          git checkout -b $BRANCH_NAME
+          # Asegurar que la rama gh-pages existe
+          git fetch origin gh-pages || git checkout --orphan gh-pages
+          git checkout gh-pages
 
-          # Copiar los archivos empaquetados
+          # Copiar los archivos generados
           cp -r helm-packages/*.tgz .
+          cp index.yaml .
+
           git add *.tgz index.yaml
 
           # Verificar si hay cambios antes de hacer commit
@@ -87,31 +78,5 @@ jobs:
             exit 0
           fi
 
-          # Commit y push a la nueva rama
           git commit -m "🚀 Update Helm Charts"
-          git push https://oriolcanades:${GH_PAT}@github.com/${{ github.repository }}.git $BRANCH_NAME
-
-          # Crear una Pull Request hacia gh-pages con tu usuario
-          curl -X POST -H "Authorization: Bearer $GH_PAT" \
-               -H "Accept: application/vnd.github.v3+json" \
-               -d "{\"title\":\"🚀 Update Helm Charts\",\"body\":\"Automated update from GitHub Actions\",\"head\":\"$BRANCH_NAME\",\"base\":\"gh-pages\",\"maintainer_can_modify\":true}" \
-               https://api.github.com/repos/${{ github.repository }}/pulls
-               
-      - name: Merge Pull Request Automatically
-        env:
-          GH_PAT: ${{ secrets.GH_PAT }}
-        run: |
-          PR_NUMBER=$(curl -s -H "Authorization: Bearer $GH_PAT" \
-                        -H "Accept: application/vnd.github.v3+json" \
-                        "https://api.github.com/repos/${{ github.repository }}/pulls?state=open&base=gh-pages" | \
-                        jq -r '.[] | select(.head.ref | startswith("update-helm-charts-")) | .number')
-
-          if [[ "$PR_NUMBER" != "null" ]]; then
-            echo "🔄 Merging PR #$PR_NUMBER"
-            curl -X PUT -H "Authorization: Bearer $GH_PAT" \
-                 -H "Accept: application/vnd.github.v3+json" \
-                 -d '{"merge_method":"squash"}' \
-                 "https://api.github.com/repos/${{ github.repository }}/pulls/$PR_NUMBER/merge"
-          else
-            echo "❌ No matching PR found for merging."
-          fi
+          git push origin gh-pages --force
