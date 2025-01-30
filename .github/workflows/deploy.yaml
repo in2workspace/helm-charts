@@ -15,74 +15,62 @@ jobs:
     name: Package and Publish Helm Charts
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Install Helm
         run: |
           curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
           helm version
 
-      - name: Authenticate to GitHub Container Registry (GHCR)
-        run: echo "${{ secrets.GH_PAT }}" | helm registry login ghcr.io --username $GITHUB_ACTOR --password-stdin
+      - name: Check for changes in Helm Charts
+        id: check-changes
+        uses: tj-actions/changed-files@v14.6
 
-      - name: Create Output Directory
-        run: mkdir -p helm-packages
+      - name: Detect modified charts
+        id: changes
+        shell: bash
+        run: |
+          for file in ${{ steps.check-changes.outputs.all_changed_and_modified_files }}; do         
+            baseFolder=$(cut -d'/' -f1 <<< "$file")
+            if [ $baseFolder = "charts" ]; then
+              echo "changed=true" >> "$GITHUB_ENV"
+              break;
+            fi  
+          done
 
-      - name: Package and Push Helm Charts
+      - name: Validate Helm Charts
+        if: env.changed == 'true'
         run: |
           CHARTS=$(find charts -mindepth 1 -maxdepth 1 -type d -printf "%f\n")
 
           for CHART in $CHARTS; do
             if [ -d "charts/$CHART" ]; then
-              echo "📦 Building dependencies for $CHART"
-              helm dependency build "charts/$CHART"
-
-              echo "📦 Packaging Helm Chart: $CHART"
-              helm package "charts/$CHART" --destination helm-packages
-
-              CHART_FILE=$(ls helm-packages/$CHART-*.tgz | head -n 1)
-              if [[ -f "$CHART_FILE" ]]; then
-                echo "🚀 Pushing Helm Chart to GHCR: $CHART_FILE"
-                helm push "$CHART_FILE" oci://ghcr.io/${{ github.repository_owner }}/helm-charts
-              else
-                echo "⚠️ No .tgz file found for $CHART, skipping push!"
-              fi
+              helm lint "charts/$CHART"
+              helm template "charts/$CHART" > /dev/null
             fi
           done
 
-      - name: Generate index.yaml
-        run: |
-          echo "⚙️ Generating index.yaml..."
-          helm repo index helm-packages --url https://in2workspace.github.io/helm-charts
-          cp helm-packages/index.yaml index.yaml
+      - name: Generate Helm Chart Version
+        id: generate-version
+        uses: zwaldowski/semver-release-action@v2
+        with:
+          bump: ${{ steps.pr.outputs.labels }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Commit and Push to gh-pages
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-      
-          # Guardar temporalmente los cambios en archivos nuevos
-          cp index.yaml index.yaml.bak
-          mkdir -p /tmp/helm-repo
-          cp -r helm-packages/*.tgz /tmp/helm-repo/
-      
-          # Resetear cambios en index.yaml y hacer checkout seguro
-          git reset --hard
-          git fetch origin gh-pages || git checkout --orphan gh-pages
-          git checkout gh-pages
-      
-          # Restaurar los archivos después del cambio de rama
-          mv index.yaml.bak index.yaml
-          mv /tmp/helm-repo/*.tgz .
-      
-          git add *.tgz index.yaml
-      
-          # Verificar si hay cambios antes de hacer commit
-          if git diff --cached --quiet; then
-            echo "✅ No changes to commit."
-            exit 0
-          fi
-      
-          git commit -m "🚀 Update Helm Charts"
-          git push origin gh-pages --force
+      - name: Publish Helm Charts
+        if: env.changed == 'true'
+        uses: helm/chart-releaser-action@v1.6.0
+        env:
+          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          CR_SKIP_EXISTING: true
+        with:
+          pages_branch: gh-pages
+
+      - name: Create GitHub Release
+        if: env.changed == 'true'
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: ${{ steps.generate-version.outputs.version }}
+          prerelease: false
+          title: ${{ steps.generate-version.outputs.version }}
