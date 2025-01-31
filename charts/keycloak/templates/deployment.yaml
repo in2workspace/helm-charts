@@ -97,6 +97,3 @@ spec:
               value: "{{ .Values.keycloak.logsCertsLevel }}"
             - name: KEYCLOAK_LOGLEVEL
               value: "{{ .Values.keycloak.logLevel }}"
-          volumeMounts:
-            - name: truststore-volume
-              mountPath: /opt/keycloak/truststore
