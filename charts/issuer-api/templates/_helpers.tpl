@@ -228,6 +228,50 @@ Support for existing default signer secret
     {{- end -}}
 {{- end -}}
 
+{{/*
+Support for existing remote-signature-secret
+*/}}
+
+{{- define "issuer-api.RemoteSignature-secretName" -}}
+    {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.remoteSignature.existingSecret.name $) -}}
+    {{- else -}}
+        {{- printf "issuer-api-remote-signature-secret" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "issuer-api.RemoteSignature-clientId" -}}
+    {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.remoteSignature.existingSecret.clientId $) -}}
+    {{- else -}}
+        {{- printf "client-id" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "issuer-api.RemoteSignature-clientSecret" -}}
+    {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.remoteSignature.existingSecret.clientSecret $) -}}
+    {{- else -}}
+        {{- printf "client-secret" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "issuer-api.RemoteSignature-credentialId" -}}
+    {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.remoteSignature.existingSecret.credentialId $) -}}
+    {{- else -}}
+        {{- printf "credential-id" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "issuer-api.RemoteSignature-credentialPassword" -}}
+    {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.remoteSignature.existingSecret.credentialPassword $) -}}
+    {{- else -}}
+        {{- printf "credential-password" -}}
+    {{- end -}}
+{{- end -}}
+
 {{/* Validate that the required values are set when db.externalService is true or false. */}}
 {{- define "validateDatabaseConfig" -}}
 {{- if .Values.db.externalService }}

@@ -178,6 +178,26 @@ spec:
                 secretKeyRef:
                   name: {{ include "issuer-api.issuerIdentity-secretName" . }}
                   key: {{ include "issuer-api.issuerIdentity-vc" . }}
+            - name: ISSUER_REMOTE_CREDENTIAL_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-api.RemoteSignature-secretName" . }}
+                  key: {{ include "issuer-api.RemoteSignature-credentialId" . }}
+            - name: ISSUER_REMOTE_CREDENTIAL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-api.RemoteSignature-secretName" . }}
+                  key: {{ include "issuer-api.RemoteSignature-credentialPassword" . }}
+            - name: ISSUER_REMOTE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-api.RemoteSignature-secretName" . }}
+                  key: {{ include "issuer-api.RemoteSignature-clientId" . }}
+            - name: ISSUER_REMOTE_CLIENT_SECRET
+              valueFrom:
+                  secretKeyRef:
+                    name: {{ include "issuer-api.RemoteSignature-secretName" . }}
+                    key: {{ include "issuer-api.RemoteSignature-clientSecret" . }}
             - name: ISSUER_IDENTITY_CRYPTO_PRIVATE_KEY
               valueFrom:
                 secretKeyRef:
