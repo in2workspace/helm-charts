@@ -68,7 +68,7 @@ Support for existing keycloak admin secret
     {{- if .Values.keycloak.admin.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.keycloak.admin.existingSecret.name $) -}}
     {{- else -}}
-        {{- printf "issuer-keycloak-admin-secret" -}}
+        {{- printf "keycloak-admin-secret" -}}
     {{- end -}}
 {{- end -}}
 
@@ -81,65 +81,19 @@ Support for existing keycloak admin secret
 {{- end -}}
 
 {{/*
-Support for existing keycloak https secret 
-*/}}
-{{- define "keycloak.https-secretName" -}}
-    {{- if .Values.keycloak.https.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.keycloak.https.existingSecret.name $) -}}
-    {{- else -}}
-        {{- printf "issuer-keycloak-trust-store-secrets" -}}
-    {{- end -}}
-{{- end -}}
-
-{{- define "keycloak.https-trustStorePasswordKey" -}}
-    {{- if .Values.keycloak.https.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.keycloak.https.existingSecret.trustStorePasswordKey $) -}}
-    {{- else -}}
-        {{- printf "trust-store-password" -}}
-    {{- end -}}
-{{- end -}}
-
-{{/*
 Support for existing keycloak db secret 
 */}}
 {{- define "keycloak.db-secretName" -}}
     {{- if .Values.db.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.db.existingSecret.name $) -}}
     {{- else -}}
-        {{- printf "issuer-keycloak-db-secret" -}}
+        {{- printf "keycloak-db-secret" -}}
     {{- end -}}
 {{- end -}}
 
 {{- define "keycloak.db-passwordKey" -}}
     {{- if .Values.db.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.db.existingSecret.passwordKey $) -}}
-    {{- else -}}
-        {{- printf "password" -}}
-    {{- end -}}
-{{- end -}}
-
-{{/*
-Support for existing mail secret
-*/}}
-{{- define "keycloak.mail-secretName" -}}
-    {{- if .Values.mail.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.mail.existingSecret.name $) -}}
-    {{- else -}}
-        {{- printf "issuer-keycloak-mail-secret" -}}
-    {{- end -}}
-{{- end -}}
-
-{{- define "keycloak.mail-userKey" -}}
-    {{- if .Values.mail.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.mail.existingSecret.userKey $) -}}
-    {{- else -}}
-        {{- printf "username" -}}
-    {{- end -}}
-{{- end -}}
-
-{{- define "keycloak.mail-passwordKey" -}}
-    {{- if .Values.mail.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.mail.existingSecret.passwordKey $) -}}
     {{- else -}}
         {{- printf "password" -}}
     {{- end -}}

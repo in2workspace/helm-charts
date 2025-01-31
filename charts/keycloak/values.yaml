@@ -127,7 +127,7 @@ keycloak:
     password: admin
     existingSecret:
       enabled: false
-      name: keycloak-secrets
+      name: keycloak-admin-secret
       passwordKey: keycloakAdminPassword
   relativePath: /
   hostname:
@@ -181,7 +181,7 @@ db:
   password: postgres
   existingSecret:
     enabled: false
-    name: keycloak-secrets
+    name: keycloak-db-secret
     passwordKey: keycloakDbPassword
   type: postgres
 
