@@ -119,7 +119,7 @@ affinity: {}
 
 keycloak:
   internalServerPort: 8080
-  proxy: edge
+  proxyHeaders: edge
   logsCertsLevel: TRACE
   logLevel: DEBUG
   admin:
@@ -150,8 +150,6 @@ keycloak:
       internalPort: 30002
       path: /
   https:
-    trustStoreFile: /opt/keycloak/truststore/truststore.jks
-    trustStorePassword: pempas
     clientAuth: request
 
 keycloakExtension:

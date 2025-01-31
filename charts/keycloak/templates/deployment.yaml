@@ -61,15 +61,13 @@ spec:
                   name: {{ include "keycloak.admin-secretName" . }}
                   key: {{ include "keycloak.admin-passwordKey" . }}
             - name: KC_PROXY
-              value: {{.Values.keycloak.proxy}}
+              value: {{.Values.keycloak.proxyHeaders}}
             - name: KC_HTTP_RELATIVE_PATH
               value: {{.Values.keycloak.relativePath}}
             - name: KC_HOSTNAME_URL
               value: "{{ .Values.keycloak.hostname.url.scheme }}://{{ .Values.keycloak.hostname.url.host }}{{ if not .Values.keycloak.hostname.url.externalService }}:{{ .Values.keycloak.hostname.url.internalPort }}{{ end }}{{ .Values.keycloak.hostname.url.path }}"
             - name: KC_HOSTNAME_ADMIN_URL
               value: "{{ .Values.keycloak.hostname.adminUrl.scheme }}://{{ .Values.keycloak.hostname.adminUrl.host }}{{ if not .Values.keycloak.hostname.adminUrl.externalService }}:{{ .Values.keycloak.hostname.adminUrl.internalPort }}{{ end }}{{ .Values.keycloak.hostname.adminUrl.path }}"
-            - name: KC_HTTPS_TRUST_STORE_FILE
-              value: {{ .Values.keycloak.https.trustStoreFile }}
             - name: KC_HTTPS_CLIENT_AUTH
               value: {{ .Values.keycloak.https.clientAuth }}
             - name: KC_DB
