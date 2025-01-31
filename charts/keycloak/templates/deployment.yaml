@@ -70,11 +70,6 @@ spec:
               value: "{{ .Values.keycloak.hostname.adminUrl.scheme }}://{{ .Values.keycloak.hostname.adminUrl.host }}{{ if not .Values.keycloak.hostname.adminUrl.externalService }}:{{ .Values.keycloak.hostname.adminUrl.internalPort }}{{ end }}{{ .Values.keycloak.hostname.adminUrl.path }}"
             - name: KC_HTTPS_TRUST_STORE_FILE
               value: {{ .Values.keycloak.https.trustStoreFile }}
-            - name: KC_HTTPS_TRUST_STORE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "keycloak.https-secretName" . }}
-                  key: {{ include "keycloak.https-trustStorePasswordKey" . }}
             - name: KC_HTTPS_CLIENT_AUTH
               value: {{ .Values.keycloak.https.clientAuth }}
             - name: KC_DB
