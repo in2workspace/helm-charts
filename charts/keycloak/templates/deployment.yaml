@@ -100,11 +100,3 @@ spec:
           volumeMounts:
             - name: truststore-volume
               mountPath: /opt/keycloak/truststore
-
-      volumes:
-        - name: truststore-volume
-          secret:
-            secretName: truststore-secret
-            items:
-              - key: truststore.jks
-                path: truststore.jks
