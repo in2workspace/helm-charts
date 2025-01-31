@@ -698,6 +698,42 @@ entries:
   issuer:
   - apiVersion: v2
     appVersion: v1.0.3
+    created: "2025-01-31T11:03:13.474103091Z"
+    dependencies:
+    - alias: issuer-api
+      condition: issuer-api.enabled
+      name: issuer-api
+      repository: https://in2workspace.github.io/helm-charts
+      version: 1.0.17
+    - alias: issuer-ui
+      condition: issuer-ui.enabled
+      name: issuer-ui
+      repository: https://in2workspace.github.io/helm-charts
+      version: 1.0.4
+    - alias: dome-issuer-keycloak
+      condition: dome-issuer-keycloak.enabled
+      name: dome-issuer-keycloak
+      repository: https://in2workspace.github.io/helm-charts
+      version: 1.0.13
+    - alias: issuer-postgres
+      condition: '!issuer-api.db.externalService'
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 13.1.5
+    - alias: issuer-keycloak-postgres
+      condition: issuer-keycloak-postgres.enabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 13.1.5
+    description: Umbrella Helm chart for the issuer
+    digest: 4cd5467393297a91ee3f6b0f598699447f2c2f007914838fcc372bdd234cfb3b
+    name: issuer
+    type: application
+    urls:
+    - https://github.com/in2workspace/helm-charts/releases/download/issuer-1.1.3/issuer-1.1.3.tgz
+    version: 1.1.3
+  - apiVersion: v2
+    appVersion: v1.0.3
     created: "2025-01-30T09:41:50.902805359Z"
     dependencies:
     - alias: issuer-api
@@ -2262,6 +2298,21 @@ entries:
   issuer-api:
   - apiVersion: v2
     appVersion: v1.1.1
+    created: "2025-01-31T11:03:13.593725286Z"
+    description: A Helm chart for Kubernetes
+    digest: b1a49fca47172c889619353fac20c1456784f4a4f45df772a7bbf1c42dce044c
+    maintainers:
+    - email: domesupport@in2.es
+      name: IN2 Team
+    name: issuer-api
+    sources:
+    - https://github.com/in2workspace/issuer-api
+    type: application
+    urls:
+    - https://github.com/in2workspace/helm-charts/releases/download/issuer-api-1.1.2/issuer-api-1.1.2.tgz
+    version: 1.1.2
+  - apiVersion: v2
+    appVersion: v1.1.1
     created: "2025-01-30T09:13:58.049955878Z"
     description: A Helm chart for Kubernetes
     digest: c472ffb1c30788450a3b16fed772a6c5c72fd0a0c84c7e48722614491805d2af
@@ -2683,6 +2734,27 @@ entries:
     - https://in2workspace.github.io/helm-charts/issuer-ui-0.6.0.tgz
     version: 0.6.0
   keycloak:
+  - apiVersion: v2
+    appVersion: v1.0.0
+    created: "2025-01-31T11:03:13.742910089Z"
+    dependencies:
+    - alias: postgresKeycloak
+      condition: postgresKeycloak.enabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 16.4.5
+    description: Helm Chart for Keycloak and PostgreSQL
+    digest: a8d87dcb4510b051fedbeca88a90ba6b7027d4abaa5d992dea6c83304257beb7
+    maintainers:
+    - email: contacto@in2.es
+      name: IN2 Kizuna DevTeam
+    name: keycloak
+    sources:
+    - https://github.com/in2workspace/dome-issuer-keycloak
+    type: application
+    urls:
+    - https://github.com/in2workspace/helm-charts/releases/download/keycloak-1.0.4/keycloak-1.0.4.tgz
+    version: 1.0.4
   - apiVersion: v2
     appVersion: v1.0.0
     created: "2025-01-30T13:14:22.5511408+01:00"
@@ -3439,4 +3511,4 @@ entries:
     urls:
     - https://in2workspace.github.io/helm-charts/wallet-api-1.0.0.tgz
     version: 1.0.0
-generated: "2025-01-30T13:14:22.2467368+01:00"
+generated: "2025-01-31T11:03:13.743349128Z"
