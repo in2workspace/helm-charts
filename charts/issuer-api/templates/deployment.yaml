@@ -181,23 +181,23 @@ spec:
             - name: ISSUER_REMOTE_CREDENTIAL_ID
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "issuer-api.RemoteSignature-secretName" . }}
-                  key: {{ include "issuer-api.RemoteSignature-credentialId" . }}
+                  name: {{ include "issuer-api.remoteSignature-secretName" . }}
+                  key: {{ include "issuer-api.remoteSignature-credentialId" . }}
             - name: ISSUER_REMOTE_CREDENTIAL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "issuer-api.RemoteSignature-secretName" . }}
-                  key: {{ include "issuer-api.RemoteSignature-credentialPassword" . }}
+                  name: {{ include "issuer-api.remoteSignature-secretName" . }}
+                  key: {{ include "issuer-api.remoteSignature-credentialPassword" . }}
             - name: ISSUER_REMOTE_CLIENT_ID
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "issuer-api.RemoteSignature-secretName" . }}
-                  key: {{ include "issuer-api.RemoteSignature-clientId" . }}
+                  name: {{ include "issuer-api.remoteSignature-secretName" . }}
+                  key: {{ include "issuer-api.remoteSignature-clientId" . }}
             - name: ISSUER_REMOTE_CLIENT_SECRET
               valueFrom:
                   secretKeyRef:
-                    name: {{ include "issuer-api.RemoteSignature-secretName" . }}
-                    key: {{ include "issuer-api.RemoteSignature-clientSecret" . }}
+                    name: {{ include "issuer-api.remoteSignature-secretName" . }}
+                    key: {{ include "issuer-api.remoteSignature-clientSecret" . }}
             - name: ISSUER_IDENTITY_CRYPTO_PRIVATE_KEY
               valueFrom:
                 secretKeyRef:

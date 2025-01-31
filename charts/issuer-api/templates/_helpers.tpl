@@ -232,7 +232,7 @@ Support for existing default signer secret
 Support for existing remote-signature-secret
 */}}
 
-{{- define "issuer-api.RemoteSignature-secretName" -}}
+{{- define "issuer-api.remoteSignature-secretName" -}}
     {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.remoteSignature.existingSecret.name $) -}}
     {{- else -}}
@@ -240,7 +240,7 @@ Support for existing remote-signature-secret
     {{- end -}}
 {{- end -}}
 
-{{- define "issuer-api.RemoteSignature-clientId" -}}
+{{- define "issuer-api.remoteSignature-clientId" -}}
     {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.remoteSignature.existingSecret.clientId $) -}}
     {{- else -}}
@@ -248,7 +248,7 @@ Support for existing remote-signature-secret
     {{- end -}}
 {{- end -}}
 
-{{- define "issuer-api.RemoteSignature-clientSecret" -}}
+{{- define "issuer-api.remoteSignature-clientSecret" -}}
     {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.remoteSignature.existingSecret.clientSecret $) -}}
     {{- else -}}
@@ -256,7 +256,7 @@ Support for existing remote-signature-secret
     {{- end -}}
 {{- end -}}
 
-{{- define "issuer-api.RemoteSignature-credentialId" -}}
+{{- define "issuer-api.remoteSignature-credentialId" -}}
     {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.remoteSignature.existingSecret.credentialId $) -}}
     {{- else -}}
@@ -264,7 +264,7 @@ Support for existing remote-signature-secret
     {{- end -}}
 {{- end -}}
 
-{{- define "issuer-api.RemoteSignature-credentialPassword" -}}
+{{- define "issuer-api.remoteSignature-credentialPassword" -}}
     {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.remoteSignature.existingSecret.credentialPassword $) -}}
     {{- else -}}
