@@ -606,6 +606,21 @@ entries:
     version: 0.1.0
   dome-wallet-ui:
   - apiVersion: v2
+    appVersion: v1.6.0
+    created: "2025-02-03T11:20:29.678390843Z"
+    description: A Helm chart for Kubernetes
+    digest: 1f6614ba4d930ac51f1ebade2b570310504baec4ec5ffff6968c1123d60fbdc9
+    maintainers:
+    - email: domesupport@in2.es
+      name: IN2 Team
+    name: dome-wallet-ui
+    sources:
+    - https://github.com/in2workspace/wallet-ui
+    type: application
+    urls:
+    - https://github.com/in2workspace/helm-charts/releases/download/dome-wallet-ui-0.2.1/dome-wallet-ui-0.2.1.tgz
+    version: 0.2.1
+  - apiVersion: v2
     appVersion: v1.5.0
     created: "2025-02-03T10:24:10.482418201Z"
     description: A Helm chart for Kubernetes
@@ -3663,4 +3678,4 @@ entries:
     urls:
     - https://in2workspace.github.io/helm-charts/wallet-api-1.0.0.tgz
     version: 1.0.0
-generated: "2025-02-03T10:37:50.983805285Z"
+generated: "2025-02-03T11:20:29.678603992Z"
