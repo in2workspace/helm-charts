@@ -80,10 +80,10 @@ spec:
             - name: IAM_REALM_PATH
               value: {{.Values.app.iam.realm_path}}
             - name: PRIMARY
-              value: {{.Values.app.colors.primary}}
+              value: {{ .Values.app.colors.primary | quote }}
             - name: PRIMARY_CONTRAST
-              value: {{.Values.app.colors.primaryContrast}}
+              value: {{ .Values.app.colors.primaryContrast | quote }}
             - name: SECONDARY
-              value: {{.Values.app.colors.secondary}}
+              value: {{ .Values.app.colors.secondary | quote }}
             - name: SECONDARY_CONTRAST
-              value: {{.Values.app.colors.secondaryContrast}}
+              value: {{ .Values.app.colors.secondaryContrast | quote }}
