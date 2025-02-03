@@ -79,3 +79,11 @@ spec:
               value: {{ .Values.app.credentialOfferUrl }}
             - name: NOTIFICATION
               value: {{ .Values.app.notification }}
+            - name: PRIMARY
+              value: {{ .Values.app.colors.primary | quote }}
+            - name: PRIMARY_CONTRAST
+              value: {{ .Values.app.colors.primaryContrast | quote }}
+            - name: SECONDARY
+              value: {{ .Values.app.colors.secondary | quote }}
+            - name: SECONDARY_CONTRAST
+              value: {{ .Values.app.colors.secondaryContrast | quote }}
