@@ -3062,6 +3062,39 @@ entries:
   wallet:
   - apiVersion: v2
     appVersion: v0.0.5
+    created: "2025-02-03T11:35:16.941632988Z"
+    dependencies:
+    - condition: wallet-api.enabled
+      name: wallet-api
+      repository: https://in2workspace.github.io/helm-charts
+      version: 1.1.2
+    - condition: dome-wallet-ui.enabled
+      name: dome-wallet-ui
+      repository: https://in2workspace.github.io/helm-charts
+      version: 0.2.1
+    - condition: dome-wallet-keycloak.enabled
+      name: dome-wallet-keycloak
+      repository: https://in2workspace.github.io/helm-charts
+      version: 0.1.3
+    - alias: postgresql
+      condition: postgresql.enabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 16.4.5
+    - alias: wallet-postgresql
+      condition: wallet-postgresql.enabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 16.4.5
+    description: Umbrella Helm chart for the Wallet
+    digest: 60106671c054b793bf02620990f8bbfc462f93bac733bb1a5cdc6a19ad62f3fc
+    name: wallet
+    type: application
+    urls:
+    - https://github.com/in2workspace/helm-charts/releases/download/wallet-1.3.1/wallet-1.3.1.tgz
+    version: 1.3.1
+  - apiVersion: v2
+    appVersion: v0.0.5
     created: "2025-02-03T10:37:50.983560858Z"
     dependencies:
     - condition: wallet-api.enabled
@@ -3678,4 +3711,4 @@ entries:
     urls:
     - https://in2workspace.github.io/helm-charts/wallet-api-1.0.0.tgz
     version: 1.0.0
-generated: "2025-02-03T11:20:29.678603992Z"
+generated: "2025-02-03T11:35:16.94185397Z"
