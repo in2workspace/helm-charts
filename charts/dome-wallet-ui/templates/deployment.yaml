@@ -79,3 +79,11 @@ spec:
               value: {{.Values.app.iam.external_domain}}
             - name: IAM_REALM_PATH
               value: {{.Values.app.iam.realm_path}}
+            - name: PRIMARY
+              value: {{.Values.app.colors.primary}}
+            - name: PRIMARY_CONTRAST
+              value: {{.Values.app.colors.primaryContrast}}
+            - name: SECONDARY
+              value: {{.Values.app.colors.secondary}}
+            - name: SECONDARY_CONTRAST
+              value: {{.Values.app.colors.secondaryContrast}}
