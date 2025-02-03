@@ -76,6 +76,11 @@ issuer-api:
           name: auth-secret
           clientSecretKey: authServerClientSecret
           clientPasswordKey: authServerClientPassword
+      colors:
+        primary: "#2d58a7"
+        primaryContrast: "#ffffff"
+        secondary: "#2cb6b2"
+        secondaryContrast: "#dde6f6"
       paths:
         tokenPath: /realms/CredentialIssuer/protocol/openid-connect/token
     ui:
