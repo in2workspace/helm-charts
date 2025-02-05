@@ -126,8 +126,8 @@ app:
     primaryContrast: "#ffffff"
     secondary: "#00ADD3"
     secondaryContrast: "#000000"
-  logoSrc: "assets/logos/no-image.png"
-  faviconSrc: "assets/logos/no-image.png"
+  logoSrc: "img/dome_logo_white.png"
+  faviconSrc: "img/dome_logo_favicon.png"
   idToken:
     expirationUnitTime: MINUTES
     expirationTime: 5
