@@ -159,6 +159,8 @@ app:
     primaryContrast: "#ffffff"
     secondary: "#2cb6b2"
     secondaryContrast: "#dde6f6"
+  logoSrc: "assets/logos/no-image.png"
+  faviconSrc: "assets/logos/no-image.png"
   knowledgebaseUrl:
     # if deployed locally set to false
     externalService: true

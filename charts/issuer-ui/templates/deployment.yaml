@@ -87,3 +87,7 @@ spec:
               value: {{ .Values.app.colors.secondary | quote }}
             - name: SECONDARY_CONTRAST
               value: {{ .Values.app.colors.secondaryContrast | quote }}
+            - name: LOGO_SRC
+              value: {{ .Values.app.logoSrc }}
+            - name: FAVICON_SRC
+              value: {{ .Values.app.faviconSrc }}
