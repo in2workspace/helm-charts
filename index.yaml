@@ -743,6 +743,32 @@ entries:
   issuer:
   - apiVersion: v2
     appVersion: v1.0.3
+    created: "2025-02-05T12:46:35.787292033Z"
+    dependencies:
+    - alias: issuer-api
+      condition: issuer-api.enabled
+      name: issuer-api
+      repository: https://in2workspace.github.io/helm-charts
+      version: 1.1.2
+    - alias: issuer-ui
+      condition: issuer-ui.enabled
+      name: issuer-ui
+      repository: https://in2workspace.github.io/helm-charts
+      version: 1.2.0
+    - alias: issuer-postgres
+      condition: '!issuer-api.db.externalService'
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 13.1.5
+    description: Umbrella Helm chart for the issuer
+    digest: 480aee584d56081b18b5f9e060f664ffbcced365306c74b8eabd9fcb87912806
+    name: issuer
+    type: application
+    urls:
+    - https://github.com/in2workspace/helm-charts/releases/download/issuer-1.2.2/issuer-1.2.2.tgz
+    version: 1.2.2
+  - apiVersion: v2
+    appVersion: v1.0.3
     created: "2025-02-05T12:00:19.974864424Z"
     dependencies:
     - alias: issuer-api
@@ -3053,6 +3079,21 @@ entries:
   verifier-api:
   - apiVersion: v2
     appVersion: v1.1.0
+    created: "2025-02-05T12:46:35.931461402Z"
+    description: A Helm chart for Kubernetes
+    digest: 7fe21c43cddc3049050009320bfa1d3a2c678682dbe98cb2de9cd82c525d411e
+    maintainers:
+    - email: domesupport@in2.es
+      name: IN2 Team
+    name: verifier-api
+    sources:
+    - https://github.com/in2workspace/in2-verifier-api
+    type: application
+    urls:
+    - https://github.com/in2workspace/helm-charts/releases/download/verifier-api-1.2.1/verifier-api-1.2.1.tgz
+    version: 1.2.1
+  - apiVersion: v2
+    appVersion: v1.1.0
     created: "2025-02-05T11:45:38.954733288Z"
     description: A Helm chart for Kubernetes
     digest: 4d0880abae2d61741f3e66e08b7b470143cf608b349ce4c6288b8a883559f912
@@ -3914,4 +3955,4 @@ entries:
     urls:
     - https://in2workspace.github.io/helm-charts/wallet-api-1.0.0.tgz
     version: 1.0.0
-generated: "2025-02-05T12:00:20.127059298Z"
+generated: "2025-02-05T12:46:35.93199469Z"
