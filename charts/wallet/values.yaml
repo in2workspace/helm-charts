@@ -123,6 +123,7 @@ dome-wallet-ui:
       primaryContrast: "#ffffff"
       secondary: "#50c8ff"
       secondaryContrast: "#50c8ff"
+    logoSrc: "assets/logos/no-image.png"
     iam:
       external_domain: https://wallet.dome-marketplace-sbx.org/keycloak
       realm_path: /realms/wallet
