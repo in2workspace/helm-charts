@@ -9,7 +9,7 @@ dependencies:
   - name: wallet-api
     condition: wallet-api.enabled
     repository: https://in2workspace.github.io/helm-charts
-    version: 1.1.2
+    version: 1.1.3
 
   - name: dome-wallet-ui
     condition: dome-wallet-ui.enabled
@@ -28,7 +28,14 @@ dependencies:
     version: 16.4.5
 
   - name: postgresql
-    condition: wallet-postgresql.enabled
+    condition: "!wallet-api.db.externalService"
     alias: wallet-postgresql
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 16.4.5
+
+  #External Database (Postgresql, MySQL,...)
+  - name: postgresql
+    condition: wallet-api.db.externalService
+    alias: wallet-external-database
     repository: oci://registry-1.docker.io/bitnamicharts
     version: 16.4.5
