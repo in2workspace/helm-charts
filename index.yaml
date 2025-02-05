@@ -606,6 +606,21 @@ entries:
     version: 0.1.0
   dome-wallet-ui:
   - apiVersion: v2
+    appVersion: v1.6.1
+    created: "2025-02-05T11:45:38.746692075Z"
+    description: A Helm chart for Kubernetes
+    digest: 1aab5309c719e86b84a07d11794abdf0bc952cb8acc52ed8bb91826ab3eb0291
+    maintainers:
+    - email: domesupport@in2.es
+      name: IN2 Team
+    name: dome-wallet-ui
+    sources:
+    - https://github.com/in2workspace/wallet-ui
+    type: application
+    urls:
+    - https://github.com/in2workspace/helm-charts/releases/download/dome-wallet-ui-0.2.2/dome-wallet-ui-0.2.2.tgz
+    version: 0.2.2
+  - apiVersion: v2
     appVersion: v1.6.0
     created: "2025-02-03T11:20:29.678390843Z"
     description: A Helm chart for Kubernetes
@@ -2762,6 +2777,21 @@ entries:
     version: 1.1.0
   issuer-ui:
   - apiVersion: v2
+    appVersion: v1.6.1
+    created: "2025-02-05T11:45:38.845770074Z"
+    description: A Helm chart for Kubernetes
+    digest: 6f2af8531f69e055ddc79459a922f7069f16a7e55084226fdf526a4691a2244a
+    maintainers:
+    - email: domesupport@in2.es
+      name: IN2 Team
+    name: issuer-ui
+    sources:
+    - https://github.com/in2workspace/issuer-ui
+    type: application
+    urls:
+    - https://github.com/in2workspace/helm-charts/releases/download/issuer-ui-1.2.0/issuer-ui-1.2.0.tgz
+    version: 1.2.0
+  - apiVersion: v2
     appVersion: v1.6.0
     created: "2025-02-03T15:04:23.377297018Z"
     description: A Helm chart for Kubernetes
@@ -2995,6 +3025,21 @@ entries:
     - https://github.com/in2workspace/helm-charts/releases/download/test-23-0.1.0/test-23-0.1.0.tgz
     version: 0.1.0
   verifier-api:
+  - apiVersion: v2
+    appVersion: v1.1.0
+    created: "2025-02-05T11:45:38.954733288Z"
+    description: A Helm chart for Kubernetes
+    digest: 4d0880abae2d61741f3e66e08b7b470143cf608b349ce4c6288b8a883559f912
+    maintainers:
+    - email: domesupport@in2.es
+      name: IN2 Team
+    name: verifier-api
+    sources:
+    - https://github.com/in2workspace/in2-verifier-api
+    type: application
+    urls:
+    - https://github.com/in2workspace/helm-charts/releases/download/verifier-api-1.2.0/verifier-api-1.2.0.tgz
+    version: 1.2.0
   - apiVersion: v2
     appVersion: v1.0.0
     created: "2025-01-30T13:14:22.5551556+01:00"
@@ -3805,4 +3850,4 @@ entries:
     urls:
     - https://in2workspace.github.io/helm-charts/wallet-api-1.0.0.tgz
     version: 1.0.0
-generated: "2025-02-05T08:27:01.423359699Z"
+generated: "2025-02-05T11:45:38.955060018Z"
