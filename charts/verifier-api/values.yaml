@@ -121,6 +121,13 @@ app:
   accessToken:
     expirationUnitTime: MINUTES
     expirationTime: 30
+  colors:
+    primary: "#14274A"
+    primaryContrast: "#ffffff"
+    secondary: "#00ADD3"
+    secondaryContrast: "#000000"
+  logoSrc: "assets/logos/no-image.png"
+  faviconSrc: "assets/logos/no-image.png"
   idToken:
     expirationUnitTime: MINUTES
     expirationTime: 5
