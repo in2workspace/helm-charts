@@ -79,8 +79,13 @@ ingressWellKnown:
       paths:
         - path: /issuer-api
           pathType: ImplementationSpecific
-          serviceName: service1
-          servicePort: 80
+          backend:
+            service:
+              name: service-name
+              port:
+                number: 80
+#          serviceName: service1
+#          servicePort: 80
   tls:
     - hosts:
         - example-host
@@ -97,8 +102,13 @@ ingressToken:
       paths:
         - path: /issuer-api
           pathType: ImplementationSpecific
-          serviceName: service1
-          servicePort: 80
+          backend:
+            service:
+              name: service-name
+              port:
+                number: 80
+  #          serviceName: service1
+  #          servicePort: 80
   tls:
     - hosts:
         - example-host
