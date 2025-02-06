@@ -91,17 +91,17 @@ spec:
               value: {{ .Values.app.loginQrCode.expirationUnitTime }}
             - name: SECURITY_LOGIN_CODE_EXPIRATION_PROPERTIES_EXPIRATION
               value: {{ quote .Values.app.loginQrCode.expirationTime}}
-            - name: PRIMARY
+            - name: VERIFIER_UI_CUSTOMIZATIONS_COLORS_PRIMARY
               value: {{ .Values.app.colors.primary | quote }}
-            - name: PRIMARY_CONTRAST
+            - name: VERIFIER_UI_CUSTOMIZATIONS_COLORS_PRIMARY_CONTRAST
               value: {{ .Values.app.colors.primaryContrast | quote }}
-            - name: SECONDARY
+            - name: VERIFIER_UI_CUSTOMIZATIONS_COLORS_SECONDARY
               value: {{ .Values.app.colors.secondary | quote }}
-            - name: SECONDARY_CONTRAST
+            - name: VERIFIER_UI_CUSTOMIZATIONS_COLORS_SECONDARY_CONTRAST
               value: {{ .Values.app.colors.secondaryContrast | quote }}
-            - name: LOGO_SRC
+            - name: VERIFIER_UI_CUSTOMIZATIONS_LOGO_SRC
               value: {{ .Values.app.logoSrc }}
-            - name: FAVICON_SRC
+            - name: VERIFIER_UI_CUSTOMIZATIONS_FAVICON_SRC
               value: {{ .Values.app.faviconSrc }}
 
             # PRIVATE KEY
