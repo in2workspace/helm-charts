@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: in2workspace/in2-verifier-api
   # Overrides the image tag whose default is the chart appVersion.
-  tag: v1.0.5-snapshot
+  tag: v1.1.0-snapshot
   pullPolicy: Always
 
 imagePullSecrets: []
@@ -121,6 +121,13 @@ app:
   accessToken:
     expirationUnitTime: MINUTES
     expirationTime: 30
+  colors:
+    primary: "#14274A"
+    primaryContrast: "#ffffff"
+    secondary: "#00ADD3"
+    secondaryContrast: "#000000"
+  logoSrc: "img/dome_logo_white.png"
+  faviconSrc: "img/dome_logo_favicon.png"
   idToken:
     expirationUnitTime: MINUTES
     expirationTime: 5

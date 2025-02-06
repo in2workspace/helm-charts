@@ -76,11 +76,6 @@ issuer-api:
           name: auth-secret
           clientSecretKey: authServerClientSecret
           clientPasswordKey: authServerClientPassword
-      colors:
-        primary: "#2d58a7"
-        primaryContrast: "#ffffff"
-        secondary: "#2cb6b2"
-        secondaryContrast: "#dde6f6"
       paths:
         tokenPath: /realms/CredentialIssuer/protocol/openid-connect/token
     ui:
@@ -185,6 +180,13 @@ issuer-ui:
       # internalPort is only used if externalService is false
       internalPort: 30003
       path: /
+    colors:
+      primary: "#2d58a7"
+      primaryContrast: "#ffffff"
+      secondary: "#2cb6b2"
+      secondaryContrast: "#dde6f6"
+    logoSrc: "assets/logos/no-image.png"
+    faviconSrc: "assets/logos/no-image.png"
     knowledgebaseUrl:
       # if deployed locally set to false
       externalService: true

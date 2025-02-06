@@ -123,6 +123,7 @@ dome-wallet-ui:
       primaryContrast: "#ffffff"
       secondary: "#50c8ff"
       secondaryContrast: "#50c8ff"
+    logoSrc: "assets/logos/no-image.png"
     iam:
       external_domain: https://wallet.dome-marketplace-sbx.org/keycloak
       realm_path: /realms/wallet
@@ -268,6 +269,24 @@ wallet-postgresql:
       whenDeleted: Retain
     initdb:
       scripts:
+        create.sh: |
+          psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE wallet;"
         create-schema.sh: |
           psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432/wallet -c "CREATE SCHEMA wallet;"
+          
+wallet-external-database:
+  # -- should the postgresql deployment be enabled
+  enabled: false
+  # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
+  fullnameOverride: wallet-external-database
+  # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
+  nameOverride: wallet-external-database
+  ## auth configuration for the database
+  auth:
+    # -- username to be used
+    username: postgres
+    # -- should the default postgres user be enabled
+    enablePostgresUser: true
+    # -- password to be used
+    password: postgres
 

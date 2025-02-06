@@ -112,6 +112,8 @@ spec:
             # DATABASE
             - name: SPRING_R2DBC_URL
               value: "r2dbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}?schema={{ .Values.db.schema }}"
+            - name: DB_SCHEMA
+              value: {{ .Values.db.schema }}
             - name: SPRING_R2DBC_USERNAME
               value: {{ .Values.db.username }}
             - name: SPRING_R2DBC_PASSWORD
