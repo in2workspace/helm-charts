@@ -189,6 +189,8 @@ app:
       clientSecret: client-secret
       credentialId: credential-id
       credentialPassword: credential-password
+    #Set to true if the external service is used 
+    externalService: false
     domain:
       scheme: http
       # change by the external url or set to localhost if deployed locally
