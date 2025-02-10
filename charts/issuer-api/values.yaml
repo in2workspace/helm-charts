@@ -219,7 +219,7 @@ app:
       host: example.org
       # internalPort is only used if externalService is false
       internalPort: 30002
-      path: /
+      path: ""
     internalDomain: http://dome-issuer-keycloak:8080
     realm: CredentialIssuer
     client:
