@@ -136,6 +136,31 @@ spec:
               value: "{{ .Values.app.remoteSignature.externalService }}" #Convert to string
             - name: REMOTE_SIGNATURE_DOMAIN
               value: "{{ .Values.app.remoteSignature.domain.scheme }}://{{ .Values.app.remoteSignature.domain.host }}{{ .Values.app.remoteSignature.domain.path }}"
+            - name: REMOTE_SIGNATURE_CREDENTIAL_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-api.remoteSignature-secretName" . }}
+                  key: {{ include "issuer-api.remoteSignature-credentialId" . }}
+            - name: REMOTE_SIGNATURE_CREDENTIAL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-api.remoteSignature-secretName" . }}
+                  key: {{ include "issuer-api.remoteSignature-credentialPassword" . }}
+            - name: REMOTE_SIGNATURE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-api.remoteSignature-secretName" . }}
+                  key: {{ include "issuer-api.remoteSignature-clientId" . }}
+            - name: REMOTE_SIGNATURE_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-api.remoteSignature-secretName" . }}
+                  key: {{ include "issuer-api.remoteSignature-clientSecret" . }}
+
+
+
+
+
             - name: TRUST_FRAMEWORK_URL
               value: {{.Values.app.trustFramework.url}}
             - name: KNOWLEDGEBASE_URL
@@ -180,26 +205,6 @@ spec:
                 secretKeyRef:
                   name: {{ include "issuer-api.issuerIdentity-secretName" . }}
                   key: {{ include "issuer-api.issuerIdentity-vc" . }}
-            - name: ISSUER_REMOTE_CREDENTIAL_ID
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "issuer-api.remoteSignature-secretName" . }}
-                  key: {{ include "issuer-api.remoteSignature-credentialId" . }}
-            - name: ISSUER_REMOTE_CREDENTIAL_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "issuer-api.remoteSignature-secretName" . }}
-                  key: {{ include "issuer-api.remoteSignature-credentialPassword" . }}
-            - name: ISSUER_REMOTE_CLIENT_ID
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "issuer-api.remoteSignature-secretName" . }}
-                  key: {{ include "issuer-api.remoteSignature-clientId" . }}
-            - name: ISSUER_REMOTE_CLIENT_SECRET
-              valueFrom:
-                  secretKeyRef:
-                    name: {{ include "issuer-api.remoteSignature-secretName" . }}
-                    key: {{ include "issuer-api.remoteSignature-clientSecret" . }}
             - name: ISSUER_IDENTITY_CRYPTO_PRIVATE_KEY
               valueFrom:
                 secretKeyRef:
