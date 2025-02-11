@@ -132,8 +132,8 @@ spec:
               value: "{{ .Values.app.ui.externalDomain.scheme }}://{{ .Values.app.ui.externalDomain.host }}{{ if not .Values.app.ui.externalDomain.externalService }}:{{ .Values.app.ui.externalDomain.internalPort }}{{ end }}{{ .Values.app.ui.externalDomain.path }}"
             - name: ISSUER_UI_INTERNAL_DOMAIN
               value: {{ .Values.app.ui.internalDomain }}
-            - name: REMOTE_SIGNATURE_EXTERNAL_SERVICE
-              value: "{{ .Values.app.remoteSignature.externalService }}" #Convert to string
+            - name: REMOTE_SIGNATURE_TYPE
+              value: "{{ .Values.app.remoteSignature.type }}"
             - name: REMOTE_SIGNATURE_DOMAIN
               value: "{{ .Values.app.remoteSignature.domain.scheme }}://{{ .Values.app.remoteSignature.domain.host }}{{ .Values.app.remoteSignature.domain.path }}"
             - name: REMOTE_SIGNATURE_CREDENTIAL_ID
