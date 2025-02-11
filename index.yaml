@@ -2653,6 +2653,21 @@ entries:
   issuer-api:
   - apiVersion: v2
     appVersion: v1.1.2
+    created: "2025-02-11T07:14:30.317310359Z"
+    description: A Helm chart for Kubernetes
+    digest: 33bb6d1e6e21e25d1587d408e77f84a94f30248b4535fa07abd48ce850ab7bf3
+    maintainers:
+    - email: domesupport@in2.es
+      name: IN2 Team
+    name: issuer-api
+    sources:
+    - https://github.com/in2workspace/issuer-api
+    type: application
+    urls:
+    - https://github.com/in2workspace/helm-charts/releases/download/issuer-api-1.1.7/issuer-api-1.1.7.tgz
+    version: 1.1.7
+  - apiVersion: v2
+    appVersion: v1.1.2
     created: "2025-02-10T12:33:15.354490145Z"
     description: A Helm chart for Kubernetes
     digest: ed20bc8956a866c8115c8b8def01c0b58612972b39ed22f7f14ef4000298b140
@@ -4215,4 +4230,4 @@ entries:
     urls:
     - https://in2workspace.github.io/helm-charts/wallet-api-1.0.0.tgz
     version: 1.0.0
-generated: "2025-02-10T12:42:00.303732528Z"
+generated: "2025-02-11T07:14:30.317717447Z"
