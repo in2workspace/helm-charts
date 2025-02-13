@@ -740,6 +740,22 @@ entries:
     urls:
     - https://in2workspace.github.io/helm-charts/dome-wallet-ui-0.1.0.tgz
     version: 0.1.0
+  dss:
+  - apiVersion: v2
+    appVersion: v0.6.0
+    created: "2025-02-13T10:36:44.750361155Z"
+    description: A Helm chart for Kubernetes
+    digest: 4c4f5b668cb7cffd88b10f95fa023df3d7c26e08173ad4e842021ea5aaecae39
+    maintainers:
+    - email: domesupport@in2.es
+      name: IN2 Team
+    name: dss
+    sources:
+    - https://github.com/in2workspace/dss
+    type: application
+    urls:
+    - https://github.com/in2workspace/helm-charts/releases/download/dss-1.0.0/dss-1.0.0.tgz
+    version: 1.0.0
   issuer:
   - apiVersion: v2
     appVersion: v1.0.3
@@ -4317,4 +4333,4 @@ entries:
     urls:
     - https://in2workspace.github.io/helm-charts/wallet-api-1.0.0.tgz
     version: 1.0.0
-generated: "2025-02-11T11:16:17.868099135Z"
+generated: "2025-02-13T10:36:44.750649044Z"
