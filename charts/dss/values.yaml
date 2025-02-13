@@ -52,7 +52,7 @@ ingress:
   hosts:
     - host: chart-example.local
       paths:
-        - path: /dome-dss
+        - path: /dss
           pathType: ImplementationSpecific
   tls: []
   #  - secretName: chart-example-tls
@@ -119,7 +119,7 @@ app:
       # -- should an existing secret be used
       enabled: false
       # -- name of the secret
-      name: dome-dss-certificate-secret
+      name: dss-certificate-secret
       # -- key to retrieve the token from
       key: password
   vault:
@@ -132,7 +132,7 @@ app:
       # -- should an existing secret be used
       enabled: false
       # -- name of the secret
-      name: dome-dss-token-secret
+      name: dss-token-secret
       # -- key to retrieve the token from
       key: token
 

@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "dome-dss.fullname" . }}
+  name: {{ include "dss.fullname" . }}
   namespace: {{ $.Release.Namespace | quote }}
   labels:
-    {{- include "dome-dss.labels" . | nindent 4 }}
+    {{- include "dss.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "dome-dss.selectorLabels" . | nindent 6 }}
+      {{- include "dss.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -19,13 +19,13 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "dome-dss.selectorLabels" . | nindent 8 }}
+        {{- include "dss.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "dome-dss.serviceAccountName" . }}
+      serviceAccountName: {{ include "dss.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -65,8 +65,8 @@ spec:
             - name: CERTIFICATE_KEY_STORE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "dome-dss.certificateSecretName" . }}
-                  key: {{ include "dome-dss.certificate-passwordKey" . }}
+                  name: {{ include "dss.certificateSecretName" . }}
+                  key: {{ include "dss.certificate-passwordKey" . }}
             # VAULT
             - name: VAULT_PROVIDER_NAME
               value: {{.Values.app.vault.provider}}
@@ -79,8 +79,8 @@ spec:
             - name: HASHICORP_VAULT_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "dome-dss.vaultTokenSecretName" . }}
-                  key: {{ include "dome-dss.user-tokenKey" . }}
+                  name: {{ include "dss.vaultTokenSecretName" . }}
+                  key: {{ include "dss.user-tokenKey" . }}
           {{- with .Values.volumeMounts }}
           volumeMounts:
             {{- toYaml . | nindent 12 }}
