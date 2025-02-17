@@ -53,6 +53,8 @@ spec:
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           env:
+            - name: SERVER_PORT
+              value: {{ quote .Values.app.internalServerPort}}
             - name: AUTH_SERVER_INTERNAL_DOMAIN
               value: {{ .Values.authServer.internalDomain }}
             - name: AUTH_SERVER_EXTERNAL_DOMAIN
