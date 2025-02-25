@@ -58,58 +58,43 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: {{.Values.app.profile}}
             - name: LOGGING_LEVEL_ES_IN2_VCVERIFIER
-              value: {{.Values.app.logLevel.app}}
+              value: {{.Values.app.logging.level.app}}
             - name: LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY
-              value: {{.Values.app.logLevel.security}}
-            - name: LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY_OAUTH2
-              value: {{.Values.app.logLevel.securityOauth2}}
+              value: {{.Values.app.logging.level.security}}
             - name: LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_WEB_FILTER
-              value: {{.Values.app.logLevel.webFilter}}
-            - name: SECURITY_AUTHORIZATION_SERVER
-              value: {{ .Values.app.externalDomain }}
-            - name: SECURITY_TOKEN_ACCESS_TOKEN_CRON_UNIT
-              value: {{ .Values.app.accessToken.expirationUnitTime }}
-            - name: SECURITY_TOKEN_ACCESS_TOKEN_EXPIRATION
-              value: {{ quote .Values.app.accessToken.expirationTime}}
-            - name: SECURITY_TOKEN_ID_TOKEN_CRON_UNIT
-              value: {{ .Values.app.idToken.expirationUnitTime }}
-            - name: SECURITY_TOKEN_ID_TOKEN_EXPIRATION
-              value: {{ quote .Values.app.idToken.expirationTime}}
-            - name: TRUST_FRAMEWORK_CLIENTS_REPOSITORY_URI
-              value: {{ .Values.app.clientsRepository.uri}}
-            - name: TRUST_FRAMEWORK_TRUSTED_ISSUER_LIST_URI
-              value: {{ .Values.app.trustedIssuerList.uri}}
-            - name: TRUST_FRAMEWORK_REVOCATION_LIST_URI
-              value: {{ .Values.app.revocationList.uri}}
-            - name: VERIFIER_UI_LOGIN_URIS_ONBOARDING_URI
-              value: {{ .Values.app.verifierUiLoginUris.onboardingUri }}
-            - name: VERIFIER_UI_LOGIN_URIS_SUPPORT_URI
-              value: {{ .Values.app.verifierUiLoginUris.supportUri }}
-            - name: VERIFIER_UI_LOGIN_URIS_WALLET_URI
-              value: {{ .Values.app.verifierUiLoginUris.walletUri }}
-            - name: SECURITY_LOGIN_CODE_EXPIRATION_PROPERTIES_CRON_UNIT
-              value: {{ .Values.app.loginQrCode.expirationUnitTime }}
-            - name: SECURITY_LOGIN_CODE_EXPIRATION_PROPERTIES_EXPIRATION
-              value: {{ quote .Values.app.loginQrCode.expirationTime}}
-            - name: VERIFIER_UI_CUSTOMIZATIONS_COLORS_PRIMARY
-              value: {{ .Values.app.colors.primary | quote }}
-            - name: VERIFIER_UI_CUSTOMIZATIONS_COLORS_PRIMARY_CONTRAST
-              value: {{ .Values.app.colors.primaryContrast | quote }}
-            - name: VERIFIER_UI_CUSTOMIZATIONS_COLORS_SECONDARY
-              value: {{ .Values.app.colors.secondary | quote }}
-            - name: VERIFIER_UI_CUSTOMIZATIONS_COLORS_SECONDARY_CONTRAST
-              value: {{ .Values.app.colors.secondaryContrast | quote }}
-            - name: VERIFIER_UI_CUSTOMIZATIONS_LOGO_SRC
-              value: {{ .Values.app.logoSrc }}
-            - name: VERIFIER_UI_CUSTOMIZATIONS_FAVICON_SRC
-              value: {{ .Values.app.faviconSrc }}
-
-            # PRIVATE KEY
-            - name: CRYPTO_PRIVATE_KEY
+              value: {{.Values.app.logging.level.webFilter}}
+            - name: VERIFIER_BACKEND_URL
+              value: {{ .Values.app.backend.url }}
+            - name: VERIFIER_BACKEND_IDENTITY_PRIVATE_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "verifier-api.privateKey-secretName" . }}
-                  key: {{ include "verifier-api.privateKey-privateKey" . }}
+                  name: { { include "verifier-api.privateKey-secretName" . } }
+                  key: { { include "verifier-api.privateKey-privateKey" . } }
+            - name: VERIFIER_BACKEND_TRUST_FRAMEWORKS_TRUSTED_ISSUERS_LIST_URI
+              value: {{ .Values.app.backend.trustFrameworks.issuersServicesListUrl}}
+            - name: VERIFIER_BACKEND_TRUST_FRAMEWORKS_TRUSTED_SERVICES_LIST_URI
+              value: {{ .Values.app.backend.trustFrameworks.trustedServicesListUrl}}
+            - name: VERIFIER_BACKEND_TRUST_FRAMEWORKS_REVOKED_CREDENTIAL_LIST_URI
+              value: {{ .Values.backend.trustFrameworks.revokedCredentialListUrl}}
+            - name: VERIFIER_FRONTEND_URLS_ONBOARDING
+              value: {{ .Values.app.frontend.urls.onboarding }}
+            - name: VERIFIER_FRONTEND_URLS_SUPPORT
+              value: {{ .Values.app.frontend.urls.support }}
+            - name: VERIFIER_FRONTEND_URLS_WALLET
+              value: {{ .Values.app.frontend.urls.wallet }}
+            - name: VERIFIER_FRONTEND_COLORS_PRIMARY
+              value: {{ .Values.app.frontend.colors.primary | quote }}
+            - name: VERIFIER_FRONTEND_COLORS_PRIMARY_CONTRAST
+              value: {{ .Values.app.frontend.colors.primaryContrast | quote }}
+            - name: VERIFIER_FRONTEND_COLORS_SECONDARY
+              value: {{ .Values.app.frontend.colors.secondary | quote }}
+            - name: VERIFIER_FRONTEND_COLORS_SECONDARY_CONTRAST
+              value: {{ .Values.app.frontend.colors.secondaryContrast | quote }}
+            - name: VERIFIER_FRONTEND_LOGO_SRC
+              value: {{ .Values.app.frontend.logoSrc }}
+            - name: VERIFIER_FRONTEND_FAVICON_SRC
+              value: {{ .Values.app.frontend.faviconSrc }}
+          # todo correct indentation?
           {{- with .Values.volumeMounts }}
           volumeMounts:
             {{- toYaml . | nindent 12 }}
