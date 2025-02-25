@@ -153,6 +153,7 @@ app:
         privateKey:
       trustFrameworks:
         # Placeholder for the name of a trust framework (REQUIRED)
+        # todo fill urls?
         - name: DOME
           # Placeholder for trusted issuers list URL
           trustedIssuersListUrl:

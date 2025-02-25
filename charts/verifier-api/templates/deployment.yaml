@@ -36,25 +36,25 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ .Values.app.internalServerPort }}
+              containerPort: {{ include "verifier-api.internalServerPort" }}
               protocol: TCP
           livenessProbe:
             httpGet:
               path: {{ .Values.livenessProbe.path }}
-              port: {{ .Values.app.internalServerPort }}
+              port: {{ include "verifier-api.internalServerPort" }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
           readinessProbe:
             httpGet:
               path: {{ .Values.readinessProbe.path }}
-              port: {{ .Values.app.internalServerPort }}
+              port: {{ include "verifier-api.internalServerPort" }}
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           env:
             - name: SERVER_PORT
-              value: {{ quote .Values.app.internalServerPort}}
+              value: {{ include "verifier-api.internalServerPort" . | quote }}
             - name: SPRING_PROFILES_ACTIVE
               value: {{.Values.app.profile}}
             - name: LOGGING_LEVEL_ES_IN2_VCVERIFIER
@@ -63,19 +63,6 @@ spec:
               value: {{.Values.app.logging.level.security}}
             - name: LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_WEB_FILTER
               value: {{.Values.app.logging.level.webFilter}}
-            - name: VERIFIER_BACKEND_URL
-              value: {{ .Values.app.backend.url }}
-            - name: VERIFIER_BACKEND_IDENTITY_PRIVATE_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: { { include "verifier-api.privateKey-secretName" . } }
-                  key: { { include "verifier-api.privateKey-privateKey" . } }
-            - name: VERIFIER_BACKEND_TRUST_FRAMEWORKS_TRUSTED_ISSUERS_LIST_URI
-              value: {{ .Values.app.backend.trustFrameworks.issuersServicesListUrl}}
-            - name: VERIFIER_BACKEND_TRUST_FRAMEWORKS_TRUSTED_SERVICES_LIST_URI
-              value: {{ .Values.app.backend.trustFrameworks.trustedServicesListUrl}}
-            - name: VERIFIER_BACKEND_TRUST_FRAMEWORKS_REVOKED_CREDENTIAL_LIST_URI
-              value: {{ .Values.backend.trustFrameworks.revokedCredentialListUrl}}
             - name: VERIFIER_FRONTEND_URLS_ONBOARDING
               value: {{ .Values.app.frontend.urls.onboarding }}
             - name: VERIFIER_FRONTEND_URLS_SUPPORT
@@ -94,6 +81,22 @@ spec:
               value: {{ .Values.app.frontend.logoSrc }}
             - name: VERIFIER_FRONTEND_FAVICON_SRC
               value: {{ .Values.app.frontend.faviconSrc }}
+            - name: VERIFIER_BACKEND_URL
+              value: { { .Values.app.backend.url } }
+            - name: VERIFIER_BACKEND_IDENTITY_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: { { include "verifier-api.privateKey-secretName" . } }
+                  key: { { include "verifier-api.privateKey-privateKey" . } }
+            - name: VERIFIER_BACKEND_TRUST_FRAMEWORKS
+              value: {{ .Values.app.verifier.backend.trustFrameworks | toJson | quote }}
+
+#            - name: VERIFIER_BACKEND_TRUST_FRAMEWORKS_TRUSTED_ISSUERS_LIST_URL
+#              value: { { .Values.app.backend.trustFrameworks.issuersServicesListUrl } }
+#            - name: VERIFIER_BACKEND_TRUST_FRAMEWORKS_TRUSTED_SERVICES_LIST_URL
+#              value: { { .Values.app.backend.trustFrameworks.trustedServicesListUrl } }
+#            - name: VERIFIER_BACKEND_TRUST_FRAMEWORKS_REVOKED_CREDENTIAL_LIST_URL
+#              value: { { .Values.backend.trustFrameworks.revokedCredentialListUrl } }
           # todo correct indentation?
           {{- with .Values.volumeMounts }}
           volumeMounts:
