@@ -248,7 +248,7 @@ app:
   trustFramework:
     url: "http://localhost:8080"
   knowledgebase:
-    url: "http://knowledgebase.com"
+    walletUrl: "http://knowledgebase.com"
   defaultSigner:
     commonName: <COMMON_NAME>
     country: <COUNTRY>
