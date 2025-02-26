@@ -79,15 +79,3 @@ Support for private key secret
         {{- printf "privateKey" -}}
     {{- end -}}
 {{- end -}}
-
-{{/*
-Defines internal server port, which should not be modified by user
-If internalServerPort is not set, 8080 will be assigned
-*/}}
-{{- define "verifier-api.internalServerPort" -}}
-    {{- if .Values.internalServerPort -}}
-        {{- .Values.internalServerPort -}}
-    {{- else -}}
-        {{- printf "8080" -}}
-    {{- end -}}
-{{- end -}}
