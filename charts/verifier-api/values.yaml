@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: in2workspace/in2-verifier-api
   # Overrides the image tag whose default is the chart appVersion.
-  tag: v1.1.0-snapshot
+  tag: v1.2.0-snapshot
   pullPolicy: Always
 
 imagePullSecrets: []
@@ -112,6 +112,8 @@ affinity: {}
 
 app:
   # todo
+  profile:
+  # todo
   logging:
     level:
       # Sets logging level for Spring Security
@@ -125,11 +127,11 @@ app:
     frontend:
       urls:
         # Placeholder for onboarding URL (REQUIRED)
-        onboarding:
+        onboarding: "https://example.com/onboarding"
         # Placeholder for support URL (REQUIRED)
-        support:
+        support: "https://example.com/support"
         # Placeholder for wallet URL (REQUIRED)
-        wallet:
+        wallet: "https://example.com/wallet"
       colors:
         # Defines primary color for the frontend (OPTIONAL with default value)
         primary: "#14274A"
@@ -141,13 +143,13 @@ app:
         secondaryContrast: "#000000"
       # Placeholder for logo source path (REQUIRED)
       # This routes must point to internal folder: src/main/resources/static/img/<file_name.png>
-      logoSrc:
+      logoSrc: logo.png
       # Placeholder for favicon source path (OPTIONAL)
       # This routes must point to internal folder: src/main/resources/static/img/<file_name.png>
-      faviconSrc:
+      faviconSrc: favicon.ico
     backend:
       # Placeholder for backend URL (REQUIRED)
-      url:
+      url: "https://raw.githubusercontent.com"
       identity:
         # Placeholder for private key used in identity verification (REQUIRED)
         privateKey:
@@ -158,10 +160,17 @@ app:
             key: private-key
       trustFrameworks:
         # Placeholder for the name of a trust framework (REQUIRED)
-        # todo fill urls?
         - name: DOME
           # Placeholder for trusted issuers list URL
-          trustedIssuersListUrl:
+          trustedIssuersListUrl: "https://raw.githubusercontent.com"
+          # Placeholder for trusted services list URL
+          trustedServicesListUrl: "https://raw.githubusercontent.com/in2workspace/in2-dome-gitops/refs/heads/main/trust-framework/trusted_services_list.yaml"
+          # Placeholder for revoked credentials list URL
+          #TODO
+          revokedCredentialListUrl: "https://raw.githubusercontent.com/in2workspace/in2-dome-gitops/refs/heads/main/trust-framework/revoked_credential_list.yaml"
+        - name: newnewOTHERTRUSTFRAMEWORK
+          # Placeholder for trusted issuers list URL
+          trustedIssuersListUrl: "othernovaurl"
           # Placeholder for trusted services list URL
           trustedServicesListUrl:
           # Placeholder for revoked credentials list URL
