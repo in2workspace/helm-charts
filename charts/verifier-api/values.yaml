@@ -112,8 +112,6 @@ affinity: {}
 
 app:
   # todo
-  profile:
-  # todo
   logging:
     level:
       # Sets logging level for Spring Security

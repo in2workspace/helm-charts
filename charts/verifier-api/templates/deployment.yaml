@@ -88,7 +88,7 @@ spec:
                 secretKeyRef:
                   name: {{ include "verifier-api.privateKey-secretName" . }}
                   key: {{ include "verifier-api.privateKey-privateKey" . }}
-            - name: SPRING_CONFIG_LOCATION
+            - name: SPRING_CONFIG_ADDITIONAL_LOCATION
               value: "/config/application.yaml"
           # todo correct indentation?
           volumeMounts:
