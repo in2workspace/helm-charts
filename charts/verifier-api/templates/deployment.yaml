@@ -84,10 +84,7 @@ spec:
             - name: VERIFIER_BACKEND_URL
               value: {{ .Values.app.verifier.backend.url }}
             - name: VERIFIER_BACKEND_IDENTITY_PRIVATE_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "verifier-api.privateKey-secretName" . }}
-                  key: {{ include "verifier-api.privateKey-privateKey" . }}
+              value: "0x73e509a7681d4a395b1ced75681c4dc4020dbab02da868512276dd766733d5b5"
             - name: SPRING_CONFIG_LOCATION
               value: "/config/application.yaml"
           # todo correct indentation?

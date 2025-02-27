@@ -6,5 +6,4 @@ data:
   application.yaml: |
     verifier:
       backend:
-        trustFrameworks:
-          {{- toYaml .Values.app.verifier.backend.trustFrameworks | nindent 10 }}
+        trustFrameworks: {{- toYaml .Values.app.verifier.backend.trustFrameworks | nindent 10 }}
