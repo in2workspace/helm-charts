@@ -164,7 +164,7 @@ spec:
             - name: TRUST_FRAMEWORK_URL
               value: {{.Values.app.trustFramework.url}}
             - name: KNOWLEDGEBASE_WALLET_URL
-              value: {{.Values.app.knowledgebase.walletUrl}}
+              value: {{.Values.app.knowledgebase.walleturl}}
             - name: DEFAULT_SIGNER_COMMON_NAME
               valueFrom:
                 secretKeyRef:
