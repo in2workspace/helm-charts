@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: in2workspace/in2-verifier-api
   # Overrides the image tag whose default is the chart appVersion.
-  tag: v1.1.0-snapshot
+  tag: v1.2.0-snapshot
   pullPolicy: Always
 
 imagePullSecrets: []
@@ -34,7 +34,7 @@ podSecurityContext: {}
 securityContext: {}
   # capabilities:
   #   drop:
-  #   - ALL
+#   - ALL
 # readOnlyRootFilesystem: true
 # runAsNonRoot: true
 # runAsUser: 1000
@@ -72,22 +72,22 @@ ingress:
       secretName: example-secret
 
 
-resources: {}
+resources:
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-# requests:
-#   cpu: 100m
-#   memory: 128Mi
+  limits:
+    cpu: 100m
+    memory: 192Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
 
 autoscaling:
   enabled: false
   minReplicas: 1
-  maxReplicas: 100
+  maxReplicas: 5
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: 80
 
@@ -111,43 +111,57 @@ tolerations: []
 affinity: {}
 
 app:
-  profile: test
-  internalServerPort: 8080
-  logLevel:
-    app: INFO
-    security: INFO
-    securityOauth2: INFO
-    webFilter: INFO
-  accessToken:
-    expirationUnitTime: MINUTES
-    expirationTime: 30
-  colors:
-    primary: "#14274A"
-    primaryContrast: "#ffffff"
-    secondary: "#00ADD3"
-    secondaryContrast: "#000000"
-  logoSrc: "img/dome_logo_white.png"
-  faviconSrc: "img/dome_logo_favicon.png"
-  idToken:
-    expirationUnitTime: MINUTES
-    expirationTime: 5
-  loginQrCode:
-    expirationUnitTime: MINUTES
-    expirationTime: 5
-  externalDomain: "https://example-external-domain.org"
-  clientsRepository:
-    uri: "https://raw.example-external-domain.com/path/to/file/filename.yaml"
-  trustedIssuerList:
-    uri: "https://example-external-domain.org/v4/issuers/"
-  revocationList:
-    uri: "https://raw.example-external-domain.com/path/to/file/filename.yaml"
-  privateKey:
-    value: your-private-key
-    existingSecret:
-      enabled: false
-      name: private-key-secret
-      key: private-key
-  verifierUiLoginUris:
-    onboardingUri: "https://knowledge-base.example.org"
-    supportUri: "https://ticketing.example.org"
-    walletUri: "https://wallet.example.org"
+  # todo
+  logging:
+    level:
+      # Sets logging level for Spring Security
+      org.springframework.security: INFO
+      # Sets logging level for web filters
+      org.springframework.web.filter: INFO
+      # Sets logging level for the custom package "es.in2.vcverifier"
+      es.in2.vcverifier: INFO
+
+  verifier:
+    frontend:
+      urls:
+        # Placeholder for onboarding URL (REQUIRED)
+        onboarding: "https://example.com/onboarding"
+        # Placeholder for support URL (REQUIRED)
+        support: "https://example.com/support"
+        # Placeholder for wallet URL (REQUIRED)
+        wallet: "https://example.com/wallet"
+      colors:
+        # Defines primary color for the frontend (OPTIONAL with default value)
+        primary: "#B22222"
+        # Defines contrasting text color for primary color (OPTIONAL with default value)
+        primaryContrast: "#000000"
+        # Defines secondary color for the frontend (OPTIONAL with default value)
+        secondary: "#00ADD3"
+        # Defines contrasting text color for secondary color (OPTIONAL with default value)
+        secondaryContrast: "#FFD700"
+      # Placeholder for logo source path (REQUIRED)
+      # This routes must point to internal folder: src/main/resources/static/img/<file_name.png>
+      logoSrc: dome_logo_white.png
+      # Placeholder for favicon source path (OPTIONAL)
+      # This routes must point to internal folder: src/main/resources/static/img/<file_name.png>
+      faviconSrc: dome_logo_favicon.png
+    backend:
+      # Placeholder for backend URL (REQUIRED)
+      url: "https://raw.githubusercontent.com"
+      identity:
+        # Placeholder for private key used in identity verification (REQUIRED)
+        privateKey:
+          value: your-private-key
+          existingSecret:
+            enabled: false
+            name: private-key-secret
+            key: private-key
+      trustFrameworks:
+        # Placeholder for the name of a trust framework (REQUIRED)
+        - name: DOME
+          # Placeholder for trusted issuers list URL
+          trustedIssuersListUrl: "https://example-external-domain.org/v4/issuers/"
+          # Placeholder for trusted services list URL
+          trustedServicesListUrl: "https://raw.example-external-domain.com/path/to/file/filename.yaml"
+          # Placeholder for revoked credentials list URL
+          revokedCredentialListUrl: "https://raw.example-external-domain.com/path/to/file/filename.yaml"

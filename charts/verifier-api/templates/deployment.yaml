@@ -36,88 +36,68 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ .Values.app.internalServerPort }}
+              containerPort: {{ include "verifier-api.internalServerPort" . }}
               protocol: TCP
           livenessProbe:
             httpGet:
               path: {{ .Values.livenessProbe.path }}
-              port: {{ .Values.app.internalServerPort }}
+              port: {{ include "verifier-api.internalServerPort" . }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
           readinessProbe:
             httpGet:
               path: {{ .Values.readinessProbe.path }}
-              port: {{ .Values.app.internalServerPort }}
+              port: {{ include "verifier-api.internalServerPort" . }}
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           env:
             - name: SERVER_PORT
-              value: {{ quote .Values.app.internalServerPort}}
+              value: {{ include "verifier-api.internalServerPort" . | quote }}
+            #todo
             - name: SPRING_PROFILES_ACTIVE
-              value: {{.Values.app.profile}}
+              value: {{ .Values.app.profile }}
             - name: LOGGING_LEVEL_ES_IN2_VCVERIFIER
-              value: {{.Values.app.logLevel.app}}
+              value: "{{ index .Values.app.logging.level "es.in2.vcverifier" }}"
             - name: LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY
-              value: {{.Values.app.logLevel.security}}
-            - name: LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY_OAUTH2
-              value: {{.Values.app.logLevel.securityOauth2}}
+              value: "{{ index .Values.app.logging.level "org.springframework.security" }}"
             - name: LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_WEB_FILTER
-              value: {{.Values.app.logLevel.webFilter}}
-            - name: SECURITY_AUTHORIZATION_SERVER
-              value: {{ .Values.app.externalDomain }}
-            - name: SECURITY_TOKEN_ACCESS_TOKEN_CRON_UNIT
-              value: {{ .Values.app.accessToken.expirationUnitTime }}
-            - name: SECURITY_TOKEN_ACCESS_TOKEN_EXPIRATION
-              value: {{ quote .Values.app.accessToken.expirationTime}}
-            - name: SECURITY_TOKEN_ID_TOKEN_CRON_UNIT
-              value: {{ .Values.app.idToken.expirationUnitTime }}
-            - name: SECURITY_TOKEN_ID_TOKEN_EXPIRATION
-              value: {{ quote .Values.app.idToken.expirationTime}}
-            - name: TRUST_FRAMEWORK_CLIENTS_REPOSITORY_URI
-              value: {{ .Values.app.clientsRepository.uri}}
-            - name: TRUST_FRAMEWORK_TRUSTED_ISSUER_LIST_URI
-              value: {{ .Values.app.trustedIssuerList.uri}}
-            - name: TRUST_FRAMEWORK_REVOCATION_LIST_URI
-              value: {{ .Values.app.revocationList.uri}}
-            - name: VERIFIER_UI_LOGIN_URIS_ONBOARDING_URI
-              value: {{ .Values.app.verifierUiLoginUris.onboardingUri }}
-            - name: VERIFIER_UI_LOGIN_URIS_SUPPORT_URI
-              value: {{ .Values.app.verifierUiLoginUris.supportUri }}
-            - name: VERIFIER_UI_LOGIN_URIS_WALLET_URI
-              value: {{ .Values.app.verifierUiLoginUris.walletUri }}
-            - name: SECURITY_LOGIN_CODE_EXPIRATION_PROPERTIES_CRON_UNIT
-              value: {{ .Values.app.loginQrCode.expirationUnitTime }}
-            - name: SECURITY_LOGIN_CODE_EXPIRATION_PROPERTIES_EXPIRATION
-              value: {{ quote .Values.app.loginQrCode.expirationTime}}
-            - name: VERIFIER_UI_CUSTOMIZATIONS_COLORS_PRIMARY
-              value: {{ .Values.app.colors.primary | quote }}
-            - name: VERIFIER_UI_CUSTOMIZATIONS_COLORS_PRIMARY_CONTRAST
-              value: {{ .Values.app.colors.primaryContrast | quote }}
-            - name: VERIFIER_UI_CUSTOMIZATIONS_COLORS_SECONDARY
-              value: {{ .Values.app.colors.secondary | quote }}
-            - name: VERIFIER_UI_CUSTOMIZATIONS_COLORS_SECONDARY_CONTRAST
-              value: {{ .Values.app.colors.secondaryContrast | quote }}
-            - name: VERIFIER_UI_CUSTOMIZATIONS_LOGO_SRC
-              value: {{ .Values.app.logoSrc }}
-            - name: VERIFIER_UI_CUSTOMIZATIONS_FAVICON_SRC
-              value: {{ .Values.app.faviconSrc }}
-
-            # PRIVATE KEY
-            - name: CRYPTO_PRIVATE_KEY
+              value: "{{ index .Values.app.logging.level "org.springframework.web.filter" }}"
+            - name: VERIFIER_FRONTEND_URLS_ONBOARDING
+              value: {{ .Values.app.verifier.frontend.urls.onboarding }}
+            - name: VERIFIER_FRONTEND_URLS_SUPPORT
+              value: {{ .Values.app.verifier.frontend.urls.support }}
+            - name: VERIFIER_FRONTEND_URLS_WALLET
+              value: {{ .Values.app.verifier.frontend.urls.wallet }}
+            - name: VERIFIER_FRONTEND_COLORS_PRIMARY
+              value: {{ .Values.app.verifier.frontend.colors.primary | quote }}
+            - name: VERIFIER_FRONTEND_COLORS_PRIMARY_CONTRAST
+              value: {{ .Values.app.verifier.frontend.colors.primaryContrast | quote }}
+            - name: VERIFIER_FRONTEND_COLORS_SECONDARY
+              value: {{ .Values.app.verifier.frontend.colors.secondary | quote }}
+            - name: VERIFIER_FRONTEND_COLORS_SECONDARY_CONTRAST
+              value: {{ .Values.app.verifier.frontend.colors.secondaryContrast | quote }}
+            - name: VERIFIER_FRONTEND_LOGO_SRC
+              value: {{ .Values.app.verifier.frontend.logoSrc }}
+            - name: VERIFIER_FRONTEND_FAVICON_SRC
+              value: {{ .Values.app.verifier.frontend.faviconSrc }}
+            - name: VERIFIER_BACKEND_URL
+              value: {{ .Values.app.verifier.backend.url }}
+            - name: VERIFIER_BACKEND_IDENTITY_PRIVATE_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ include "verifier-api.privateKey-secretName" . }}
                   key: {{ include "verifier-api.privateKey-privateKey" . }}
-          {{- with .Values.volumeMounts }}
+            - name: SPRING_CONFIG_ADDITIONAL_LOCATION
+              value: "/config/application.yaml"
           volumeMounts:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-      {{- with .Values.volumes }}
+            - name: config-volume
+              mountPath: /config
       volumes:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        - name: config-volume
+          configMap:
+            name: verifier-api-config
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

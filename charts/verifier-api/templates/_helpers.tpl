@@ -65,17 +65,29 @@ Create the name of the service account to use
 Support for private key secret
 */}}
 {{- define "verifier-api.privateKey-secretName" -}}
-    {{- if .Values.app.privateKey.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.privateKey.existingSecret.name $) -}}
+    {{- if .Values.app.verifier.backend.identity.privateKey.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.verifier.backend.identity.privateKey.existingSecret.name $) -}}
     {{- else -}}
         {{- printf "verifier-api-private-key-secret" -}}
     {{- end -}}
 {{- end -}}
 
 {{- define "verifier-api.privateKey-privateKey" -}}
-    {{- if .Values.app.privateKey.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.privateKey.existingSecret.key $) -}}
+    {{- if .Values.app.verifier.backend.identity.privateKey.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.verifier.backend.identity.privateKey.existingSecret.key $) -}}
     {{- else -}}
         {{- printf "privateKey" -}}
+    {{- end -}}
+{{- end -}}
+
+{{/*
+Defines internal server port, which should not be modified by user
+If internalServerPort is not set, 8080 will be assigned
+*/}}
+{{- define "verifier-api.internalServerPort" -}}
+    {{- if .Values.internalServerPort -}}
+        {{- .Values.internalServerPort -}}
+    {{- else -}}
+        {{- printf "8080" -}}
     {{- end -}}
 {{- end -}}
