@@ -56,13 +56,13 @@ spec:
             - name: SERVER_PORT
               value: {{ include "verifier-api.internalServerPort" . | quote }}
             - name: SPRING_PROFILES_ACTIVE
-              value: {{.Values.app.profile}}
+              value: {{ .Values.app.profile }}
             - name: LOGGING_LEVEL_ES_IN2_VCVERIFIER
-              value: {{.Values.app.logging.level.app}}
+              value: "{{ index .Values.app.logging.level "es.in2.vcverifier" }}"
             - name: LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY
-              value: {{.Values.app.logging.level.security}}
+              value: "{{ index .Values.app.logging.level "org.springframework.security" }}"
             - name: LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_WEB_FILTER
-              value: {{.Values.app.logging.level.webFilter}}
+              value: "{{ index .Values.app.logging.level "org.springframework.web.filter" }}"
             - name: VERIFIER_FRONTEND_URLS_ONBOARDING
               value: {{ .Values.app.verifier.frontend.urls.onboarding }}
             - name: VERIFIER_FRONTEND_URLS_SUPPORT
