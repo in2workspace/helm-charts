@@ -55,6 +55,7 @@ spec:
           env:
             - name: SERVER_PORT
               value: {{ include "verifier-api.internalServerPort" . | quote }}
+            #todo
             - name: SPRING_PROFILES_ACTIVE
               value: {{ .Values.app.profile }}
             - name: LOGGING_LEVEL_ES_IN2_VCVERIFIER
@@ -90,7 +91,6 @@ spec:
                   key: {{ include "verifier-api.privateKey-privateKey" . }}
             - name: SPRING_CONFIG_ADDITIONAL_LOCATION
               value: "/config/application.yaml"
-          # todo correct indentation?
           volumeMounts:
             - name: config-volume
               mountPath: /config

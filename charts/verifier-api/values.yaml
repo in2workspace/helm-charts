@@ -132,26 +132,26 @@ app:
         wallet: "https://example.com/wallet"
       colors:
         # Defines primary color for the frontend (OPTIONAL with default value)
-        primary: "#14274A"
+        primary: "#B22222"
         # Defines contrasting text color for primary color (OPTIONAL with default value)
-        primaryContrast: "#ffffff"
+        primaryContrast: "#000000"
         # Defines secondary color for the frontend (OPTIONAL with default value)
         secondary: "#00ADD3"
         # Defines contrasting text color for secondary color (OPTIONAL with default value)
-        secondaryContrast: "#000000"
+        secondaryContrast: "#FFD700"
       # Placeholder for logo source path (REQUIRED)
       # This routes must point to internal folder: src/main/resources/static/img/<file_name.png>
-      logoSrc: logo.png
+      logoSrc: dome_logo_white.png
       # Placeholder for favicon source path (OPTIONAL)
       # This routes must point to internal folder: src/main/resources/static/img/<file_name.png>
-      faviconSrc: favicon.ico
+      faviconSrc: dome_logo_favicon.png
     backend:
       # Placeholder for backend URL (REQUIRED)
       url: "https://raw.githubusercontent.com"
       identity:
         # Placeholder for private key used in identity verification (REQUIRED)
         privateKey:
-          value: "0x73e509a7681d4a395b1ced75681c4dc4020dbab02da868512276dd766733d5b5"
+          value: your-private-key
           existingSecret:
             enabled: false
             name: private-key-secret
@@ -160,16 +160,8 @@ app:
         # Placeholder for the name of a trust framework (REQUIRED)
         - name: DOME
           # Placeholder for trusted issuers list URL
-          trustedIssuersListUrl: "https://raw.githubusercontent.com"
+          trustedIssuersListUrl: "https://example-external-domain.org/v4/issuers/"
           # Placeholder for trusted services list URL
-          trustedServicesListUrl: "https://raw.githubusercontent.com/in2workspace/in2-dome-gitops/refs/heads/main/trust-framework/trusted_services_list.yaml"
+          trustedServicesListUrl: "https://raw.example-external-domain.com/path/to/file/filename.yaml"
           # Placeholder for revoked credentials list URL
-          #TODO
-          revokedCredentialListUrl: "https://raw.githubusercontent.com/in2workspace/in2-dome-gitops/refs/heads/main/trust-framework/revoked_credential_list.yaml"
-        - name: newnewOTHERTRUSTFRAMEWORK
-          # Placeholder for trusted issuers list URL
-          trustedIssuersListUrl: "othernovaurl"
-          # Placeholder for trusted services list URL
-          trustedServicesListUrl:
-          # Placeholder for revoked credentials list URL
-          revokedCredentialListUrl:
+          revokedCredentialListUrl: "https://raw.example-external-domain.com/path/to/file/filename.yaml"
