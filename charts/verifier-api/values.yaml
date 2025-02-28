@@ -132,22 +132,24 @@ app:
         wallet: "https://example.com/wallet"
       colors:
         # Defines primary color for the frontend (OPTIONAL with default value)
-        primary: "#B22222"
+        # todo test pursposes color
+        primary: "#14274A"
         # Defines contrasting text color for primary color (OPTIONAL with default value)
         primaryContrast: "#000000"
         # Defines secondary color for the frontend (OPTIONAL with default value)
+        # todo test pursposes color
         secondary: "#00ADD3"
         # Defines contrasting text color for secondary color (OPTIONAL with default value)
-        secondaryContrast: "#FFD700"
+        secondaryContrast: "#000000"
       # Placeholder for logo source path (REQUIRED)
       # This routes must point to internal folder: src/main/resources/static/img/<file_name.png>
       logoSrc: dome_logo_white.png
       # Placeholder for favicon source path (OPTIONAL)
       # This routes must point to internal folder: src/main/resources/static/img/<file_name.png>
-      faviconSrc: dome_logo_favicon.png
+      faviconSrc:
     backend:
       # Placeholder for backend URL (REQUIRED)
-      url: "https://raw.githubusercontent.com"
+      url: "https://example-url.org"
       identity:
         # Placeholder for private key used in identity verification (REQUIRED)
         privateKey:
