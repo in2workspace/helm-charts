@@ -69,6 +69,8 @@ spec:
               value: "{{ .Values.app.walletUrlTest.scheme }}://{{ .Values.app.walletUrlTest.host }}{{ if not .Values.app.walletUrlTest.externalService }}:{{ .Values.app.walletUrlTest.internalPort }}{{ end }}{{ .Values.app.walletUrlTest.path }}"
             - name: KNOWLEDGEBASE_URL
               value: "{{ .Values.app.knowledgebaseUrl.scheme }}://{{ .Values.app.knowledgebaseUrl.host }}{{ if not .Values.app.knowledgebaseUrl.externalService }}:{{ .Values.app.knowledgebaseUrl.internalPort }}{{ end }}{{ .Values.app.knowledgebaseUrl.path }}"
+            - name: KNOWLEDGE_WALLET_PATH
+              value: {{ .Values.app.knowledgebaseUrl.walletPath }}
             - name: PROFILE
               value: {{ .Values.app.profile }}
             - name: PROCEDURES
