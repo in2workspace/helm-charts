@@ -3646,6 +3646,21 @@ entries:
   verifier-api:
   - apiVersion: v2
     appVersion: v1.1.0
+    created: "2025-03-05T11:28:02.483257684Z"
+    description: A Helm chart for Kubernetes
+    digest: 808e349f6da1ab835b02792dde0f1a6294fe6630c0dad963504e52370bf98a0e
+    maintainers:
+    - email: domesupport@in2.es
+      name: IN2 Team
+    name: verifier-api
+    sources:
+    - https://github.com/in2workspace/in2-verifier-api
+    type: application
+    urls:
+    - https://github.com/in2workspace/helm-charts/releases/download/verifier-api-1.2.11/verifier-api-1.2.11.tgz
+    version: 1.2.11
+  - apiVersion: v2
+    appVersion: v1.1.0
     created: "2025-03-05T10:34:47.953600351Z"
     description: A Helm chart for Kubernetes
     digest: 32f5bae79a93261beae2cca854752726f19194c9c24fe215bc68e7dc17928113
@@ -4642,4 +4657,4 @@ entries:
     urls:
     - https://in2workspace.github.io/helm-charts/wallet-api-1.0.0.tgz
     version: 1.0.0
-generated: "2025-03-05T10:34:47.953912345Z"
+generated: "2025-03-05T11:28:02.483616887Z"
