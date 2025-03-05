@@ -76,13 +76,13 @@ ingress:
 # We usually recommend not to specify default resources and to leave this as a conscious
 # choice for the user. This also increases chances charts run on environments with little
 # resources, such as Minikube.
-resources:
-  limits:
-    cpu: 220m
-    memory: 192Mi
-  requests:
-    cpu: 180m
-    memory: 128Mi
+#resources:
+#  limits:
+#    cpu: 220m
+#    memory: 192Mi
+#  requests:
+#    cpu: 180m
+#    memory: 128Mi
 
 autoscaling:
   enabled: false
