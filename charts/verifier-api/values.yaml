@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: in2workspace/in2-verifier-api
   # Overrides the image tag whose default is the chart appVersion.
-  tag: v1.2.0-snapshot
+  tag: v1.2.1-snapshot
   pullPolicy: Always
 
 imagePullSecrets: []
@@ -141,7 +141,7 @@ app:
         secondaryContrast: "#00ADD3"
       # Placeholder for logo source path (REQUIRED)
       # This routes must point to internal folder: src/main/resources/static/img/<file_name.png>
-      logoSrc: dome_logo_white.png
+      logoSrc: dome_logo_white.svg
       # Placeholder for favicon source path (OPTIONAL)
       # This routes must point to internal folder: src/main/resources/static/img/<file_name.png>
       faviconSrc:
