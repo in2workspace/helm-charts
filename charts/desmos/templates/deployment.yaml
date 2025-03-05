@@ -126,6 +126,6 @@ spec:
               value: {{ .Values.app.trustedAccessNodesList.customTrustedList }}
             {{- end }}
             {{- if .Values.app.verifier.enableCustomVerifier }}
-            - name: VERIFIER_EXTERNAL_DOMAIN
+            - name: VERIFIER_URL
               value: {{ .Values.app.verifier.customVerifier }}
             {{- end }}
