@@ -116,7 +116,7 @@ spec:
                 secretKeyRef:
                   name: {{ include "desmos.privateKey-secretName" . }}
                   key: {{ include "desmos.privateKey-privateKey" . }}
-            - name: LEAR_CREDENTIAL_MACHINE_IN_BASE64
+            - name: SECURITY_LEAR_CREDENTIAL_MACHINE_IN_BASE64
               valueFrom:
                 secretKeyRef:
                   name: {{ include "desmos.learCredentialMachine-secretName" . }}
