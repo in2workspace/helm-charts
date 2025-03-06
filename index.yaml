@@ -3,6 +3,21 @@ entries:
   desmos:
   - apiVersion: v2
     appVersion: v1.0.0
+    created: "2025-03-06T11:46:42.574292599Z"
+    description: A Helm chart for Kubernetes
+    digest: 9b7901da8cfc15c567d8a9899712eee9ff2c23d6d2f688fd96204f01235dea34
+    maintainers:
+    - email: domesupport@in2.es
+      name: IN2 Team
+    name: desmos
+    sources:
+    - https://github.com/in2workspace/desmos
+    type: application
+    urls:
+    - https://github.com/in2workspace/helm-charts/releases/download/desmos-1.0.8/desmos-1.0.8.tgz
+    version: 1.0.8
+  - apiVersion: v2
+    appVersion: v1.0.0
     created: "2025-03-06T08:02:32.550550273Z"
     description: A Helm chart for Kubernetes
     digest: 0053258f6065e87f41e1f0e2cf1ff9121ca94b4ad2189cc6292b33813b491a0e
@@ -4672,4 +4687,4 @@ entries:
     urls:
     - https://in2workspace.github.io/helm-charts/wallet-api-1.0.0.tgz
     version: 1.0.0
-generated: "2025-03-06T08:02:32.550893805Z"
+generated: "2025-03-06T11:46:42.574659836Z"
