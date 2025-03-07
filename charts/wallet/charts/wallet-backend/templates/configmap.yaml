@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-backend-cm
+data:
+  TENANT_NAME: "{{ .Values.global.tenantName | quote }}"
+  ENVIRONMENT: "{{ .Values.global.environment | quote }}"
+  KEYCLOAK_EXTERNAL_DOMAIN: "{{ include "keycloak.domain" . }}"
+  KEYCLOAK_REALM_PATH: "/realms/{{ .Values.global.tenantName | quote }}"
+  DB_HOST: "tenant-{{ .Values.global.tenantName | lower }}-postgres"
+  DB_NAME: "{{ .Values.global.tenantName | quote }}"
+  DB_URL: "r2dbc:postgresql://tenant-{{ .Values.global.tenantName | lower }}-postgres:{{ .Values.app.db.port }}/{{ .Values.global.tenantName | quote }}?schema=wallet"
+  FLYWAY_URL: "jdbc:postgresql://tenant-{{ .Values.global.tenantName | lower }}-postgres:{{ .Values.app.db.port }}/{{ .Values.global.tenantName | quote }}?schema=wallet"

@@ -116,59 +116,68 @@ Support for existing database secret
 Support for existing database secret
 */}}
 {{- define "wallet-api.db-secretName" -}}
-    {{- if .Values.db.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.db.existingSecret.name $) -}}
+    {{- if .Values.app.db.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.db.existingSecret.name $) -}}
     {{- else -}}
         {{- printf "wallet-api-db-secret" -}}
     {{- end -}}
 {{- end -}}
 
 {{- define "wallet-api.db-passwordKey" -}}
-    {{- if .Values.db.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.db.existingSecret.key $) -}}
+    {{- if .Values.app.db.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.db.existingSecret.key $) -}}
     {{- else -}}
         {{- printf "password" -}}
     {{- end -}}
 {{- end -}}
 
+{{/* todo: revisar las validaciones porque algunos campos sean externos o internos siguen siendo dinámicos */}}
 {{/* Validate that the required values are set when db.externalService is true or false. */}}
-{{- define "validateDatabaseConfig" -}}
-{{- if .Values.db.externalService }}
-  {{/*Cuando externalService es verdadero, validamos los campos*/}}
-  {{- if empty .Values.db.host }}
-    {{ fail "El valor 'db.host' no puede estar vacío cuando 'db.externalService' está habilitado." }}
-  {{- end }}
-  {{- if empty .Values.db.name }}
-    {{ fail "El valor 'db.name' no puede estar vacío cuando 'db.externalService' está habilitado." }}
-  {{- end }}
-  {{- if empty .Values.db.schema }}
-    {{ fail "El valor 'db.schema' no puede estar vacío cuando 'db.externalService' está habilitado." }}
-  {{- end }}
-  {{- if empty .Values.db.username }}
-    {{ fail "El valor 'db.username' no puede estar vacío cuando 'db.externalService' está habilitado." }}
-  {{- end }}
-  {{- if empty .Values.db.password }}
-    {{ fail "El valor 'db.password' no puede estar vacío cuando 'db.externalService' está habilitado." }}
-  {{- end }}
-{{- else }}
-  {{/* Cuando externalService es falso, validamos que los valores sean específicos */}}
-  {{- if ne .Values.db.host "wallet-postgres" }}
-    {{ fail "El valor 'db.host' debe ser 'localhost' cuando 'db.externalService' está deshabilitado." }}
-  {{- end }}
-  {{- if ne .Values.db.port 5432 }}
-    {{ fail "El valor 'db.port' debe ser '5432' cuando 'db.externalService' está deshabilitado." }}
-  {{- end }}
-  {{- if ne .Values.db.name "wallet" }}
-    {{ fail "El valor 'db.name' debe ser 'issuer' cuando 'db.externalService' está deshabilitado." }}
-  {{- end }}
-  {{- if ne .Values.db.schema "wallet" }}
-    {{ fail "El valor 'db.schema' debe ser 'public' cuando 'db.externalService' está deshabilitado." }}
-  {{- end }}
-  {{- if ne .Values.db.username "postgres" }}
-    {{ fail "El valor 'db.username' debe ser 'postgres' cuando 'db.externalService' está deshabilitado." }}
-  {{- end }}
-  {{- if empty .Values.db.password }}
-    {{ fail "El valor 'db.password' no puede estar vacío cuando 'db.externalService' está deshabilitado." }}
-  {{- end }}
+{{/*{{- define "validateDatabaseConfig" -}}*/}}
+{{/*{{- if .Values.app.db.externalService }}*/}}
+{{/*  */}}{{/*Cuando externalService es verdadero, validamos los campos*/}}
+{{/*  {{- if empty .Values.app.db.host }}*/}}
+{{/*    {{ fail "El valor 'db.host' no puede estar vacío cuando 'db.externalService' está habilitado." }}*/}}
+{{/*  {{- end }}*/}}
+{{/*  {{- if empty .Values.app.db.name }}*/}}
+{{/*    {{ fail "El valor 'db.name' no puede estar vacío cuando 'db.externalService' está habilitado." }}*/}}
+{{/*  {{- end }}*/}}
+{{/*  {{- if empty .Values.app.db.schema }}*/}}
+{{/*    {{ fail "El valor 'db.schema' no puede estar vacío cuando 'db.externalService' está habilitado." }}*/}}
+{{/*  {{- end }}*/}}
+{{/*  {{- if empty .Values.app.db.username }}*/}}
+{{/*    {{ fail "El valor 'db.username' no puede estar vacío cuando 'db.externalService' está habilitado." }}*/}}
+{{/*  {{- end }}*/}}
+{{/*  {{- if empty .Values.app.db.password }}*/}}
+{{/*    {{ fail "El valor 'db.password' no puede estar vacío cuando 'db.externalService' está habilitado." }}*/}}
+{{/*  {{- end }}*/}}
+{{/*{{- else }}*/}}
+{{/*  */}}{{/* Cuando externalService es falso, validamos que los valores sean específicos */}}
+{{/*  {{- if ne .Values.app.db.host "wallet-postgres" }}*/}}
+{{/*    {{ fail "El valor 'db.host' debe ser 'localhost' cuando 'db.externalService' está deshabilitado." }}*/}}
+{{/*  {{- end }}*/}}
+{{/*  {{- if ne .Values.app.db.port 5432 }}*/}}
+{{/*    {{ fail "El valor 'db.port' debe ser '5432' cuando 'db.externalService' está deshabilitado." }}*/}}
+{{/*  {{- end }}*/}}
+{{/*  {{- if ne .Values.app.db.name "wallet" }}*/}}
+{{/*    {{ fail "El valor 'db.name' debe ser 'issuer' cuando 'db.externalService' está deshabilitado." }}*/}}
+{{/*  {{- end }}*/}}
+{{/*  {{- if ne .Values.app.db.schema "wallet" }}*/}}
+{{/*    {{ fail "El valor 'db.schema' debe ser 'public' cuando 'db.externalService' está deshabilitado." }}*/}}
+{{/*  {{- end }}*/}}
+{{/*  {{- if ne .Values.app.db.username "postgres" }}*/}}
+{{/*    {{ fail "El valor 'db.username' debe ser 'postgres' cuando 'db.externalService' está deshabilitado." }}*/}}
+{{/*  {{- end }}*/}}
+{{/*  {{- if empty .Values.app.db.password }}*/}}
+{{/*    {{ fail "El valor 'db.password' no puede estar vacío cuando 'db.externalService' está deshabilitado." }}*/}}
+{{/*  {{- end }}*/}}
+{{/*{{- end }}*/}}
+{{/*{{- end }}*/}}
+
+{{- define "keycloak.domain" -}}
+{{- if eq .Values.global.environment "prod" -}}
+    keycloak.{{ .Values.global.externalDomain }}
+{{- else -}}
+    keycloak-{{ .Values.global.environment }}.{{ .Values.global.externalDomain }}
 {{- end }}
 {{- end }}

@@ -2,9 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "wallet-api.fullname" . }}
-  namespace: {{ $.Release.Namespace | quote }}
   labels:
-    {{- include "wallet-api.labels" . | nindent 4 }}
+      {{- include "wallet-api.labels" . | nindent 4 }}
+  namespace: {{ $.Release.Namespace | quote }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
@@ -20,6 +20,9 @@ spec:
       {{- end }}
       labels:
         {{- include "wallet-api.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -36,99 +39,136 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ .Values.app.internalServerPort }}
+              containerPort: {{ .Values.service.port }}
               protocol: TCP
           livenessProbe:
-            httpGet:
-              path: {{ .Values.livenessProbe.path }}
-              port: {{ .Values.app.internalServerPort }}
-            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
           readinessProbe:
-            httpGet:
-              path: {{ .Values.readinessProbe.path }}
-              port: {{ .Values.app.internalServerPort }}
-            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
-            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
           env:
             - name: SPRING_PROFILES_ACTIVE
-              value: {{.Values.app.profile}}
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-backend-cm
+                  key: ENVIRONMENT
             - name: LOGGING_LEVEL_ES_IN2_WALLET_API
-              value: {{.Values.app.logLevel}}
+              value: {{ .Values.app.logLevel }}
             - name: SPRING_WEBFLUX_BASEPATH
-              value: {{.Values.app.basePath}}
+              value: "/api"
             # AUTH SERVER
             - name: AUTH_SERVER_EXTERNAL_URL_SCHEME
-              value: {{.Values.app.authServer.external.scheme}}
+              value: "https"
             - name: AUTH_SERVER_EXTERNAL_URL_DOMAIN
-              value: {{.Values.app.authServer.external.domain}}
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-backend-cm
+                  key: KEYCLOAK_EXTERNAL_DOMAIN
             - name: AUTH_SERVER_EXTERNAL_URL_PORT
-              value: {{quote .Values.app.authServer.external.port}}
+              value: "443"
             - name: AUTH_SERVER_EXTERNAL_URL_PATH
-              value: {{.Values.app.authServer.external.path}}
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-backend-cm
+                  key: KEYCLOAK_REALM_PATH
             - name: AUTH_SERVER_INTERNAL_URL_SCHEME
-              value: {{.Values.app.authServer.internal.scheme}}
+              value: "http"
             - name: AUTH_SERVER_INTERNAL_URL_DOMAIN
-              value: {{.Values.app.authServer.internal.domain}}
+              value: "keycloak-wallet"
             - name: AUTH_SERVER_INTERNAL_URL_PORT
-              value: {{quote .Values.app.authServer.internal.port}}
+              value: "8080"
             - name: AUTH_SERVER_INTERNAL_URL_PATH
-              value: {{.Values.app.authServer.internal.path}}
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-backend-cm
+                  key: KEYCLOAK_REALM_PATH
             - name: AUTH_SERVER_JWT_DECODER_PATH
-              value: {{.Values.app.authServer.jwtDecoderPath}}
+              value: "/protocol/openid-connect/certs"
             # EBSI TESTS
             - name: EBSI_TEST_URL
-              value: {{.Values.app.ebsiTest.url}}
+              value: {{ .Values.app.ebsiTest.url }}
             - name: EBSI_TEST_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
+                  # fixme: debe tener el nombre del tenant dinámicamente. Revisar en helpers
                   name: {{ include "wallet-api.clientSecretName" . }}
                   key: {{ include "wallet-api.client-passwordKey" . }}
             - name: EBSI_TEST_CLIENT_ID
-              value: {{.Values.app.ebsiTest.client.id}}
+              value: {{ .Values.app.ebsiTest.client.id }}
             - name: EBSI_TEST_USERNAME
-              value: {{.Values.app.ebsiTest.userData.name}}
+              value: {{ .Values.app.ebsiTest.userData.name }}
             - name: EBSI_TEST_PASSWORD
               valueFrom:
                 secretKeyRef:
+                  # fixme: debe tener el nombre del tenant dinámicamente. Revisar en helpers
                   name: {{ include "wallet-api.userSecretName" . }}
                   key: {{ include "wallet-api.user-passwordKey" . }}
             # VAULT
             - name: VAULT_PROVIDER_NAME
-              value: {{.Values.app.vault.provider}}
+              value: {{ .Values.app.vault.provider }}
             - name: HASHICORP_VAULT_HOST
-              value: {{.Values.app.vault.host}}
+              value: {{ .Values.app.vault.host }}
             - name: HASHICORP_VAULT_SCHEME
-              value: {{.Values.app.vault.scheme}}
+              value: {{ .Values.app.vault.scheme }}
             - name: HASHICORP_VAULT_PORT
-              value: {{quote .Values.app.vault.port}}
+              value: {{ quote .Values.app.vault.port }}
             - name: HASHICORP_VAULT_TOKEN
               valueFrom:
                 secretKeyRef:
+                  # fixme: debe tener el nombre del tenant dinámicamente. Revisar en helpers
                   name: {{ include "wallet-api.vaultTokenSecretName" . }}
                   key: {{ include "wallet-api.user-tokenKey" . }}
             # DATABASE
             - name: SPRING_R2DBC_URL
-              value: "r2dbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}?schema={{ .Values.db.schema }}"
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-backend-cm
+                  key: DB_URL
+              # todo: el valor del schema siempre será wallet, el usuario no debe poder modificarlo
             - name: DB_SCHEMA
-              value: {{ .Values.db.schema }}
+              value: {{ .Values.app.db.schema }}
             - name: SPRING_R2DBC_USERNAME
-              value: {{ .Values.db.username }}
+              value: {{ .Values.app.db.username }}
             - name: SPRING_R2DBC_PASSWORD
               valueFrom:
+                # fixme: debe tener el nombre del tenant dinámicamente. Revisar en helpers
                 secretKeyRef:
                   name: {{ include "wallet-api.db-secretName" . }}
                   key: {{ include "wallet-api.db-passwordKey" . }}
             - name: SPRING_FLYWAY_URL
-              value: "jdbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}?schema={{ .Values.db.schema }}"
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-backend-cm
+                  key: FLYWAY_URL
             - name: SPRING_FLYWAY_USER
-              value: {{ .Values.db.username }}
+              value: {{ .Values.app.db.username }}
+              # todo: el valor del schema siempre será wallet, el usuario no debe poder modificarlo
             - name: SPRING_FLYWAY_DEFAULT_SCHEMA
-              value: {{ .Values.db.schema }}
+              value: {{ .Values.app.db.schema }}
             - name: SPRING_FLYWAY_PASSWORD
               valueFrom:
+                # fixme: debe tener el nombre del tenant dinámicamente. Revisar en helpers
                 secretKeyRef:
                   name: {{ include "wallet-api.db-secretName" . }}
                   key: {{ include "wallet-api.db-passwordKey" . }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- with .Values.volumeMounts }}
+          volumeMounts:
+            {- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.volumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
