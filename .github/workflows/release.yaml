@@ -47,10 +47,11 @@ jobs:
           helm repo update
           
           CHARTS=$(find charts -mindepth 1 -maxdepth 1 -type d -printf "%f\n")
-      
+          
           for CHART in $CHARTS; do
             if [ -d "charts/$CHART" ]; then
               echo "📦 Building dependencies for $CHART"
+              helm dependency update "charts/$CHART"
               helm dependency build "charts/$CHART"
             fi
           done
