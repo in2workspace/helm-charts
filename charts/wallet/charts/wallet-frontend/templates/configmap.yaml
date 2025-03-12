@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-frontend-cm
+  labels:
+    {{- include "wallet-frontend.labels" . | nindent 4 }}
+data:
+  TENANT_NAME: "{{ .Values.global.tenantName }}"
+  ENVIRONMENT: "{{ .Values.global.environment }}"
+  KEYCLOAK_EXTERNAL_DOMAIN: "https://{{ include "keycloak.domain" . | trim }}"
+  KEYCLOAK_REALM_PATH: "/realms/{{ .Values.global.tenantName }}-wallet"
+  WALLET_BACKEND_URL: "https://{{ include "wallet-backend.domain" . | trim }}"
+  WEBSOCKET_URL: "wss://{{ include "wallet-backend.domain" . | trim }}"
+  LOGO_SRC: "{{ include "wallet-frontend.logoSrc" . | trim }}"

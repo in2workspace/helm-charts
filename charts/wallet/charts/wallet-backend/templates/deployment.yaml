@@ -1,0 +1,183 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "wallet-backend.fullname" . }}
+  labels:
+      {{- include "wallet-backend.labels" . | nindent 4 }}
+  namespace: {{ $.Release.Namespace | quote }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "wallet-backend.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "wallet-backend.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "wallet-backend.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.livenessProbe.httpGet.path }}
+              port: {{ .Values.livenessProbe.httpGet.port }}
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.readinessProbe.httpGet.path }}
+              port: {{ .Values.readinessProbe.httpGet.port }}
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-backend-cm
+                  key: ENVIRONMENT
+            - name: LOGGING_LEVEL_ES_IN2_WALLET_API
+              value: {{ .Values.app.logLevel }}
+            - name: SPRING_WEBFLUX_BASEPATH
+              value: "/api"
+            # AUTH SERVER
+            - name: AUTH_SERVER_EXTERNAL_URL_SCHEME
+              value: "https"
+            - name: AUTH_SERVER_EXTERNAL_URL_DOMAIN
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-backend-cm
+                  key: KEYCLOAK_EXTERNAL_DOMAIN
+            - name: AUTH_SERVER_EXTERNAL_URL_PORT
+              value: "443"
+            - name: AUTH_SERVER_EXTERNAL_URL_PATH
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-backend-cm
+                  key: KEYCLOAK_REALM_PATH
+              # http://keycloak.iam.svc.cluster.local:80
+            - name: AUTH_SERVER_INTERNAL_URL_SCHEME
+              value: "http"
+            - name: AUTH_SERVER_INTERNAL_URL_DOMAIN
+              value: "keycloak-proxy"
+            - name: AUTH_SERVER_INTERNAL_URL_PORT
+              value: "80"
+            - name: AUTH_SERVER_INTERNAL_URL_PATH
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-backend-cm
+                  key: KEYCLOAK_REALM_PATH
+            - name: AUTH_SERVER_JWT_DECODER_PATH
+              value: "/protocol/openid-connect/certs"
+            # EBSI TESTS
+            - name: EBSI_TEST_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-backend-cm
+                  key: EBSI_TEST_URL
+            - name: EBSI_TEST_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.app.ebsiTest.client.existingSecret.name }}
+                  key: {{ .Values.app.ebsiTest.client.existingSecret.key }}
+            - name: EBSI_TEST_CLIENT_ID
+              value: {{ .Values.app.ebsiTest.client.id }}
+            - name: EBSI_TEST_USERNAME
+              value: {{ .Values.app.ebsiTest.userData.name }}
+            - name: EBSI_TEST_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.app.ebsiTest.userData.existingSecret.name }}
+                  key: {{ .Values.app.ebsiTest.userData.existingSecret.key }}
+            # VAULT
+            - name: VAULT_PROVIDER_NAME
+              value: {{ .Values.app.vault.provider }}
+            - name: HASHICORP_VAULT_HOST
+              value: {{ .Values.app.vault.host }}
+            - name: HASHICORP_VAULT_SCHEME
+              value: {{ .Values.app.vault.scheme }}
+            - name: HASHICORP_VAULT_PORT
+              value: {{ quote .Values.app.vault.port }}
+            - name: HASHICORP_VAULT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.app.vault.existingSecret.name }}
+                  key: {{ .Values.app.vault.existingSecret.key }}
+            # DATABASE
+            - name: SPRING_R2DBC_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-backend-cm
+                  key: DB_URL
+              # todo: el valor del schema siempre será wallet, el usuario no debe poder modificarlo
+            - name: DB_SCHEMA
+              value: {{ .Values.app.db.schema }}
+            - name: SPRING_R2DBC_USERNAME
+              value: {{ .Values.app.db.username }}
+            - name: SPRING_R2DBC_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.app.db.existingSecret.name }}
+                  key: {{ .Values.app.db.existingSecret.key }}
+            - name: SPRING_FLYWAY_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-backend-cm
+                  key: FLYWAY_URL
+            - name: SPRING_FLYWAY_USER
+              value: {{ .Values.app.db.username }}
+              # todo: el valor del schema siempre será wallet, el usuario no debe poder modificarlo
+            - name: SPRING_FLYWAY_DEFAULT_SCHEMA
+              value: {{ .Values.app.db.schema }}
+            - name: SPRING_FLYWAY_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.app.db.existingSecret.name }}
+                  key: {{ .Values.app.db.existingSecret.key }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- with .Values.volumeMounts }}
+          volumeMounts:
+            {- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.volumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
