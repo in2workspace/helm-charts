@@ -2,12 +2,15 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}-backend-cm
+  labels:
+    {{- include "wallet-frontend.labels" . | nindent 4 }}
 data:
-  TENANT_NAME: "{{ .Values.global.tenantName | quote }}"
-  ENVIRONMENT: "{{ .Values.global.environment | quote }}"
-  KEYCLOAK_EXTERNAL_DOMAIN: "{{ include "keycloak.domain" . }}"
-  KEYCLOAK_REALM_PATH: "/realms/{{ .Values.global.tenantName | quote }}"
+  TENANT_NAME: "{{ .Values.global.tenantName }}"
+  ENVIRONMENT: "{{ .Values.global.environment }}"
+  KEYCLOAK_EXTERNAL_DOMAIN: "{{ include "keycloak.domain" . | trim }}"
+  KEYCLOAK_REALM_PATH: "/realms/{{ .Values.global.tenantName }}-wallet"
   DB_HOST: "tenant-{{ .Values.global.tenantName | lower }}-postgres"
-  DB_NAME: "{{ .Values.global.tenantName | quote }}"
-  DB_URL: "r2dbc:postgresql://tenant-{{ .Values.global.tenantName | lower }}-postgres:{{ .Values.app.db.port }}/{{ .Values.global.tenantName | quote }}?schema=wallet"
-  FLYWAY_URL: "jdbc:postgresql://tenant-{{ .Values.global.tenantName | lower }}-postgres:{{ .Values.app.db.port }}/{{ .Values.global.tenantName | quote }}?schema=wallet"
+  DB_NAME: "{{ .Values.global.tenantName }}"
+  DB_URL: "r2dbc:postgresql://tenant-{{ .Values.global.tenantName | lower }}-postgresql:{{ .Values.app.db.port | default 5432 }}/{{ .Values.global.tenantName }}?schema=wallet"
+  FLYWAY_URL: "jdbc:postgresql://tenant-{{ .Values.global.tenantName | lower }}-postgresql:{{ .Values.app.db.port | default 5432 }}/{{ .Values.global.tenantName }}?schema=wallet"
+  EBSI_TEST_URL: "https://{{ include "keycloak.domain" . | trim }}/realms/{{ .Values.global.tenantName }}-wallet/protocol/openid-connect/token"

@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "wallet-api.name" -}}
+{{- define "wallet-backend.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "wallet-api.fullname" -}}
+{{- define "wallet-backend.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,16 +26,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "wallet-api.chart" -}}
+{{- define "wallet-backend.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "wallet-api.labels" -}}
-helm.sh/chart: {{ include "wallet-api.chart" . }}
-{{ include "wallet-api.selectorLabels" . }}
+{{- define "wallet-backend.labels" -}}
+helm.sh/chart: {{ include "wallet-backend.chart" . }}
+{{ include "wallet-backend.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -45,134 +45,64 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "wallet-api.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "wallet-api.name" . }}
+{{- define "wallet-backend.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "wallet-backend.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "wallet-api.serviceAccountName" -}}
+{{- define "wallet-backend.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "wallet-api.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "wallet-backend.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
 
 {{/*
-Support for existing database secret 
+Support for existing secrets
 */}}
-{{- define "wallet-api.clientSecretName" -}}
-    {{- if .Values.app.ebsiTest.client.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.ebsiTest.client.existingSecret.name $) -}}
-    {{- else -}}
-        {{- printf "wallet-api-client-secret" -}}
-    {{- end -}}
-{{- end -}}
-
-{{- define "wallet-api.client-passwordKey" -}}
-    {{- if .Values.app.ebsiTest.client.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.ebsiTest.client.existingSecret.key $) -}}
-    {{- else -}}
-        {{- printf "client-secret" -}}
-    {{- end -}}
-{{- end -}}
-
-{{- define "wallet-api.userSecretName" -}}
-    {{- if .Values.app.ebsiTest.userData.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.ebsiTest.userData.existingSecret.name $) -}}
-    {{- else -}}
-        {{- printf "wallet-api-user-password" -}}
-    {{- end -}}
-{{- end -}}
-
-{{- define "wallet-api.user-passwordKey" -}}
-    {{- if .Values.app.ebsiTest.userData.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.ebsiTest.userData.existingSecret.key $) -}}
-    {{- else -}}
-        {{- printf "user-password" -}}
-    {{- end -}}
-{{- end -}}
-
-{{- define "wallet-api.vaultTokenSecretName" -}}
-    {{- if .Values.app.vault.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.vault.existingSecret.name $) -}}
-    {{- else -}}
-        {{- printf "wallet-api-token-secret" -}}
-    {{- end -}}
-{{- end -}}
-
-{{- define "wallet-api.user-tokenKey" -}}
-    {{- if .Values.app.vault.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.vault.existingSecret.key $) -}}
-    {{- else -}}
-        {{- printf "token" -}}
-    {{- end -}}
-{{- end -}}
-
-{{/*
-Support for existing database secret
-*/}}
-{{- define "wallet-api.db-secretName" -}}
+{{- define "wallet-backend.secretName" -}}
     {{- if .Values.app.db.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.db.existingSecret.name $) -}}
     {{- else -}}
-        {{- printf "wallet-api-db-secret" -}}
+        {{- printf "wallet-backend-secret" -}}
     {{- end -}}
 {{- end -}}
 
-{{- define "wallet-api.db-passwordKey" -}}
+{{- define "wallet-backend.secretKey" -}}
     {{- if .Values.app.db.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.db.existingSecret.key $) -}}
     {{- else -}}
-        {{- printf "password" -}}
+        {{- printf "postgres-password" -}}
     {{- end -}}
 {{- end -}}
 
-{{/* todo: revisar las validaciones porque algunos campos sean externos o internos siguen siendo dinámicos */}}
-{{/* Validate that the required values are set when db.externalService is true or false. */}}
-{{/*{{- define "validateDatabaseConfig" -}}*/}}
-{{/*{{- if .Values.app.db.externalService }}*/}}
-{{/*  */}}{{/*Cuando externalService es verdadero, validamos los campos*/}}
-{{/*  {{- if empty .Values.app.db.host }}*/}}
-{{/*    {{ fail "El valor 'db.host' no puede estar vacío cuando 'db.externalService' está habilitado." }}*/}}
-{{/*  {{- end }}*/}}
-{{/*  {{- if empty .Values.app.db.name }}*/}}
-{{/*    {{ fail "El valor 'db.name' no puede estar vacío cuando 'db.externalService' está habilitado." }}*/}}
-{{/*  {{- end }}*/}}
-{{/*  {{- if empty .Values.app.db.schema }}*/}}
-{{/*    {{ fail "El valor 'db.schema' no puede estar vacío cuando 'db.externalService' está habilitado." }}*/}}
-{{/*  {{- end }}*/}}
-{{/*  {{- if empty .Values.app.db.username }}*/}}
-{{/*    {{ fail "El valor 'db.username' no puede estar vacío cuando 'db.externalService' está habilitado." }}*/}}
-{{/*  {{- end }}*/}}
-{{/*  {{- if empty .Values.app.db.password }}*/}}
-{{/*    {{ fail "El valor 'db.password' no puede estar vacío cuando 'db.externalService' está habilitado." }}*/}}
-{{/*  {{- end }}*/}}
-{{/*{{- else }}*/}}
-{{/*  */}}{{/* Cuando externalService es falso, validamos que los valores sean específicos */}}
-{{/*  {{- if ne .Values.app.db.host "wallet-postgres" }}*/}}
-{{/*    {{ fail "El valor 'db.host' debe ser 'localhost' cuando 'db.externalService' está deshabilitado." }}*/}}
-{{/*  {{- end }}*/}}
-{{/*  {{- if ne .Values.app.db.port 5432 }}*/}}
-{{/*    {{ fail "El valor 'db.port' debe ser '5432' cuando 'db.externalService' está deshabilitado." }}*/}}
-{{/*  {{- end }}*/}}
-{{/*  {{- if ne .Values.app.db.name "wallet" }}*/}}
-{{/*    {{ fail "El valor 'db.name' debe ser 'issuer' cuando 'db.externalService' está deshabilitado." }}*/}}
-{{/*  {{- end }}*/}}
-{{/*  {{- if ne .Values.app.db.schema "wallet" }}*/}}
-{{/*    {{ fail "El valor 'db.schema' debe ser 'public' cuando 'db.externalService' está deshabilitado." }}*/}}
-{{/*  {{- end }}*/}}
-{{/*  {{- if ne .Values.app.db.username "postgres" }}*/}}
-{{/*    {{ fail "El valor 'db.username' debe ser 'postgres' cuando 'db.externalService' está deshabilitado." }}*/}}
-{{/*  {{- end }}*/}}
-{{/*  {{- if empty .Values.app.db.password }}*/}}
-{{/*    {{ fail "El valor 'db.password' no puede estar vacío cuando 'db.externalService' está deshabilitado." }}*/}}
-{{/*  {{- end }}*/}}
-{{/*{{- end }}*/}}
-{{/*{{- end }}*/}}
+{{- define "wallet-backend.clientSecretKey" -}}
+    {{- if .Values.app.ebsiTest.client.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.ebsiTest.client.existingSecret.key $) -}}
+    {{- else -}}
+        {{- printf "ebsi-client-secret" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "wallet-backend.userPasswordKey" -}}
+    {{- if .Values.app.ebsiTest.userData.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.ebsiTest.userData.existingSecret.key $) -}}
+    {{- else -}}
+        {{- printf "ebsi-user-password" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "wallet-backend.vaultTokenKey" -}}
+    {{- if .Values.app.vault.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.vault.existingSecret.key $) -}}
+    {{- else -}}
+        {{- printf "vault-token" -}}
+    {{- end -}}
+{{- end -}}
 
 {{- define "keycloak.domain" -}}
 {{- if eq .Values.global.environment "prod" -}}
@@ -180,4 +110,11 @@ Support for existing database secret
 {{- else -}}
     keycloak-{{ .Values.global.environment }}.{{ .Values.global.externalDomain }}
 {{- end }}
+{{- end }}
+
+{{/*
+Internal Server Port
+*/}}
+{{- define "wallet-backend.serverPort" -}}
+{{- default 8080 }}
 {{- end }}

@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: in2workspace/wallet-api
+  repository: in2workspace/in2-wallet-api
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: v1.4.1
@@ -41,8 +41,7 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  # fixme: porqué es 8080 y no 80?
-  port: 8080
+  port: 80
 
 ingress:
   enabled: false
@@ -74,12 +73,18 @@ resources: {}
 
 livenessProbe:
   httpGet:
-    path: /health
+    path: /api/health
     port: 8080
+  initialDelaySeconds: 40
+  failureThreshold: 6
+  periodSeconds: 10
 readinessProbe:
   httpGet:
-    path: /health
+    path: /api/health
     port: 8080
+  initialDelaySeconds: 40
+  failureThreshold: 6
+  periodSeconds: 10
 
 autoscaling:
   enabled: false
@@ -110,7 +115,6 @@ affinity: {}
 app:
   logLevel: DEBUG
   ebsiTest:
-    url: http://keycloak-wallet:8080/realms/wallet/protocol/openid-connect/token
     client:
       id: user-registry-client
       secret: defaultSecret
@@ -119,8 +123,8 @@ app:
         enabled: false
         # -- name of the secret
         name: wallet-backend-secret
-        # -- key to retrieve the password from
-        key: client-secret
+        # -- key to retrieve the secret from
+        key: ebsi-client-secret
     userData:
       name: admin
       password: defaultPassword
@@ -129,8 +133,8 @@ app:
         enabled: false
         # -- name of the secret
         name: wallet-backend-secret
-        # -- key to retrieve the password from
-        key: user-password
+        # -- key to retrieve the secret from
+        key: ebsi-user-password
   vault:
     provider: hashicorp
     host: vault-server
@@ -142,8 +146,8 @@ app:
       enabled: false
       # -- name of the secret
       name: wallet-backend-secret
-      # -- key to retrieve the token from
-      key: token
+      # -- key to retrieve the secret from
+      key: vault-token
   db:
     host: wallet-postgres
     port: 5432
@@ -152,6 +156,9 @@ app:
     username: postgres
     password: postgres
     existingSecret:
+      # -- should an existing secret be used?
       enabled: false
-      name: db-secret
-      key: password
+      # -- name of the secret
+      name: wallet-backend-secret
+      # -- key to retrieve the secret from
+      key: postgres-password

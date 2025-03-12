@@ -8,29 +8,28 @@ appVersion: "1.0.0"
 
 dependencies:
   - name: wallet-backend
-    version: "1.1.4"
-    repository: https://in2workspace.github.io/helm-charts
+    version: "2.0.0"
     condition: wallet-backend.enabled
 
   - name: wallet-frontend
-    version: "0.2.2"
-    repository: https://in2workspace.github.io/helm-charts
+    version: "2.0.0"
     condition: wallet-frontend.enabled
 
-  - name: wallet-postgres
-    version: "16.4.5" # version could be consulted in https://artifacthub.io/packages/helm/bitnami/postgresql
+  - name: postgresql
+    alias: wallet-postgres
+    version: "16.4.5"
     repository: oci://registry-1.docker.io/bitnamicharts
-    condition: wallet-postgres.enabled
+    condition: wallet-postgres.enabled # false - we use an external service
 
   - name: keycloak-wallet
     version: "0.1.3"
-    repository: https://in2workspace.github.io/helm-charts
-    condition: keycloak-wallet.enabled
+    condition: keycloak-wallet.enabled # false - we use an external service
 
-  - name: keycloak-wallet-postgres
-    version: "16.4.5" # version could be consulted in https://artifacthub.io/packages/helm/bitnami/postgresql
+  - name: postgresql
+    alias: keycloak-wallet-postgres
+    version: "16.4.5"
     repository: oci://registry-1.docker.io/bitnamicharts
-    condition: keycloak-wallet-postgres.enabled
+    condition: keycloak-wallet-postgres.enabled # false - we use an external service
 
 
 

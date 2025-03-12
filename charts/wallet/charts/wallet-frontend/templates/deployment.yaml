@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "dome-wallet-ui.fullname" . }}
-  namespace: {{ $.Release.Namespace | quote }}
+  name: {{ include "wallet-frontend.fullname" . }}
   labels:
-    {{- include "dome-wallet-ui.labels" . | nindent 4 }}
+      {{- include "wallet-frontend.labels" . | nindent 4 }}
+  namespace: {{ $.Release.Namespace | quote }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "dome-wallet-ui.selectorLabels" . | nindent 6 }}
+      {{- include "wallet-frontend.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -19,13 +19,16 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "dome-wallet-ui.labels" . | nindent 8 }}
+        {{- include "wallet-frontend.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "dome-wallet-ui.serviceAccountName" . }}
+      serviceAccountName: {{ include "wallet-frontend.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -36,49 +39,61 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ .Values.app.internalServerPort }}
+              containerPort: {{ .Values.service.port }}
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: {{ .Values.livenessProbe.path }}
-              port: {{ .Values.app.internalServerPort }}
+              path: {{ .Values.livenessProbe.httpGet.path }}
+              port: {{ .Values.livenessProbe.httpGet.port }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
           readinessProbe:
             httpGet:
-              path: {{ .Values.readinessProbe.path }}
-              port: {{ .Values.app.internalServerPort }}
+              path: {{ .Values.readinessProbe.httpGet.path }}
+              port: {{ .Values.readinessProbe.httpGet.port }}
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           env:
             - name: WALLET_API_INTERNAL_DOMAIN
-              value: {{.Values.app.walletApi.internalDomain}}
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-frontend-cm
+                  key: WALLET_BACKEND_URL
             - name: WALLET_API_WEBSOCKET_EXTERNAL_DOMAIN
-              value: {{.Values.app.walletApi.websocketExternalDomain}}
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-frontend-cm
+                  key: WEBSOCKET_URL
             - name: WALLET_API_WEBSOCKET_PATH
-              value: {{.Values.app.walletApi.websocketPath}}
+              value: "/api/v1/pin"
             - name: WALLET_API_EXECUTE_CONTENT_PATH
-              value: {{.Values.app.walletApi.executeContentPath}}
+              value: "/api/v1/execute-content"
             - name: WALLET_API_REQUEST_CREDENTIAL_PATH
-              value: {{.Values.app.walletApi.requestCredentialPath}}
+              value: "/api/v1/openid-credential-offer"
             - name: WALLET_API_VERIFIABLE_PRESENTATION_PATH
-              value: {{.Values.app.walletApi.verifiablePresentationPath}}
+              value: "/api/v1/vp"
             - name: WALLET_API_CREDENTIALS_PATH
-              value: {{.Values.app.walletApi.credentialsPath}}
+              value: "/api/v1/credentials"
             - name: WALLET_API_CREDENTIALS_BY_ID_PATH
-              value: {{.Values.app.walletApi.credentialsByIdPath}}
+              value: "/api/v1/credentials?credentialId="
             - name: WALLET_API_REQUEST_SIGNED_CREDENTIAL_PATH
-              value: {{.Values.app.walletApi.requestSignedCredentialPath}}
+              value: "/api/v1/request-signed-credential"
             - name: WALLET_API_CBOR_PATH
-              value: {{.Values.app.walletApi.cborPath}}
+              value: "/api/v1/vp/cbor"
             - name: LOGS_ENABLED
-              value: {{ quote .Values.app.logsEnabled }}
+              value: {{ .Values.app.logsEnabled | quote }}
             - name: IAM_EXTERNAL_DOMAIN
-              value: {{.Values.app.iam.external_domain}}
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-frontend-cm
+                  key: KEYCLOAK_EXTERNAL_DOMAIN
             - name: IAM_REALM_PATH
-              value: {{.Values.app.iam.realm_path}}
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-frontend-cm
+                  key: KEYCLOAK_REALM_PATH
             - name: PRIMARY
               value: {{ .Values.app.colors.primary | quote }}
             - name: PRIMARY_CONTRAST
@@ -88,4 +103,7 @@ spec:
             - name: SECONDARY_CONTRAST
               value: {{ .Values.app.colors.secondaryContrast | quote }}
             - name: lOGO_SRC
-              value: {{ .Values.app.logoSrc }}
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-frontend-cm
+                  key: LOGO_SRC
