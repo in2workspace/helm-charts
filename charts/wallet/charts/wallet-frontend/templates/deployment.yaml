@@ -56,6 +56,18 @@ spec:
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           env:
+            # values.yaml
+            - name: LOGS_ENABLED
+              value: {{ .Values.app.logsEnabled | quote }}
+            - name: PRIMARY
+              value: {{ .Values.app.colors.primary | quote }}
+            - name: PRIMARY_CONTRAST
+              value: {{ .Values.app.colors.primaryContrast | quote }}
+            - name: SECONDARY
+              value: {{ .Values.app.colors.secondary | quote }}
+            - name: SECONDARY_CONTRAST
+              value: {{ .Values.app.colors.secondaryContrast | quote }}
+            # configmap.yaml
             - name: WALLET_API_INTERNAL_DOMAIN
               valueFrom:
                 configMapKeyRef:
@@ -66,24 +78,6 @@ spec:
                 configMapKeyRef:
                   name: {{ .Release.Name }}-frontend-cm
                   key: WEBSOCKET_URL
-            - name: WALLET_API_WEBSOCKET_PATH
-              value: "/api/v1/pin"
-            - name: WALLET_API_EXECUTE_CONTENT_PATH
-              value: "/api/v1/execute-content"
-            - name: WALLET_API_REQUEST_CREDENTIAL_PATH
-              value: "/api/v1/openid-credential-offer"
-            - name: WALLET_API_VERIFIABLE_PRESENTATION_PATH
-              value: "/api/v1/vp"
-            - name: WALLET_API_CREDENTIALS_PATH
-              value: "/api/v1/credentials"
-            - name: WALLET_API_CREDENTIALS_BY_ID_PATH
-              value: "/api/v1/credentials?credentialId="
-            - name: WALLET_API_REQUEST_SIGNED_CREDENTIAL_PATH
-              value: "/api/v1/request-signed-credential"
-            - name: WALLET_API_CBOR_PATH
-              value: "/api/v1/vp/cbor"
-            - name: LOGS_ENABLED
-              value: {{ .Values.app.logsEnabled | quote }}
             - name: IAM_EXTERNAL_DOMAIN
               valueFrom:
                 configMapKeyRef:
@@ -94,16 +88,13 @@ spec:
                 configMapKeyRef:
                   name: {{ .Release.Name }}-frontend-cm
                   key: KEYCLOAK_REALM_PATH
-            - name: PRIMARY
-              value: {{ .Values.app.colors.primary | quote }}
-            - name: PRIMARY_CONTRAST
-              value: {{ .Values.app.colors.primaryContrast | quote }}
-            - name: SECONDARY
-              value: {{ .Values.app.colors.secondary | quote }}
-            - name: SECONDARY_CONTRAST
-              value: {{ .Values.app.colors.secondaryContrast | quote }}
-            - name: lOGO_SRC
+            - name: LOGO_SRC
               valueFrom:
                 configMapKeyRef:
                   name: {{ .Release.Name }}-frontend-cm
                   key: LOGO_SRC
+            - name: FAVICON_SRC
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-frontend-cm
+                  key: FAVICON_SRC

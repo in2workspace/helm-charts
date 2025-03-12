@@ -85,3 +85,10 @@ Logo file src
 {{- define "wallet-frontend.logoSrc" -}}
 assets/logos/{{ .Values.global.tenantName }}-logo.png
 {{- end }}
+
+{{/*
+Favicon file src
+*/}}
+{{- define "wallet-frontend.faviconSrc" -}}
+assets/icons/{{ .Values.global.tenantName }}-favicon.png
+{{- end }}

@@ -12,3 +12,4 @@ data:
   WALLET_BACKEND_URL: "https://{{ include "wallet-backend.domain" . | trim }}"
   WEBSOCKET_URL: "wss://{{ include "wallet-backend.domain" . | trim }}"
   LOGO_SRC: "{{ include "wallet-frontend.logoSrc" . | trim }}"
+  FAVICON_SRC: "{{ include "wallet-frontend.faviconSrc" . | trim }}"
