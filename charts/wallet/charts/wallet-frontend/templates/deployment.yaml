@@ -88,13 +88,4 @@ spec:
                 configMapKeyRef:
                   name: {{ .Release.Name }}-frontend-cm
                   key: KEYCLOAK_REALM_PATH
-            - name: LOGO_SRC
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ .Release.Name }}-frontend-cm
-                  key: LOGO_SRC
-            - name: FAVICON_SRC
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ .Release.Name }}-frontend-cm
-                  key: FAVICON_SRC
+
