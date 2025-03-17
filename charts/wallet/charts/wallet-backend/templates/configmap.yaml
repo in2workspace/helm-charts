@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}-backend-cm
   labels:
-    {{- include "wallet-frontend.labels" . | nindent 4 }}
+    {{- include "wallet-backend.labels" . | nindent 4 }}
 data:
   TENANT_NAME: "{{ .Values.global.tenantName }}"
   ENVIRONMENT: "{{ .Values.global.environment }}"
