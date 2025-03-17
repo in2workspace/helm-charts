@@ -80,6 +80,17 @@ Internal Server Port
 {{- end }}
 
 {{/*
+Keycloak domain
+*/}}
+{{- define "keycloak.domain" -}}
+{{- if eq .Values.global.environment "prod" -}}
+    keycloak.{{ .Values.global.externalDomain }}
+{{- else -}}
+    keycloak-{{ .Values.global.environment }}.{{ .Values.global.externalDomain }}
+{{- end }}
+{{- end }}
+
+{{/*
 Logo file src
 */}}
 {{- define "wallet-frontend.logoSrc" -}}
