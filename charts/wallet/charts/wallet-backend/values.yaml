@@ -154,7 +154,6 @@ app:
     host: wallet-postgres
     port: 5432
     name: wallet
-    schema: wallet
     username: postgres
     password: postgres
     existingSecret:

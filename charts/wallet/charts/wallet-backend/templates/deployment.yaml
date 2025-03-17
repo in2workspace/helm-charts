@@ -56,44 +56,24 @@ spec:
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           env:
-            - name: SPRING_PROFILES_ACTIVE
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ .Release.Name }}-backend-cm
-                  key: ENVIRONMENT
             - name: LOGGING_LEVEL_ES_IN2_WALLET_API
               value: {{ .Values.app.logLevel }}
-            - name: SPRING_WEBFLUX_BASEPATH
-              value: "/api"
             # AUTH SERVER
-            - name: AUTH_SERVER_EXTERNAL_URL_SCHEME
-              value: "https"
             - name: AUTH_SERVER_EXTERNAL_URL_DOMAIN
               valueFrom:
                 configMapKeyRef:
                   name: {{ .Release.Name }}-backend-cm
                   key: KEYCLOAK_EXTERNAL_DOMAIN
-            - name: AUTH_SERVER_EXTERNAL_URL_PORT
-              value: "443"
             - name: AUTH_SERVER_EXTERNAL_URL_PATH
               valueFrom:
                 configMapKeyRef:
                   name: {{ .Release.Name }}-backend-cm
                   key: KEYCLOAK_REALM_PATH
-              # http://keycloak.iam.svc.cluster.local:80
-            - name: AUTH_SERVER_INTERNAL_URL_SCHEME
-              value: "http"
-            - name: AUTH_SERVER_INTERNAL_URL_DOMAIN
-              value: "keycloak-proxy"
-            - name: AUTH_SERVER_INTERNAL_URL_PORT
-              value: "80"
             - name: AUTH_SERVER_INTERNAL_URL_PATH
               valueFrom:
                 configMapKeyRef:
                   name: {{ .Release.Name }}-backend-cm
                   key: KEYCLOAK_REALM_PATH
-            - name: AUTH_SERVER_JWT_DECODER_PATH
-              value: "/protocol/openid-connect/certs"
             # EBSI TESTS
             - name: EBSI_TEST_URL
               valueFrom:
@@ -134,9 +114,6 @@ spec:
                 configMapKeyRef:
                   name: {{ .Release.Name }}-backend-cm
                   key: DB_URL
-              # todo: el valor del schema siempre será wallet, el usuario no debe poder modificarlo
-            - name: DB_SCHEMA
-              value: {{ .Values.app.db.schema }}
             - name: SPRING_R2DBC_USERNAME
               value: {{ .Values.app.db.username }}
             - name: SPRING_R2DBC_PASSWORD
@@ -151,9 +128,6 @@ spec:
                   key: FLYWAY_URL
             - name: SPRING_FLYWAY_USER
               value: {{ .Values.app.db.username }}
-              # todo: el valor del schema siempre será wallet, el usuario no debe poder modificarlo
-            - name: SPRING_FLYWAY_DEFAULT_SCHEMA
-              value: {{ .Values.app.db.schema }}
             - name: SPRING_FLYWAY_PASSWORD
               valueFrom:
                 secretKeyRef:
