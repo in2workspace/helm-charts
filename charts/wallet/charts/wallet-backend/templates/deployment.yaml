@@ -56,6 +56,13 @@ spec:
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           env:
+              # todo
+            - name: SERVER_PORT
+              value: 8080
+              # todo
+#            - name: CORS
+#              value:
+            # LOGGING
             - name: LOGGING_LEVEL_ES_IN2_WALLET_API
               value: {{ .Values.app.logLevel }}
             # AUTH SERVER
