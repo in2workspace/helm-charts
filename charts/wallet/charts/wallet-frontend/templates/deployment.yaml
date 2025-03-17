@@ -71,12 +71,12 @@ spec:
             - name: LOGO_SRC
               valueFrom:
                 configMapKeyRef:
-                  name: { { .Release.Name } }-frontend-cm
+                  name: {{ .Release.Name }}-frontend-cm
                   key: LOGO_SRC
             - name: FAVICON_SRC
               valueFrom:
                 configMapKeyRef:
-                  name: { { .Release.Name } }-frontend-cm
+                  name: {{ .Release.Name }}-frontend-cm
                   key: FAVICON_SRC
             - name: WALLET_API_INTERNAL_DOMAIN
               valueFrom:
