@@ -68,6 +68,16 @@ spec:
             - name: SECONDARY_CONTRAST
               value: {{ .Values.app.colors.secondaryContrast | quote }}
             # configmap.yaml
+            - name: LOGO_SRC
+              valueFrom:
+                configMapKeyRef:
+                  name: { { .Release.Name } }-frontend-cm
+                  key: LOGO_SRC
+            - name: FAVICON_SRC
+              valueFrom:
+                configMapKeyRef:
+                  name: { { .Release.Name } }-frontend-cm
+                  key: FAVICON_SRC
             - name: WALLET_API_INTERNAL_DOMAIN
               valueFrom:
                 configMapKeyRef:

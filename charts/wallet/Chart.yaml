@@ -3,7 +3,7 @@ name: wallet
 description: Parent chart managing all the components of the Wallet application
 type: application
 # Chart version
-version: 2.0.2
+version: 2.0.3
 appVersion: "1.0.0"
 
 dependencies:
@@ -12,7 +12,7 @@ dependencies:
     condition: wallet-backend.enabled
 
   - name: wallet-frontend
-    version: "2.0.1"
+    version: "2.0.2"
     condition: wallet-frontend.enabled
 
   - name: postgresql
