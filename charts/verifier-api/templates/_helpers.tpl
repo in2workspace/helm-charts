@@ -81,6 +81,25 @@ Support for private key secret
 {{- end -}}
 
 {{/*
+Support for lear credential machine
+*/}}
+{{- define "verifier-api.lear-credential-machine-secretName" -}}
+    {{- if .Values.app.verifier.backend.identity.learCredentialMachineInBase64.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.verifier.backend.identity.learCredentialMachineInBase64.existingSecret.name $) -}}
+    {{- else -}}
+        {{- printf "verifier-api-lear-credential-machine-secret" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "verifier-api.lear-credential-machine-key" -}}
+    {{- if .Values.app.verifier.backend.identity.learCredentialMachineInBase64.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.verifier.backend.identity.learCredentialMachineInBase64.existingSecret.key $) -}}
+    {{- else -}}
+        {{- printf "learCredentialMachineInBase64" -}}
+    {{- end -}}
+{{- end -}}
+
+{{/*
 Defines internal server port, which should not be modified by user
 If internalServerPort is not set, 8080 will be assigned
 */}}
