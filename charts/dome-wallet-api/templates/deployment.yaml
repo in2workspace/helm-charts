@@ -1,0 +1,132 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "dome-wallet-api.fullname" . }}
+  namespace: {{ $.Release.Namespace | quote }}
+  labels:
+    {{- include "dome-wallet-api.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "dome-wallet-api.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "dome-wallet-api.labels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "dome-wallet-api.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.app.internalServerPort }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.livenessProbe.path }}
+              port: {{ .Values.app.internalServerPort }}
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.readinessProbe.path }}
+              port: {{ .Values.app.internalServerPort }}
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: {{ .Values.app. }}
+            - name: LOGGING_LEVEL_ES_IN2_WALLET_API
+              value: {{ .Values.app.logLevel }}
+            - name: SPRING_WEBFLUX_BASEPATH
+              value: {{ .Values.app.basePath }}
+            # AUTH SERVER
+            - name: AUTH_SERVER_EXTERNAL_URL_SCHEME
+              value: {{ .Values.app.authServer.external.scheme }}
+            - name: AUTH_SERVER_EXTERNAL_URL_DOMAIN
+              value: {{ .Values.app.authServer.external.domain }}
+            - name: AUTH_SERVER_EXTERNAL_URL_PORT
+              value: {{ quote .Values.app.authServer.external.port }}
+            - name: AUTH_SERVER_EXTERNAL_URL_PATH
+              value: {{ .Values.app.authServer.external.path }}
+            - name: AUTH_SERVER_INTERNAL_URL_SCHEME
+              value: {{ .Values.app.authServer.internal.scheme }}
+            - name: AUTH_SERVER_INTERNAL_URL_DOMAIN
+              value: {{ .Values.app.authServer.internal.domain }}
+            - name: AUTH_SERVER_INTERNAL_URL_PORT
+              value: {{ quote .Values.app.authServer.internal.port }}
+            - name: AUTH_SERVER_INTERNAL_URL_PATH
+              value: {{ .Values.app.authServer.internal.path }}
+            - name: AUTH_SERVER_JWT_DECODER_PATH
+              value: {{ .Values.app.authServer.jwtDecoderPath }}
+            # EBSI TESTS
+            - name: EBSI_TEST_URL
+              value: {{ .Values.app.ebsiTest.url }}
+            - name: EBSI_TEST_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-wallet-api.clientSecretName" . }}
+                  key: {{ include "dome-wallet-api.client-passwordKey" . }}
+            - name: EBSI_TEST_CLIENT_ID
+              value: {{ .Values.app.ebsiTest.client.id }}
+            - name: EBSI_TEST_USERNAME
+              value: {{ .Values.app.ebsiTest.userData.name }}
+            - name: EBSI_TEST_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-wallet-api.userSecretName" . }}
+                  key: {{ include "dome-wallet-api.user-passwordKey" . }}
+            # VAULT
+            - name: VAULT_PROVIDER_NAME
+              value: {{ .Values.app.vault.provider }}
+            - name: HASHICORP_VAULT_HOST
+              value: {{ .Values.app.vault.host }}
+            - name: HASHICORP_VAULT_SCHEME
+              value: {{ .Values.app.vault.scheme }}
+            - name: HASHICORP_VAULT_PORT
+              value: {{ quote .Values.app.vault.port }}
+            - name: HASHICORP_VAULT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-wallet-api.vaultTokenSecretName" . }}
+                  key: {{ include "dome-wallet-api.user-tokenKey" . }}
+            # DATABASE
+            - name: SPRING_R2DBC_URL
+              value: "r2dbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}?schema={{ .Values.db.schema }}"
+            - name: DB_SCHEMA
+              value: {{ .Values.db.schema }}
+            - name: SPRING_R2DBC_USERNAME
+              value: {{ .Values.db.username }}
+            - name: SPRING_R2DBC_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-wallet-api.db-secretName" . }}
+                  key: {{ include "dome-wallet-api.db-passwordKey" . }}
+            - name: SPRING_FLYWAY_URL
+              value: "jdbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}?schema={{ .Values.db.schema }}"
+            - name: SPRING_FLYWAY_USER
+              value: {{ .Values.db.username }}
+            - name: SPRING_FLYWAY_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-wallet-api.db-secretName" . }}
+                  key: {{ include "dome-wallet-api.db-passwordKey" . }}
