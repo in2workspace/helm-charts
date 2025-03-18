@@ -81,6 +81,8 @@ spec:
               value: {{ .Values.app.verifier.frontend.faviconSrc }}
             - name: VERIFIER_BACKEND_URL
               value: {{ .Values.app.verifier.backend.url }}
+            - name: VERIFIER_BACKEND_IDENTITY_DID
+              value: {{ .Values.app.verifier.backend.identity.did }}
             - name: VERIFIER_BACKEND_IDENTITY_PRIVATE_KEY
               valueFrom:
                 secretKeyRef:
