@@ -1,0 +1,13 @@
+apiVersion: v2
+name: dome-wallet-keycloak
+description: A Helm chart for Kubernetes
+type: application
+version: 0.1.3
+appVersion: "v1.0.2"
+
+sources:
+  - https://github.com/in2workspace/dome-wallet-keycloak
+
+maintainers:
+  - name: IN2 Team
+    email: domesupport@in2.es
