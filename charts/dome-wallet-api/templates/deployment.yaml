@@ -54,7 +54,7 @@ spec:
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           env:
             - name: SPRING_PROFILES_ACTIVE
-              value: {{ .Values.app. }}
+              value: {{ .Values.app.profile }}
             - name: LOGGING_LEVEL_ES_IN2_WALLET_API
               value: {{ .Values.app.logLevel }}
             - name: SPRING_WEBFLUX_BASEPATH
