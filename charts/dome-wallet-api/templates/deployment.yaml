@@ -125,6 +125,8 @@ spec:
               value: "jdbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}?schema={{ .Values.db.schema }}"
             - name: SPRING_FLYWAY_USER
               value: {{ .Values.db.username }}
+            - name: SPRING_FLYWAY_DEFAULT_SCHEMA
+              value: "public"
             - name: SPRING_FLYWAY_PASSWORD
               valueFrom:
                 secretKeyRef:
