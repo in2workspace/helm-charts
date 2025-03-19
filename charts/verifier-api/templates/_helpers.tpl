@@ -76,7 +76,7 @@ Support for private key secret
     {{- if .Values.app.verifier.backend.security.serviceIdentity.privateKey.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.verifier.backend.security.serviceIdentity.privateKey.existingSecret.key $) -}}
     {{- else -}}
-        {{- printf "privateKey" -}}
+        {{- printf "private-key" -}}
     {{- end -}}
 {{- end -}}
 
@@ -95,7 +95,7 @@ Support for lear credential machine
     {{- if .Values.app.verifier.backend.security.serviceIdentity.verifiableCredential.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.verifier.backend.security.serviceIdentity.verifiableCredential.existingSecret.key $) -}}
     {{- else -}}
-        {{- printf "verifiableCredential" -}}
+        {{- printf "verifiable-credential" -}}
     {{- end -}}
 {{- end -}}
 
