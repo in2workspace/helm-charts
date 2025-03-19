@@ -105,25 +105,18 @@ dome-wallet-ui:
 
   ## deployment specific configuration
   app:
-    logsEnabled: false
     internalServerPort: 8080
-    walletApi:
-      internalDomain: https://wallet.dome-marketplace-sbx.org/wallet-api
-      websocketExternalDomain: wss://wallet.dome-marketplace-sbx.org/wallet-api
-      websocketPath: /api/v1/pin
-      executeContentPath: /api/v1/execute-content
-      requestCredentialPath: /api/v1/openid-credential-offer
-      verifiablePresentationPath: /api/v1/vp
-      credentialsPath: /api/v1/credentials
-      credentialsByIdPath: /api/v1/credentials?credentialId=
-      requestSignedCredentialPath: /api/v1/request-signed-credential
-      cborPath: /api/v1/vp/cbor
+    logsEnabled: false
     colors:
       primary: "#00ADD3"
       primaryContrast: "#ffffff"
       secondary: "#50c8ff"
       secondaryContrast: "#50c8ff"
     logoSrc: "assets/logos/no-image.png"
+    faviconSrc: "assets/icons/dome-favicon.png"
+    walletApi:
+      internalDomain: https://wallet.dome-marketplace-sbx.org/wallet-api
+      websocketExternalDomain: wss://wallet.dome-marketplace-sbx.org/wallet-api
     iam:
       external_domain: https://wallet.dome-marketplace-sbx.org/keycloak
       realm_path: /realms/wallet
