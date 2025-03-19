@@ -150,12 +150,19 @@ app:
       url: "https://example-url.org"
       identity:
         # Placeholder for private key used in identity verification (REQUIRED)
+        did: your-did-key
         privateKey:
           value: your-private-key
           existingSecret:
             enabled: false
             name: private-key-secret
             key: private-key
+        learCredentialMachineInBase64:
+          value: your-lear-credential-machine
+          existingSecret:
+            enabled: false
+            name: lear-credential-machine-secret
+            key: lear-credential-machine-key
       trustFrameworks:
         # Placeholder for the name of a trust framework (REQUIRED)
         - name: DOME
