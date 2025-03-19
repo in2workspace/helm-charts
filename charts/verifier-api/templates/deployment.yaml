@@ -82,17 +82,17 @@ spec:
             - name: VERIFIER_BACKEND_URL
               value: {{ .Values.app.verifier.backend.url }}
             - name: VERIFIER_BACKEND_IDENTITY_DID
-              value: {{ .Values.app.verifier.backend.identity.did }}
+              value: {{ .Values.app.verifier.backend.security.serviceIdentity.didKey }}
             - name: VERIFIER_BACKEND_IDENTITY_PRIVATE_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ include "verifier-api.privateKey-secretName" . }}
-                  key: {{ include "verifier-api.privateKey-privateKey" . }}
+                  key: {{ include "verifier-api.privateKey-key" . }}
             - name: VERIFIER_BACKEND_IDENTITY_LEAR_CREDENTIAL_MACHINE_IN_BASE64
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "verifier-api.lear-credential-machine-secretName" . }}
-                  key: {{ include "verifier-api.lear-credential-machine-key" . }}
+                  name: {{ include "verifier-api.learCredentialMachine-secretName" . }}
+                  key: {{ include "verifier-api.learCredentialMachine-key" . }}
             - name: SPRING_CONFIG_ADDITIONAL_LOCATION
               value: "/config/application.yaml"
           volumeMounts:

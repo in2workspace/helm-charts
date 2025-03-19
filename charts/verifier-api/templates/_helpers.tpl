@@ -65,37 +65,37 @@ Create the name of the service account to use
 Support for private key secret
 */}}
 {{- define "verifier-api.privateKey-secretName" -}}
-    {{- if .Values.app.verifier.backend.identity.privateKey.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.verifier.backend.identity.privateKey.existingSecret.name $) -}}
+    {{- if .Values.app.verifier.backend.security.serviceIdentity.privateKey.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.verifier.backend.security.serviceIdentity.privateKey.existingSecret.name $) -}}
     {{- else -}}
         {{- printf "verifier-api-private-key-secret" -}}
     {{- end -}}
 {{- end -}}
 
-{{- define "verifier-api.privateKey-privateKey" -}}
-    {{- if .Values.app.verifier.backend.identity.privateKey.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.verifier.backend.identity.privateKey.existingSecret.key $) -}}
+{{- define "verifier-api.privateKey-key" -}}
+    {{- if .Values.app.verifier.backend.security.serviceIdentity.privateKey.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.verifier.backend.security.serviceIdentity.privateKey.existingSecret.key $) -}}
     {{- else -}}
-        {{- printf "privateKey" -}}
+        {{- printf "private-key" -}}
     {{- end -}}
 {{- end -}}
 
 {{/*
 Support for lear credential machine
 */}}
-{{- define "verifier-api.lear-credential-machine-secretName" -}}
-    {{- if .Values.app.verifier.backend.identity.learCredentialMachineInBase64.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.verifier.backend.identity.learCredentialMachineInBase64.existingSecret.name $) -}}
+{{- define "verifier-api.learCredentialMachine-secretName" -}}
+    {{- if .Values.app.verifier.backend.security.serviceIdentity.verifiableCredential.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.verifier.backend.security.serviceIdentity.verifiableCredential.existingSecret.name $) -}}
     {{- else -}}
-        {{- printf "verifier-api-lear-credential-machine-secret" -}}
+        {{- printf "verifiable-credential-secret" -}}
     {{- end -}}
 {{- end -}}
 
-{{- define "verifier-api.lear-credential-machine-key" -}}
-    {{- if .Values.app.verifier.backend.identity.learCredentialMachineInBase64.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.verifier.backend.identity.learCredentialMachineInBase64.existingSecret.key $) -}}
+{{- define "verifier-api.learCredentialMachine-key" -}}
+    {{- if .Values.app.verifier.backend.security.serviceIdentity.verifiableCredential.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.verifier.backend.security.serviceIdentity.verifiableCredential.existingSecret.key $) -}}
     {{- else -}}
-        {{- printf "learCredentialMachineInBase64" -}}
+        {{- printf "verifiable-credential" -}}
     {{- end -}}
 {{- end -}}
 
