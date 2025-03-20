@@ -54,7 +54,7 @@ spec:
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           env:
             - name: LOGS_ENABLED
-              value: { { quote .Values.app.logsEnabled } }
+              value: {{ quote .Values.app.logsEnabled }}
             - name: PRIMARY
               value: {{ .Values.app.colors.primary | quote }}
             - name: PRIMARY_CONTRAST
