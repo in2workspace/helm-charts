@@ -53,32 +53,8 @@ spec:
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           env:
-            - name: WALLET_API_INTERNAL_DOMAIN
-              value: {{.Values.app.walletApi.internalDomain}}
-            - name: WALLET_API_WEBSOCKET_EXTERNAL_DOMAIN
-              value: {{.Values.app.walletApi.websocketExternalDomain}}
-            - name: WALLET_API_WEBSOCKET_PATH
-              value: {{.Values.app.walletApi.websocketPath}}
-            - name: WALLET_API_EXECUTE_CONTENT_PATH
-              value: {{.Values.app.walletApi.executeContentPath}}
-            - name: WALLET_API_REQUEST_CREDENTIAL_PATH
-              value: {{.Values.app.walletApi.requestCredentialPath}}
-            - name: WALLET_API_VERIFIABLE_PRESENTATION_PATH
-              value: {{.Values.app.walletApi.verifiablePresentationPath}}
-            - name: WALLET_API_CREDENTIALS_PATH
-              value: {{.Values.app.walletApi.credentialsPath}}
-            - name: WALLET_API_CREDENTIALS_BY_ID_PATH
-              value: {{.Values.app.walletApi.credentialsByIdPath}}
-            - name: WALLET_API_REQUEST_SIGNED_CREDENTIAL_PATH
-              value: {{.Values.app.walletApi.requestSignedCredentialPath}}
-            - name: WALLET_API_CBOR_PATH
-              value: {{.Values.app.walletApi.cborPath}}
             - name: LOGS_ENABLED
               value: {{ quote .Values.app.logsEnabled }}
-            - name: IAM_EXTERNAL_DOMAIN
-              value: {{.Values.app.iam.external_domain}}
-            - name: IAM_REALM_PATH
-              value: {{.Values.app.iam.realm_path}}
             - name: PRIMARY
               value: {{ .Values.app.colors.primary | quote }}
             - name: PRIMARY_CONTRAST
@@ -87,5 +63,15 @@ spec:
               value: {{ .Values.app.colors.secondary | quote }}
             - name: SECONDARY_CONTRAST
               value: {{ .Values.app.colors.secondaryContrast | quote }}
-            - name: lOGO_SRC
+            - name: LOGO_SRC
               value: {{ .Values.app.logoSrc }}
+            - name: FAVICON_SRC
+              value: {{ .Values.app.faviconSrc }}
+            - name: WALLET_API_INTERNAL_DOMAIN
+              value: {{.Values.app.walletApi.internalDomain}}
+            - name: WALLET_API_WEBSOCKET_EXTERNAL_DOMAIN
+              value: {{.Values.app.walletApi.websocketExternalDomain}}
+            - name: IAM_EXTERNAL_DOMAIN
+              value: {{.Values.app.iam.external_domain}}
+            - name: IAM_REALM_PATH
+              value: {{.Values.app.iam.realm_path}}
