@@ -6,9 +6,9 @@ replicaCount: 1
 
 image:
   repository: in2workspace/in2-verifier-api
+  pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: v1.2.1-snapshot
-  pullPolicy: Always
 
 imagePullSecrets: []
 nameOverride: ""
@@ -43,18 +43,6 @@ service:
   type: ClusterIP
   port: 8080
 
-readinessProbe:
-  path: /health
-  initialDelaySeconds: 40
-  failureThreshold: 6
-  periodSeconds: 10
-
-livenessProbe:
-  path: /health
-  initialDelaySeconds: 40
-  failureThreshold: 6
-  periodSeconds: 10
-
 ingress:
   enabled: false
   className: ""
@@ -62,27 +50,41 @@ ingress:
   # kubernetes.io/ingress.class: nginx
   # kubernetes.io/tls-acme: "true"
   hosts:
-    - host: chart-example.local
+    - host: verifier.127.0.0.1.nip.io
       paths:
         - path: /
           pathType: Prefix
-  tls:
-    - hosts:
-        - example-host
-      secretName: example-secret
+  tls: []
+#    - secretName: example-secrets
+#      hosts:
+#        - verifier.127.0.0.1.nip.io
 
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+#   memory: 128Mi
 
-
-# We usually recommend not to specify default resources and to leave this as a conscious
-# choice for the user. This also increases chances charts run on environments with little
-# resources, such as Minikube.
-#resources:
-#  limits:
-#    cpu: 220m
-#    memory: 192Mi
-#  requests:
-#    cpu: 180m
-#    memory: 128Mi
+livenessProbe:
+  httpGet:
+    path: /api/health
+    port: 8080
+  initialDelaySeconds: 40
+  failureThreshold: 6
+  periodSeconds: 10
+readinessProbe:
+  httpGet:
+    path: /api/health
+    port: 8080
+  initialDelaySeconds: 40
+  failureThreshold: 6
+  periodSeconds: 10
 
 autoscaling:
   enabled: false
@@ -120,7 +122,6 @@ app:
       org.springframework.web.filter: INFO
       # Sets logging level for the custom package "es.in2.vcverifier"
       es.in2.vcverifier: INFO
-
   verifier:
     frontend:
       urls:
