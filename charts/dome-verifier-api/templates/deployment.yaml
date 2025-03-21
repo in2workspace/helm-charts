@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "verifier-api.fullname" . }}
+  name: {{ include "dome-verifier-api.fullname" . }}
   namespace: {{ $.Release.Namespace | quote }}
   labels:
-    {{- include "verifier-api.labels" . | nindent 4 }}
+    {{- include "dome-verifier-api.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "verifier-api.selectorLabels" . | nindent 6 }}
+      {{- include "dome-verifier-api.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -19,13 +19,13 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "verifier-api.selectorLabels" . | nindent 8 }}
+        {{- include "dome-verifier-api.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "verifier-api.serviceAccountName" . }}
+      serviceAccountName: {{ include "dome-verifier-api.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -36,25 +36,25 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ include "verifier-api.internalServerPort" . }}
+              containerPort: {{ include "dome-verifier-api.internalServerPort" . }}
               protocol: TCP
           livenessProbe:
             httpGet:
               path: {{ .Values.livenessProbe.path }}
-              port: {{ include "verifier-api.internalServerPort" . }}
+              port: {{ include "dome-verifier-api.internalServerPort" . }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
           readinessProbe:
             httpGet:
               path: {{ .Values.readinessProbe.path }}
-              port: {{ include "verifier-api.internalServerPort" . }}
+              port: {{ include "dome-verifier-api.internalServerPort" . }}
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           env:
             - name: SERVER_PORT
-              value: {{ include "verifier-api.internalServerPort" . | quote }}
+              value: {{ include "dome-verifier-api.internalServerPort" . | quote }}
             - name: LOGGING_LEVEL_ES_IN2_VCVERIFIER
               value: "{{ index .Values.app.logging.level "es.in2.vcverifier" }}"
             - name: LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY
@@ -86,13 +86,13 @@ spec:
             - name: VERIFIER_BACKEND_IDENTITY_PRIVATE_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "verifier-api.privateKey-secretName" . }}
-                  key: {{ include "verifier-api.privateKey-key" . }}
+                  name: {{ include "dome-verifier-api.privateKey-secretName" . }}
+                  key: {{ include "dome-verifier-api.privateKey-key" . }}
             - name: VERIFIER_BACKEND_IDENTITY_VERIFIABLE_CREDENTIAL
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "verifier-api.learCredentialMachine-secretName" . }}
-                  key: {{ include "verifier-api.learCredentialMachine-key" . }}
+                  name: {{ include "dome-verifier-api.learCredentialMachine-secretName" . }}
+                  key: {{ include "dome-verifier-api.learCredentialMachine-key" . }}
             - name: SPRING_CONFIG_ADDITIONAL_LOCATION
               value: "/config/application.yaml"
           volumeMounts:
@@ -101,7 +101,7 @@ spec:
       volumes:
         - name: config-volume
           configMap:
-            name: verifier-api-config
+            name: dome-verifier-api-config
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "verifier-api.fullname" . }}
+  name: {{ include "dome-verifier-api.fullname" . }}
   namespace: {{ $.Release.Namespace | quote }}
   labels:
-    {{- include "verifier-api.labels" . | nindent 4 }}
+    {{- include "dome-verifier-api.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -13,4 +13,4 @@ spec:
       protocol: TCP
       name: http
   selector:
-    {{- include "verifier-api.selectorLabels" . | nindent 4 }}
+    {{- include "dome-verifier-api.selectorLabels" . | nindent 4 }}

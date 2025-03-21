@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: verifier-api-config
+  name: dome-verifier-api-config
 data:
   application.yaml: |
     verifier:
