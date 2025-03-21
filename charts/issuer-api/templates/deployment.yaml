@@ -156,11 +156,6 @@ spec:
                 secretKeyRef:
                   name: {{ include "issuer-api.remoteSignature-secretName" . }}
                   key: {{ include "issuer-api.remoteSignature-clientSecret" . }}
-
-
-
-
-
             - name: TRUST_FRAMEWORK_URL
               value: {{.Values.app.trustFramework.url}}
             - name: KNOWLEDGE_BASE_WALLET_URL
@@ -214,3 +209,5 @@ spec:
               value: {{ .Values.app.cors.default.allowedOrigins }}
             - name: CORS_EXTERNAL_ALLOWED_ORIGINS
               value: {{ .Values.app.cors.external.allowedOrigins }}
+            - name: VERIFIER_EXTERNAL_DOMAIN
+              value: {{ .Values.app.verifier.url}}
