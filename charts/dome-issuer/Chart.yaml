@@ -43,7 +43,7 @@ dependencies:
     version: 1.0.13
 
   - name: postgresql
-    condition: "!issuer-api.db.externalService"
+    condition: "!dome-issuer-api.db.externalService"
     alias: dome-issuer-postgres
     repository: oci://registry-1.docker.io/bitnamicharts
     version: 13.1.5
