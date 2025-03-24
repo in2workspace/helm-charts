@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "issuer-ui.fullname" . }}
+  name: {{ include "dome-issuer-ui.fullname" . }}
   namespace: {{ $.Release.Namespace | quote }}
   labels:
-    {{- include "issuer-ui.labels" . | nindent 4 }}
+    {{- include "dome-issuer-ui.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -16,4 +16,4 @@ spec:
       protocol: TCP
       name: http
   selector:
-    {{- include "issuer-ui.selectorLabels" . | nindent 4 }}
+    {{- include "dome-issuer-ui.selectorLabels" . | nindent 4 }}

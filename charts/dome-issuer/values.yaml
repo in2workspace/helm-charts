@@ -1,4 +1,4 @@
-issuer-api:
+dome-issuer-api:
   app:
     profile: prod
     logLevel:
@@ -142,7 +142,7 @@ issuer-api:
       name: db-secret
       key: db-password
 
-issuer-ui:
+dome-issuer-ui:
   app:
     internalServerPort: 8080
     loginUrl:
@@ -303,7 +303,7 @@ dome-issuer-keycloak:
   token:
     expiration: 2592000
 
-issuer-postgres:
+dome-issuer-postgres:
   # -- should the postgresql deployment be enabled
   enabled: true
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
@@ -329,7 +329,7 @@ issuer-postgres:
         create.sh: |
           psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE issuer;"
 
-issuer-keycloak-postgres:
+dome-issuer-keycloak-postgres:
   # -- should the postgresql deployment be enabled
   enabled: true
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace

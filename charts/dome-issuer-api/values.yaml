@@ -195,6 +195,7 @@ app:
       scheme: http
       # change by the external url or set to localhost if deployed locally
       host: example.org
+      path: ""
   api:
     externalDomain:
       # if deployed locally set to false
