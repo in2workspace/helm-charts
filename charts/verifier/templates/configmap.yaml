@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-cm
+data:
+  application.yaml: |
+    verifier:
+      backend:
+        trustFrameworks: {{- toYaml .Values.app.backend.trustFrameworks | nindent 10 }}
