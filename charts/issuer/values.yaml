@@ -127,6 +127,8 @@ issuer-api:
         allowedOrigins: "https://example.org"
       external:
         allowedOrigins: "https://new.example.org, https://example-2.org"
+    verifier:
+      url: "https://example.org"
   db:
     externalService: false
     schema: public
