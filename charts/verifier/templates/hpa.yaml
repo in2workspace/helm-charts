@@ -2,15 +2,15 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "verifier-api.fullname" . }}
+  name: {{ include "verifier.fullname" . }}
   namespace: {{ $.Release.Namespace | quote }}
   labels:
-    {{- include "verifier-api.labels" . | nindent 4 }}
+    {{- include "verifier.labels" . | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "verifier-api.fullname" . }}
+    name: {{ include "verifier.fullname" . }}
   minReplicas: {{ .Values.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.autoscaling.maxReplicas }}
   metrics:

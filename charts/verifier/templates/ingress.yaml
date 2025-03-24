@@ -1,12 +1,12 @@
 {{- if .Values.ingress.enabled -}}
-{{- $fullName := include "verifier-api.fullname" . -}}
+{{- $fullName := include "verifier.fullname" . -}}
 {{- $servicePort := .Values.service.port -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "verifier-api.fullname" . }}
+  name: {{ include "verifier.fullname" . }}
   labels:
-    {{ include "verifier-api.labels" . | nindent 4 }}
+    {{ include "verifier.labels" . | nindent 4 }}
   {{- if .Values.ingress.annotations }}
   annotations:
     {{- with .Values.ingress.annotations }}

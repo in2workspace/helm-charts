@@ -30,7 +30,3 @@ dependencies:
     version: "16.4.5"
     repository: oci://registry-1.docker.io/bitnamicharts
     condition: keycloak-wallet-postgres.enabled # false - we use an external service
-
-
-
-

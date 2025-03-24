@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-cm-env
+data:
+  TENANT_NAME: "{{ .Values.global.tenantName }}"
+  ENVIRONMENT: "{{ .Values.global.environment }}"
+  LOGO_SRC: "{{ include "verifier-frontend.logoSrc" . | trim }}"
+  FAVICON_SRC: "{{ include "verifier-frontend.faviconSrc" . | trim }}"
+  VERIFIER_EXTERNAL_URL: "https://{{ include "verifier.domain" . | trim }}"
