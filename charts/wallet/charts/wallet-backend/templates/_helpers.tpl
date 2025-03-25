@@ -80,22 +80,6 @@ Support for existing secrets
     {{- end -}}
 {{- end -}}
 
-{{- define "wallet-backend.clientSecretKey" -}}
-    {{- if .Values.app.ebsiTest.client.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.ebsiTest.client.existingSecret.key $) -}}
-    {{- else -}}
-        {{- printf "ebsi-client-secret" -}}
-    {{- end -}}
-{{- end -}}
-
-{{- define "wallet-backend.userPasswordKey" -}}
-    {{- if .Values.app.ebsiTest.userData.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.ebsiTest.userData.existingSecret.key $) -}}
-    {{- else -}}
-        {{- printf "ebsi-user-password" -}}
-    {{- end -}}
-{{- end -}}
-
 {{- define "wallet-backend.vaultTokenKey" -}}
     {{- if .Values.app.vault.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.vault.existingSecret.key $) -}}
