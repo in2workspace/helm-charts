@@ -4221,6 +4221,39 @@ entries:
   wallet:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2025-03-25T09:54:01.866593837Z"
+    dependencies:
+    - condition: wallet-backend.enabled
+      name: wallet-backend
+      repository: ""
+      version: 2.1.1
+    - condition: wallet-frontend.enabled
+      name: wallet-frontend
+      repository: ""
+      version: 2.0.3
+    - alias: wallet-postgres
+      condition: wallet-postgres.enabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 16.4.5
+    - condition: keycloak-wallet.enabled
+      name: keycloak-wallet
+      repository: ""
+      version: 0.1.3
+    - alias: keycloak-wallet-postgres
+      condition: keycloak-wallet-postgres.enabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 16.4.5
+    description: Parent chart managing all the components of the Wallet application
+    digest: 3fd3530e1da636cc26a42ea668f99bdd3b9d9a138edc904d3c7f012f5831ddd5
+    name: wallet
+    type: application
+    urls:
+    - https://github.com/in2workspace/helm-charts/releases/download/wallet-2.0.5/wallet-2.0.5.tgz
+    version: 2.0.5
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2025-03-17T14:24:05.559596163Z"
     dependencies:
     - condition: wallet-backend.enabled
@@ -5146,4 +5179,4 @@ entries:
     urls:
     - https://in2workspace.github.io/helm-charts/wallet-api-1.0.0.tgz
     version: 1.0.0
-generated: "2025-03-24T12:38:55.915826108Z"
+generated: "2025-03-25T09:54:01.866908016Z"
