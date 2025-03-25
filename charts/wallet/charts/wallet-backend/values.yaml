@@ -10,7 +10,7 @@ image:
   # editable
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: v1.4.1
+  tag: v1.4.3-snapshot
 
 imagePullSecrets: []
 nameOverride: ""
