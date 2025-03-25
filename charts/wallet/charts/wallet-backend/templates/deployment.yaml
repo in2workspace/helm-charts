@@ -39,7 +39,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ .Values.service.port }}
+              containerPort: {{ include "wallet-backend.serverPort" . }}
               protocol: TCP
           livenessProbe:
             httpGet:
@@ -56,74 +56,42 @@ spec:
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           env:
-            - name: SPRING_PROFILES_ACTIVE
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ .Release.Name }}-backend-cm
-                  key: ENVIRONMENT
+            # todo
+            - name: SERVER_PORT
+              value: {{ include "wallet-backend.serverPort" . | quote }}
+            # LOGGING
             - name: LOGGING_LEVEL_ES_IN2_WALLET_API
               value: {{ .Values.app.logLevel }}
-            - name: SPRING_WEBFLUX_BASEPATH
-              value: "/api"
             # AUTH SERVER
-            - name: AUTH_SERVER_EXTERNAL_URL_SCHEME
-              value: "https"
-            - name: AUTH_SERVER_EXTERNAL_URL_DOMAIN
+            - name: SECURITY_AUTH_SERVER_EXTERNAL_URL_DOMAIN
               valueFrom:
                 configMapKeyRef:
                   name: {{ .Release.Name }}-backend-cm
                   key: KEYCLOAK_EXTERNAL_DOMAIN
-            - name: AUTH_SERVER_EXTERNAL_URL_PORT
-              value: "443"
-            - name: AUTH_SERVER_EXTERNAL_URL_PATH
+            - name: SECURITY_AUTH_SERVER_EXTERNAL_URL_PATH
               valueFrom:
                 configMapKeyRef:
                   name: {{ .Release.Name }}-backend-cm
                   key: KEYCLOAK_REALM_PATH
-              # http://keycloak.iam.svc.cluster.local:80
-            - name: AUTH_SERVER_INTERNAL_URL_SCHEME
-              value: "http"
-            - name: AUTH_SERVER_INTERNAL_URL_DOMAIN
-              value: "keycloak-proxy"
-            - name: AUTH_SERVER_INTERNAL_URL_PORT
-              value: "80"
-            - name: AUTH_SERVER_INTERNAL_URL_PATH
+            - name: SECURITY_AUTH_SERVER_INTERNAL_URL_PATH
               valueFrom:
                 configMapKeyRef:
                   name: {{ .Release.Name }}-backend-cm
                   key: KEYCLOAK_REALM_PATH
-            - name: AUTH_SERVER_JWT_DECODER_PATH
-              value: "/protocol/openid-connect/certs"
-            # EBSI TESTS
-            - name: EBSI_TEST_URL
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ .Release.Name }}-backend-cm
-                  key: EBSI_TEST_URL
-            - name: EBSI_TEST_CLIENT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.app.ebsiTest.client.existingSecret.name }}
-                  key: {{ .Values.app.ebsiTest.client.existingSecret.key }}
-            - name: EBSI_TEST_CLIENT_ID
-              value: {{ .Values.app.ebsiTest.client.id }}
-            - name: EBSI_TEST_USERNAME
-              value: {{ .Values.app.ebsiTest.userData.name }}
-            - name: EBSI_TEST_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.app.ebsiTest.userData.existingSecret.name }}
-                  key: {{ .Values.app.ebsiTest.userData.existingSecret.key }}
+            # todo
+            # CORS
+            - name: SECURITY_CORS_ALLOWED_ORIGINS
+              value: {{ .Values.app.cors.allowedOrigins }}
             # VAULT
-            - name: VAULT_PROVIDER_NAME
+            - name: SECURITY_VAULT_PROVIDER_NAME
               value: {{ .Values.app.vault.provider }}
-            - name: HASHICORP_VAULT_HOST
+            - name: SECURITY_HASHICORP_VAULT_HOST
               value: {{ .Values.app.vault.host }}
-            - name: HASHICORP_VAULT_SCHEME
+            - name: SECURITY_HASHICORP_VAULT_SCHEME
               value: {{ .Values.app.vault.scheme }}
-            - name: HASHICORP_VAULT_PORT
+            - name: SECURITY_HASHICORP_VAULT_PORT
               value: {{ quote .Values.app.vault.port }}
-            - name: HASHICORP_VAULT_TOKEN
+            - name: SECURITY_HASHICORP_VAULT_TOKEN
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.app.vault.existingSecret.name }}
@@ -134,9 +102,6 @@ spec:
                 configMapKeyRef:
                   name: {{ .Release.Name }}-backend-cm
                   key: DB_URL
-              # todo: el valor del schema siempre será wallet, el usuario no debe poder modificarlo
-            - name: DB_SCHEMA
-              value: {{ .Values.app.db.schema }}
             - name: SPRING_R2DBC_USERNAME
               value: {{ .Values.app.db.username }}
             - name: SPRING_R2DBC_PASSWORD
@@ -151,9 +116,6 @@ spec:
                   key: FLYWAY_URL
             - name: SPRING_FLYWAY_USER
               value: {{ .Values.app.db.username }}
-              # todo: el valor del schema siempre será wallet, el usuario no debe poder modificarlo
-            - name: SPRING_FLYWAY_DEFAULT_SCHEMA
-              value: {{ .Values.app.db.schema }}
             - name: SPRING_FLYWAY_PASSWORD
               valueFrom:
                 secretKeyRef:
