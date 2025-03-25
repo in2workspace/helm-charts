@@ -74,6 +74,8 @@ spec:
                   key: {{ include "issuer-api.db-passwordKey" . }}
             - name: SPRING_FLYWAY_URL
               value: "jdbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}"
+            - name: SPRING_FLYWAY_DEFAULT_SCHEMA
+              value: {{ .Values.db.schema }}
             - name: SPRING_MAIL_HOST
               value: {{ .Values.app.mail.host }}
             - name: SPRING_MAIL_PORT
