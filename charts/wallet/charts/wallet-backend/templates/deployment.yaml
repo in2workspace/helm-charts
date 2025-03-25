@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: {{ include "wallet-backend.fullname" . }}
   labels:
-    {{- include "wallet-backend.labels" . | nindent 4 }}
+      {{- include "wallet-backend.labels" . | nindent 4 }}
   namespace: {{ $.Release.Namespace | quote }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
@@ -20,9 +20,9 @@ spec:
       {{- end }}
       labels:
         {{- include "wallet-backend.labels" . | nindent 8 }}
-          {{- with .Values.podLabels }}
-          {{- toYaml . | nindent 8 }}
-          {{- end }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
