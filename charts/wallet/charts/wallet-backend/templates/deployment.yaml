@@ -73,6 +73,8 @@ spec:
                 configMapKeyRef:
                   name: {{ .Release.Name }}-backend-cm
                   key: KEYCLOAK_REALM_PATH
+            - name: SECURITY_AUTH_SERVER_INTERNAL_URL_DOMAIN
+              value: "keycloak-proxy"
             - name: SECURITY_AUTH_SERVER_INTERNAL_URL_PATH
               valueFrom:
                 configMapKeyRef:
