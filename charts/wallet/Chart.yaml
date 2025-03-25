@@ -8,7 +8,7 @@ appVersion: "1.0.0"
 
 dependencies:
   - name: wallet-backend
-    version: "2.0.0"
+    version: "2.1.1"
     condition: wallet-backend.enabled
 
   - name: wallet-frontend
