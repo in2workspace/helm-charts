@@ -87,13 +87,13 @@ spec:
             # VAULT
             - name: SECURITY_VAULT_PROVIDER_NAME
               value: {{ .Values.app.vault.provider }}
-            - name: SECURITY_HASHICORP_VAULT_HOST
+            - name: SECURITY_VAULT_HASHICORP_HOST
               value: {{ .Values.app.vault.host }}
-            - name: SECURITY_HASHICORP_VAULT_SCHEME
+            - name: SECURITY_VAULT_HASHICORP_SCHEME
               value: {{ .Values.app.vault.scheme }}
-            - name: SECURITY_HASHICORP_VAULT_PORT
+            - name: SECURITY_VAULT_HASHICORP_PORT
               value: {{ quote .Values.app.vault.port }}
-            - name: SECURITY_HASHICORP_VAULT_TOKEN
+            - name: SECURITY_VAULT_HASHICORP_TOKEN
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.app.vault.existingSecret.name }}
