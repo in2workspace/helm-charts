@@ -1,0 +1,215 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "dome-issuer-api.fullname" . }}
+  namespace: {{ $.Release.Namespace | quote }}
+  labels:
+    {{- include "dome-issuer-api.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "dome-issuer-api.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "dome-issuer-api.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "dome-issuer-api.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.app.internalServerPort }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.livenessProbe.path }}
+              port: {{ .Values.app.internalServerPort }}
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.readinessProbe.path }}
+              port: {{ .Values.app.internalServerPort }}
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: {{ .Values.app.profile }}
+            - name: LOGGING_LEVEL_ES_IN2_ISSUER
+              value: {{ .Values.app.logLevel.app }}
+            - name: LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY
+              value: {{ .Values.app.logLevel.security }}
+            - name: SPRING_WEBFLUX_BASEPATH
+              value: {{ .Values.app.basePath }}
+            - name: SPRING_R2DBC_URL
+              value: "r2dbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}?schema={{ .Values.db.schema }}"
+            - name: DB_SCHEMA
+              value: {{ .Values.db.schema }}
+            - name: SPRING_R2DBC_USERNAME
+              value: {{ .Values.db.username }}
+            - name: SPRING_R2DBC_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-issuer-api.db-secretName" . }}
+                  key: {{ include "dome-issuer-api.db-passwordKey" . }}
+            - name: SPRING_FLYWAY_URL
+              value: "jdbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}"
+            - name: SPRING_FLYWAY_DEFAULT_SCHEMA
+              value: {{ .Values.db.schema }}
+            - name: SPRING_MAIL_HOST
+              value: {{ .Values.app.mail.host }}
+            - name: SPRING_MAIL_PORT
+              value: "{{ .Values.app.mail.port }}" # Convert to string
+            - name: SPRING_MAIL_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-issuer-api.mail-secretName" . }}
+                  key: {{ include "dome-issuer-api.mail-userKey" . }}
+            - name: SPRING_MAIL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-issuer-api.mail-secretName" . }}
+                  key: {{ include "dome-issuer-api.mail-passwordKey" . }}
+            - name: SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH
+              value: "{{ .Values.app.mail.properties.mail.smtp.auth }}" # Convert to string
+            - name: SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE
+              value: "{{ .Values.app.mail.properties.mail.smtp.starttls.enable }}" # Convert to string
+            - name: SPRING_MAIL_PROPERTIES_MAIL_SMTP_SSL_TRUST
+              value: {{ .Values.app.mail.properties.mail.smtp.ssl.trust }}
+            - name: API_EXTERNAL_DOMAIN
+              value: "{{ .Values.app.api.externalDomain.scheme }}://{{ .Values.app.api.externalDomain.host }}{{ if not .Values.app.api.externalDomain.externalService }}:{{ .Values.app.api.externalDomain.internalPort }}{{ end }}{{ .Values.app.api.externalDomain.path }}"
+            - name: API_INTERNAL_DOMAIN
+              value: {{ .Values.app.api.internalDomain }}
+            - name: API_CONFIG_SOURCE
+              value: {{ .Values.app.api.configSource }}
+            - name: API_CACHE_LIFETIME_CREDENTIAL_OFFER
+              value: "{{ .Values.app.api.cacheLifetimeCredentialOffer }}" # Convert to string
+            - name: API_CACHE_LIFETIME_VERIFIABLE_CREDENTIAL
+              value: "{{ .Values.app.api.cacheLifetimeVerifiableCredential }}" # Convert to string
+            - name: AUTH_SERVER_PROVIDER
+              value: {{ .Values.app.authServer.provider }}
+            - name: AUTH_SERVER_EXTERNAL_DOMAIN
+              value: "{{ .Values.app.authServer.externalDomain.scheme }}://{{ .Values.app.authServer.externalDomain.host }}{{ if not .Values.app.authServer.externalDomain.externalService }}:{{ .Values.app.authServer.externalDomain.internalPort }}{{ end }}{{ .Values.app.authServer.externalDomain.path }}"
+            - name: AUTH_SERVER_INTERNAL_DOMAIN
+              value: {{ .Values.app.authServer.internalDomain }}
+            - name: AUTH_SERVER_REALM
+              value: {{ .Values.app.authServer.realm }}
+            - name: AUTH_SERVER_CLIENT_CLIENT_ID
+              value: {{ .Values.app.authServer.client.clientId }}
+            - name: AUTH_SERVER_CLIENT_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-issuer-api.authServerClient-secretName" . }}
+                  key: {{ include "dome-issuer-api.authServerClient-clientSecretKey" . }}
+            - name: AUTH_SERVER_PATHS_TOKEN_PATH
+              value: {{ .Values.app.authServer.paths.tokenPath }}
+            - name: AUTH_SERVER_CLIENT_USERNAME
+              value: {{ .Values.app.authServer.client.username }}
+            - name: AUTH_SERVER_CLIENT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-issuer-api.authServerClient-secretName" . }}
+                  key: {{ include "dome-issuer-api.authServerClient-passwordKey" . }}
+            - name: ISSUER_UI_EXTERNAL_DOMAIN
+              value: "{{ .Values.app.ui.externalDomain.scheme }}://{{ .Values.app.ui.externalDomain.host }}{{ if not .Values.app.ui.externalDomain.externalService }}:{{ .Values.app.ui.externalDomain.internalPort }}{{ end }}{{ .Values.app.ui.externalDomain.path }}"
+            - name: ISSUER_UI_INTERNAL_DOMAIN
+              value: {{ .Values.app.ui.internalDomain }}
+            - name: REMOTE_SIGNATURE_TYPE
+              value: "{{ .Values.app.remoteSignature.type }}"
+            - name: REMOTE_SIGNATURE_DOMAIN
+              value: "{{ .Values.app.remoteSignature.domain.scheme }}://{{ .Values.app.remoteSignature.domain.host }}{{ .Values.app.remoteSignature.domain.path }}"
+            - name: REMOTE_SIGNATURE_CREDENTIAL_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-issuer-api.remoteSignature-secretName" . }}
+                  key: {{ include "dome-issuer-api.remoteSignature-credentialId" . }}
+            - name: REMOTE_SIGNATURE_CREDENTIAL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-issuer-api.remoteSignature-secretName" . }}
+                  key: {{ include "dome-issuer-api.remoteSignature-credentialPassword" . }}
+            - name: REMOTE_SIGNATURE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-issuer-api.remoteSignature-secretName" . }}
+                  key: {{ include "dome-issuer-api.remoteSignature-clientId" . }}
+            - name: REMOTE_SIGNATURE_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-issuer-api.remoteSignature-secretName" . }}
+                  key: {{ include "dome-issuer-api.remoteSignature-clientSecret" . }}
+            - name: TRUST_FRAMEWORK_URL
+              value: {{ .Values.app.trustFramework.url }}
+            - name: KNOWLEDGE_BASE_WALLET_URL
+              value: {{ .Values.app.knowledgebase.walletUrl }}
+            - name: DEFAULT_SIGNER_COMMON_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-issuer-api.defaultSigner-secretName" . }}
+                  key: {{ include "dome-issuer-api.defaultSigner-commonName" . }}
+            - name: DEFAULT_SIGNER_COUNTRY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-issuer-api.defaultSigner-secretName" . }}
+                  key: {{ include "dome-issuer-api.defaultSigner-country" . }}
+            - name: DEFAULT_SIGNER_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-issuer-api.defaultSigner-secretName" . }}
+                  key: {{ include "dome-issuer-api.defaultSigner-email" . }}
+            - name: DEFAULT_SIGNER_ORGANIZATION_IDENTIFIER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-issuer-api.defaultSigner-secretName" . }}
+                  key: {{ include "dome-issuer-api.defaultSigner-organizationIdentifier" . }}
+            - name: DEFAULT_SIGNER_ORGANIZATION
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-issuer-api.defaultSigner-secretName" . }}
+                  key: {{ include "dome-issuer-api.defaultSigner-organization" . }}
+            - name: DEFAULT_SIGNER_SERIAL_NUMBER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-issuer-api.defaultSigner-secretName" . }}
+                  key: {{ include "dome-issuer-api.defaultSigner-serialNumber" . }}
+            - name: ISSUER_IDENTITY_CREDENTIAL_SUBJECT_DID_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-issuer-api.issuerIdentity-secretName" . }}
+                  key: {{ include "dome-issuer-api.issuerIdentity-credentialDidKey" . }}
+            - name: ISSUER_IDENTITY_JWT_CREDENTIAL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-issuer-api.issuerIdentity-secretName" . }}
+                  key: {{ include "dome-issuer-api.issuerIdentity-vc" . }}
+            - name: ISSUER_IDENTITY_CRYPTO_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-issuer-api.issuerIdentity-secretName" . }}
+                  key: {{ include "dome-issuer-api.issuerIdentity-privateKey" . }}
+            - name: CORS_DEFAULT_ALLOWED_ORIGINS
+              value: {{ .Values.app.cors.default.allowedOrigins }}
+            - name: CORS_EXTERNAL_ALLOWED_ORIGINS
+              value: {{ .Values.app.cors.external.allowedOrigins }}
+            - name: VERIFIER_EXTERNAL_DOMAIN
+              value: {{ .Values.app.verifier.url }}
