@@ -604,6 +604,22 @@ entries:
     urls:
     - https://in2workspace.github.io/helm-charts/dome-issuer-keycloak-1.0.0.tgz
     version: 1.0.0
+  dome-issuer-ui:
+  - apiVersion: v2
+    appVersion: v1.6.1
+    created: "2025-03-26T13:47:27.893271996Z"
+    description: A Helm chart for Kubernetes
+    digest: def26a9bd741704e8107ad7f24e606417b7472534b761684bbb50872157de1da
+    maintainers:
+    - email: domesupport@in2.es
+      name: IN2 Team
+    name: dome-issuer-ui
+    sources:
+    - https://github.com/in2workspace/issuer-ui
+    type: application
+    urls:
+    - https://github.com/in2workspace/helm-charts/releases/download/dome-issuer-ui-1.2.3/dome-issuer-ui-1.2.3.tgz
+    version: 1.2.3
   dome-verifier-api:
   - apiVersion: v2
     appVersion: v1.1.0
@@ -5342,4 +5358,4 @@ entries:
     urls:
     - https://in2workspace.github.io/helm-charts/wallet-api-1.0.0.tgz
     version: 1.0.0
-generated: "2025-03-26T13:41:55.34456977Z"
+generated: "2025-03-26T13:47:27.893753033Z"
