@@ -10,7 +10,7 @@ image:
   # editable
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: v1.4.1
+  tag: v1.4.3-snapshot
 
 imagePullSecrets: []
 nameOverride: ""
@@ -116,27 +116,8 @@ affinity: {}
 
 app:
   logLevel: DEBUG
-  ebsiTest:
-    client:
-      id: user-registry-client
-      secret: defaultSecret
-      existingSecret:
-        # -- should an existing secret be used?
-        enabled: false
-        # -- name of the secret
-        name: wallet-backend-secret
-        # -- key to retrieve the secret from
-        key: ebsi-client-secret
-    userData:
-      name: admin
-      password: defaultPassword
-      existingSecret:
-        # -- should an existing secret be used?
-        enabled: false
-        # -- name of the secret
-        name: wallet-backend-secret
-        # -- key to retrieve the secret from
-        key: ebsi-user-password
+  cors:
+    allowedOrigins:
   vault:
     provider: hashicorp
     host: vault-server
@@ -154,7 +135,6 @@ app:
     host: wallet-postgres
     port: 5432
     name: wallet
-    schema: wallet
     username: postgres
     password: postgres
     existingSecret:
