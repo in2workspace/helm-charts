@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "issuer-api.fullname" . }}
+  name: {{ include "dome-issuer-api.fullname" . }}
   namespace: {{ $.Release.Namespace | quote }}
   labels:
-    {{- include "issuer-api.labels" . | nindent 4 }}
+    {{- include "dome-issuer-api.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "issuer-api.selectorLabels" . | nindent 6 }}
+      {{- include "dome-issuer-api.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -19,13 +19,13 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "issuer-api.selectorLabels" . | nindent 8 }}
+        {{- include "dome-issuer-api.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "issuer-api.serviceAccountName" . }}
+      serviceAccountName: {{ include "dome-issuer-api.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -64,14 +64,14 @@ spec:
             - name: SPRING_R2DBC_URL
               value: "r2dbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}?schema={{ .Values.db.schema }}"
             - name: DB_SCHEMA
-              value: {{.Values.db.schema}}
+              value: {{ .Values.db.schema }}
             - name: SPRING_R2DBC_USERNAME
               value: {{ .Values.db.username }}
             - name: SPRING_R2DBC_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "issuer-api.db-secretName" . }}
-                  key: {{ include "issuer-api.db-passwordKey" . }}
+                  name: {{ include "dome-issuer-api.db-secretName" . }}
+                  key: {{ include "dome-issuer-api.db-passwordKey" . }}
             - name: SPRING_FLYWAY_URL
               value: "jdbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}"
             - name: SPRING_FLYWAY_DEFAULT_SCHEMA
@@ -83,13 +83,13 @@ spec:
             - name: SPRING_MAIL_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "issuer-api.mail-secretName" . }}
-                  key: {{ include "issuer-api.mail-userKey" . }}
+                  name: {{ include "dome-issuer-api.mail-secretName" . }}
+                  key: {{ include "dome-issuer-api.mail-userKey" . }}
             - name: SPRING_MAIL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "issuer-api.mail-secretName" . }}
-                  key: {{ include "issuer-api.mail-passwordKey" . }}
+                  name: {{ include "dome-issuer-api.mail-secretName" . }}
+                  key: {{ include "dome-issuer-api.mail-passwordKey" . }}
             - name: SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH
               value: "{{ .Values.app.mail.properties.mail.smtp.auth }}" # Convert to string
             - name: SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE
@@ -119,8 +119,8 @@ spec:
             - name: AUTH_SERVER_CLIENT_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "issuer-api.authServerClient-secretName" . }}
-                  key: {{ include "issuer-api.authServerClient-clientSecretKey" . }}
+                  name: {{ include "dome-issuer-api.authServerClient-secretName" . }}
+                  key: {{ include "dome-issuer-api.authServerClient-clientSecretKey" . }}
             - name: AUTH_SERVER_PATHS_TOKEN_PATH
               value: {{ .Values.app.authServer.paths.tokenPath }}
             - name: AUTH_SERVER_CLIENT_USERNAME
@@ -128,8 +128,8 @@ spec:
             - name: AUTH_SERVER_CLIENT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "issuer-api.authServerClient-secretName" . }}
-                  key: {{ include "issuer-api.authServerClient-passwordKey" . }}
+                  name: {{ include "dome-issuer-api.authServerClient-secretName" . }}
+                  key: {{ include "dome-issuer-api.authServerClient-passwordKey" . }}
             - name: ISSUER_UI_EXTERNAL_DOMAIN
               value: "{{ .Values.app.ui.externalDomain.scheme }}://{{ .Values.app.ui.externalDomain.host }}{{ if not .Values.app.ui.externalDomain.externalService }}:{{ .Values.app.ui.externalDomain.internalPort }}{{ end }}{{ .Values.app.ui.externalDomain.path }}"
             - name: ISSUER_UI_INTERNAL_DOMAIN
@@ -141,75 +141,75 @@ spec:
             - name: REMOTE_SIGNATURE_CREDENTIAL_ID
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "issuer-api.remoteSignature-secretName" . }}
-                  key: {{ include "issuer-api.remoteSignature-credentialId" . }}
+                  name: {{ include "dome-issuer-api.remoteSignature-secretName" . }}
+                  key: {{ include "dome-issuer-api.remoteSignature-credentialId" . }}
             - name: REMOTE_SIGNATURE_CREDENTIAL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "issuer-api.remoteSignature-secretName" . }}
-                  key: {{ include "issuer-api.remoteSignature-credentialPassword" . }}
+                  name: {{ include "dome-issuer-api.remoteSignature-secretName" . }}
+                  key: {{ include "dome-issuer-api.remoteSignature-credentialPassword" . }}
             - name: REMOTE_SIGNATURE_CLIENT_ID
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "issuer-api.remoteSignature-secretName" . }}
-                  key: {{ include "issuer-api.remoteSignature-clientId" . }}
+                  name: {{ include "dome-issuer-api.remoteSignature-secretName" . }}
+                  key: {{ include "dome-issuer-api.remoteSignature-clientId" . }}
             - name: REMOTE_SIGNATURE_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "issuer-api.remoteSignature-secretName" . }}
-                  key: {{ include "issuer-api.remoteSignature-clientSecret" . }}
+                  name: {{ include "dome-issuer-api.remoteSignature-secretName" . }}
+                  key: {{ include "dome-issuer-api.remoteSignature-clientSecret" . }}
             - name: TRUST_FRAMEWORK_URL
-              value: {{.Values.app.trustFramework.url}}
+              value: {{ .Values.app.trustFramework.url }}
             - name: KNOWLEDGE_BASE_WALLET_URL
-              value: {{.Values.app.knowledgebase.walletUrl}}
+              value: {{ .Values.app.knowledgebase.walletUrl }}
             - name: DEFAULT_SIGNER_COMMON_NAME
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "issuer-api.defaultSigner-secretName" . }}
-                  key: {{ include "issuer-api.defaultSigner-commonName" . }}
+                  name: {{ include "dome-issuer-api.defaultSigner-secretName" . }}
+                  key: {{ include "dome-issuer-api.defaultSigner-commonName" . }}
             - name: DEFAULT_SIGNER_COUNTRY
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "issuer-api.defaultSigner-secretName" . }}
-                  key: {{ include "issuer-api.defaultSigner-country" . }}
+                  name: {{ include "dome-issuer-api.defaultSigner-secretName" . }}
+                  key: {{ include "dome-issuer-api.defaultSigner-country" . }}
             - name: DEFAULT_SIGNER_EMAIL
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "issuer-api.defaultSigner-secretName" . }}
-                  key: {{ include "issuer-api.defaultSigner-email" . }}
+                  name: {{ include "dome-issuer-api.defaultSigner-secretName" . }}
+                  key: {{ include "dome-issuer-api.defaultSigner-email" . }}
             - name: DEFAULT_SIGNER_ORGANIZATION_IDENTIFIER
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "issuer-api.defaultSigner-secretName" . }}
-                  key: {{ include "issuer-api.defaultSigner-organizationIdentifier" . }}
+                  name: {{ include "dome-issuer-api.defaultSigner-secretName" . }}
+                  key: {{ include "dome-issuer-api.defaultSigner-organizationIdentifier" . }}
             - name: DEFAULT_SIGNER_ORGANIZATION
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "issuer-api.defaultSigner-secretName" . }}
-                  key: {{ include "issuer-api.defaultSigner-organization" . }}
+                  name: {{ include "dome-issuer-api.defaultSigner-secretName" . }}
+                  key: {{ include "dome-issuer-api.defaultSigner-organization" . }}
             - name: DEFAULT_SIGNER_SERIAL_NUMBER
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "issuer-api.defaultSigner-secretName" . }}
-                  key: {{ include "issuer-api.defaultSigner-serialNumber" . }}
+                  name: {{ include "dome-issuer-api.defaultSigner-secretName" . }}
+                  key: {{ include "dome-issuer-api.defaultSigner-serialNumber" . }}
             - name: ISSUER_IDENTITY_CREDENTIAL_SUBJECT_DID_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "issuer-api.issuerIdentity-secretName" . }}
-                  key: {{ include "issuer-api.issuerIdentity-credentialDidKey" . }}
+                  name: {{ include "dome-issuer-api.issuerIdentity-secretName" . }}
+                  key: {{ include "dome-issuer-api.issuerIdentity-credentialDidKey" . }}
             - name: ISSUER_IDENTITY_JWT_CREDENTIAL
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "issuer-api.issuerIdentity-secretName" . }}
-                  key: {{ include "issuer-api.issuerIdentity-vc" . }}
+                  name: {{ include "dome-issuer-api.issuerIdentity-secretName" . }}
+                  key: {{ include "dome-issuer-api.issuerIdentity-vc" . }}
             - name: ISSUER_IDENTITY_CRYPTO_PRIVATE_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "issuer-api.issuerIdentity-secretName" . }}
-                  key: {{ include "issuer-api.issuerIdentity-privateKey" . }}
+                  name: {{ include "dome-issuer-api.issuerIdentity-secretName" . }}
+                  key: {{ include "dome-issuer-api.issuerIdentity-privateKey" . }}
             - name: CORS_DEFAULT_ALLOWED_ORIGINS
               value: {{ .Values.app.cors.default.allowedOrigins }}
             - name: CORS_EXTERNAL_ALLOWED_ORIGINS
               value: {{ .Values.app.cors.external.allowedOrigins }}
             - name: VERIFIER_EXTERNAL_DOMAIN
-              value: {{ .Values.app.verifier.url}}
+              value: {{ .Values.app.verifier.url }}

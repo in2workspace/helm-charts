@@ -4,7 +4,7 @@ kind: Ingress
 metadata:
   name: ingress-well-known
   labels:
-    {{ include "issuer-api.labels" . | nindent 4 }}
+    {{ include "dome-issuer-api.labels" . | nindent 4 }}
   {{- if .Values.ingressWellKnown.annotations }}
   annotations:
     {{- with .Values.ingressWellKnown.annotations }}

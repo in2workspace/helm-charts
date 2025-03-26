@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "issuer-api.name" -}}
+{{- define "dome-issuer-api.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "issuer-api.fullname" -}}
+{{- define "dome-issuer-api.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,16 +26,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "issuer-api.chart" -}}
+{{- define "dome-issuer-api.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "issuer-api.labels" -}}
-helm.sh/chart: {{ include "issuer-api.chart" . }}
-{{ include "issuer-api.selectorLabels" . }}
+{{- define "dome-issuer-api.labels" -}}
+helm.sh/chart: {{ include "dome-issuer-api.chart" . }}
+{{ include "dome-issuer-api.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -45,26 +45,26 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "issuer-api.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "issuer-api.name" . }}
+{{- define "dome-issuer-api.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "dome-issuer-api.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "issuer-api.serviceAccountName" -}}
+{{- define "dome-issuer-api.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "issuer-api.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "dome-issuer-api.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
 
 {{/*
-Support for existing database secret 
+Support for existing database secret
 */}}
-{{- define "issuer-api.db-secretName" -}}
+{{- define "dome-issuer-api.db-secretName" -}}
     {{- if .Values.db.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.db.existingSecret.name $) -}}
     {{- else -}}
@@ -72,7 +72,7 @@ Support for existing database secret
     {{- end -}}
 {{- end -}}
 
-{{- define "issuer-api.db-passwordKey" -}}
+{{- define "dome-issuer-api.db-passwordKey" -}}
     {{- if .Values.db.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.db.existingSecret.key $) -}}
     {{- else -}}
@@ -81,9 +81,9 @@ Support for existing database secret
 {{- end -}}
 
 {{/*
-Support for existing auth server client secret 
+Support for existing auth server client secret
 */}}
-{{- define "issuer-api.authServerClient-secretName" -}}
+{{- define "dome-issuer-api.authServerClient-secretName" -}}
     {{- if .Values.app.authServer.client.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.authServer.client.existingSecret.name $) -}}
     {{- else -}}
@@ -91,7 +91,7 @@ Support for existing auth server client secret
     {{- end -}}
 {{- end -}}
 
-{{- define "issuer-api.authServerClient-clientSecretKey" -}}
+{{- define "dome-issuer-api.authServerClient-clientSecretKey" -}}
     {{- if .Values.app.authServer.client.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.authServer.client.existingSecret.clientSecretKey $) -}}
     {{- else -}}
@@ -99,7 +99,7 @@ Support for existing auth server client secret
     {{- end -}}
 {{- end -}}
 
-{{- define "issuer-api.authServerClient-passwordKey" -}}
+{{- define "dome-issuer-api.authServerClient-passwordKey" -}}
     {{- if .Values.app.authServer.client.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.authServer.client.existingSecret.clientPasswordKey $) -}}
     {{- else -}}
@@ -108,9 +108,9 @@ Support for existing auth server client secret
 {{- end -}}
 
 {{/*
-Support for existing mail secret 
+Support for existing mail secret
 */}}
-{{- define "issuer-api.mail-secretName" -}}
+{{- define "dome-issuer-api.mail-secretName" -}}
     {{- if .Values.app.mail.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.mail.existingSecret.name $) -}}
     {{- else -}}
@@ -118,7 +118,7 @@ Support for existing mail secret
     {{- end -}}
 {{- end -}}
 
-{{- define "issuer-api.mail-userKey" -}}
+{{- define "dome-issuer-api.mail-userKey" -}}
     {{- if .Values.app.mail.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.mail.existingSecret.userKey $) -}}
     {{- else -}}
@@ -126,7 +126,7 @@ Support for existing mail secret
     {{- end -}}
 {{- end -}}
 
-{{- define "issuer-api.mail-passwordKey" -}}
+{{- define "dome-issuer-api.mail-passwordKey" -}}
     {{- if .Values.app.mail.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.mail.existingSecret.passwordKey $) -}}
     {{- else -}}
@@ -137,7 +137,7 @@ Support for existing mail secret
 {{/*
 Support for existing issuer identity secret
 */}}
-{{- define "issuer-api.issuerIdentity-secretName" -}}
+{{- define "dome-issuer-api.issuerIdentity-secretName" -}}
     {{- if .Values.app.issuerIdentity.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.issuerIdentity.existingSecret.name $) -}}
     {{- else -}}
@@ -145,7 +145,7 @@ Support for existing issuer identity secret
     {{- end -}}
 {{- end -}}
 
-{{- define "issuer-api.issuerIdentity-privateKey" -}}
+{{- define "dome-issuer-api.issuerIdentity-privateKey" -}}
     {{- if .Values.app.issuerIdentity.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.issuerIdentity.existingSecret.cryptoPrivateKey $) -}}
     {{- else -}}
@@ -153,7 +153,7 @@ Support for existing issuer identity secret
     {{- end -}}
 {{- end -}}
 
-{{- define "issuer-api.issuerIdentity-vc" -}}
+{{- define "dome-issuer-api.issuerIdentity-vc" -}}
     {{- if .Values.app.issuerIdentity.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.issuerIdentity.existingSecret.vc $) -}}
     {{- else -}}
@@ -161,7 +161,7 @@ Support for existing issuer identity secret
     {{- end -}}
 {{- end -}}
 
-{{- define "issuer-api.issuerIdentity-credentialDidKey" -}}
+{{- define "dome-issuer-api.issuerIdentity-credentialDidKey" -}}
     {{- if .Values.app.issuerIdentity.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.issuerIdentity.existingSecret.credentialDidKey $) -}}
     {{- else -}}
@@ -172,7 +172,7 @@ Support for existing issuer identity secret
 {{/*
 Support for existing default signer secret
 */}}
-{{- define "issuer-api.defaultSigner-secretName" -}}
+{{- define "dome-issuer-api.defaultSigner-secretName" -}}
     {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.defaultSigner.existingSecret.name $) -}}
     {{- else -}}
@@ -180,7 +180,7 @@ Support for existing default signer secret
     {{- end -}}
 {{- end -}}
 
-{{- define "issuer-api.defaultSigner-commonName" -}}
+{{- define "dome-issuer-api.defaultSigner-commonName" -}}
     {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.defaultSigner.existingSecret.commonName $) -}}
     {{- else -}}
@@ -188,7 +188,7 @@ Support for existing default signer secret
     {{- end -}}
 {{- end -}}
 
-{{- define "issuer-api.defaultSigner-organization" -}}
+{{- define "dome-issuer-api.defaultSigner-organization" -}}
     {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.defaultSigner.existingSecret.organization $) -}}
     {{- else -}}
@@ -196,7 +196,7 @@ Support for existing default signer secret
     {{- end -}}
 {{- end -}}
 
-{{- define "issuer-api.defaultSigner-country" -}}
+{{- define "dome-issuer-api.defaultSigner-country" -}}
     {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.defaultSigner.existingSecret.country $) -}}
     {{- else -}}
@@ -204,7 +204,7 @@ Support for existing default signer secret
     {{- end -}}
 {{- end -}}
 
-{{- define "issuer-api.defaultSigner-email" -}}
+{{- define "dome-issuer-api.defaultSigner-email" -}}
     {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.defaultSigner.existingSecret.email $) -}}
     {{- else -}}
@@ -212,7 +212,7 @@ Support for existing default signer secret
     {{- end -}}
 {{- end -}}
 
-{{- define "issuer-api.defaultSigner-organizationIdentifier" -}}
+{{- define "dome-issuer-api.defaultSigner-organizationIdentifier" -}}
     {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.defaultSigner.existingSecret.organizationIdentifier $) -}}
     {{- else -}}
@@ -220,7 +220,7 @@ Support for existing default signer secret
     {{- end -}}
 {{- end -}}
 
-{{- define "issuer-api.defaultSigner-serialNumber" -}}
+{{- define "dome-issuer-api.defaultSigner-serialNumber" -}}
     {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.defaultSigner.existingSecret.serialNumber $) -}}
     {{- else -}}
@@ -232,7 +232,7 @@ Support for existing default signer secret
 Support for existing remote-signature-secret
 */}}
 
-{{- define "issuer-api.remoteSignature-secretName" -}}
+{{- define "dome-issuer-api.remoteSignature-secretName" -}}
     {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.remoteSignature.existingSecret.name $) -}}
     {{- else -}}
@@ -240,7 +240,7 @@ Support for existing remote-signature-secret
     {{- end -}}
 {{- end -}}
 
-{{- define "issuer-api.remoteSignature-clientId" -}}
+{{- define "dome-issuer-api.remoteSignature-clientId" -}}
     {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.remoteSignature.existingSecret.clientId $) -}}
     {{- else -}}
@@ -248,7 +248,7 @@ Support for existing remote-signature-secret
     {{- end -}}
 {{- end -}}
 
-{{- define "issuer-api.remoteSignature-clientSecret" -}}
+{{- define "dome-issuer-api.remoteSignature-clientSecret" -}}
     {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.remoteSignature.existingSecret.clientSecret $) -}}
     {{- else -}}
@@ -256,7 +256,7 @@ Support for existing remote-signature-secret
     {{- end -}}
 {{- end -}}
 
-{{- define "issuer-api.remoteSignature-credentialId" -}}
+{{- define "dome-issuer-api.remoteSignature-credentialId" -}}
     {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.remoteSignature.existingSecret.credentialId $) -}}
     {{- else -}}
@@ -264,7 +264,7 @@ Support for existing remote-signature-secret
     {{- end -}}
 {{- end -}}
 
-{{- define "issuer-api.remoteSignature-credentialPassword" -}}
+{{- define "dome-issuer-api.remoteSignature-credentialPassword" -}}
     {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.remoteSignature.existingSecret.credentialPassword $) -}}
     {{- else -}}

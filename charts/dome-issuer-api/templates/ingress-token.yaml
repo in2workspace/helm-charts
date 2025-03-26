@@ -4,7 +4,7 @@ kind: Ingress
 metadata:
   name: ingress-token
   labels:
-    {{ include "issuer-api.labels" . | nindent 4 }}
+    {{ include "dome-issuer-api.labels" . | nindent 4 }}
   {{- if .Values.ingressToken.annotations }}
   annotations:
     {{- with .Values.ingressToken.annotations }}
