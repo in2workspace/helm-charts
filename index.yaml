@@ -961,6 +961,42 @@ entries:
   issuer:
   - apiVersion: v2
     appVersion: v1.0.3
+    created: "2025-03-26T09:00:54.91941837Z"
+    dependencies:
+    - alias: issuer-api
+      condition: issuer-api.enabled
+      name: issuer-api
+      repository: https://in2workspace.github.io/helm-charts
+      version: 1.1.15
+    - alias: issuer-ui
+      condition: issuer-ui.enabled
+      name: issuer-ui
+      repository: https://in2workspace.github.io/helm-charts
+      version: 1.2.1
+    - alias: dome-issuer-keycloak
+      condition: dome-issuer-keycloak.enabled
+      name: dome-issuer-keycloak
+      repository: https://in2workspace.github.io/helm-charts
+      version: 1.0.13
+    - alias: issuer-postgres
+      condition: '!issuer-api.db.externalService'
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 13.1.5
+    - alias: issuer-keycloak-postgres
+      condition: issuer-keycloak-postgres.enabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 13.1.5
+    description: Umbrella Helm chart for the issuer
+    digest: 92eae1051af3c9e218e4a0714a24c61b6097b3bc9350ea9e580d12aa0f3f6292
+    name: issuer
+    type: application
+    urls:
+    - https://github.com/in2workspace/helm-charts/releases/download/issuer-1.3.12/issuer-1.3.12.tgz
+    version: 1.3.12
+  - apiVersion: v2
+    appVersion: v1.0.3
     created: "2025-03-21T12:39:27.727314505Z"
     dependencies:
     - alias: issuer-api
@@ -5260,4 +5296,4 @@ entries:
     urls:
     - https://in2workspace.github.io/helm-charts/wallet-api-1.0.0.tgz
     version: 1.0.0
-generated: "2025-03-25T16:03:15.603687419Z"
+generated: "2025-03-26T09:00:54.919757041Z"
