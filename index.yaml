@@ -362,7 +362,38 @@ entries:
     urls:
     - https://in2workspace.github.io/helm-charts/dome-dss-0.0.1.tgz
     version: 0.0.1
+  dome-issuer-api:
+  - apiVersion: v2
+    appVersion: v1.3.0
+    created: "2025-03-26T13:41:54.828963834Z"
+    description: A Helm chart for Kubernetes
+    digest: c1b613e3f74581ce70a8a159ebaa34cdec6e8fe5ec0a9dd897c90425f559d5ce
+    maintainers:
+    - email: domesupport@in2.es
+      name: IN2 Team
+    name: dome-issuer-api
+    sources:
+    - https://github.com/in2workspace/issuer-api
+    type: application
+    urls:
+    - https://github.com/in2workspace/helm-charts/releases/download/dome-issuer-api-1.1.17/dome-issuer-api-1.1.17.tgz
+    version: 1.1.17
   dome-issuer-keycloak:
+  - apiVersion: v2
+    appVersion: v1.1.0
+    created: "2025-03-26T13:41:55.084166008Z"
+    description: A Helm chart for Kubernetes
+    digest: 17719258b6f58308f662c6bd132a2c425c0251410f38bd5eb83321964c14b4c5
+    maintainers:
+    - email: domesupport@in2.es
+      name: IN2 Team
+    name: dome-issuer-keycloak
+    sources:
+    - https://github.com/in2workspace/dome-issuer-keycloak
+    type: application
+    urls:
+    - https://github.com/in2workspace/helm-charts/releases/download/dome-issuer-keycloak-1.0.14/dome-issuer-keycloak-1.0.14.tgz
+    version: 1.0.14
   - apiVersion: v2
     appVersion: v1.1.0
     created: "2025-01-30T13:14:22.2701381+01:00"
@@ -3671,6 +3702,21 @@ entries:
   issuer-ui:
   - apiVersion: v2
     appVersion: v1.6.1
+    created: "2025-03-26T13:41:55.344174861Z"
+    description: A Helm chart for Kubernetes
+    digest: fed9630ff56680599c32657887436b8e5ab8373e302c14cdfa1d0be264bffce8
+    maintainers:
+    - email: domesupport@in2.es
+      name: IN2 Team
+    name: issuer-ui
+    sources:
+    - https://github.com/in2workspace/issuer-ui
+    type: application
+    urls:
+    - https://github.com/in2workspace/helm-charts/releases/download/issuer-ui-1.2.3/issuer-ui-1.2.3.tgz
+    version: 1.2.3
+  - apiVersion: v2
+    appVersion: v1.6.1
     created: "2025-02-28T13:47:16.332672027Z"
     description: A Helm chart for Kubernetes
     digest: 2a6b1e2fad2834ed4028ca9f5d3e14a724bd952dc8d9881decd0cee8a21d5748
@@ -5296,4 +5342,4 @@ entries:
     urls:
     - https://in2workspace.github.io/helm-charts/wallet-api-1.0.0.tgz
     version: 1.0.0
-generated: "2025-03-26T09:00:54.919757041Z"
+generated: "2025-03-26T13:41:55.34456977Z"
