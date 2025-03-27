@@ -18,7 +18,7 @@ data:
   KEYCLOAK_REALM_PATH: "{{ .Values.global.tenantName }}-issuer"
   KEYCLOAK_TOKEN_PATH: "/realms/{{ .Values.global.tenantName }}-issuer/protocol/openid-connect/token"
   # Routing
-  ISSUER_API_EXTERNAL_DOMAIN: "https://{{ include "issuer.externalDomain" . | trim }}"
+  ISSUER_API_EXTERNAL_DOMAIN: "https://{{ include "issuer.externalDomain" . | trim }}/api"
   # todo: originalmente se agregaba el path '/' a la ruta. Revisar si es necesario
   ISSUER_FRONTEND_EXTERNAL_DOMAIN: "https://{{ include "issuer.externalDomain" . | trim }}"
 
