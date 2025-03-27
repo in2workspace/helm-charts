@@ -80,10 +80,29 @@ spec:
                 configMapKeyRef:
                   name: {{ .Release.Name }}-backend-cm
                   key: KEYCLOAK_REALM_PATH
-            # todo
             # CORS
             - name: SECURITY_CORS_ALLOWED_ORIGINS
               value: {{ .Values.app.cors.allowedOrigins }}
+            # EBSI TESTS
+            - name: EBSI_TEST_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-backend-cm
+                  key: EBSI_TEST_URL
+            - name: EBSI_TEST_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.app.ebsiTest.client.existingSecret.name }}
+                  key: {{ .Values.app.ebsiTest.client.existingSecret.key }}
+            - name: EBSI_TEST_CLIENT_ID
+              value: {{ .Values.app.ebsiTest.client.id }}
+            - name: EBSI_TEST_USERNAME
+              value: {{ .Values.app.ebsiTest.userData.name }}
+            - name: EBSI_TEST_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.app.ebsiTest.userData.existingSecret.name }}
+                  key: {{ .Values.app.ebsiTest.userData.existingSecret.key }}
             # VAULT
             - name: SECURITY_VAULT_PROVIDER_NAME
               value: {{ .Values.app.vault.provider }}

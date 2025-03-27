@@ -13,3 +13,4 @@ data:
   DB_NAME: "{{ .Values.global.tenantName }}"
   DB_URL: "r2dbc:postgresql://tenant-{{ .Values.global.tenantName | lower }}-postgresql:{{ .Values.app.db.port | default 5432 }}/{{ .Values.global.tenantName }}?schema=wallet"
   FLYWAY_URL: "jdbc:postgresql://tenant-{{ .Values.global.tenantName | lower }}-postgresql:{{ .Values.app.db.port | default 5432 }}/{{ .Values.global.tenantName }}?schema=wallet"
+  EBSI_TEST_URL: "https://{{ include "keycloak.domain" . | trim }}/realms/{{ .Values.global.tenantName }}-wallet/protocol/openid-connect/token"
