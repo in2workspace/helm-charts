@@ -1,0 +1,113 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "issuer-frontend.fullname" . }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "issuer-frontend.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "issuer-frontend.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "issuer-frontend.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "issuer-frontend.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.livenessProbe.httpGet.path }}
+              port: {{ .Values.livenessProbe.httpGet.port }}
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.readinessProbe.httpGet.path }}
+              port: {{ .Values.readinessProbe.httpGet.port }}
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          env:
+            # values.yaml
+            - name: PRIMARY
+              value: {{ .Values.app.colors.primary | quote }}
+            - name: PRIMARY_CONTRAST
+              value: {{ .Values.app.colors.primaryContrast | quote }}
+            - name: SECONDARY
+              value: {{ .Values.app.colors.secondary | quote }}
+            - name: SECONDARY_CONTRAST
+              value: {{ .Values.app.colors.secondaryContrast | quote }}
+            - name: CLIENT_ID
+              value: {{ .Values.app.clientId }}
+            - name: SCOPE
+              value: {{ .Values.app.scope }}
+            - name: GRANT_TYPE
+              value: {{ .Values.app.grantType }}
+            # todo: refactorizar para que se pueda usar en otros proyectos
+            - name: LOGIN_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-frontend-cm
+                  key: KEYCLOAK_LOGIN_PATH
+            - name: BASE_URL
+              value: "{{ .Values.app.baseUrl.scheme }}://{{ .Values.app.baseUrl.host }}{{ if not .Values.app.baseUrl.externalService }}:{{ .Values.app.baseUrl.internalPort }}{{ end }}{{ .Values.app.baseUrl.path }}"
+            - name: WALLET_URL
+              value: "{{ .Values.app.walletUrl.scheme }}://{{ .Values.app.walletUrl.host }}{{ if not .Values.app.walletUrl.externalService }}:{{ .Values.app.walletUrl.internalPort }}{{ end }}{{ .Values.app.walletUrl.path }}"
+            - name: WALLET_URL_TEST
+              value: "{{ .Values.app.walletUrlTest.scheme }}://{{ .Values.app.walletUrlTest.host }}{{ if not .Values.app.walletUrlTest.externalService }}:{{ .Values.app.walletUrlTest.internalPort }}{{ end }}{{ .Values.app.walletUrlTest.path }}"
+            - name: KNOWLEDGEBASE_URL
+              value: "{{ .Values.app.knowledgebaseUrl.scheme }}://{{ .Values.app.knowledgebaseUrl.host }}{{ if not .Values.app.knowledgebaseUrl.externalService }}:{{ .Values.app.knowledgebaseUrl.internalPort }}{{ end }}{{ .Values.app.knowledgebaseUrl.path }}"
+            - name: KNOWLEDGE_WALLET_PATH
+              value: {{ .Values.app.knowledgebaseUrl.walletPath }}
+
+            # configmap.yaml
+            - name: PROFILE
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-frontend-cm
+                  key: ENVIRONMENT
+            - name: LOGO_SRC
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-frontend-cm
+                  key: LOGO_SRC
+            - name: FAVICON_SRC
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-frontend-cm
+                  key: FAVICON_SRC
+
+            # todo: pasar a constantes dentro de la solución
+            - name: PROCEDURES
+              value: "/api/v1/procedures"
+            - name: SAVE_CREDENTIAL
+              value: "/api/v1/credentials?type=LEARCredentialEmployee"
+            - name: CREDENTIAL_OFFER_URL
+              value: "/api/v1/credential-offer"
+            - name: NOTIFICATION
+              value: "/api/v1/notifications"

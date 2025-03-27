@@ -1,0 +1,141 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "keycloak.fullname" . }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "keycloak.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "keycloak.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "keycloak.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "keycloak.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.app.internalServerPort }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.livenessProbe.path }}
+              port: {{ .Values.app.internalServerPort }}
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.readinessProbe.path }}
+              port: {{ .Values.app.internalServerPort }}
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          env:
+            - name: KEYCLOAK_ADMIN
+              value: {{ .Values.keycloak.admin.username }}
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "keycloak.admin-secretName" . }}
+                  key: {{ include "keycloak.admin-passwordKey" . }}
+            - name: KC_PROXY
+              value: {{ .Values.keycloak.proxy }}
+            - name: KC_HTTP_RELATIVE_PATH
+              value: {{ .Values.keycloak.relativePath }}
+            - name: KC_HOSTNAME_URL
+              value: "{{ .Values.keycloak.hostname.url.scheme }}://{{ .Values.keycloak.hostname.url.host }}{{ if not .Values.keycloak.hostname.url.externalService }}:{{ .Values.keycloak.hostname.url.internalPort }}{{ end }}{{ .Values.keycloak.hostname.url.path }}"
+            - name: KC_HOSTNAME_ADMIN_URL
+              value: "{{ .Values.keycloak.hostname.adminUrl.scheme }}://{{ .Values.keycloak.hostname.adminUrl.host }}{{ if not .Values.keycloak.hostname.adminUrl.externalService }}:{{ .Values.keycloak.hostname.adminUrl.internalPort }}{{ end }}{{ .Values.keycloak.hostname.adminUrl.path }}"
+            - name: KC_HTTPS_TRUST_STORE_FILE
+              value: {{ .Values.keycloak.https.trustStoreFile }}
+            - name: KC_HTTPS_TRUST_STORE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "keycloak.https-secretName" . }}
+                  key: {{ include "keycloak.https-trustStorePasswordKey" . }}
+            - name: KC_HTTPS_CLIENT_AUTH
+              value: {{ .Values.keycloak.https.clientAuth }}
+            - name: KC_DB
+              value: {{ .Values.keycloak.db.type }}
+            - name: KC_DB_USERNAME
+              value: {{ .Values.keycloak.db.username }}
+            - name: KC_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "keycloak.db-secretName" . }}
+                  key: {{ include "keycloak.db-passwordKey" . }}
+            - name: KC_DB_URL
+              value: "jdbc:postgresql://{{ .Values.keycloak.db.host }}{{ if not .Values.keycloak.db.externalService }}:{{ .Values.keycloak.db.port }}{{ end }}/{{ .Values.keycloak.db.name }}"
+            - name: ISSUER_API_URL
+              value: {{ .Values.issuerApi.url }}
+            - name: ISSUER_API_EXTERNAL_URL
+              value: "{{ .Values.issuerApi.externalUrl.scheme }}://{{ .Values.issuerApi.externalUrl.host }}{{ if not .Values.issuerApi.externalUrl.externalService }}:{{ .Values.issuerApi.externalUrl.internalPort }}{{ end }}{{ .Values.issuerApi.externalUrl.path }}"
+            - name: PRE_AUTH_LIFESPAN
+              value: "{{ .Values.preAuth.lifespan }}"
+            - name: PRE_AUTH_LIFESPAN_TIME_UNIT
+              value: {{ .Values.preAuth.lifespanTimeUnit }}
+            - name: TOKEN_EXPIRATION
+              value: "{{ .Values.token.expiration }}"
+            - name: QUARKUS_LOG_CATEGORY__ORG_KEYCLOAK_SERVICES_X509__LEVEL
+              value: "{{ .Values.keycloak.logsCertsLevel }}"
+            - name: KEYCLOAK_LOGLEVEL
+              value: "{{ .Values.keycloak.logLevel }}"
+            - name: SMTP_HOST
+              value: {{ .Values.keycloak.mail.host }}
+            - name: SMTP_PORT
+              value: "{{ .Values.keycloak.mail.port }}" # Convert to string
+            - name: SMTP_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "keycloak.mail-secretName" . }}
+                  key: {{ include "keycloak.mail-userKey" . }}
+            - name: SMTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "keycloak.mail-secretName" . }}
+                  key: {{ include "keycloak.mail-passwordKey" . }}
+            - name: SMTP_FROM
+              value: "{{ .Values.keycloak.mail.from }}"
+            - name: SMTP_FROM_DISPLAY_NAME
+              value: "{{ .Values.keycloak.mail.fromDisplayName }}"
+            - name: SMTP_REPLY_TO
+              value: "{{ .Values.keycloak.mail.replyTo }}"
+            - name: SMTP_AUTH
+              value: "{{ .Values.keycloak.mail.properties.mail.smtp.auth }}" # Convert to string
+            - name: SMTP_STARTTLS
+              value: "{{ .Values.keycloak.mail.properties.mail.smtp.starttls.enable }}" # Convert to string
+            - name: SMTP_SSL
+              value: "{{ .Values.keycloak.mail.properties.mail.smtp.ssl.enable }}"
+          volumeMounts:
+            - name: truststore-volume
+              mountPath: /opt/keycloak/truststore
+
+      volumes:
+        - name: truststore-volume
+          secret:
+            secretName: truststore-secret
+            items:
+              - key: truststore.jks
+                path: truststore.jks

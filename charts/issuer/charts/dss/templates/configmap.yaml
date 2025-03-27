@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-dss-cm
+  labels:
+    {{- include "dss.labels" . | nindent 4 }}
+data:
+  TENANT_NAME: "{{ .Values.global.tenantName }}"
+  ENVIRONMENT: "{{ .Values.global.environment }}"
+  KEYCLOAK_EXTERNAL_URL: "https://{{ include "dss.KeycloakExternalUrl" . }}"
+  KEYCLOAK_INTERNAL_URL: "http://keycloak-proxy:80"
+  KEYCLOAK_REALM_PATH: "/realms/{{ .Values.global.tenantName }}-issuer"

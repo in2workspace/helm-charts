@@ -1,0 +1,220 @@
+# Issuer global configurations
+global:
+  tenantName: "in2"
+  environment: "dev"
+  # Se usa para construir el ingress.hosts.host: issuer.{{ tenantName }}.{{ externalDomain }}
+  externalDomain: "127.0.0.1.nip.io"
+  ingress:
+    enabled: true
+    className: "nginx"
+    sslRedirect: false
+    backendProtocol: "HTTP"
+    enableTLS: false
+    clusterIssuer: "letsencrypt-in2-test-issuer"
+
+# Issuer Backend subchart configuration
+issuer-backend:
+  # -- should be enabled?
+  enabled: true
+  # Image configuration
+  image:
+    pullPolicy: IfNotPresent
+    tag: v1.5.0-snapshot
+  # Application specific configuration
+  app:
+    # General configurations
+    logLevel:
+      app: DEBUG
+      security: DEBUG
+    # Database configurations
+    db:
+      password: <POSTGRES_PASSWORD>
+      existingSecret:
+        enabled: false
+        name: issuer-secret
+        key: postgres-password
+    #Security
+    security:
+      serviceIdentity:
+        privateKey: <PRIVATE_KEY>
+        didKey: <DID_KEY>
+        verifiableCredential: <VC>
+        existingSecret:
+          enabled: false
+          name: issuer-secret
+          privateKey: private-key
+          didKey: did-key
+          verifiableCredential: vc
+      cors:
+        default:
+          allowedOrigins: "https://issuer.leviathan.127.0.0.1.nip.io"
+        external:
+          allowedOrigins: "https://issuer.leviathan.127.0.0.1.nip.io"
+      keycloak:
+        client:
+          clientId: oidc4vci-wallet-client
+          clientSecret: <CLIENT_SECRET>
+          username: user
+          password: <USER_PASSWORD>
+          existingSecret:
+            enabled: false
+            name: issuer-secret
+            clientSecretKey: keycloak-client-secret
+            clientPasswordKey: keycloak-user-password
+    # Mail configurations
+    mail:
+      host: smtp.example.de
+      port: 587
+      username: <EMAIL_USERNAME>
+      password: <EMAIL_PASSWORD>
+      existingSecret:
+        enabled: false
+        name: issuer-secret
+        userKey: email-username
+        passwordKey: email-password
+      properties:
+        mail:
+          smtp:
+            auth: true
+            starttls:
+              enable: true
+            ssl:
+              trust: smtp.example.de
+    remoteSignature:
+      type: server # server or cloud
+      externalURL: "https://issuer.leviathan.127.0.0.1.nip.io/dss"
+      clientId: <CLIENT_ID>
+      clientSecret: <CLIENT_SECRET>
+      credentialId: <CREDENTIAL_ID>
+      credentialPassword: <CREDENTIAL_PASSWORD>
+      existingSecret:
+        enabled: false
+        name: issuer-secret
+        clientId: client-id
+        clientSecret: client-secret
+        credentialId: credential-id
+        credentialPassword: credential-password
+      defaultSigner:
+        commonName: <COMMON_NAME>
+        serialNumber: <SERIAL_NUMBER>
+        email: <EMAIL>
+        organization: <ORGANIZATION>
+        organizationIdentifier: <ORGANIZATION_IDENTIFIER>
+        country: <COUNTRY>
+        existingSecret:
+          enabled: false
+          name: issuer-secret
+          commonName: signer-common-name
+          serialNumber: signer-serial-number
+          email: signer-email
+          organization: signer-organization
+          organizationIdentifier: signer-organization-identifier
+          country: signer-country
+    routing:
+      issuerBackend:
+        externalURL: "https://issuer.tenantName.127.0.0.1.nip.io/api"
+        internalURL: "http://issuer-backend:8080"
+      issuerFrontend:
+        externalURL: "https://issuer.tenantName.127.0.0.1.nip.io"
+        internalURL: "http://issuer-frontend:8080"
+      trustFramework:
+        internalURL: "http://trusted-issuers-list:8080"
+      knowledgebase:
+        externalURL: "https://knowledgebase.com"
+
+# Issuer Frontend subchart configuration
+issuer-frontend:
+  # -- should be enabled?
+  enabled: true
+  # Image configuration
+  image:
+    pullPolicy: Always
+    tag: v1.9.0
+  # Application specific configuration
+  app:
+    baseUrl:
+      # if deployed locally set to false
+      externalService: true
+      scheme: https
+      # change by the external url or set to localhost if deployed locally
+      host: issuer.tenantName.127.0.0.1.nip.io
+      # internalPort is only used if externalService is false
+      internalPort: 30001
+      path: "/api"
+    walletUrl:
+      # if deployed locally set to false
+      externalService: true
+      scheme: https
+      # change by the external url or set to localhost if deployed locally
+      host: wallet.tenantName.127.0.0.1.nip.io
+      # internalPort is only used if externalService is false
+      internalPort: 30001
+      path: ""
+    walletUrlTest:
+      # if deployed locally set to false
+      externalService: true
+      scheme: http
+      # change by the external url or set to localhost if deployed locally
+      host: wallet.tenantName.127.0.0.1.nip.io
+      # internalPort is only used if externalService is false
+      internalPort: 30003
+      path: ""
+    knowledgebaseUrl:
+      # if deployed locally set to false
+      externalService: true
+      scheme: http
+      # change by the external url or set to localhost if deployed locally
+      host: example.org
+      # internalPort is only used if externalService is false
+      internalPort: 30004
+      path: /
+      walletPath: "books/digital-wallet-user-guide"
+    colors:
+      primary: "#2d58a7"
+      primaryContrast: "#ffffff"
+      secondary: "#2cb6b2"
+      secondaryContrast: "#dde6f6"
+
+# Issuer PostgreSQL subchart configuration
+issuer-postgres:
+  # -- should be enabled?
+  enabled: false
+
+## Keycloak subchart configuration
+keycloak:
+  # -- should be enabled?
+  enabled: false
+
+## Keycloak PostgreSQL subchart configuration
+keycloak-issuer-postgres:
+  # -- should be enabled?
+  enabled: false
+
+dss-issuer:
+  # -- should be enabled?
+  enabled: true
+  # Image configuration
+  image:
+    pullPolicy: Always
+    tag: "v0.6.0"
+  # Application specific configuration
+  app:
+    certificate:
+      name: issuer-certificate
+      password: <CERTIFICATE_PASSWORD>
+      existingSecret:
+        # -- should an existing secret be used?
+        enabled: false
+        # -- name of the secret
+        name: issuer-secret
+        # -- key to retrieve the secret from
+        key: certificate-password
+    vault:
+      token: 0000-0000-0000-0000-000000000000
+      existingSecret:
+        # -- should an existing secret be used?
+        enabled: false
+        # -- name of the secret
+        name: vault-unseal-secret
+        # -- key to retrieve the token from
+        key: root
