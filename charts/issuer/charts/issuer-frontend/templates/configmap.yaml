@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-frontend-cm
+  labels:
+    {{- include "issuer-frontend.labels" . | nindent 4 }}
+data:
+  TENANT_NAME: "{{ .Values.global.tenantName }}"
+  ENVIRONMENT: "{{ .Values.global.environment }}"
+  LOGO_SRC: "{{ include "issuer-frontend.logoSrc" . | trim }}"
+  FAVICON_SRC: "{{ include "issuer-frontend.faviconSrc" . | trim }}"
+  # Keycloak configuration
+  KEYCLOAK_EXTERNAL_DOMAIN: "https://{{ include "issuer-frontend.keycloakExternalDomain" . | trim }}"
+  KEYCLOAK_REALM_PATH: "/{{ .Values.global.tenantName }}-issuer"
+  # todo: refactorizar
+  KEYCLOAK_LOGIN_PATH: "https://{{ include "issuer-frontend.keycloakExternalDomain" . | trim }}/realms/{{ .Values.global.tenantName }}-issuer"

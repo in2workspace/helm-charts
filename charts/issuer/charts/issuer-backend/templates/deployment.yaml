@@ -1,0 +1,272 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "issuer-backend.fullname" . }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "issuer-backend.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "issuer-backend.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "issuer-backend.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "issuer-backend.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.livenessProbe.httpGet.path }}
+              port: {{ .Values.livenessProbe.httpGet.port }}
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.readinessProbe.httpGet.path }}
+              port: {{ .Values.readinessProbe.httpGet.port }}
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+          env:
+            # GENERAL
+            - name: SPRING_PROFILES_ACTIVE
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-backend-cm
+                  key: ENVIRONMENT
+            - name: LOGGING_LEVEL_ES_IN2_ISSUER
+              value: {{ .Values.app.logLevel.app }}
+            - name: LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY
+              value: {{ .Values.app.logLevel.security }}
+            # DATABASE
+            - name: SPRING_R2DBC_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-backend-cm
+                  key: DB_URL
+            # todo: el valor del schema siempre será issuer, el usuario no debe poder modificarlo
+            - name: DB_SCHEMA
+              value: {{ .Values.app.db.schema }}
+            - name: SPRING_R2DBC_USERNAME
+              value: {{ .Values.app.db.username }}
+            - name: SPRING_R2DBC_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-backend.secretFileName" . }}
+                  key: {{ include "issuer-backend.postgresPasswordKey" . }}
+            - name: SPRING_FLYWAY_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-backend-cm
+                  key: FLYWAY_URL
+            # todo: el valor del schema siempre será wallet, el usuario no debe poder modificarlo
+            - name: SPRING_FLYWAY_DEFAULT_SCHEMA
+              value: {{ .Values.app.db.schema }}
+              # todo: Revisar si es user o username
+            - name: SPRING_FLYWAY_USER
+              value: {{ .Values.app.db.username }}
+            - name: SPRING_FLYWAY_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-backend.secretFileName" . }}
+                  key: {{ include "issuer-backend.postgresPasswordKey" . }}
+            # SECURITY
+            - name: ISSUER_IDENTITY_CRYPTO_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-backend.secretFileName" . }}
+                  key: {{ include "issuer-backend.issuerIdentityPrivateKey" . }}
+            - name: ISSUER_IDENTITY_CREDENTIAL_SUBJECT_DID_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-backend.secretFileName" . }}
+                  key: {{ include "issuer-backend.issuerIdentityDidKey" . }}
+            - name: ISSUER_IDENTITY_JWT_CREDENTIAL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-backend.secretFileName" . }}
+                  key: {{ include "issuer-backend.issuerIdentityVC" . }}
+            - name: CORS_DEFAULT_ALLOWED_ORIGINS
+              value: {{ .Values.app.security.cors.default.allowedOrigins | quote }}
+            - name: CORS_EXTERNAL_ALLOWED_ORIGINS
+              value: {{ .Values.app.security.cors.external.allowedOrigins | quote }}
+            # todo: no debería ser configurable
+            - name: API_CACHE_LIFETIME_CREDENTIAL_OFFER
+              value: "10"
+            # todo: no debería ser configurable
+            - name: API_CACHE_LIFETIME_VERIFIABLE_CREDENTIAL
+              value: "10"
+            # KEYCLOAK
+            # todo: siempre va a ser Keycloak, eliminar la posibilidad de que sea otro
+            - name: AUTH_SERVER_PROVIDER
+              value: "keycloak"
+            - name: AUTH_SERVER_EXTERNAL_DOMAIN
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-backend-cm
+                  key: KEYCLOAK_EXTERNAL_DOMAIN
+            # todo: decidir si se mantiene o lo pasamos por config map
+            - name: AUTH_SERVER_INTERNAL_DOMAIN
+              value: "http://keycloak-proxy:80"
+            - name: AUTH_SERVER_REALM
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-backend-cm
+                  key: KEYCLOAK_REALM_PATH
+            - name: AUTH_SERVER_PATHS_TOKEN_PATH
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-backend-cm
+                  key: KEYCLOAK_TOKEN_PATH
+            - name: AUTH_SERVER_CLIENT_CLIENT_ID
+              value: {{ .Values.app.security.keycloak.client.clientId }}
+            - name: AUTH_SERVER_CLIENT_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-backend.secretFileName" . }}
+                  key: {{ include "issuer-backend.keycloakClientSecretKey" . }}
+            - name: AUTH_SERVER_CLIENT_USERNAME
+              value: {{ .Values.app.security.keycloak.client.username }}
+            - name: AUTH_SERVER_CLIENT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-backend.secretFileName" . }}
+                  key: {{ include "issuer-backend.keycloakUserPasswordKey" . }}
+            # MAIL
+            - name: SPRING_MAIL_HOST
+              value: {{ .Values.app.mail.host }}
+            - name: SPRING_MAIL_PORT
+              value: {{ .Values.app.mail.port | quote }}
+            - name: SPRING_MAIL_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-backend.secretFileName" . }}
+                  key: {{ include "issuer-backend.mailUsernameKey" . }}
+            - name: SPRING_MAIL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-backend.secretFileName" . }}
+                  key: {{ include "issuer-backend.mailPasswordKey" . }}
+            - name: SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH
+              value: {{ .Values.app.mail.properties.mail.smtp.auth | quote }}
+            - name: SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE
+              value: {{ .Values.app.mail.properties.mail.smtp.starttls.enable | quote }}
+            - name: SPRING_MAIL_PROPERTIES_MAIL_SMTP_SSL_TRUST
+              value: {{ .Values.app.mail.properties.mail.smtp.ssl.trust }}
+            # REMOTE SIGNATURE SERVICE
+            - name: REMOTE_SIGNATURE_TYPE
+              value: "server"
+            - name: REMOTE_SIGNATURE_DOMAIN
+              value: {{ .Values.app.remoteSignature.externalURL }}
+            - name: REMOTE_SIGNATURE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-backend.secretFileName" . }}
+                  key: {{ include "issuer-backend.remote-signature.clientId" . }}
+            - name: REMOTE_SIGNATURE_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-backend.secretFileName" . }}
+                  key: {{ include "issuer-backend.remote-signature.clientSecret" . }}
+            - name: REMOTE_SIGNATURE_CREDENTIAL_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-backend.secretFileName" . }}
+                  key: {{ include "issuer-backend.remote-signature.credentialId" . }}
+            - name: REMOTE_SIGNATURE_CREDENTIAL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-backend.secretFileName" . }}
+                  key: {{ include "issuer-backend.remote-signature.credentialPassword" . }}
+            # ROUTING
+            - name: API_EXTERNAL_DOMAIN
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-backend-cm
+                  key: ISSUER_API_EXTERNAL_DOMAIN
+            # todo: revisar si se necesita y cómo se construye (servicio?)
+            - name: API_INTERNAL_DOMAIN
+              value: {{ .Values.app.routing.issuerBackend.internalURL }}
+              # todo: Por qué hay internal y external domain si la lógica del external para construir la url es la misma que la del internal
+            - name: ISSUER_UI_EXTERNAL_DOMAIN
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-backend-cm
+                  key: ISSUER_FRONTEND_EXTERNAL_DOMAIN
+            # todo: revisar si se necesita y cómo se construye (servicio?)
+            - name: ISSUER_UI_INTERNAL_DOMAIN
+              value: {{ .Values.app.routing.issuerFrontend.internalURL }}
+            - name: TRUST_FRAMEWORK_URL
+              value: {{ .Values.app.routing.trustFramework.internalURL }}
+            - name: KNOWLEDGE_BASE_WALLET_URL
+              value: {{ .Values.app.routing.knowledgebase.externalURL }}
+            # DEPRECATED
+            # todo: revisar la estrategia de base_path y quién y dónde se usan/implementan
+            - name: SPRING_WEBFLUX_BASEPATH
+              value: "/api"
+            # todo: esta variable se usaba cuando había la posibilidad de usar Azure para gestionar las configuraciones
+            - name: API_CONFIG_SOURCE
+              value: "yaml"
+            # todo: deprecated
+            - name: DEFAULT_SIGNER_COMMON_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-backend.secretFileName" . }}
+                  key: {{ include "issuer-backend.signerCommonName" . }}
+            # todo: deprecated
+            - name: DEFAULT_SIGNER_SERIAL_NUMBER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-backend.secretFileName" . }}
+                  key: {{ include "issuer-backend.signerSerialNumber" . }}
+            # todo: deprecated
+            - name: DEFAULT_SIGNER_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-backend.secretFileName" . }}
+                  key: {{ include "issuer-backend.signerEmail" . }}
+            # todo: deprecated
+            - name: DEFAULT_SIGNER_ORGANIZATION
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-backend.secretFileName" . }}
+                  key: {{ include "issuer-backend.signerOrganization" . }}
+            # todo: deprecated
+            - name: DEFAULT_SIGNER_ORGANIZATION_IDENTIFIER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-backend.secretFileName" . }}
+                  key: {{ include "issuer-backend.signerOrganizationIdentifier" . }}
+            # todo: deprecated
+            - name: DEFAULT_SIGNER_COUNTRY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "issuer-backend.secretFileName" . }}
+                  key: {{ include "issuer-backend.signerCountry" . }}

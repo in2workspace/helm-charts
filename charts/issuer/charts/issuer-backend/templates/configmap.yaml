@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-backend-cm
+  labels:
+    {{- include "issuer-backend.labels" . | nindent 4 }}
+data:
+  TENANT_NAME: "{{ .Values.global.tenantName }}"
+  ENVIRONMENT: "{{ .Values.global.environment }}"
+  # Database configuration
+  DB_HOST: "tenant-{{ .Values.global.tenantName | lower }}-postgres"
+  DB_NAME: "{{ .Values.global.tenantName }}"
+  DB_URL: "r2dbc:postgresql://tenant-{{ .Values.global.tenantName | lower }}-postgresql:{{ .Values.app.db.port | default 5432 }}/{{ .Values.global.tenantName }}?schema=issuer"
+  FLYWAY_URL: "jdbc:postgresql://tenant-{{ .Values.global.tenantName | lower }}-postgresql:{{ .Values.app.db.port | default 5432 }}/{{ .Values.global.tenantName }}?schema=issuer"
+  # Keycloak configuration
+  KEYCLOAK_EXTERNAL_DOMAIN: "https://{{ include "issuer-backend.keycloakExternalDomain" . | trim }}"
+  # todo: el Wallet utiliza como path '/realms/{{ .Values.global.tenantName }}-wallet', pero aquí solo el nombre del realm
+  KEYCLOAK_REALM_PATH: "{{ .Values.global.tenantName }}-issuer"
+  KEYCLOAK_TOKEN_PATH: "/realms/{{ .Values.global.tenantName }}-issuer/protocol/openid-connect/token"
+  # Routing
+  ISSUER_API_EXTERNAL_DOMAIN: "https://{{ include "issuer.externalDomain" . | trim }}"
+  # todo: originalmente se agregaba el path '/' a la ruta. Revisar si es necesario
+  ISSUER_FRONTEND_EXTERNAL_DOMAIN: "https://{{ include "issuer.externalDomain" . | trim }}"
+
