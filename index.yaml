@@ -1044,6 +1044,46 @@ entries:
     version: 1.0.0
   issuer:
   - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2025-03-27T07:29:17.810401021Z"
+    dependencies:
+    - condition: issuer-backend.enabled
+      name: issuer-backend
+      repository: ""
+      version: 2.0.0
+    - condition: issuer-frontend.enabled
+      name: issuer-frontend
+      repository: ""
+      version: 2.0.0
+    - alias: issuer-postgres
+      condition: issuer-postgres.enabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 16.4.5
+    - alias: keycloak-issuer
+      condition: keycloak.enabled
+      name: keycloak
+      repository: ""
+      version: 1.0.13
+    - alias: keycloak-issuer-postgres
+      condition: keycloak-issuer-postgres.enabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 16.4.5
+    - alias: dss-issuer
+      condition: dss.enabled
+      name: dss
+      repository: ""
+      version: 2.0.0
+    description: Parent chart managing all the components of the Credential Issuer
+      application
+    digest: 0eea0852d3fe7a028754f0a6d8ee467a4a40f16a44925c3338f96a44582c3115
+    name: issuer
+    type: application
+    urls:
+    - https://github.com/in2workspace/helm-charts/releases/download/issuer-2.0.0/issuer-2.0.0.tgz
+    version: 2.0.0
+  - apiVersion: v2
     appVersion: v1.0.3
     created: "2025-03-26T09:00:54.91941837Z"
     dependencies:
@@ -5395,4 +5435,4 @@ entries:
     urls:
     - https://in2workspace.github.io/helm-charts/wallet-api-1.0.0.tgz
     version: 1.0.0
-generated: "2025-03-26T13:54:01.159999143Z"
+generated: "2025-03-27T07:29:17.811060762Z"
