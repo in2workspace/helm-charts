@@ -47,9 +47,9 @@ issuer-backend:
           verifiableCredential: vc
       cors:
         default:
-          allowedOrigins: "https://issuer.leviathan.127.0.0.1.nip.io"
+          allowedOrigins: "https://issuer.tenantName.127.0.0.1.nip.io"
         external:
-          allowedOrigins: "https://issuer.leviathan.127.0.0.1.nip.io"
+          allowedOrigins: "https://issuer.tenantName.127.0.0.1.nip.io"
       keycloak:
         client:
           clientId: oidc4vci-wallet-client
@@ -82,7 +82,7 @@ issuer-backend:
               trust: smtp.example.de
     remoteSignature:
       type: server # server or cloud
-      externalURL: "https://issuer.leviathan.127.0.0.1.nip.io/dss"
+      externalURL: "https://issuer.tenantName.127.0.0.1.nip.io/dss"
       clientId: <CLIENT_ID>
       clientSecret: <CLIENT_SECRET>
       credentialId: <CREDENTIAL_ID>
