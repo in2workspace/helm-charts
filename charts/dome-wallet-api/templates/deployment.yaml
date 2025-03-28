@@ -60,31 +60,10 @@ spec:
             - name: LOGGING_LEVEL_ES_IN2_WALLET_API
               value: {{ .Values.app.logLevel }}
             # AUTH SERVER
-            - name: SECURITY_AUTH_SERVER_EXTERNAL_URL_DOMAIN
-              value: {{ .Values.app.authServer.external.domain }}
-            - name: SECURITY_AUTH_SERVER_EXTERNAL_URL_PATH
-              value: {{ .Values.app.authServer.external.path }}
-            - name: SECURITY_AUTH_SERVER_INTERNAL_URL_DOMAIN
-              value: {{ .Values.app.authServer.internal.domain }}
-            - name: SECURITY_AUTH_SERVER_INTERNAL_URL_PATH
-              value: {{ .Values.app.authServer.internal.path }}
-            # EBSI TESTS
-            - name: EBSI_TEST_URL
-              value: {{ .Values.app.ebsiTest.url }}
-            - name: EBSI_TEST_CLIENT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "dome-wallet-api.clientSecretName" . }}
-                  key: {{ include "dome-wallet-api.client-passwordKey" . }}
-            - name: EBSI_TEST_CLIENT_ID
-              value: {{ .Values.app.ebsiTest.client.id }}
-            - name: EBSI_TEST_USERNAME
-              value: {{ .Values.app.ebsiTest.userData.name }}
-            - name: EBSI_TEST_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "dome-wallet-api.userSecretName" . }}
-                  key: {{ include "dome-wallet-api.user-passwordKey" . }}
+            - name: SECURITY_AUTH_SERVER_EXTERNAL_URL
+              value: {{ .Values.app.authServer.externalUrl }}
+            - name: SECURITY_AUTH_SERVER_INTERNAL_URL
+              value: {{ .Values.app.authServer.internalUrl }}
             # CORS
             - name: SECURITY_CORS_ALLOWED_ORIGINS
               value: {{ .Values.app.cors.allowedOrigins }}
@@ -102,6 +81,23 @@ spec:
                 secretKeyRef:
                   name: {{ include "dome-wallet-api.vaultTokenSecretName" . }}
                   key: {{ include "dome-wallet-api.user-tokenKey" . }}
+            # EBSI TESTS
+            - name: EBSI_TEST_URL
+              value: { { .Values.app.ebsiTest.url } }
+            - name: EBSI_TEST_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-wallet-api.clientSecretName" . }}
+                  key: {{ include "dome-wallet-api.client-passwordKey" . }}
+            - name: EBSI_TEST_CLIENT_ID
+              value: {{ .Values.app.ebsiTest.client.id }}
+            - name: EBSI_TEST_USERNAME
+              value: {{ .Values.app.ebsiTest.userData.name }}
+            - name: EBSI_TEST_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-wallet-api.userSecretName" . }}
+                  key: {{ include "dome-wallet-api.user-passwordKey" . }}
             # DATABASE
             - name: SPRING_R2DBC_URL
               value: "r2dbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}?schema={{ .Values.db.schema }}"
