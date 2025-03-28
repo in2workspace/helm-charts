@@ -122,9 +122,7 @@ app:
     allowedOrigins:
   vault:
     provider: hashicorp
-    host: vault-server
-    scheme: http
-    port: 8200
+    url: http://vault-server:8200
     token: defaultToken
     existingSecret:
       # -- should an existing secret be used

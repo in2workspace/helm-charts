@@ -70,12 +70,8 @@ spec:
             # VAULT
             - name: VAULT_PROVIDER_NAME
               value: {{ .Values.app.vault.provider }}
-            - name: HASHICORP_VAULT_HOST
-              value: {{ .Values.app.vault.host }}
-            - name: HASHICORP_VAULT_SCHEME
-              value: {{ .Values.app.vault.scheme }}
-            - name: HASHICORP_VAULT_PORT
-              value: {{ quote .Values.app.vault.port }}
+            - name: HASHICORP_VAULT_URL
+              value: {{ .Values.app.vault.url }}
             - name: HASHICORP_VAULT_TOKEN
               valueFrom:
                 secretKeyRef:
