@@ -79,7 +79,7 @@ spec:
                   key: {{ include "dome-wallet-api.user-tokenKey" . }}
             # EBSI TESTS
             - name: EBSI_TEST_URL
-              value: { { .Values.app.ebsiTest.url } }
+              value: {{ .Values.app.ebsiTest.url }}
             - name: EBSI_TEST_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
