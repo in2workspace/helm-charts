@@ -53,31 +53,19 @@ spec:
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: {{ .Values.app.profile }}
+            - name: SERVER_PORT
+              value: {{ .Values.app.internalServerPort | quote }}
             - name: LOGGING_LEVEL_ES_IN2_WALLET_API
               value: {{ .Values.app.logLevel }}
-            - name: SPRING_WEBFLUX_BASEPATH
-              value: {{ .Values.app.basePath }}
             # AUTH SERVER
-            - name: AUTH_SERVER_EXTERNAL_URL_SCHEME
-              value: {{ .Values.app.authServer.external.scheme }}
-            - name: AUTH_SERVER_EXTERNAL_URL_DOMAIN
+            - name: SECURITY_AUTH_SERVER_EXTERNAL_URL_DOMAIN
               value: {{ .Values.app.authServer.external.domain }}
-            - name: AUTH_SERVER_EXTERNAL_URL_PORT
-              value: {{ quote .Values.app.authServer.external.port }}
-            - name: AUTH_SERVER_EXTERNAL_URL_PATH
+            - name: SECURITY_AUTH_SERVER_EXTERNAL_URL_PATH
               value: {{ .Values.app.authServer.external.path }}
-            - name: AUTH_SERVER_INTERNAL_URL_SCHEME
-              value: {{ .Values.app.authServer.internal.scheme }}
-            - name: AUTH_SERVER_INTERNAL_URL_DOMAIN
+            - name: SECURITY_AUTH_SERVER_INTERNAL_URL_DOMAIN
               value: {{ .Values.app.authServer.internal.domain }}
-            - name: AUTH_SERVER_INTERNAL_URL_PORT
-              value: {{ quote .Values.app.authServer.internal.port }}
-            - name: AUTH_SERVER_INTERNAL_URL_PATH
+            - name: SECURITY_AUTH_SERVER_INTERNAL_URL_PATH
               value: {{ .Values.app.authServer.internal.path }}
-            - name: AUTH_SERVER_JWT_DECODER_PATH
-              value: {{ .Values.app.authServer.jwtDecoderPath }}
             # EBSI TESTS
             - name: EBSI_TEST_URL
               value: {{ .Values.app.ebsiTest.url }}
@@ -95,6 +83,9 @@ spec:
                 secretKeyRef:
                   name: {{ include "dome-wallet-api.userSecretName" . }}
                   key: {{ include "dome-wallet-api.user-passwordKey" . }}
+            # CORS
+            - name: SECURITY_CORS_ALLOWED_ORIGINS
+              value: {{ .Values.app.cors.allowedOrigins }}
             # VAULT
             - name: VAULT_PROVIDER_NAME
               value: {{ .Values.app.vault.provider }}

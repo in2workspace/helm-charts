@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: in2workspace/wallet-api
   # Overrides the image tag whose default is the chart appVersion.
-  tag: v1.4.0
+  tag: v1.4.3-snapshot
   pullPolicy: Always
 
 imagePullSecrets: []
@@ -111,22 +111,18 @@ tolerations: []
 affinity: {}
 
 app:
-  profile: prod
   internalServerPort: 8080
   logLevel: DEBUG
-  basePath: /wallet-api
   authServer:
     external:
-      scheme: https
       domain: wallet.dome-marketplace-sbx.org
-      port: 443
       path: /keycloak/realms/wallet
     internal:
-      scheme: http
       domain: dome-wallet-keycloak
-      port: 8080
       path: /realms/wallet
-    jwtDecoderPath: /protocol/openid-connect/certs
+  cors:
+    # expects a string of url's separated with comma and space
+    allowedOrigins:
   ebsiTest:
     url: http://dome-wallet-keycloak:8080/realms/wallet/protocol/openid-connect/token
     client:
