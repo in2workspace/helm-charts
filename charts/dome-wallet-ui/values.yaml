@@ -121,8 +121,7 @@ app:
   logoSrc: "assets/logos/no-image.png"
   faviconSrc: "assets/icons/dome-favicon.png"
   walletApi:
-    internalDomain: https://wallet.dome-marketplace-sbx.org/wallet-api
-    websocketExternalDomain: wss://wallet.dome-marketplace-sbx.org/wallet-api
+    internalDomain: https://example-internal-domain.org/wallet-api
+    websocketExternalDomain: wss://example-external-domain/wallet-api
   iam:
-    external_domain: https://wallet.dome-marketplace-sbx.org/keycloak
-    realm_path: /realms/wallet
+    externalUrl: https://example-external-domain.org/keycloak/realms/wallet
