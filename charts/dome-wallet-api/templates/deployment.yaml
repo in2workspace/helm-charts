@@ -55,6 +55,8 @@ spec:
           env:
             - name: SERVER_PORT
               value: {{ .Values.app.internalServerPort | quote }}
+            - name: SPRING_WEBFLUX_BASEPATH
+              value: {{ .Values.app.basePath }}
             - name: LOGGING_LEVEL_ES_IN2_WALLET_API
               value: {{ .Values.app.logLevel }}
             # AUTH SERVER
