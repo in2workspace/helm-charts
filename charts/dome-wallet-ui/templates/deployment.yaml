@@ -71,7 +71,5 @@ spec:
               value: {{.Values.app.walletApi.internalDomain}}
             - name: WALLET_API_WEBSOCKET_EXTERNAL_DOMAIN
               value: {{.Values.app.walletApi.websocketExternalDomain}}
-            - name: IAM_EXTERNAL_DOMAIN
-              value: {{.Values.app.iam.external_domain}}
-            - name: IAM_REALM_PATH
-              value: {{.Values.app.iam.realm_path}}
+            - name: IAM_EXTERNAL_URL
+              value: {{.Values.app.iam.externalUrl}}
