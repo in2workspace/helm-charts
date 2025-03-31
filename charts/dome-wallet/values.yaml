@@ -22,22 +22,19 @@ dome-wallet-api:
         secretName: example-secret
   ## deployment specific configuration
   app:
-    profile: prod
     internalServerPort: 8080
-    logLevel: DEBUG
     basePath: /wallet-api
+    logLevel: DEBUG
     authServer:
-      external:
-        scheme: https
-        domain: wallet.dome-marketplace-sbx.org
-        port: 443
-        path: /keycloak/realms/wallet
-      internal:
-        scheme: http
-        domain: dome-wallet-keycloak
-        port: 8080
-        path: /realms/wallet
-      jwtDecoderPath: /protocol/openid-connect/certs
+      externalUrl: example-external-domain.org/keycloak/realms/wallet
+      internalUrl: example-internal-domain.org/keycloak/realms/wallet
+    cors:
+      # expects a string of url's separated with comma and space
+      allowedOrigins:
+    vault:
+      provider: hashicorp
+      url: http://vault-server:8200
+      token: token
     ebsiTest:
       url: http://dome-wallet-keycloak:8080/realms/wallet/protocol/openid-connect/token
       client:
@@ -60,12 +57,6 @@ dome-wallet-api:
           name: wallet-api-user-password
           # -- key to retrieve the password from
           key: user-password
-    vault:
-      provider: hashicorp
-      host: vault-server
-      scheme: http
-      port: 8200
-      token: token
   db:
     externalService: false
     schema: wallet
@@ -115,11 +106,10 @@ dome-wallet-ui:
     logoSrc: "assets/logos/no-image.png"
     faviconSrc: "assets/icons/dome-favicon.png"
     walletApi:
-      internalDomain: https://wallet.dome-marketplace-sbx.org/wallet-api
-      websocketExternalDomain: wss://wallet.dome-marketplace-sbx.org/wallet-api
+      internalDomain: https://example-internal-domain.org/wallet-api
+      websocketExternalDomain: wss://example-external-domain/wallet-api
     iam:
-      external_domain: https://wallet.dome-marketplace-sbx.org/keycloak
-      realm_path: /realms/wallet
+      externalUrl: https://example-external-domain.org/keycloak/realms/wallet
 
 ## configuration for the dome-wallet-keycloak
 dome-wallet-keycloak:
