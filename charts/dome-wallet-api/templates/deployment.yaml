@@ -68,11 +68,11 @@ spec:
             - name: SECURITY_CORS_ALLOWED_ORIGINS
               value: {{ .Values.app.cors.allowedOrigins }}
             # VAULT
-            - name: VAULT_PROVIDER_NAME
+            - name: SECURITY_VAULT_PROVIDER_NAME
               value: {{ .Values.app.vault.provider }}
-            - name: HASHICORP_VAULT_URL
+            - name: SECURITY_VAULT_HASHICORP_URL
               value: {{ .Values.app.vault.url }}
-            - name: HASHICORP_VAULT_TOKEN
+            - name: SECURITY_VAULT_HASHICORP_TOKEN
               valueFrom:
                 secretKeyRef:
                   name: {{ include "dome-wallet-api.vaultTokenSecretName" . }}
