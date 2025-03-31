@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "dome-verifier.fullname" . }}
+  namespace: {{ $.Release.Namespace | quote }}
+  labels:
+    {{- include "dome-verifier.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ include "dome-verifier.serverPort" . }}
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "dome-verifier.selectorLabels" . | nindent 4 }}

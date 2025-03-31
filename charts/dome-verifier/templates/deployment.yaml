@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "dome-verifier-api.fullname" . }}
+  name: {{ include "dome-verifier.fullname" . }}
   namespace: {{ $.Release.Namespace | quote }}
   labels:
-    {{- include "dome-verifier-api.labels" . | nindent 4 }}
+    {{- include "dome-verifier.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "dome-verifier-api.selectorLabels" . | nindent 6 }}
+      {{- include "dome-verifier.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -19,13 +19,13 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "dome-verifier-api.selectorLabels" . | nindent 8 }}
+        {{- include "dome-verifier.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "dome-verifier-api.serviceAccountName" . }}
+      serviceAccountName: {{ include "dome-verifier.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -36,63 +36,63 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ include "dome-verifier-api.internalServerPort" . }}
+              containerPort: {{ include "dome-verifier.serverPort" . }}
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: {{ .Values.livenessProbe.path }}
-              port: {{ include "dome-verifier-api.internalServerPort" . }}
+              path: {{ .Values.livenessProbe.httpGet.path }}
+              port: {{ include "dome-verifier.serverPort" . }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
           readinessProbe:
             httpGet:
-              path: {{ .Values.readinessProbe.path }}
-              port: {{ include "dome-verifier-api.internalServerPort" . }}
+              path: {{ .Values.readinessProbe.httpGet.path }}
+              port: {{ include "dome-verifier.serverPort" . }}
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           env:
-            - name: SERVER_PORT
-              value: {{ include "dome-verifier-api.internalServerPort" . | quote }}
-            - name: LOGGING_LEVEL_ES_IN2_VCVERIFIER
-              value: "{{ index .Values.app.logging.level "es.in2.vcverifier" }}"
-            - name: LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY
-              value: "{{ index .Values.app.logging.level "org.springframework.security" }}"
-            - name: LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_WEB_FILTER
-              value: "{{ index .Values.app.logging.level "org.springframework.web.filter" }}"
+            # Frontend
             - name: VERIFIER_FRONTEND_URLS_ONBOARDING
-              value: {{ .Values.app.verifier.frontend.urls.onboarding }}
+              value: {{ .Values.app.frontend.externalLinks.onboarding }}
             - name: VERIFIER_FRONTEND_URLS_SUPPORT
-              value: {{ .Values.app.verifier.frontend.urls.support }}
+              value: {{ .Values.app.frontend.externalLinks.support }}
             - name: VERIFIER_FRONTEND_URLS_WALLET
-              value: {{ .Values.app.verifier.frontend.urls.wallet }}
+              value: {{ .Values.app.frontend.externalLinks.wallet }}
             - name: VERIFIER_FRONTEND_COLORS_PRIMARY
-              value: {{ .Values.app.verifier.frontend.colors.primary | quote }}
+              value: {{ .Values.app.frontend.colors.primary | quote }}
             - name: VERIFIER_FRONTEND_COLORS_PRIMARY_CONTRAST
-              value: {{ .Values.app.verifier.frontend.colors.primaryContrast | quote }}
+              value: {{ .Values.app.frontend.colors.primaryContrast | quote }}
             - name: VERIFIER_FRONTEND_COLORS_SECONDARY
-              value: {{ .Values.app.verifier.frontend.colors.secondary | quote }}
+              value: {{ .Values.app.frontend.colors.secondary | quote }}
             - name: VERIFIER_FRONTEND_COLORS_SECONDARY_CONTRAST
-              value: {{ .Values.app.verifier.frontend.colors.secondaryContrast | quote }}
+              value: {{ .Values.app.frontend.colors.secondaryContrast | quote }}
             - name: VERIFIER_FRONTEND_LOGO_SRC
-              value: {{ .Values.app.verifier.frontend.logoSrc }}
+              value: {{ .Values.app.frontend.logoSrc }}
             - name: VERIFIER_FRONTEND_FAVICON_SRC
-              value: {{ .Values.app.verifier.frontend.faviconSrc }}
+              value: {{ .Values.app.frontend.faviconSrc }}
+            # Backend
+            - name: LOGGING_LEVEL_ES_IN2_VCVERIFIER
+              value: "{{ index .Values.app.backend.logging.level "es.in2.vcverifier" }}"
+            - name: LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY
+              value: "{{ index .Values.app.backend.logging.level "org.springframework.security" }}"
+            - name: LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_WEB_FILTER
+              value: "{{ index .Values.app.backend.logging.level "org.springframework.web.filter" }}"
             - name: VERIFIER_BACKEND_URL
-              value: {{ .Values.app.verifier.backend.url }}
+              value: {{ .Values.app.backend.url }}
             - name: VERIFIER_BACKEND_IDENTITY_DID_KEY
-              value: {{ .Values.app.verifier.backend.security.serviceIdentity.didKey }}
+              value: {{ .Values.app.backend.security.serviceIdentity.didKey }}
             - name: VERIFIER_BACKEND_IDENTITY_PRIVATE_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "dome-verifier-api.privateKey-secretName" . }}
-                  key: {{ include "dome-verifier-api.privateKey-key" . }}
+                  name: {{ include "dome-verifier.verifierSecretFileName" . }}
+                  key: {{ include "dome-verifier.privateKey-key" . }}
             - name: VERIFIER_BACKEND_IDENTITY_VERIFIABLE_CREDENTIAL
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "dome-verifier-api.learCredentialMachine-secretName" . }}
-                  key: {{ include "dome-verifier-api.learCredentialMachine-key" . }}
+                  name: {{ include "dome-verifier.verifierSecretFileName" . }}
+                  key: {{ include "dome-verifier.learCredentialMachine-key" . }}
             - name: SPRING_CONFIG_ADDITIONAL_LOCATION
               value: "/config/application.yaml"
           volumeMounts:
@@ -101,7 +101,7 @@ spec:
       volumes:
         - name: config-volume
           configMap:
-            name: dome-verifier-api-config
+            name: dome-verifier-config
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

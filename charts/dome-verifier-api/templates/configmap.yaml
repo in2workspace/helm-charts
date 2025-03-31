@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: dome-verifier-api-config
-data:
-  application.yaml: |
-    verifier:
-      backend:
-        trustFrameworks: {{- toYaml .Values.app.verifier.backend.trustFrameworks | nindent 10 }}
