@@ -22,22 +22,26 @@ dome-wallet-api:
         secretName: example-secret
   ## deployment specific configuration
   app:
-    profile: prod
     internalServerPort: 8080
-    logLevel: DEBUG
     basePath: /wallet-api
+    logLevel: DEBUG
     authServer:
-      external:
-        scheme: https
-        domain: wallet.dome-marketplace-sbx.org
-        port: 443
-        path: /keycloak/realms/wallet
-      internal:
-        scheme: http
-        domain: dome-wallet-keycloak
-        port: 8080
-        path: /realms/wallet
-      jwtDecoderPath: /protocol/openid-connect/certs
+      externalUrl: example-external-domain.org/keycloak/realms/wallet
+      internalUrl: example-internal-domain.org/keycloak/realms/wallet
+    cors:
+      # expects a string of url's separated with comma and space
+      allowedOrigins:
+    vault:
+      provider: hashicorp
+      url: http://vault-server:8200
+      token: defaultToken
+      existingSecret:
+        # -- should an existing secret be used
+        enabled: false
+        # -- name of the secret
+        name: wallet-api-token-secret
+        # -- key to retrieve the token from
+        key: token
     ebsiTest:
       url: http://dome-wallet-keycloak:8080/realms/wallet/protocol/openid-connect/token
       client:
@@ -60,24 +64,19 @@ dome-wallet-api:
           name: wallet-api-user-password
           # -- key to retrieve the password from
           key: user-password
-    vault:
-      provider: hashicorp
-      host: vault-server
-      scheme: http
-      port: 8200
-      token: token
-    db:
-      externalService: false
-      schema: wallet
-      host: wallet-postgres
-      port: 5432
-      name: wallet
-      username: postgres
-      password: postgres
-      existingSecret:
-        enabled: false
-        name: db-secret
-        key: password
+
+  db:
+    externalService: false
+    schema: wallet
+    host: wallet-postgres
+    port: 5432
+    name: wallet
+    username: postgres
+    password: postgres
+    existingSecret:
+      enabled: false
+      name: db-secret
+      key: password
 
 ## configuration for the dome-wallet-ui
 dome-wallet-ui:
