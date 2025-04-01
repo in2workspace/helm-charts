@@ -365,6 +365,42 @@ entries:
   dome-issuer:
   - apiVersion: v2
     appVersion: v1.0.3
+    created: "2025-04-01T12:03:05.028607252Z"
+    dependencies:
+    - alias: dome-issuer-api
+      condition: dome-issuer-api.enabled
+      name: dome-issuer-api
+      repository: https://in2workspace.github.io/helm-charts
+      version: 1.1.17
+    - alias: dome-issuer-ui
+      condition: dome-issuer-ui.enabled
+      name: dome-issuer-ui
+      repository: https://in2workspace.github.io/helm-charts
+      version: 1.2.3
+    - alias: dome-issuer-postgresql
+      condition: dome-issuer-postgresql.enabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 13.1.5
+    - alias: dome-issuer-keycloak
+      condition: dome-issuer-keycloak.enabled
+      name: dome-issuer-keycloak
+      repository: https://in2workspace.github.io/helm-charts
+      version: 1.0.14
+    - alias: dome-issuer-keycloak-postgresql
+      condition: dome-issuer-keycloak-postgresql.enabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 13.1.5
+    description: Umbrella Helm chart for the issuer
+    digest: 551f298d842a6eb31566cf33aa3891dd91f52bc4637b582ffb62b62ae5086d2b
+    name: dome-issuer
+    type: application
+    urls:
+    - https://github.com/in2workspace/helm-charts/releases/download/dome-issuer-1.3.16/dome-issuer-1.3.16.tgz
+    version: 1.3.16
+  - apiVersion: v2
+    appVersion: v1.0.3
     created: "2025-04-01T10:21:05.66765807Z"
     dependencies:
     - alias: dome-issuer-api
@@ -5816,4 +5852,4 @@ entries:
     urls:
     - https://in2workspace.github.io/helm-charts/wallet-api-1.0.0.tgz
     version: 1.0.0
-generated: "2025-04-01T11:52:37.61155961Z"
+generated: "2025-04-01T12:03:05.222305337Z"
