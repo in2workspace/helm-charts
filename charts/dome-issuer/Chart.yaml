@@ -15,7 +15,7 @@ type: application
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 1.3.14
+version: 1.3.15
 
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application. Versions are not expected to
@@ -25,38 +25,31 @@ appVersion: "v1.0.3"
 
 dependencies:
   - name: dome-issuer-api
+    version: 1.1.17
+    repository: https://in2workspace.github.io/helm-charts
     alias: dome-issuer-api
     condition: dome-issuer-api.enabled
-    repository: https://in2workspace.github.io/helm-charts
-    version: 1.1.17
 
   - name: dome-issuer-ui
+    version: 1.2.3
+    repository: https://in2workspace.github.io/helm-charts
     alias: dome-issuer-ui
     condition: dome-issuer-ui.enabled
-    repository: https://in2workspace.github.io/helm-charts
-    version: 1.2.3
+
+  - name: postgresql
+    version: 13.1.5
+    repository: oci://registry-1.docker.io/bitnamicharts
+    alias: dome-issuer-postgresql
+    condition: dome-issuer-postgresql.enabled
 
   - name: dome-issuer-keycloak
+    version: 1.0.14
+    repository: https://in2workspace.github.io/helm-charts
     alias: dome-issuer-keycloak
     condition: dome-issuer-keycloak.enabled
-    repository: https://in2workspace.github.io/helm-charts
-    version: 1.0.14
 
   - name: postgresql
-    condition: "!dome-issuer-api.db.externalService"
-    alias: dome-issuer-postgres
-    repository: oci://registry-1.docker.io/bitnamicharts
     version: 13.1.5
-
-  - name: postgresql
-    condition: issuer-keycloak-postgres.enabled
-    alias: dome-issuer-keycloak-postgres
     repository: oci://registry-1.docker.io/bitnamicharts
-    version: 13.1.5
-
-  # External Database (Postgresql, MySQL,...)
-#  - name: postgresql
-#    condition: issuer-api.db.externalService
-#    alias: external-database
-#    repository: oci://registry-1.docker.io/bitnamicharts
-#    version: 13.1.5
+    alias: dome-issuer-keycloak-postgresql
+    condition: dome-issuer-keycloak-postgresql.enabled
