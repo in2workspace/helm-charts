@@ -64,7 +64,6 @@ dome-wallet-api:
           name: wallet-api-user-password
           # -- key to retrieve the password from
           key: user-password
-
   db:
     externalService: false
     schema: wallet
@@ -84,7 +83,6 @@ dome-wallet-ui:
   enabled: true
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
   fullnameOverride: dome-wallet-ui
-
   ## ingress specific configuration
   ingress:
     enabled: false
@@ -101,7 +99,6 @@ dome-wallet-ui:
       - hosts:
           - example-host
         secretName: example-secret
-
   ## deployment specific configuration
   app:
     internalServerPort: 8080
@@ -125,7 +122,6 @@ dome-wallet-keycloak:
   enabled: true
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
   fullnameOverride: dome-wallet-keycloak
-
   ## ingress specific configuration
   ingress:
     enabled: false
@@ -142,7 +138,6 @@ dome-wallet-keycloak:
       - hosts:
           - example-host
         secretName: example-secret
-
   ## deployment specific configuration
   app:
     internalServerPort: 8080
@@ -264,7 +259,7 @@ wallet-postgresql:
           psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE wallet;"
         create-schema.sh: |
           psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432/wallet -c "CREATE SCHEMA wallet;"
-          
+
 wallet-external-database:
   # -- should the postgresql deployment be enabled
   enabled: false
@@ -280,4 +275,3 @@ wallet-external-database:
     enablePostgresUser: true
     # -- password to be used
     password: postgres
-
