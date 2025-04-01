@@ -114,8 +114,7 @@ dome-issuer-api:
     issuerIdentity:
       credentialDidKey: <CREDENTIAL_DID_KEY>
       vcJwt: <ENCRYPTED_VC>
-      crypto:
-        privateKey: <PRIVATE_KEY>
+      privateKey: <PRIVATE_KEY>
       existingSecret:
         enabled: false
         name: issuer-identity-secret
