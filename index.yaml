@@ -474,6 +474,21 @@ entries:
   dome-issuer-api:
   - apiVersion: v2
     appVersion: v1.3.0
+    created: "2025-04-01T14:08:41.987188214Z"
+    description: A Helm chart for Kubernetes
+    digest: ddcd0d904716a6edff6335a3ea6f6fe471011f75f54534157ac792ebc755de8b
+    maintainers:
+    - email: domesupport@in2.es
+      name: IN2 Team
+    name: dome-issuer-api
+    sources:
+    - https://github.com/in2workspace/issuer-api
+    type: application
+    urls:
+    - https://github.com/in2workspace/helm-charts/releases/download/dome-issuer-api-1.1.18/dome-issuer-api-1.1.18.tgz
+    version: 1.1.18
+  - apiVersion: v2
+    appVersion: v1.3.0
     created: "2025-03-26T13:41:54.828963834Z"
     description: A Helm chart for Kubernetes
     digest: c1b613e3f74581ce70a8a159ebaa34cdec6e8fe5ec0a9dd897c90425f559d5ce
@@ -5852,4 +5867,4 @@ entries:
     urls:
     - https://in2workspace.github.io/helm-charts/wallet-api-1.0.0.tgz
     version: 1.0.0
-generated: "2025-04-01T12:03:05.222305337Z"
+generated: "2025-04-01T14:08:41.987647385Z"
