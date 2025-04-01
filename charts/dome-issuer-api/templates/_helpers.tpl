@@ -147,7 +147,7 @@ Support for existing issuer identity secret
 
 {{- define "dome-issuer-api.issuerIdentity-privateKey" -}}
     {{- if .Values.app.issuerIdentity.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.issuerIdentity.existingSecret.cryptoPrivateKey $) -}}
+        {{- printf "%s" (tpl .Values.app.issuerIdentity.existingSecret.privateKey $) -}}
     {{- else -}}
         {{- printf "private-key" -}}
     {{- end -}}
