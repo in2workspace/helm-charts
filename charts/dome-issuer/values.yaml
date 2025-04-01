@@ -207,6 +207,32 @@ dome-issuer-ui:
     credentialOfferUrl: /api/v1/credential-offer
     notification: /api/v1/notifications
 
+dome-issuer-postgresql:
+  # -- should the postgresql deployment be enabled
+  enabled: true
+  # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
+  fullnameOverride: issuer-postgres
+  # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
+  nameOverride: issuer-postgres
+  ## auth configuration for the database
+  auth:
+    # -- username to be used
+    username: postgres
+    # -- should the default postgres user be enabled
+    enablePostgresUser: true
+    # -- password to be used
+    password: postgres
+  ## configuration of the postgres primary replica
+  primary:
+    ## provide db initialization
+    initdb:
+      ## provide scripts for initialization
+      scripts:
+        # -- create the database
+        # -- !!Put the same database name and the same database schema
+        create.sh: |
+          psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE issuer;"
+
 dome-issuer-keycloak:
   # Keycloak Configuration
   keycloak:
@@ -280,7 +306,6 @@ dome-issuer-keycloak:
               enable: true
             ssl:
               enable: false
-
   # Issuer API Configuration
   issuerApi:
     url: http://issuer-api:8080
@@ -293,43 +318,15 @@ dome-issuer-keycloak:
       # internalPort is only used if externalService is false
       internalPort: 30001
       path: /
-
   # Pre-authorization Configuration
   preAuth:
     lifespan: 10
     lifespanTimeUnit: MINUTES
-
   # Token Configuration
   token:
     expiration: 2592000
 
-dome-issuer-postgres:
-  # -- should the postgresql deployment be enabled
-  enabled: true
-  # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
-  fullnameOverride: issuer-postgres
-  # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
-  nameOverride: issuer-postgres
-  ## auth configuration for the database
-  auth:
-    # -- username to be used
-    username: postgres
-    # -- should the default postgres user be enabled
-    enablePostgresUser: true
-    # -- password to be used
-    password: postgres
-  ## configuration of the postgres primary replica
-  primary:
-    ## provide db initialization
-    initdb:
-      ## provide scripts for initialization
-      scripts:
-        # -- create the database
-        # -- !!Put the same database name and the same database schema
-        create.sh: |
-          psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE issuer;"
-
-dome-issuer-keycloak-postgres:
+dome-issuer-keycloak-postgresql:
   # -- should the postgresql deployment be enabled
   enabled: true
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
@@ -353,19 +350,3 @@ dome-issuer-keycloak-postgres:
         # -- create the database
         create.sh: |
           psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE cred;"
-
-external-database:
-  # -- should the postgresql deployment be enabled
-  enabled: false
-  # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
-  fullnameOverride: external-database
-  # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
-  nameOverride: external-database
-  ## auth configuration for the database
-  auth:
-    # -- username to be used
-    username: postgres
-    # -- should the default postgres user be enabled
-    enablePostgresUser: true
-    # -- password to be used
-    password: postgres
