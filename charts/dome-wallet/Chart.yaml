@@ -1,8 +1,8 @@
 apiVersion: v2
 name: dome-wallet
-description: Umbrella Helm chart for the Wallet
+description: Helm chart for the Wallet
 type: application
-version: 1.3.12
+version: 1.3.14
 appVersion: "v0.0.5"
 
 dependencies:
@@ -16,26 +16,19 @@ dependencies:
     repository: https://in2workspace.github.io/helm-charts
     version: 0.3.2
 
+  - name: postgresql
+    condition: dome-wallet-postgresql.enabled
+    alias: dome-wallet-postgresql
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 16.4.5
+
   - name: dome-wallet-keycloak
     condition: dome-wallet-keycloak.enabled
     repository: https://in2workspace.github.io/helm-charts
     version: 0.1.3
 
   - name: postgresql
-    condition: postgresql.enabled
-    alias: postgresql
-    repository: oci://registry-1.docker.io/bitnamicharts
-    version: 16.4.5
-
-  - name: postgresql
-    condition: "!wallet-api.db.externalService"
-    alias: wallet-postgresql
-    repository: oci://registry-1.docker.io/bitnamicharts
-    version: 16.4.5
-
-  #External Database (Postgresql, MySQL,...)
-  - name: postgresql
-    condition: wallet-api.db.externalService
-    alias: wallet-external-database
+    condition: dome-wallet-keycloak-postgresql.enabled
+    alias: dome-wallet-keycloak-postgresql
     repository: oci://registry-1.docker.io/bitnamicharts
     version: 16.4.5

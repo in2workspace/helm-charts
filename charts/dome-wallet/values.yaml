@@ -64,9 +64,7 @@ dome-wallet-api:
           name: wallet-api-user-password
           # -- key to retrieve the password from
           key: user-password
-
   db:
-    externalService: false
     schema: wallet
     host: wallet-postgres
     port: 5432
@@ -84,7 +82,6 @@ dome-wallet-ui:
   enabled: true
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
   fullnameOverride: dome-wallet-ui
-
   ## ingress specific configuration
   ingress:
     enabled: false
@@ -101,7 +98,6 @@ dome-wallet-ui:
       - hosts:
           - example-host
         secretName: example-secret
-
   ## deployment specific configuration
   app:
     internalServerPort: 8080
@@ -122,10 +118,9 @@ dome-wallet-ui:
 ## configuration for the dome-wallet-keycloak
 dome-wallet-keycloak:
   # -- should be enabled?
-  enabled: true
+  enabled: false
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
   fullnameOverride: dome-wallet-keycloak
-
   ## ingress specific configuration
   ingress:
     enabled: false
@@ -142,7 +137,6 @@ dome-wallet-keycloak:
       - hosts:
           - example-host
         secretName: example-secret
-
   ## deployment specific configuration
   app:
     internalServerPort: 8080
@@ -197,9 +191,9 @@ dome-wallet-keycloak:
       key: keycloak-db-password
 
 ## configuration of postgres to be used for the blockchain-connector - see https://github.com/bitnami/charts/tree/main/bitnami/postgresql for details
-postgresql:
+dome-wallet-keycloak-postgresql:
   # -- should the postgresql deployment be enabled
-  enabled: true
+  enabled: false
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
   fullnameOverride: dome-wallet-keycloak-postgres
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
@@ -231,7 +225,7 @@ postgresql:
           psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE keycloak;"
 
 ## configuration of postgres
-wallet-postgresql:
+dome-wallet-postgresql:
   # -- should the postgresql deployment be enabled
   enabled: true
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
@@ -264,20 +258,3 @@ wallet-postgresql:
           psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE wallet;"
         create-schema.sh: |
           psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432/wallet -c "CREATE SCHEMA wallet;"
-          
-wallet-external-database:
-  # -- should the postgresql deployment be enabled
-  enabled: false
-  # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
-  fullnameOverride: wallet-external-database
-  # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
-  nameOverride: wallet-external-database
-  ## auth configuration for the database
-  auth:
-    # -- username to be used
-    username: postgres
-    # -- should the default postgres user be enabled
-    enablePostgresUser: true
-    # -- password to be used
-    password: postgres
-
