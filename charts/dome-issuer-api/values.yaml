@@ -45,12 +45,14 @@ readinessProbe:
   initialDelaySeconds: 40
   failureThreshold: 6
   periodSeconds: 10
+  timeoutSeconds: 60
 
 livenessProbe:
   path: /issuer-api/health
   initialDelaySeconds: 40
   failureThreshold: 6
   periodSeconds: 10
+  timeoutSeconds: 60
 
 ingress:
   enabled: false
