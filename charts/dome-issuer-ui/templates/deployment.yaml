@@ -54,24 +54,24 @@ spec:
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           env:
             - name: IAM_EXTERNAL_URL
-              value: {{ .Values.app.iam.externalUrl }}
+              value: {{.Values.app.iam.externalUrl}}
             - name: BASE_URL
-              value: {{ .Values.app.baseUrl }}
+              value: {{.Values.app.baseUrl}}
             - name: WALLET_URL
-              value: {{ .Values.app.walletUrl }}
+              value: {{.Values.app.walletUrl}}
             - name: WALLET_URL_TEST
-              value: {{ .Values.app.walletUrlTest }}
+              value: {{.Values.app.walletUrlTest}}
             - name: KNOWLEDGEBASE_URL
-              value: {{ .Values.app.knowledgeBaseUrl }}
+              value: {{.Values.app.knowledgeBaseUrl}}
             - name: PRIMARY
-              value: {{ .Values.app.colors.primary | quote }}
+              value: {{.Values.app.colors.primary | quote}}
             - name: PRIMARY_CONTRAST
-              value: {{ .Values.app.colors.primaryContrast | quote }}
+              value: {{.Values.app.colors.primaryContrast | quote}}
             - name: SECONDARY
-              value: {{ .Values.app.colors.secondary | quote }}
+              value: {{.Values.app.colors.secondary | quote}}
             - name: SECONDARY_CONTRAST
-              value: {{ .Values.app.colors.secondaryContrast | quote }}
+              value: {{.Values.app.colors.secondaryContrast | quote}}
             - name: LOGO_SRC
-              value: {{ .Values.app.logoSrc }}
+              value: {{.Values.app.logoSrc}}
             - name: FAVICON_SRC
-              value: {{ .Values.app.faviconSrc }}
+              value: {{.Values.app.faviconSrc}}
