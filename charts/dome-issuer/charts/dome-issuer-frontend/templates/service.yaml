@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "dome-issuer-frontend.fullname" . }}
+  namespace: {{ $.Release.Namespace | quote }}
+  labels:
+    {{- include "dome-issuer-frontend.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ include "dome-issuer-frontend.serverPort" }}
+      {{ if eq .Values.service.type "NodePort" }}
+      nodePort: 30000
+      {{ end }}
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "dome-issuer-frontend.selectorLabels" . | nindent 4 }}
