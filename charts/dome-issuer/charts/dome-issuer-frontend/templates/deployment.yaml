@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "dome-issuer-ui.fullname" . }}
+  name: {{ include "dome-issuer-frontend.fullname" . }}
   namespace: {{ $.Release.Namespace | quote }}
   labels:
-    {{- include "dome-issuer-ui.labels" . | nindent 4 }}
+    {{- include "dome-issuer-frontend.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "dome-issuer-ui.selectorLabels" . | nindent 6 }}
+      {{- include "dome-issuer-frontend.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -19,13 +19,13 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "dome-issuer-ui.selectorLabels" . | nindent 8 }}
+        {{- include "dome-issuer-frontend.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "dome-issuer-ui.serviceAccountName" . }}
+      serviceAccountName: {{ include "dome-issuer-frontend.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -36,33 +36,25 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ .Values.app.internalServerPort }}
+              containerPort: {{ include "dome-issuer-frontend.serverPort" }}
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: {{ .Values.livenessProbe.path }}
-              port: {{ .Values.app.internalServerPort }}
+              path: {{ .Values.livenessProbe.httpGet.path }}
+              port: {{ .Values.livenessProbe.httpGet.port }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
           readinessProbe:
             httpGet:
-              path: {{ .Values.readinessProbe.path }}
-              port: {{ .Values.app.internalServerPort }}
+              path: {{ .Values.readinessProbe.httpGet.path }}
+              port: {{ .Values.readinessProbe.httpGet.port }}
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
           env:
-            - name: IAM_EXTERNAL_URL
-              value: {{ .Values.app.iam.externalUrl }}
-            - name: BASE_URL
-              value: {{ .Values.app.baseUrl }}
-            - name: WALLET_URL
-              value: {{ .Values.app.walletUrl }}
-            - name: WALLET_URL_TEST
-              value: {{ .Values.app.walletUrlTest }}
-            - name: KNOWLEDGEBASE_URL
-              value: {{ .Values.app.knowledgeBaseUrl }}
             - name: PRIMARY
               value: {{ .Values.app.colors.primary | quote }}
             - name: PRIMARY_CONTRAST
@@ -75,3 +67,11 @@ spec:
               value: {{ .Values.app.logoSrc }}
             - name: FAVICON_SRC
               value: {{ .Values.app.faviconSrc }}
+            - name: IAM_EXTERNAL_URL
+              value: {{ .Values.app.keycloakUrl }}
+            - name: BASE_URL
+              value: {{ .Values.app.backendUrl }}
+            - name: WALLET_URL
+              value: {{ .Values.app.walletUrl }}
+            - name: KNOWLEDGEBASE_URL
+              value: {{ .Values.app.knowledgeBaseUrl }}
