@@ -43,6 +43,18 @@ service:
   type: ClusterIP
   port: 8080
 
+readinessProbe:
+  path: /health
+  initialDelaySeconds: 40
+  failureThreshold: 6
+  periodSeconds: 10
+
+livenessProbe:
+  path: /health
+  initialDelaySeconds: 40
+  failureThreshold: 6
+  periodSeconds: 10
+
 ingress:
   enabled: false
   className: ""
@@ -70,22 +82,6 @@ resources: {}
   # requests:
   #   cpu: 100m
   #   memory: 128Mi
-
-readinessProbe:
-  path: /health
-  port: http
-  # IN2: Extra attributes for the readinessProbe
-  initialDelaySeconds: 40
-  failureThreshold: 6
-  periodSeconds: 10
-
-livenessProbe:
-  path: /health
-  port: http
-  # IN2: Extra attributes for the livenessProbe
-  initialDelaySeconds: 40
-  failureThreshold: 6
-  periodSeconds: 10
 
 autoscaling:
   enabled: false
@@ -115,45 +111,6 @@ affinity: {}
 
 app:
   internalServerPort: 8080
-  loginUrl:
-    # if deployed locally set to false
-    externalService: true
-    scheme: http
-    # change by the external url or set to localhost if deployed locally
-    host: example.org
-    # internalPort is only used if externalService is false
-    internalPort: 30002
-    path: /realms/CredentialIssuer
-  clientId: account-console
-  scope: openid profile email offline_access
-  grantType: code
-  baseUrl:
-    # if deployed locally set to false
-    externalService: true
-    scheme: http
-    # change by the external url or set to localhost if deployed locally
-    host: example.org
-    # internalPort is only used if externalService is false
-    internalPort: 30001
-    path: /
-  walletUrl:
-    # if deployed locally set to false
-    externalService: true
-    scheme: http
-    # change by the external url or set to localhost if deployed locally
-    host: example.org
-    # internalPort is only used if externalService is false
-    internalPort: 30003
-    path: /
-  walletUrlTest:
-    # if deployed locally set to false
-    externalService: true
-    scheme: http
-    # change by the external url or set to localhost if deployed locally
-    host: example.org
-    # internalPort is only used if externalService is false
-    internalPort: 30003
-    path: /
   colors:
     primary: "#2d58a7"
     primaryContrast: "#ffffff"
@@ -161,18 +118,9 @@ app:
     secondaryContrast: "#dde6f6"
   logoSrc: "assets/logos/no-image.png"
   faviconSrc: "assets/logos/no-image.png"
-  knowledgebaseUrl:
-    # if deployed locally set to false
-    externalService: true
-    scheme: http
-    # change by the external url or set to localhost if deployed locally
-    host: example.org
-    # internalPort is only used if externalService is false
-    internalPort: 30004
-    path: /
-    walletPath: "books/dome-digital-wallet-user-guide"
-  profile: local
-  procedures: /api/v1/procedures
-  saveCredential: /api/v1/credentials?type=LEARCredentialEmployee
-  credentialOfferUrl: /api/v1/credential-offer
-  notification: /api/v1/notifications
+  baseUrl: "https://issuer-api.com"
+  walletUrl: "https://wallet.example.com"
+  walletUrlTest: "https://wallet-test.example.com"
+  knowledgeBaseUrl: "https://knowledgebase.example.com"
+  iam:
+    externalUrl: "https://iam.example.com/realms/example"
