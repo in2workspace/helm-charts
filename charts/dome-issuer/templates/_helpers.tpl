@@ -3,7 +3,7 @@
 {{- end}}
 
 {{- define "issuer.url" -}}
-https://{{ .Values.global.domain }}
+{{ .Values.global.domain }}
 {{- end }}
 
 
