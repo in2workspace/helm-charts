@@ -36,7 +36,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ include "dome-issuer-frontend.serverPort" }}
+              containerPort: {{ include "dome-issuer-frontend.serverPort" . }}
               protocol: TCP
           livenessProbe:
             httpGet:
@@ -67,11 +67,11 @@ spec:
               value: {{ .Values.app.logoSrc }}
             - name: FAVICON_SRC
               value: {{ .Values.app.faviconSrc }}
-            - name: IAM_EXTERNAL_URL
+            - name: IAM_URL
               value: {{ .Values.app.keycloakUrl }}
             - name: BASE_URL
               value: {{ .Values.app.backendUrl }}
             - name: WALLET_URL
               value: {{ .Values.app.walletUrl }}
-            - name: KNOWLEDGEBASE_URL
+            - name: KNOWLEDGE_BASE_URL
               value: {{ .Values.app.knowledgeBaseUrl }}

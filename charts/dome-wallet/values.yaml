@@ -1,7 +1,6 @@
 global:
-  fullNameOverride: ""
-  nameOverride: ""
   # Ingress configuration
+  # todo remove from global?
   ingress:
     enabled: true
     labels:
@@ -12,6 +11,8 @@ global:
     clusterIssuer: "letsencrypt-in2-test-issuer"
     host: "example-host"
 
+fullNameOverride: ""
+nameOverride: ""
 
 ## configuration for the dome-wallet-backend
 dome-wallet-backend:
@@ -22,7 +23,7 @@ dome-wallet-backend:
     pullPolicy: Always
     # -- image tag
     tag: v1.4.3
-  ## ingress specific configuration
+  # ingress specific configuration
   ingress:
     enabled: false
   # has to match ingress port --remove?
@@ -30,9 +31,8 @@ dome-wallet-backend:
     port: 80
   ## deployment specific configuration
   app:
-    # has to match ingress backend path
+    # has to match ingress backend path --remove?
     basePath: "/api"
-    internalServerPort: 8080
     logLevel: DEBUG
     authServer:
       externalUrl: example-external-domain.org/keycloak/realms/wallet
@@ -75,7 +75,7 @@ dome-wallet-backend:
           key: user-password
   db:
     schema: public # remove?
-    host: wallet-postgres #dome-wallet-postgres?
+    host: wallet-postgres # dome-wallet-postgres?
     port: 5432
     name: wallet
     username: postgres
@@ -101,7 +101,6 @@ dome-wallet-frontend:
     port: 80
   ## deployment specific configuration
   app:
-    internalServerPort: 8080
     logsEnabled: false
     colors:
       primary: "#00ADD3"
@@ -122,7 +121,19 @@ dome-wallet-keycloak:
   enabled: false
   ## ingress specific configuration
   ingress:
-    enabled: false
+    enabled: true
+    className: nginx
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-in2-test-issuer
+    hosts:
+      - host: wallet.dome-marketplace-lcl.org
+        paths:
+          - path: /keycloak
+            pathType: Prefix
+    tls:
+      - hosts:
+          - wallet.dome-marketplace-lcl.org
+        secretName: wallet-tls-secret
   ## deployment specific configuration
   app:
     internalServerPort: 8080
@@ -192,6 +203,14 @@ dome-wallet-keycloak-postgresql:
     enabled: true
     whenScaled: Retain
     whenDeleted: Retain
+  # configuration for Velero backup
+  backup:
+    cronjob:
+      annotations:
+        backup: true
+  readReplicas:
+    labels:
+      backup.velero.io/backup-volumes: data
   ## auth configuration for the database
   auth:
     # -- username to be used
