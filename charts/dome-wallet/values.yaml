@@ -206,6 +206,14 @@ dome-wallet-keycloak-postgresql:
     enabled: true
     whenScaled: Retain
     whenDeleted: Retain
+  # configuration for velero backup
+  backup:
+    cronjob:
+      annotations:
+        backup: true
+  readReplicas:
+    labels:
+      backup.velero.io/backup-volumes: data
   ## auth configuration for the database
   auth:
     # -- username to be used
