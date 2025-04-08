@@ -1,0 +1,42 @@
+{{- if .Values.global.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "dome-wallet.fullname" . }}
+  labels: {{ .Values.global.ingress.labels }}
+  namespace: {{ $.Release.Namespace | quote }}
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "{{ .Values.global.ingress.sslRedirect }}"
+    nginx.ingress.kubernetes.io/backend-protocol: "{{ .Values.global.ingress.backendProtocol }}"
+    {{- if .Values.global.ingress.enableTLS }}
+    cert-manager.io/cluster-issuer: {{ .Values.global.ingress.clusterIssuer }}
+    {{- end }}
+spec:
+  ingressClassName: {{ .Values.global.ingress.className }}
+  rules:
+    - host: {{ .Values.global.ingress.host }}
+      http:
+        paths:
+          # Backend
+          - path: "/api"
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "dome-wallet-backend.service.name" . }}
+                port:
+                  number: 80
+          # Frontend
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "dome-wallet-frontend.service.name" . }}
+                port:
+                  number: 80
+  {{- if .Values.global.ingress.enableTLS }}
+  tls:
+    - hosts:
+        - {{ .Values.global.ingress.host }}
+      secretName: wallet-tls-secret
+  {{- end }}
+  {{- end }}

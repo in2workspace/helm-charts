@@ -1,0 +1,124 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "dome-wallet-backend.fullname" . }}
+  namespace: {{ $.Release.Namespace | quote }} # remove?
+  labels:
+    {{- include "dome-wallet-backend.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "dome-wallet-backend.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "dome-wallet-backend.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "dome-wallet-backend.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ include "dome-wallet-backend.serverPort" . }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.livenessProbe.httpGet.path }}
+              port: {{ include "dome-wallet-backend.serverPort" . }}
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.readinessProbe.httpGet.path }}
+              port: {{ include "dome-wallet-backend.serverPort" . }}
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          env:
+            - name: SERVER_PORT
+              value: {{ include "dome-wallet-backend.serverPort" . }}
+            # remove?
+            - name: SPRING_WEBFLUX_BASEPATH
+              value: {{ .Values.app.basePath }}
+            - name: LOGGING_LEVEL_ES_IN2_WALLET_API
+              value: {{ .Values.app.logLevel }}
+            # AUTH SERVER
+            - name: SECURITY_AUTH_SERVER_EXTERNAL_URL
+              value: {{ .Values.app.authServer.externalUrl }}
+            - name: SECURITY_AUTH_SERVER_INTERNAL_URL
+              value: {{ .Values.app.authServer.internalUrl }}
+            # CORS
+            - name: SECURITY_CORS_ALLOWED_ORIGINS
+              value: {{ .Values.app.cors.allowedOrigins }}
+            # VAULT
+            - name: SECURITY_VAULT_PROVIDER_NAME
+              value: {{ .Values.app.vault.provider }}
+            - name: SECURITY_VAULT_HASHICORP_URL
+              value: {{ .Values.app.vault.url }}
+            - name: SECURITY_VAULT_HASHICORP_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-wallet-backend.vaultTokenSecretName" . }}
+                  key: {{ include "dome-wallet-backend.user-tokenKey" . }}
+            # EBSI TESTS
+            - name: EBSI_TEST_URL
+              value: {{ .Values.app.ebsiTest.url }}
+            - name: EBSI_TEST_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-wallet-backend.clientSecretName" . }}
+                  key: {{ include "dome-wallet-backend.client-passwordKey" . }}
+            - name: EBSI_TEST_CLIENT_ID
+              value: {{ .Values.app.ebsiTest.client.id }}
+            - name: EBSI_TEST_USERNAME
+              value: {{ .Values.app.ebsiTest.userData.name }}
+            - name: EBSI_TEST_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-wallet-backend.userSecretName" . }}
+                  key: {{ include "dome-wallet-backend.user-passwordKey" . }}
+            # DATABASE
+            - name: SPRING_R2DBC_URL
+              value: "r2dbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}?schema={{ .Values.db.schema }}"
+            # remove?
+            - name: DB_SCHEMA
+              value: {{ .Values.db.schema }}
+            - name: SPRING_R2DBC_USERNAME
+              value: {{ .Values.db.username }}
+            - name: SPRING_R2DBC_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-wallet-backend.db-secretName" . }}
+                  key: {{ include "dome-wallet-backend.db-passwordKey" . }}
+            - name: SPRING_FLYWAY_URL
+              value: "jdbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}?schema={{ .Values.db.schema }}"
+            - name: SPRING_FLYWAY_USER
+              value: {{ .Values.db.username }}
+            - name: SPRING_FLYWAY_DEFAULT_SCHEMA
+              value: "public"
+            - name: SPRING_FLYWAY_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-wallet-backend.db-secretName" . }}
+                  key: {{ include "dome-wallet-backend.db-passwordKey" . }}

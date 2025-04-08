@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "dome-wallet-frontend.fullname" . }}
+  namespace: {{ $.Release.Namespace | quote }}
+  labels:
+    {{- include "dome-wallet-frontend.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "dome-wallet-frontend.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "dome-wallet-frontend.labels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "dome-wallet-frontend.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ include "dome-wallet-frontend.serverPort" . }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.livenessProbe.httpGet.path }}
+              port: {{ include "dome-wallet-frontend.serverPort" . }}
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.readinessProbe.httpGet.path }}
+              port: {{ include "dome-wallet-frontend.serverPort" . }}
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          env:
+            - name: LOGS_ENABLED
+              value: {{ quote .Values.app.logsEnabled }}
+            - name: PRIMARY
+              value: {{ .Values.app.colors.primary | quote }}
+            - name: PRIMARY_CONTRAST
+              value: {{ .Values.app.colors.primaryContrast | quote }}
+            - name: SECONDARY
+              value: {{ .Values.app.colors.secondary | quote }}
+            - name: SECONDARY_CONTRAST
+              value: {{ .Values.app.colors.secondaryContrast | quote }}
+            - name: LOGO_SRC
+              value: {{ .Values.app.logoSrc }}
+            - name: FAVICON_SRC
+              value: {{ .Values.app.faviconSrc }}
+            - name: WALLET_API_INTERNAL_DOMAIN
+              value: {{.Values.app.walletApi.internalDomain}}
+            - name: WALLET_API_WEBSOCKET_EXTERNAL_DOMAIN
+              value: {{.Values.app.walletApi.websocketExternalDomain}}
+            - name: IAM_EXTERNAL_URL
+              value: {{.Values.app.iam.externalUrl}}

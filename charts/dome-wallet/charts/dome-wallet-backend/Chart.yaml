@@ -1,0 +1,6 @@
+apiVersion: v2
+name: dome-wallet-backend
+description: DOME Wallet Backend Helm chart (subchart of DOME Wallet Helm chart)
+type: application
+version: 1.2.0
+appVersion: "v1.2.1"

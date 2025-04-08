@@ -1,0 +1,183 @@
+{{/*
+Expand the name of the chart.
+*/}}
+{{- define "dome-wallet-backend.name" -}}
+{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
+Create a default fully qualified app name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+If release name contains chart name it will be used as a full name.
+*/}}
+{{- define "dome-wallet-backend.fullname" -}}
+{{- if .Values.fullnameOverride }}
+{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- $name := default .Chart.Name .Values.nameOverride }}
+{{- if contains $name .Release.Name }}
+{{- .Release.Name | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{/*
+Create chart name and version as used by the chart label.
+*/}}
+{{- define "dome-wallet-backend.chart" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
+Common labels
+*/}}
+{{- define "dome-wallet-backend.labels" -}}
+helm.sh/chart: {{ include "dome-wallet-backend.chart" . }}
+{{ include "dome-wallet-backend.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{/*
+Selector labels
+*/}}
+{{- define "dome-wallet-backend.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "dome-wallet-backend.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{/*
+Create the name of the service account to use
+*/}}
+{{- define "dome-wallet-backend.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create }}
+{{- default (include "dome-wallet-backend.fullname" .) .Values.serviceAccount.name }}
+{{- else }}
+{{- default "default" .Values.serviceAccount.name }}
+{{- end }}
+{{- end }}
+
+{{/*
+Support for existing database secret 
+*/}}
+{{- define "dome-wallet-backend.clientSecretName" -}}
+    {{- if .Values.app.ebsiTest.client.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.ebsiTest.client.existingSecret.name $) -}}
+    {{- else -}}
+        {{- printf "wallet-api-client-secret" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "dome-wallet-backend.client-passwordKey" -}}
+    {{- if .Values.app.ebsiTest.client.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.ebsiTest.client.existingSecret.key $) -}}
+    {{- else -}}
+        {{- printf "client-secret" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "dome-wallet-backend.userSecretName" -}}
+    {{- if .Values.app.ebsiTest.userData.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.ebsiTest.userData.existingSecret.name $) -}}
+    {{- else -}}
+        {{- printf "wallet-api-user-password" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "dome-wallet-backend.user-passwordKey" -}}
+    {{- if .Values.app.ebsiTest.userData.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.ebsiTest.userData.existingSecret.key $) -}}
+    {{- else -}}
+        {{- printf "user-password" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "dome-wallet-backend.vaultTokenSecretName" -}}
+    {{- if .Values.app.vault.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.vault.existingSecret.name $) -}}
+    {{- else -}}
+        {{- printf "wallet-api-token-secret" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "dome-wallet-backend.user-tokenKey" -}}
+    {{- if .Values.app.vault.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.vault.existingSecret.key $) -}}
+    {{- else -}}
+        {{- printf "token" -}}
+    {{- end -}}
+{{- end -}}
+
+
+# todo: only one secret (helper)
+{{/*
+Support for existing database secret
+*/}}
+{{- define "dome-wallet-backend.db-secretName" -}}
+    {{- if .Values.db.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.db.existingSecret.name $) -}}
+    {{- else -}}
+        {{- printf "wallet-api-db-secret" -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "dome-wallet-backend.db-passwordKey" -}}
+    {{- if .Values.db.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.db.existingSecret.key $) -}}
+    {{- else -}}
+        {{- printf "password" -}}
+    {{- end -}}
+{{- end -}}
+
+{{/* Validate that the required values are set when db.externalService is true or false. */}}
+{{- define "validateDatabaseConfig" -}}
+{{- if .Values.db.externalService }}
+  {{/*Cuando externalService es verdadero, validamos los campos*/}}
+  {{- if empty .Values.db.host }}
+    {{ fail "El valor 'db.host' no puede estar vacío cuando 'db.externalService' está habilitado." }}
+  {{- end }}
+  {{- if empty .Values.db.name }}
+    {{ fail "El valor 'db.name' no puede estar vacío cuando 'db.externalService' está habilitado." }}
+  {{- end }}
+  {{- if empty .Values.db.schema }}
+    {{ fail "El valor 'db.schema' no puede estar vacío cuando 'db.externalService' está habilitado." }}
+  {{- end }}
+  {{- if empty .Values.db.username }}
+    {{ fail "El valor 'db.username' no puede estar vacío cuando 'db.externalService' está habilitado." }}
+  {{- end }}
+  {{- if empty .Values.db.password }}
+    {{ fail "El valor 'db.password' no puede estar vacío cuando 'db.externalService' está habilitado." }}
+  {{- end }}
+{{- else }}
+  {{/* Cuando externalService es falso, validamos que los valores sean específicos */}}
+  {{- if ne .Values.db.host "dome-wallet-postgres" }}
+    {{ fail "El valor 'db.host' debe ser 'localhost' cuando 'db.externalService' está deshabilitado." }}
+  {{- end }}
+  {{- if ne .Values.db.port 5432 }}
+    {{ fail "El valor 'db.port' debe ser '5432' cuando 'db.externalService' está deshabilitado." }}
+  {{- end }}
+  {{- if ne .Values.db.name "wallet" }}
+    {{ fail "El valor 'db.name' debe ser 'issuer' cuando 'db.externalService' está deshabilitado." }}
+  {{- end }}
+  {{- if ne .Values.db.schema "wallet" }}
+    {{ fail "El valor 'db.schema' debe ser 'public' cuando 'db.externalService' está deshabilitado." }}
+  {{- end }}
+  {{- if ne .Values.db.username "postgres" }}
+    {{ fail "El valor 'db.username' debe ser 'postgres' cuando 'db.externalService' está deshabilitado." }}
+  {{- end }}
+  {{- if empty .Values.db.password }}
+    {{ fail "El valor 'db.password' no puede estar vacío cuando 'db.externalService' está deshabilitado." }}
+  {{- end }}
+{{- end }}
+{{- end }}
+
+{{/*
+Internal Server Port
+*/}}
+{{- define "dome-wallet-backend.serverPort" -}}
+{{- default 8080 }}
+{{- end }}
