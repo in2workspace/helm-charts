@@ -35,8 +35,8 @@ dome-wallet-backend:
     basePath: "/api"
     logLevel: DEBUG
     authServer:
-      externalUrl: www.example-external-domain.org/keycloak/realms/wallet
-      internalUrl: www.example-internal-domain.org/keycloak/realms/wallet
+      externalUrl: http://www.example-external-domain.org/keycloak/realms/wallet
+      internalUrl: http://www.example-internal-domain.org/keycloak/realms/wallet
     cors:
       # expects a string of url's separated with comma and space
       allowedOrigins: "www.example-cors.com, www.example-cors-two.com"
