@@ -35,8 +35,8 @@ dome-wallet-backend:
     basePath: "/api"
     logLevel: DEBUG
     authServer:
-      externalUrl: example-external-domain.org/keycloak/realms/wallet
-      internalUrl: example-internal-domain.org/keycloak/realms/wallet
+      externalUrl: www.example-external-domain.org/keycloak/realms/wallet
+      internalUrl: www.example-internal-domain.org/keycloak/realms/wallet
     cors:
       # expects a string of url's separated with comma and space
       allowedOrigins: "www.example-cors.com, www.example-cors-two.com"
@@ -256,9 +256,9 @@ dome-wallet-postgresql:
       whenScaled: Retain
       whenDeleted: Retain
     initdb:
-      # todo remove?
+      # todo remove? public instead of wallet schema?
       scripts:
         create.sh: |
-          psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE wallet;"
+          psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "SELECT 'CREATE DATABASE wallet' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'wallet')\gexec"
         create-schema.sh: |
           psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432/wallet -c "CREATE SCHEMA IF NOT EXISTS wallet;"
