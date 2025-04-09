@@ -203,14 +203,6 @@ dome-wallet-keycloak-postgresql:
     enabled: true
     whenScaled: Retain
     whenDeleted: Retain
-  # configuration for Velero backup
-  backup:
-    cronjob:
-      annotations:
-        backup: true
-  readReplicas:
-    labels:
-      backup.velero.io/backup-volumes: data
   ## auth configuration for the database
   auth:
     # -- username to be used
@@ -221,6 +213,11 @@ dome-wallet-keycloak-postgresql:
     password: postgres
   ## configuration of the postgres primary replica
   primary:
+    # Configuration for Velero backup
+    annotations:
+      backup.velero.io/backup-volumes: data
+    podAnnotations:
+      backup.velero.io/backup-volumes: data
     ## provide db initialization
     initdb:
       ## provide scripts for initialization

@@ -16,16 +16,18 @@ If release name contains chart name it will be used as a full name.
 {{- end }}
 {{- end }}
 
+# todo: helpers for chart name, labels and selectorlabels?
+
 {{/*
-Backend name --todo: find a way to avoid hardcoded name
+Backend service name --todo: find a way to avoid hardcoded name
 */}}
 {{- define "dome-wallet-backend.service.name" -}}
-dome-wallet-backend
+dome-wallet-dome-wallet-backend
 {{- end }}
 
 {{/*
 Frontend name --todo: find a way to avoid hardcoded name
 */}}
 {{- define "dome-wallet-frontend.service.name" -}}
-dome-wallet-frontend
+dome-wallet-dome-wallet-frontend
 {{- end }}

@@ -57,7 +57,7 @@ spec:
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           env:
             - name: SERVER_PORT
-              value: {{ include "dome-wallet-backend.serverPort" . }}
+              value: {{ include "dome-wallet-backend.serverPort" . | quote }}
             # remove?
             - name: SPRING_WEBFLUX_BASEPATH
               value: {{ .Values.app.basePath }}
