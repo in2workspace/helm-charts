@@ -190,7 +190,7 @@ dome-wallet-keycloak:
 ## configuration of postgres to be used for the blockchain-connector - see https://github.com/bitnami/charts/tree/main/bitnami/postgresql for details
 dome-wallet-keycloak-postgresql:
   # -- should the postgresql deployment be enabled
-  enabled: false
+  enabled: true
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
   fullnameOverride: dome-wallet-keycloak-postgres
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
@@ -261,4 +261,4 @@ dome-wallet-postgresql:
         create.sh: |
           psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE wallet;"
         create-schema.sh: |
-          psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432/wallet -c "CREATE SCHEMA wallet;"
+          psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432/wallet -c "CREATE SCHEMA IF NOT EXISTS wallet;"
