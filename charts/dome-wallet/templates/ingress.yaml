@@ -22,7 +22,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ include "dome-wallet-backend.service.name" . }}
+                name: {{ index .Values "dome-wallet-backend" "fullnameOverride" }}
                 port:
                   number: 80
           # Frontend
@@ -30,7 +30,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ include "dome-wallet-frontend.service.name" . }}
+                name: {{ index .Values "dome-wallet-frontend" "fullnameOverride" }}
                 port:
                   number: 80
   {{- if .Values.ingress.enableTLS }}
