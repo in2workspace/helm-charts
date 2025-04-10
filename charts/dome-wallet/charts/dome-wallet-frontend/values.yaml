@@ -111,7 +111,7 @@ tolerations: []
 
 affinity: {}
 
-# todo: configmap?
+# todo: use configmap when needed
 app:
   logsEnabled: false
   colors:
@@ -122,7 +122,8 @@ app:
   logoSrc: "assets/logos/no-image.png"
   faviconSrc: "assets/icons/dome-favicon.png"
   walletApi:
-    internalDomain: https://example-internal-domain.org/wallet-api
-    websocketExternalDomain: wss://example-external-domain/wallet-api
+    # path has to match backend basePath
+    internalDomain: https://example-internal-domain.org/api
+    websocketExternalDomain: wss://example-external-domain/api
   iam:
     externalUrl: https://example-external-domain.org/keycloak/realms/wallet

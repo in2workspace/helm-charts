@@ -111,9 +111,10 @@ tolerations: []
 
 affinity: {}
 
-# todo: configmap?
+# todo: use configmap when needed
 app:
   # has to match ingress.hosts.host.path
+  # todo: remove or refactor to match it with ingress backend path
   basePath: /api
   logLevel: DEBUG
   authServer:

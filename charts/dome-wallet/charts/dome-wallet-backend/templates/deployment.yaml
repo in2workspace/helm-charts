@@ -55,6 +55,7 @@ spec:
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          # todo: unify secrets
           env:
             - name: SERVER_PORT
               value: {{ include "dome-wallet-backend.serverPort" . | quote }}

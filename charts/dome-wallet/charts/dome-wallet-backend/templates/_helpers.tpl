@@ -9,6 +9,7 @@ Expand the name of the chart.
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
+todo: maybe change with {{- if contains $name .Release.Name }}
 */}}
 {{- define "dome-wallet-backend.fullname" -}}
 {{- if .Values.fullnameOverride }}
@@ -113,9 +114,9 @@ Support for existing database secret
 {{- end -}}
 
 
-# todo: only one secret (helper)
 {{/*
 Support for existing database secret
+todo: when all secrets are unified, only one secret helper will be needed
 */}}
 {{- define "dome-wallet-backend.db-secretName" -}}
     {{- if .Values.db.existingSecret.enabled -}}
