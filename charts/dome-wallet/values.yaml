@@ -1,18 +1,16 @@
-global:
-  # Ingress configuration
-  # todo remove from global?
-  ingress:
-    enabled: true
-    labels:
-    className: "nginx"
-    sslRedirect: false
-    backendProtocol: "HTTP"
-    enableTLS: false
-    clusterIssuer: "letsencrypt-in2-test-issuer"
-    host: "example-host"
-
 fullNameOverride: ""
 nameOverride: ""
+
+# Ingress configuration
+ingress:
+  enabled: true
+  labels:
+  className: "nginx"
+  sslRedirect: false
+  backendProtocol: "HTTP"
+  enableTLS: false
+  clusterIssuer: "letsencrypt-in2-test-issuer"
+  host: "example-host"
 
 ## configuration for the dome-wallet-backend
 dome-wallet-backend:
@@ -31,7 +29,8 @@ dome-wallet-backend:
     port: 80
   ## deployment specific configuration
   app:
-    # has to match ingress backend path --remove?
+    # has to match ingress backend path
+    # todo: remove or refactor to match it with ingress backend path
     basePath: "/api"
     logLevel: DEBUG
     authServer:
@@ -109,13 +108,15 @@ dome-wallet-frontend:
       secondaryContrast: "#50c8ff"
     logoSrc: "assets/logos/no-image.png"
     faviconSrc: "assets/icons/dome-favicon.png"
+    # path has to match backend basePath
     walletApi:
-      internalDomain: https://example-internal-domain.org/wallet-api
-      websocketExternalDomain: wss://example-external-domain/wallet-api
+      internalDomain: https://example-internal-domain.org/api
+      websocketExternalDomain: wss://example-external-domain/api
     iam:
       externalUrl: https://example-external-domain.org/keycloak/realms/wallet
 
 ## configuration for the dome-wallet-keycloak
+# todo: will be disabled when there is centralized keycloak
 dome-wallet-keycloak:
   # -- should be enabled?
   enabled: false
@@ -188,6 +189,7 @@ dome-wallet-keycloak:
       key: keycloak-db-password
 
 ## configuration of postgres to be used for the blockchain-connector - see https://github.com/bitnami/charts/tree/main/bitnami/postgresql for details
+# todo: will be disabled when there is centralized keycloak
 dome-wallet-keycloak-postgresql:
   # -- should the postgresql deployment be enabled
   enabled: true
@@ -221,13 +223,13 @@ dome-wallet-keycloak-postgresql:
     ## provide db initialization
     initdb:
       ## provide scripts for initialization
-      # todo remove?
       scripts:
         # -- create the database as expected by the blockchain-connector
         create.sh: |
           psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE keycloak;"
 
 ## configuration of postgres
+# todo: will be disabled when there is centralized database
 dome-wallet-postgresql:
   # -- should the postgresql deployment be enabled
   enabled: true
@@ -256,9 +258,18 @@ dome-wallet-postgresql:
       whenScaled: Retain
       whenDeleted: Retain
     initdb:
-      # todo remove? public instead of wallet schema?
+      # todo: remove? public schema instead of wallet?
       scripts:
         create.sh: |
-          psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "SELECT 'CREATE DATABASE wallet' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'wallet')\gexec"
+          psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 <<EOF
+          DO
+          \$\$
+          BEGIN
+            IF NOT EXISTS (SELECT FROM pg_database WHERE datname = 'wallet') THEN
+              CREATE DATABASE wallet;
+            END IF;
+          END
+          \$\$;
+          EOF
         create-schema.sh: |
           psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432/wallet -c "CREATE SCHEMA IF NOT EXISTS wallet;"
