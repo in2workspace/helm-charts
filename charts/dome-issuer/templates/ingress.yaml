@@ -20,7 +20,7 @@ spec:
       http:
         paths:
           # Backend
-          - path: "/api"
+          - path: "/issuer-api"
             pathType: ImplementationSpecific
             backend:
               service:
