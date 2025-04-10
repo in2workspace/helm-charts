@@ -261,15 +261,6 @@ dome-wallet-postgresql:
       # todo: remove? public schema instead of wallet?
       scripts:
         create.sh: |
-          psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 <<EOF
-          DO
-          \$\$
-          BEGIN
-            IF NOT EXISTS (SELECT FROM pg_database WHERE datname = 'wallet') THEN
-              CREATE DATABASE wallet;
-            END IF;
-          END
-          \$\$;
-          EOF
+          psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE wallet;"
         create-schema.sh: |
           psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432/wallet -c "CREATE SCHEMA IF NOT EXISTS wallet;"
