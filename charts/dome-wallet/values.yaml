@@ -24,9 +24,6 @@ dome-wallet-backend:
   # ingress specific configuration
   ingress:
     enabled: false
-  # has to match ingress port --remove?
-  service:
-    port: 80
   ## deployment specific configuration
   app:
     # has to match ingress backend path
@@ -95,9 +92,6 @@ dome-wallet-frontend:
   ## ingress specific configuration
   ingress:
     enabled: false
-  # has to match ingress port --remove?
-  service:
-    port: 80
   ## deployment specific configuration
   app:
     logsEnabled: false

@@ -158,8 +158,8 @@ app:
         key: user-password
 
 db:
-  externalService: false # remove?
-  schema: public # remove?
+  externalService: false # todo: remove?
+  schema: public # todo: remove?
   host: dome-wallet-postgres
   port: 5432
   name: wallet

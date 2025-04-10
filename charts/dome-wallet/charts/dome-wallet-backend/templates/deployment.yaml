@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "dome-wallet-backend.fullname" . }}
-  namespace: {{ $.Release.Namespace | quote }} # remove?
+  namespace: {{ $.Release.Namespace | quote }}
   labels:
     {{- include "dome-wallet-backend.labels" . | nindent 4 }}
 spec:
@@ -59,7 +59,7 @@ spec:
           env:
             - name: SERVER_PORT
               value: {{ include "dome-wallet-backend.serverPort" . | quote }}
-            # remove?
+            # todo: refactor/remove?
             - name: SPRING_WEBFLUX_BASEPATH
               value: {{ .Values.app.basePath }}
             - name: LOGGING_LEVEL_ES_IN2_WALLET_API
@@ -102,7 +102,7 @@ spec:
             # DATABASE
             - name: SPRING_R2DBC_URL
               value: "r2dbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}?schema={{ .Values.db.schema }}"
-            # remove?
+            # todo: remove?
             - name: DB_SCHEMA
               value: {{ .Values.db.schema }}
             - name: SPRING_R2DBC_USERNAME
