@@ -101,23 +101,23 @@ spec:
                   key: {{ include "dome-wallet-backend.ebsiUserSecretKey" . }}
             # DATABASE
             - name: SPRING_R2DBC_URL
-              value: "r2dbc:postgresql://{{ .Values.app.db.host }}{{ if not .Values.app.db.externalService }}:{{ .Values.app.db.port }}{{ end }}/{{ .Values.app.db.name }}?schema={{ .Values.app.db.schema }}"
+              value: "r2dbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}?schema={{ .Values.db.schema }}"
             # todo: remove?
             - name: DB_SCHEMA
-              value: {{ .Values.app.db.schema }}
+              value: {{ .Values.db.schema }}
             - name: SPRING_R2DBC_USERNAME
-              value: {{ .Values.app.db.username }}
+              value: {{ .Values.db.username }}
             - name: SPRING_R2DBC_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "dome-wallet-backend.dbSecretName" . }}
                   key: {{ include "dome-wallet-backend.dbSecretKey" . }}
             - name: SPRING_FLYWAY_URL
-              value: "jdbc:postgresql://{{ .Values.app.db.host }}{{ if not .Values.app.db.externalService }}:{{ .Values.app.db.port }}{{ end }}/{{ .Values.app.db.name }}?schema={{ .Values.app.db.schema }}"
+              value: "jdbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}?schema={{ .Values.db.schema }}"
             - name: SPRING_FLYWAY_USER
-              value: {{ .Values.app.db.username }}
+              value: {{ .Values.db.username }}
             - name: SPRING_FLYWAY_DEFAULT_SCHEMA
-              value: {{ .Values.app.db.schema }}
+              value: "public"
             - name: SPRING_FLYWAY_PASSWORD
               valueFrom:
                 secretKeyRef:
