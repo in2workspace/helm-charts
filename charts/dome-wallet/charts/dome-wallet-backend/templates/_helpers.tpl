@@ -63,78 +63,90 @@ Create the name of the service account to use
 {{- end }}
 
 {{/*
-Support for existing database secret 
+Support for existing vault secret
 */}}
-{{- define "dome-wallet-backend.clientSecretName" -}}
-    {{- if .Values.app.ebsiTest.client.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.ebsiTest.client.existingSecret.name $) -}}
-    {{- else -}}
-        {{- printf "wallet-api-client-secret" -}}
-    {{- end -}}
-{{- end -}}
-
-{{- define "dome-wallet-backend.client-passwordKey" -}}
-    {{- if .Values.app.ebsiTest.client.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.ebsiTest.client.existingSecret.key $) -}}
-    {{- else -}}
-        {{- printf "client-secret" -}}
-    {{- end -}}
-{{- end -}}
-
-{{- define "dome-wallet-backend.userSecretName" -}}
-    {{- if .Values.app.ebsiTest.userData.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.ebsiTest.userData.existingSecret.name $) -}}
-    {{- else -}}
-        {{- printf "wallet-api-user-password" -}}
-    {{- end -}}
-{{- end -}}
-
-{{- define "dome-wallet-backend.user-passwordKey" -}}
-    {{- if .Values.app.ebsiTest.userData.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.ebsiTest.userData.existingSecret.key $) -}}
-    {{- else -}}
-        {{- printf "user-password" -}}
-    {{- end -}}
-{{- end -}}
-
 {{- define "dome-wallet-backend.vaultTokenSecretName" -}}
-    {{- if .Values.app.vault.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.vault.existingSecret.name $) -}}
-    {{- else -}}
-        {{- printf "wallet-api-token-secret" -}}
-    {{- end -}}
-{{- end -}}
+  {{- if .Values.app.vault.existingSecret.enabled -}}
+    {{- printf "%s" .Values.app.vault.existingSecret.name | quote -}}
+  {{- else -}}
+    {{- printf "%s" (include "dome-wallet-backend.fullname" .) | quote -}}
+  {{- end }}
+{{- end }}
 
-{{- define "dome-wallet-backend.user-tokenKey" -}}
-    {{- if .Values.app.vault.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.vault.existingSecret.key $) -}}
-    {{- else -}}
-        {{- printf "token" -}}
-    {{- end -}}
-{{- end -}}
+
+{{- define "dome-wallet-backend.vaultTokenSecretKey" -}}
+  {{- if .Values.app.vault.existingSecret.enabled -}}
+    {{- printf "%s" .Values.app.vault.existingSecret.key | quote -}}
+  {{- else -}}
+    {{- printf "%s" "vault-token" | quote -}}
+  {{- end }}
+{{- end }}
+
+{{/*
+Support for existing ebsiTest.client secret
+*/}}
+{{- define "dome-wallet-backend.ebsiClientSecretName" -}}
+  {{- if .Values.app.ebsiTest.client.existingSecret.enabled -}}
+    {{- printf "%s" .Values.app.ebsiTest.client.existingSecret.name | quote -}}
+  {{- else -}}
+    {{- printf "%s" (include "dome-wallet-backend.fullname" .) | quote -}}
+  {{- end }}
+{{- end }}
+
+{{- define "dome-wallet-backend.ebsiClientSecretKey" -}}
+  {{- if .Values.app.ebsiTest.client.existingSecret.enabled -}}
+    {{- printf "%s" .Values.app.ebsiTest.client.existingSecret.key | quote -}}
+  {{- else -}}
+    {{- printf "%s" "ebsi-client-secret" | quote -}}
+  {{- end }}
+{{- end }}
 
 
 {{/*
-Support for existing database secret
-todo: when all secrets are unified, only one secret helper will be needed
+Support for existing ebsiTest.userData secret
 */}}
-{{- define "dome-wallet-backend.db-secretName" -}}
-    {{- if .Values.db.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.db.existingSecret.name $) -}}
-    {{- else -}}
-        {{- printf "wallet-api-db-secret" -}}
-    {{- end -}}
-{{- end -}}
+{{- define "dome-wallet-backend.ebsiUserSecretName" -}}
+  {{- if .Values.app.ebsiTest.userData.existingSecret.enabled -}}
+    {{- printf "%s" .Values.app.ebsiTest.userData.existingSecret.name | quote -}}
+  {{- else -}}
+    {{- printf "%s" (include "dome-wallet-backend.fullname" .) | quote -}}
+  {{- end }}
+{{- end }}
 
-{{- define "dome-wallet-backend.db-passwordKey" -}}
-    {{- if .Values.db.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.db.existingSecret.key $) -}}
-    {{- else -}}
-        {{- printf "password" -}}
-    {{- end -}}
-{{- end -}}
+{{- define "dome-wallet-backend.ebsiUserSecretKey" -}}
+  {{- if .Values.app.ebsiTest.userData.existingSecret.enabled -}}
+    {{- printf "%s" .Values.app.ebsiTest.userData.existingSecret.key | quote -}}
+  {{- else -}}
+    {{- printf "%s" "ebsi-user-password" | quote -}}
+  {{- end }}
+{{- end }}
 
-{{/* Validate that the required values are set when db.externalService is true or false. */}}
+
+{{/*
+Support for existing db secret
+*/}}
+{{- define "dome-wallet-backend.dbSecretName" -}}
+  {{- if .Values.db.existingSecret.enabled -}}
+    {{- printf "%s" .Values.db.existingSecret.name | quote -}}
+  {{- else -}}
+    {{- printf "%s" (include "dome-wallet-backend.fullname" .) | quote -}}
+  {{- end }}
+{{- end }}
+
+{{- define "dome-wallet-backend.dbSecretKey" -}}
+  {{- if .Values.db.existingSecret.enabled -}}
+    {{- printf "%s" .Values.db.existingSecret.key | quote -}}
+  {{- else -}}
+    {{- printf "%s" "postgres-password" | quote -}}
+  {{- end }}
+{{- end }}
+
+
+
+{{/*
+Validate that the required values are set when db.externalService is true or false.
+todo: remove or use it
+*/}}
 {{- define "validateDatabaseConfig" -}}
 {{- if .Values.db.externalService }}
   {{/*Cuando externalService es verdadero, validamos los campos*/}}

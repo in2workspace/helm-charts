@@ -81,15 +81,15 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "dome-wallet-backend.vaultTokenSecretName" . }}
-                  key: {{ include "dome-wallet-backend.user-tokenKey" . }}
+                  key: {{ include "dome-wallet-backend.vaultTokenSecretKey" . }}
             # EBSI TESTS
             - name: EBSI_TEST_URL
               value: {{ .Values.app.ebsiTest.url }}
             - name: EBSI_TEST_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "dome-wallet-backend.clientSecretName" . }}
-                  key: {{ include "dome-wallet-backend.client-passwordKey" . }}
+                  name: {{ include "dome-wallet-backend.ebsiClientSecretName" . }}
+                  key: {{ include "dome-wallet-backend.ebsiClientSecretKey" . }}
             - name: EBSI_TEST_CLIENT_ID
               value: {{ .Values.app.ebsiTest.client.id }}
             - name: EBSI_TEST_USERNAME
@@ -97,8 +97,8 @@ spec:
             - name: EBSI_TEST_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "dome-wallet-backend.userSecretName" . }}
-                  key: {{ include "dome-wallet-backend.user-passwordKey" . }}
+                  name: {{ include "dome-wallet-backend.ebsiUserSecretName" . }}
+                  key: {{ include "dome-wallet-backend.ebsiUserSecretKey" . }}
             # DATABASE
             - name: SPRING_R2DBC_URL
               value: "r2dbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}?schema={{ .Values.db.schema }}"
@@ -110,8 +110,8 @@ spec:
             - name: SPRING_R2DBC_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "dome-wallet-backend.db-secretName" . }}
-                  key: {{ include "dome-wallet-backend.db-passwordKey" . }}
+                  name: {{ include "dome-wallet-backend.dbSecretName" . }}
+                  key: {{ include "dome-wallet-backend.dbSecretKey" . }}
             - name: SPRING_FLYWAY_URL
               value: "jdbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}?schema={{ .Values.db.schema }}"
             - name: SPRING_FLYWAY_USER
@@ -121,5 +121,5 @@ spec:
             - name: SPRING_FLYWAY_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "dome-wallet-backend.db-secretName" . }}
-                  key: {{ include "dome-wallet-backend.db-passwordKey" . }}
+                  name: {{ include "dome-wallet-backend.dbSecretName" . }}
+                  key: {{ include "dome-wallet-backend.dbSecretKey" . }}
