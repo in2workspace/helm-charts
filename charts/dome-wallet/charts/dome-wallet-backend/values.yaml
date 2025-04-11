@@ -157,16 +157,16 @@ app:
         # -- key to retrieve the password from
         key: ebsi-user-password
 
-db:
-  externalService: false # todo: remove?
-  schema: public # todo: remove?
-  host: dome-wallet-postgres
-  port: 5432
-  name: wallet
-  username: postgres
-  password: postgres
-  existingSecret:
-    enabled: false
-    name: dome-wallet-backend-secret
-    key: postgres-password
+  db:
+    externalService: false # todo: remove?
+    schema: wallet
+    host: dome-wallet-postgres
+    port: 5432
+    name: wallet
+    username: postgres
+    password: postgres
+    existingSecret:
+      enabled: false
+      name: dome-wallet-backend-secret
+      key: postgres-password
 
