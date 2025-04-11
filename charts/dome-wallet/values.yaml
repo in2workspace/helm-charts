@@ -1,8 +1,3 @@
-# Default values for test.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
-# This is to override the chart name.
 fullNameOverride: ""
 nameOverride: ""
 
@@ -21,7 +16,6 @@ ingress:
 dome-wallet-backend:
   # -- should be enabled?
   enabled: true
-  # This is to override the subchart name. Sets the name of the dome-wallet-backend service and its reference in the dome-wallet ingress
   fullnameOverride: "dome-wallet-backend"
   image:
     # -- image pull policy
@@ -76,23 +70,22 @@ dome-wallet-backend:
           name: dome-wallet-sealed-secret
           # -- key to retrieve the password from
           key: user-password
-    db:
-      schema: wallet
-      host: dome-wallet-postgres
-      port: 5432
-      name: wallet
-      username: postgres
-      password: postgres
-      existingSecret:
-        enabled: false
-        name: dome-wallet-sealed-secret
-        key: password
+  db:
+    schema: public # remove?
+    host: wallet-postgres # dome-wallet-postgres?
+    port: 5432
+    name: wallet
+    username: postgres
+    password: postgres
+    existingSecret:
+      enabled: false
+      name: dome-wallet-sealed-secret
+      key: password
 
 ## configuration for the dome-wallet-frontend
 dome-wallet-frontend:
   # -- should be enabled?
   enabled: true
-  # This is to override the subchart name. Sets the name of the dome-wallet-frontend service and its reference in the dome-wallet ingress
   fullnameOverride: "dome-wallet-frontend"
   # -- image pull policy
   pullPolicy: Always
@@ -224,6 +217,12 @@ dome-wallet-keycloak-postgresql:
     podAnnotations:
       backup.velero.io/backup-volumes: data
     ## provide db initialization
+    initdb:
+      ## provide scripts for initialization
+      scripts:
+        # -- create the database as expected by the blockchain-connector
+        create.sh: |
+          psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE keycloak;"
 
 ## configuration of postgres
 # todo: will be disabled when there is centralized database
@@ -256,3 +255,10 @@ dome-wallet-postgresql:
       enabled: true
       whenScaled: Retain
       whenDeleted: Retain
+    initdb:
+      # todo: remove? public schema instead of wallet?
+      scripts:
+        create.sh: |
+          psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE wallet;"
+        create-schema.sh: |
+          psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432/wallet -c "CREATE SCHEMA IF NOT EXISTS wallet;"
