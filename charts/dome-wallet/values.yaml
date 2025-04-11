@@ -72,7 +72,7 @@ dome-wallet-backend:
           key: user-password
     db:
       schema: wallet
-      host: wallet-postgres # dome-wallet-postgres?
+      host: dome-wallet-postgres
       port: 5432
       name: wallet
       username: postgres
