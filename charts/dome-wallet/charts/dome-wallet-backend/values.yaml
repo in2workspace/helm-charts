@@ -52,7 +52,7 @@ ingress:
   hosts:
     - host: chart-example.local
       paths:
-        - path: /api
+        # we don't specify path here because it is taken from app.basePath
           pathType: Prefix
   tls: []
 #    - hosts:
