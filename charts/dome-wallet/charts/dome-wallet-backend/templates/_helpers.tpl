@@ -126,16 +126,16 @@ Support for existing ebsiTest.userData secret
 Support for existing db secret
 */}}
 {{- define "dome-wallet-backend.dbSecretName" -}}
-  {{- if .Values.db.existingSecret.enabled -}}
-    {{- printf "%s" .Values.db.existingSecret.name | quote -}}
+  {{- if .Values.app.db.existingSecret.enabled -}}
+    {{- printf "%s" .Values.app.db.existingSecret.name | quote -}}
   {{- else -}}
     {{- printf "%s" (include "dome-wallet-backend.fullname" .) | quote -}}
   {{- end }}
 {{- end }}
 
 {{- define "dome-wallet-backend.dbSecretKey" -}}
-  {{- if .Values.db.existingSecret.enabled -}}
-    {{- printf "%s" .Values.db.existingSecret.key | quote -}}
+  {{- if .Values.app.db.existingSecret.enabled -}}
+    {{- printf "%s" .Values.app.db.existingSecret.key | quote -}}
   {{- else -}}
     {{- printf "%s" "postgres-password" | quote -}}
   {{- end }}
