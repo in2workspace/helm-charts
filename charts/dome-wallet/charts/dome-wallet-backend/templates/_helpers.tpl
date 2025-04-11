@@ -141,53 +141,6 @@ Support for existing db secret
   {{- end }}
 {{- end }}
 
-
-
-{{/*
-Validate that the required values are set when db.externalService is true or false.
-todo: remove or use it
-*/}}
-{{- define "validateDatabaseConfig" -}}
-{{- if .Values.db.externalService }}
-  {{/*Cuando externalService es verdadero, validamos los campos*/}}
-  {{- if empty .Values.db.host }}
-    {{ fail "El valor 'db.host' no puede estar vacío cuando 'db.externalService' está habilitado." }}
-  {{- end }}
-  {{- if empty .Values.db.name }}
-    {{ fail "El valor 'db.name' no puede estar vacío cuando 'db.externalService' está habilitado." }}
-  {{- end }}
-  {{- if empty .Values.db.schema }}
-    {{ fail "El valor 'db.schema' no puede estar vacío cuando 'db.externalService' está habilitado." }}
-  {{- end }}
-  {{- if empty .Values.db.username }}
-    {{ fail "El valor 'db.username' no puede estar vacío cuando 'db.externalService' está habilitado." }}
-  {{- end }}
-  {{- if empty .Values.db.password }}
-    {{ fail "El valor 'db.password' no puede estar vacío cuando 'db.externalService' está habilitado." }}
-  {{- end }}
-{{- else }}
-  {{/* Cuando externalService es falso, validamos que los valores sean específicos */}}
-  {{- if ne .Values.db.host "dome-wallet-postgres" }}
-    {{ fail "El valor 'db.host' debe ser 'localhost' cuando 'db.externalService' está deshabilitado." }}
-  {{- end }}
-  {{- if ne .Values.db.port 5432 }}
-    {{ fail "El valor 'db.port' debe ser '5432' cuando 'db.externalService' está deshabilitado." }}
-  {{- end }}
-  {{- if ne .Values.db.name "wallet" }}
-    {{ fail "El valor 'db.name' debe ser 'issuer' cuando 'db.externalService' está deshabilitado." }}
-  {{- end }}
-  {{- if ne .Values.db.schema "wallet" }}
-    {{ fail "El valor 'db.schema' debe ser 'public' cuando 'db.externalService' está deshabilitado." }}
-  {{- end }}
-  {{- if ne .Values.db.username "postgres" }}
-    {{ fail "El valor 'db.username' debe ser 'postgres' cuando 'db.externalService' está deshabilitado." }}
-  {{- end }}
-  {{- if empty .Values.db.password }}
-    {{ fail "El valor 'db.password' no puede estar vacío cuando 'db.externalService' está deshabilitado." }}
-  {{- end }}
-{{- end }}
-{{- end }}
-
 {{/*
 Internal Server Port
 */}}
