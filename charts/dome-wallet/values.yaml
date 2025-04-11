@@ -1,3 +1,8 @@
+# Default values for test.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# This is to override the chart name.
 fullNameOverride: ""
 nameOverride: ""
 
@@ -16,6 +21,7 @@ ingress:
 dome-wallet-backend:
   # -- should be enabled?
   enabled: true
+  # This is to override the subchart name. Sets the name of the dome-wallet-backend service and its reference in the dome-wallet ingress
   fullnameOverride: "dome-wallet-backend"
   image:
     # -- image pull policy
@@ -86,6 +92,7 @@ dome-wallet-backend:
 dome-wallet-frontend:
   # -- should be enabled?
   enabled: true
+  # This is to override the subchart name. Sets the name of the dome-wallet-frontend service and its reference in the dome-wallet ingress
   fullnameOverride: "dome-wallet-frontend"
   # -- image pull policy
   pullPolicy: Always
