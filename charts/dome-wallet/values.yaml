@@ -45,7 +45,7 @@ dome-wallet-backend:
         # -- should an existing secret be used
         enabled: false
         # -- name of the secret
-        name: wallet-api-token-secret
+        name: dome-wallet-sealed-secret
         # -- key to retrieve the token from
         key: token
     ebsiTest:
@@ -57,7 +57,7 @@ dome-wallet-backend:
           # -- should an existing secret be used
           enabled: false
           # -- name of the secret
-          name: wallet-api-client-secret
+          name: dome-wallet-sealed-secret
           # -- key to retrieve the password from
           key: client-secret
       userData:
@@ -67,7 +67,7 @@ dome-wallet-backend:
           # -- should an existing secret be used
           enabled: false
           # -- name of the secret
-          name: wallet-api-user-password
+          name: dome-wallet-sealed-secret
           # -- key to retrieve the password from
           key: user-password
   db:
@@ -79,7 +79,7 @@ dome-wallet-backend:
     password: postgres
     existingSecret:
       enabled: false
-      name: db-secret
+      name: dome-wallet-sealed-secret
       key: password
 
 ## configuration for the dome-wallet-frontend
@@ -144,7 +144,7 @@ dome-wallet-keycloak:
         # -- should an existing secret be used
         enabled: false
         # -- name of the secret
-        name: dome-wallet-keycloak-secret
+        name: dome-wallet-sealed-secret
         # -- key to retrieve the password from
         key: keycloak-password
       mail:
@@ -180,7 +180,7 @@ dome-wallet-keycloak:
       # -- should an existing secret be used
       enabled: false
       # -- name of the secret
-      name: dome-wallet-keycloak-db-secret
+      name: dome-wallet-secret
       # -- key to retrieve the password from
       key: keycloak-db-password
 
@@ -230,8 +230,10 @@ dome-wallet-postgresql:
   # -- should the postgresql deployment be enabled
   enabled: true
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
+  # todo dome-wallet-postgres?
   fullnameOverride: wallet-postgres
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
+  # todo dome-wallet-postgres?
   nameOverride: wallet-postgres
   ## auth configuration for the database
   auth:

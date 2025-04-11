@@ -18,7 +18,7 @@ spec:
       http:
         paths:
           # Backend
-          - path: "/api"
+          - path: {{ index .Values "dome-wallet-backend" "app" "basePath" | quote }}
             pathType: Prefix
             backend:
               service:

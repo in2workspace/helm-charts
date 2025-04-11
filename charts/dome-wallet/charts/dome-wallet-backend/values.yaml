@@ -52,7 +52,7 @@ ingress:
   hosts:
     - host: chart-example.local
       paths:
-        - path: /api
+        # we don't specify path here because it is taken from app.basePath
           pathType: Prefix
   tls: []
 #    - hosts:
@@ -131,9 +131,9 @@ app:
       # -- should an existing secret be used
       enabled: false
       # -- name of the secret
-      name: wallet-api-token-secret # dome wallet-backend-secret...
+      name: dome-wallet-backend-secret
       # -- key to retrieve the token from
-      key: token
+      key: vault-token
   ebsiTest:
     url: http://dome-wallet-keycloak:8080/realms/wallet/protocol/openid-connect/token
     client:
@@ -143,9 +143,9 @@ app:
         # -- should an existing secret be used
         enabled: false
         # -- name of the secret
-        name: wallet-api-client-secret # dome wallet-backend-secret...
+        name: dome-wallet-backend-secret # dome wallet-backend-secret...
         # -- key to retrieve the password from
-        key: client-secret
+        key: ebsi-client-secret
     userData:
       name: admin
       password: defaultPassword
@@ -153,9 +153,9 @@ app:
         # -- should an existing secret be used
         enabled: false
         # -- name of the secret
-        name: wallet-api-user-password # dome wallet-backend-secret...
+        name: dome-wallet-backend-secret # dome wallet-backend-secret...
         # -- key to retrieve the password from
-        key: user-password
+        key: ebsi-user-password
 
 db:
   externalService: false # todo: remove?
@@ -167,6 +167,6 @@ db:
   password: postgres
   existingSecret:
     enabled: false
-    name: db-secret
-    key: password
+    name: dome-wallet-backend-secret
+    key: postgres-password
 
