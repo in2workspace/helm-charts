@@ -2,7 +2,7 @@ apiVersion: v2
 name: dome-wallet
 description: Helm chart for the Wallet
 type: application
-version: 1.4.2
+version: 1.4.3
 appVersion: "v0.0.5"
 
 dependencies:
