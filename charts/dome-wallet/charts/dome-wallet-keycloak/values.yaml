@@ -135,7 +135,7 @@ app:
       password: password
       existingSecret:
         enabled: false
-        name: mail-secret
+        name: dome-wallet-keycloak-secret
         userKey: mail-user
         passwordKey: mail-password
       properties:
@@ -158,6 +158,6 @@ app:
       # -- should an existing secret be used
       enabled: false
       # -- name of the secret
-      name: dome-wallet-keycloak-db-secret
+      name: dome-wallet-keycloak-secret
       # -- key to retrieve the password from
       key: keycloak-db-password

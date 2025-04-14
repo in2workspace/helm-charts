@@ -68,7 +68,7 @@ Support for existing database secret
     {{- if .Values.app.db.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.db.existingSecret.name $) -}}
     {{- else -}}
-        {{- printf "dome-wallet-keycloak-db-secret" -}}
+        {{- printf "%s" (include "dome-wallet-keycloak.fullname" .) | quote -}}
     {{- end -}}
 {{- end -}}
 
@@ -76,15 +76,18 @@ Support for existing database secret
     {{- if .Values.app.db.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.db.existingSecret.key $) -}}
     {{- else -}}
-        {{- printf "keycloak-db-password" -}}
+        {{- printf "%s" "keycloak-db-password" | quote -}}
     {{- end -}}
 {{- end -}}
 
+{{/*
+Support for existing Keycloak secret
+*/}}
 {{- define "dome-wallet-keycloak.keycloakSecretName" -}}
     {{- if .Values.app.keycloak.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.keycloak.existingSecret.name $) -}}
     {{- else -}}
-        {{- printf "dome-wallet-keycloak-secret" -}}
+        {{- printf "%s" (include "dome-wallet-keycloak.fullname" .) | quote -}}
     {{- end -}}
 {{- end -}}
 
@@ -92,7 +95,7 @@ Support for existing database secret
     {{- if .Values.app.keycloak.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.keycloak.existingSecret.key $) -}}
     {{- else -}}
-        {{- printf "keycloak-password" -}}
+        {{- printf "%s" "keycloak-password" | quote -}}
     {{- end -}}
 {{- end -}}
 
@@ -103,7 +106,7 @@ Support for existing mail secret
     {{- if .Values.app.keycloak.mail.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.keycloak.mail.existingSecret.name $) -}}
     {{- else -}}
-        {{- printf "wallet-keycloak-mail-secret" -}}
+        {{- printf "%s" (include "dome-wallet-keycloak.fullname" .) | quote -}}
     {{- end -}}
 {{- end -}}
 
@@ -111,7 +114,7 @@ Support for existing mail secret
     {{- if .Values.app.keycloak.mail.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.keycloak.mail.existingSecret.userKey $) -}}
     {{- else -}}
-        {{- printf "username" -}}
+        {{- printf "%s" "mail-username" | quote -}}
     {{- end -}}
 {{- end -}}
 
@@ -119,7 +122,7 @@ Support for existing mail secret
     {{- if .Values.app.keycloak.mail.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.keycloak.mail.existingSecret.passwordKey $) -}}
     {{- else -}}
-        {{- printf "password" -}}
+        {{- printf "%s" "mail-password" | quote -}}
     {{- end -}}
 {{- end -}}
 
