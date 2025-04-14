@@ -9,11 +9,16 @@ ingress:
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-    nginx.ingress.kubernetes.io/use-regex: "true"
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
   enableTLS: false
   clusterIssuer: "letsencrypt-in2-test-issuer"
-  host: "example-host"
+  host: "localhost"
+  backend:
+    annotations:
+      nginx.ingress.kubernetes.io/use-regex: "true"
+      nginx.ingress.kubernetes.io/rewrite-target: /$2
+  frontend:
+    annotations:
+
 
 ## configuration for the dome-wallet-backend
 dome-wallet-backend:
@@ -45,11 +50,11 @@ dome-wallet-backend:
   app:
     logLevel: DEBUG
     authServer:
-      externalUrl: http://www.example-external-domain.org/keycloak/realms/wallet
-      internalUrl: http://www.example-internal-domain.org/keycloak/realms/wallet
+      externalUrl: http://localhost/keycloak/realms/wallet
+      internalUrl: http://localhost/keycloak/realms/wallet
     cors:
       # expects a string of url's separated with comma and space
-      allowedOrigins: "www.example-cors.com, www.example-cors-two.com"
+      allowedOrigins: "www.localhost.com, www.example-cors-two.com"
     vault:
       provider: hashicorp
       url: http://vault-server:8200
@@ -119,10 +124,10 @@ dome-wallet-frontend:
     logoSrc: "assets/logos/no-image.png"
     faviconSrc: "assets/icons/dome-favicon.png"
     walletApi:
-      internalDomain: https://example-internal-domain.org
-      websocketExternalDomain: wss://example-external-domain
+      internalDomain: https://localhost
+      websocketExternalDomain: wss://localhost
     iam:
-      externalUrl: https://example-external-domain.org/keycloak/realms/wallet
+      externalUrl: https://localhost/keycloak/realms/wallet
 
 ## configuration for the dome-wallet-keycloak
 # todo: will be disabled when there is centralized keycloak
@@ -138,13 +143,13 @@ dome-wallet-keycloak:
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-in2-test-issuer
     hosts:
-      - host: wallet.dome-marketplace-lcl.org
+      - host: localhost
         paths:
           - path: /keycloak
             pathType: Prefix
     tls:
       - hosts:
-          - wallet.dome-marketplace-lcl.org
+          - localhost
         secretName: wallet-tls-secret
   ## deployment specific configuration
   app:
