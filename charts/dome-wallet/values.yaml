@@ -73,7 +73,7 @@ dome-wallet-backend:
           # -- name of the secret
           name: dome-wallet-sealed-secret
           # -- key to retrieve the password from
-          key: client-secret
+          key: ebsi-client-secret
       userData:
         name: admin
         password: defaultPassword
@@ -83,7 +83,7 @@ dome-wallet-backend:
           # -- name of the secret
           name: dome-wallet-sealed-secret
           # -- key to retrieve the password from
-          key: user-password
+          key: ebsi-user-password
   db:
     schema: wallet
     host: dome-wallet-postgres # dome-wallet-postgres?
