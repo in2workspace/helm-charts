@@ -4,7 +4,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "dome-wallet-frontend.fullname" . }}
+  name: {{ $fullName }}
   labels:
     {{ include "dome-wallet-frontend.labels" . | nindent 4 }}
   {{- if .Values.ingress.annotations }}
