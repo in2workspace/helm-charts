@@ -64,9 +64,6 @@ ingress:
     nginx.ingress.kubernetes.io/rewrite-target: /$2
   hosts:
     - host: chart-example.local
-      paths:
-        path: /api(/|$)(.*)
-        pathType: Prefix
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
@@ -129,15 +126,15 @@ affinity: {}
 initContainers:
   # a script can be added to wait for keycloak to be ready before initializing
   # - name: wait-for-keycloak
-  # image: curlimages/curl
-  # url has to match keycloak health url
-  #  command:
-  #    - sh
-  #    - -c
-  #    - >
-  #      timeout 75 sh -c '
-  #        until curl -s http://dome-wallet-keycloak:80/keycloak/health;
-  #        do echo "waiting for keycloak..."; sleep 5; done'
+  #   image: curlimages/curl
+      # url has to match keycloak health url
+  #   command:
+  #     - sh
+  #     - -c
+  #     - >
+  #       timeout 75 sh -c '
+  #         until curl -s http://dome-wallet-keycloak:80/keycloak/health;
+  #         do echo "waiting for keycloak..."; sleep 5; done'
 
 # specific app (API) configuration
 app:

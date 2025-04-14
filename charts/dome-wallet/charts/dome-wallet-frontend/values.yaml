@@ -126,7 +126,6 @@ tolerations: []
 
 affinity: {}
 
-# todo: use configmap when needed
 # app (frontend) specific configuration
 app:
   logsEnabled: false
