@@ -60,7 +60,7 @@ dome-wallet-backend:
         # -- name of the secret
         name: dome-wallet-sealed-secret
         # -- key to retrieve the token from
-        key: token
+        key: vault-token
     ebsiTest:
       # this will fail in the API unless the specified realm, client and user-password are created in the Keycloak instance
       url: http://dome-wallet-keycloak:80/keycloak/realms/wallet/protocol/openid-connect/token
