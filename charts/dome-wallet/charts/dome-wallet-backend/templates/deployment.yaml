@@ -25,7 +25,6 @@ spec:
         {{- end }}
     spec:
       # scripts before container initializes
-      # todo: find a way to avoid
       initContainers:
         {{- toYaml .Values.initContainers | nindent 8 }}
       {{- with .Values.imagePullSecrets }}

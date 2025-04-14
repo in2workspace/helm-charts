@@ -178,7 +178,6 @@ app:
         name: dome-wallet-backend-secret # dome wallet-backend-secret...
         # -- key to retrieve the password from
         key: ebsi-user-password
-  # todo: add inside app?
   db:
     schema: wallet
     host: dome-wallet-postgres
