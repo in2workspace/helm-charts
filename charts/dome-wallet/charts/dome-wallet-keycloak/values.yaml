@@ -147,17 +147,17 @@ app:
             ssl:
               enable: false
 
-db:
-  type: postgres
-  host: dome-wallet-keycloak-postgres
-  port: 5432
-  name: keycloak
-  username: postgres
-  password: postgres
-  existingSecret:
-    # -- should an existing secret be used
-    enabled: false
-    # -- name of the secret
-    name: dome-wallet-keycloak-db-secret
-    # -- key to retrieve the password from
-    key: keycloak-db-password
+  db:
+    type: postgres
+    host: dome-wallet-keycloak-postgres
+    port: 5432
+    name: keycloak
+    username: postgres
+    password: postgres
+    existingSecret:
+      # -- should an existing secret be used
+      enabled: false
+      # -- name of the secret
+      name: dome-wallet-keycloak-db-secret
+      # -- key to retrieve the password from
+      key: keycloak-db-password

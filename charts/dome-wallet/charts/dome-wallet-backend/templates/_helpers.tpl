@@ -82,7 +82,7 @@ Support for existing vault secret
 {{- end }}
 
 {{/*
-Support for existing ebsiTest.client secret
+Support for existing ebsiTest client secret
 */}}
 {{- define "dome-wallet-backend.ebsiClientSecretName" -}}
   {{- if .Values.app.ebsiTest.client.existingSecret.enabled -}}
@@ -102,7 +102,7 @@ Support for existing ebsiTest.client secret
 
 
 {{/*
-Support for existing ebsiTest.userData secret
+Support for existing ebsiTest userData secret
 */}}
 {{- define "dome-wallet-backend.ebsiUserSecretName" -}}
   {{- if .Values.app.ebsiTest.userData.existingSecret.enabled -}}
@@ -137,33 +137,6 @@ Support for existing db secret
     {{- printf "%s" .Values.app.db.existingSecret.key | quote -}}
   {{- else -}}
     {{- printf "%s" "postgres-password" | quote -}}
-  {{- end }}
-{{- end }}
-
-
-
-{{/*
-Validate that the required values are set
-todo: remove?
-*/}}
-{{- define "validateDatabaseConfig" -}}
-  {{- if ne .Values.app.db.host "dome-wallet-postgres" }}
-    {{ fail "El valor 'db.host' debe ser 'dome-wallet-postgres'." }}
-  {{- end }}
-  {{- if ne .Values.app.db.port 5432 }}
-    {{ fail "El valor 'db.port' debe ser '5432'." }}
-  {{- end }}
-  {{- if ne .Values.app.db.name "wallet" }}
-    {{ fail "El valor 'db.name' debe ser 'wallet'." }}
-  {{- end }}
-  {{- if ne .Values.app.db.schema "wallet" }}
-    {{ fail "El valor 'db.schema' debe ser 'wallet'." }}
-  {{- end }}
-  {{- if ne .Values.app.db.username "postgres" }}
-    {{ fail "El valor 'db.username' debe ser 'postgres'." }}
-  {{- end }}
-  {{- if empty .Values.app.db.password }}
-    {{ fail "El valor 'db.password'." }}
   {{- end }}
 {{- end }}
 
