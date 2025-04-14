@@ -122,3 +122,10 @@ Support for existing mail secret
         {{- printf "password" -}}
     {{- end -}}
 {{- end -}}
+
+{{/*
+Internal Server Port
+*/}}
+{{- define "dome-wallet-keycloak.serverPort" -}}
+{{- default 8080 }}
+{{- end }}

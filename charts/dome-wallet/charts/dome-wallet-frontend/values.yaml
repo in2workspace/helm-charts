@@ -122,8 +122,7 @@ app:
   logoSrc: "assets/logos/no-image.png"
   faviconSrc: "assets/icons/dome-favicon.png"
   walletApi:
-    # path has to match backend basePath
-    internalDomain: https://example-internal-domain.org/api
-    websocketExternalDomain: wss://example-external-domain/api
+    internalDomain: https://example-internal-domain.org
+    websocketExternalDomain: wss://example-external-domain
   iam:
     externalUrl: https://example-external-domain.org/keycloak/realms/wallet

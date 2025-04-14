@@ -44,16 +44,18 @@ service:
   port: 80
 
 ingress:
-  enabled: false
+  enabled: true
   className: ""
-  annotations: {}
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
   # kubernetes.io/ingress.class: nginx
   # kubernetes.io/tls-acme: "true"
   hosts:
     - host: chart-example.local
       paths:
-        # we don't specify path here because it is taken from app.basePath
-          pathType: Prefix
+        path: /api(/|$)(.*)
+        pathType: Prefix
   tls: []
 #    - hosts:
 #        - example-host
@@ -111,11 +113,22 @@ tolerations: []
 
 affinity: {}
 
+# scripts before container initializes
+initContainers:
+  # a script can be added to wait for keycloak to be ready before initializing
+  # - name: wait-for-keycloak
+  # image: curlimages/curl
+  # url has to match keycloak health url
+  #  command:
+  #    - sh
+  #    - -c
+  #    - >
+  #      timeout 75 sh -c '
+  #        until curl -s http://dome-wallet-keycloak:80/keycloak/health;
+  #        do echo "waiting for keycloak..."; sleep 50; done'
+
 # todo: use configmap when needed
 app:
-  # has to match ingress.hosts.host.path
-  # todo: remove or refactor to match it with ingress backend path
-  basePath: /api
   logLevel: DEBUG
   authServer:
     externalUrl: example-external-domain.org/keycloak/realms/wallet
@@ -135,7 +148,7 @@ app:
       # -- key to retrieve the token from
       key: vault-token
   ebsiTest:
-    url: http://dome-wallet-keycloak:8080/realms/wallet/protocol/openid-connect/token
+    url: http://dome-wallet-keycloak:80/realms/wallet/protocol/openid-connect/token
     client:
       id: user-registry-client
       secret: defaultSecret
@@ -156,10 +169,9 @@ app:
         name: dome-wallet-backend-secret # dome wallet-backend-secret...
         # -- key to retrieve the password from
         key: ebsi-user-password
-
+# todo: add inside app?
 db:
-  externalService: false # todo: remove?
-  schema: public # todo: remove?
+  schema: wallet
   host: dome-wallet-postgres
   port: 5432
   name: wallet

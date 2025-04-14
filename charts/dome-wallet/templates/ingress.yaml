@@ -8,6 +8,8 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "{{ .Values.ingress.sslRedirect }}"
     nginx.ingress.kubernetes.io/backend-protocol: "{{ .Values.ingress.backendProtocol }}"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
     {{- if .Values.ingress.enableTLS }}
     cert-manager.io/cluster-issuer: {{ .Values.ingress.clusterIssuer }}
     {{- end }}
@@ -18,7 +20,7 @@ spec:
       http:
         paths:
           # Backend
-          - path: {{ index .Values "dome-wallet-backend" "app" "basePath" | quote }}
+          - path: /api(/|$)(.*)
             pathType: Prefix
             backend:
               service:

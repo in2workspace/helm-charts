@@ -15,19 +15,3 @@ If release name contains chart name it will be used as a full name.
 {{- end }}
 {{- end }}
 {{- end }}
-
-# todo: find a way to avoid hardcoded name
-{{/*
-Backend service name
-*/}}
-{{- define "dome-wallet-backend.service.name" -}}
-dome-wallet-dome-wallet-backend
-{{- end }}
-
-# todo: find a way to avoid hardcoded name
-{{/*
-Frontend name
-*/}}
-{{- define "dome-wallet-frontend.service.name" -}}
-dome-wallet-dome-wallet-frontend
-{{- end }}

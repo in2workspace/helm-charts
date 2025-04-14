@@ -41,7 +41,7 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 8080
+  port: 80
 
 readinessProbe:
   httpGet:
@@ -112,7 +112,6 @@ tolerations: []
 affinity: {}
 
 app:
-  internalServerPort: 8080
   keycloak:
     hostnameUrl: "http://dome-wallet-keycloak/keycloak"
     adminUrl: "http://dome-wallet-keycloak/keycloak/admin"
@@ -152,7 +151,6 @@ db:
   type: postgres
   host: dome-wallet-keycloak-postgres
   port: 5432
-  externalService: false
   name: keycloak
   username: postgres
   password: postgres
