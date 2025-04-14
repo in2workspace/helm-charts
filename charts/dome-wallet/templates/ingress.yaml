@@ -3,7 +3,8 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ include "dome-wallet.fullname" . }}
-  labels: {{ .Values.ingress.labels }}
+  labels:
+    {{- toYaml .Values.ingress.labels | nindent 4 }}
   namespace: {{ $.Release.Namespace | quote }}
   annotations:
     {{- with .Values.ingress.annotations }}

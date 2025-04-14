@@ -63,16 +63,16 @@ spec:
                   name: {{ include "dome-wallet-keycloak.keycloakSecretName" . }}
                   key: {{ include "dome-wallet-keycloak.keycloak-passwordKey" . }}
             - name: KC_DB_USERNAME
-              value: {{.Values.db.username}}
+              value: {{.Values.app.db.username}}
             - name: KC_DB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "dome-wallet-keycloak.dbSecretName" . }}
                   key: {{ include "dome-wallet-keycloak.db-passwordKey" . }}
             - name: KC_DB
-              value: {{.Values.db.type}}
+              value: {{.Values.app.db.type}}
             - name: KC_DB_URL
-              value: "jdbc:postgresql://{{ .Values.db.host }}:{{ .Values.db.port }}/{{ .Values.db.name }}"
+              value: "jdbc:postgresql://{{ .Values.app.db.host }}:{{ .Values.app.db.port }}/{{ .Values.app.db.name }}"
             - name: KC_HOSTNAME_URL
               value: {{.Values.app.keycloak.hostnameUrl}}
             - name: KC_HOSTNAME_ADMIN_URL
