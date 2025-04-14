@@ -6,12 +6,11 @@ metadata:
   labels: {{ .Values.ingress.labels }}
   namespace: {{ $.Release.Namespace | quote }}
   annotations:
-    nginx.ingress.kubernetes.io/ssl-redirect: "{{ .Values.ingress.sslRedirect }}"
-    nginx.ingress.kubernetes.io/backend-protocol: "{{ .Values.ingress.backendProtocol }}"
-    nginx.ingress.kubernetes.io/use-regex: "true"
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    {{- with .Values.ingress.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
     {{- if .Values.ingress.enableTLS }}
-    cert-manager.io/cluster-issuer: {{ .Values.ingress.clusterIssuer }}
+    cert-manager.io/cluster-issuer: {{ .Values.ingress.clusterIssuer | quote }}
     {{- end }}
 spec:
   ingressClassName: {{ .Values.ingress.className }}

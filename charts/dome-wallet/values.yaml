@@ -4,10 +4,13 @@ nameOverride: ""
 # Ingress configuration
 ingress:
   enabled: true
-  labels:
   className: "nginx"
-  sslRedirect: false
-  backendProtocol: "HTTP"
+  labels: {}
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: false
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
   enableTLS: false
   clusterIssuer: "letsencrypt-in2-test-issuer"
   host: "example-host"
