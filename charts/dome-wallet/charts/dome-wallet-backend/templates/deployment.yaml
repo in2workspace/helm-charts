@@ -101,20 +101,20 @@ spec:
                   key: {{ include "dome-wallet-backend.ebsiUserSecretKey" . }}
             # DATABASE
             - name: SPRING_R2DBC_URL
-              value: "r2dbc:postgresql://{{ .Values.db.host }}:{{ .Values.db.port }}/{{ .Values.db.name }}?schema={{ .Values.db.schema }}"
+              value: "r2dbc:postgresql://{{ .Values.app.db.host }}:{{ .Values.app.db.port }}/{{ .Values.app.db.name }}?schema={{ .Values.app.db.schema }}"
             - name: SPRING_R2DBC_USERNAME
-              value: {{ .Values.db.username }}
+              value: {{ .Values.app.db.username }}
             - name: SPRING_R2DBC_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "dome-wallet-backend.dbSecretName" . }}
                   key: {{ include "dome-wallet-backend.dbSecretKey" . }}
             - name: SPRING_FLYWAY_URL
-              value: "jdbc:postgresql://{{ .Values.db.host }}:{{ .Values.db.port }}/{{ .Values.db.name }}?schema={{ .Values.db.schema }}"
+              value: "jdbc:postgresql://{{ .Values.app.db.host }}:{{ .Values.app.db.port }}/{{ .Values.app.db.name }}?schema={{ .Values.app.db.schema }}"
             - name: SPRING_FLYWAY_USER
-              value: {{ .Values.db.username }}
+              value: {{ .Values.app.db.username }}
             - name: SPRING_FLYWAY_DEFAULT_SCHEMA
-              value: {{ .Values.db.schema }}
+              value: {{ .Values.app.db.schema }}
             - name: SPRING_FLYWAY_PASSWORD
               valueFrom:
                 secretKeyRef:
