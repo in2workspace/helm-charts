@@ -26,7 +26,7 @@ spec:
             pathType: ImplementationSpecific
             backend:
               service:
-                name: {{ index .Values "dome-wallet-backend" "fullnameOverride" }}
+                name: {{ include "dome-wallet-backend.service.name" . }}
                 port:
                   number: 80
 #           Frontend
@@ -34,7 +34,7 @@ spec:
             pathType: ImplementationSpecific
             backend:
               service:
-                name: {{ index .Values "dome-wallet-frontend" "fullnameOverride" }}
+                name: {{ include "dome-wallet-frontend.service.name" . }}
                 port:
                   number: 80
   {{- if .Values.global.ingress.enableTLS }}
