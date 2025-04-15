@@ -1,24 +1,24 @@
 # as for the ingress nginx rewrite, see: https://kubernetes.github.io/ingress-nginx/examples/rewrite/
 
-{{- if .Values.ingress.enabled }}
+{{- if .Values.global.ingress.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ include "dome-wallet.fullname" . }}
   labels:
-    {{- toYaml .Values.ingress.labels | nindent 4 }}
+    {{- toYaml .Values.global.ingress.labels | nindent 4 }}
   namespace: {{ $.Release.Namespace | quote }}
   annotations:
-    {{- with .Values.ingress.annotations }}
+    {{- with .Values.global.ingress.annotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
-    {{- if .Values.ingress.enableTLS }}
-    cert-manager.io/cluster-issuer: {{ .Values.ingress.clusterIssuer | quote }}
+    {{- if .Values.global.ingress.enableTLS }}
+    cert-manager.io/cluster-issuer: {{ .Values.global.ingress.clusterIssuer | quote }}
     {{- end }}
 spec:
-  ingressClassName: {{ .Values.ingress.className }}
+  ingressClassName: {{ .Values.global.ingress.className }}
   rules:
-    - host: {{ .Values.ingress.host }}
+    - host: {{ .Values.global.domain }}
       http:
         paths:
           # Backend
@@ -37,10 +37,10 @@ spec:
                 name: {{ index .Values "dome-wallet-frontend" "fullnameOverride" }}
                 port:
                   number: 80
-  {{- if .Values.ingress.enableTLS }}
+  {{- if .Values.global.ingress.enableTLS }}
   tls:
     - hosts:
-        - {{ .Values.ingress.host }}
+        - {{ .Values.global.domain }}
       secretName: wallet-tls-secret
   {{- end }}
   {{- end }}
