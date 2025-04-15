@@ -9,15 +9,12 @@ ingress:
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
   enableTLS: false
   clusterIssuer: "letsencrypt-in2-test-issuer"
   host: "localhost"
-  backend:
-    annotations:
-      nginx.ingress.kubernetes.io/use-regex: "true"
-      nginx.ingress.kubernetes.io/rewrite-target: /$2
-  frontend:
-    annotations:
+
 
 
 ## configuration for the dome-wallet-backend
@@ -130,7 +127,6 @@ dome-wallet-frontend:
       externalUrl: http://localhost/keycloak/realms/wallet
 
 ## configuration for the dome-wallet-keycloak
-# todo: will be disabled when there is centralized keycloak
 dome-wallet-keycloak:
   nameOverride: dome-wallet-keycloak
   fullnameOverride: dome-wallet-keycloak
@@ -203,7 +199,6 @@ dome-wallet-keycloak:
       key: keycloak-db-password
 
 ## configuration of postgres to be used for the blockchain-connector - see https://github.com/bitnami/charts/tree/main/bitnami/postgresql for details
-# todo: will be disabled when there is centralized keycloak
 dome-wallet-keycloak-postgresql:
   # -- should the postgresql deployment be enabled
   enabled: true
@@ -243,15 +238,12 @@ dome-wallet-keycloak-postgresql:
           psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE keycloak;"
 
 ## configuration of postgres
-# todo: will be disabled when there is centralized database
 dome-wallet-postgresql:
   # -- should the postgresql deployment be enabled
   enabled: true
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
-  # todo dome-wallet-postgres?
   fullnameOverride: dome-wallet-postgres
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
-  # todo dome-wallet-postgres?
   nameOverride: dome-wallet-postgres
   ## auth configuration for the database
   auth:
