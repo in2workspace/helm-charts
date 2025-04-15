@@ -62,8 +62,8 @@ spec:
           env:
             - name: SERVER_PORT
               value: {{ include "dome-wallet-backend.serverPort" . | quote }}
-            - name: SPRING_APPLICATION_WEBFLUX
-              value: ""
+            - name: SPRING_WEBFLUX_BASE_PATH
+              value: /
             - name: LOGGING_LEVEL_ES_IN2_WALLET_API
               value: {{ .Values.app.logLevel }}
             # AUTH SERVER

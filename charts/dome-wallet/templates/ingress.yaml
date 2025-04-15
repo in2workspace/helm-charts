@@ -1,29 +1,38 @@
-
+# as for the ingress nginx rewrite, see: https://kubernetes.github.io/ingress-nginx/examples/rewrite/
 
 {{- if .Values.ingress.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   # todo
-  name: {{ include "dome-wallet.fullname" . }}-frontend
+  name: {{ include "dome-wallet.fullname" . }}-backend
   labels:
     {{- toYaml .Values.ingress.labels | nindent 4 }}
   namespace: {{ $.Release.Namespace | quote }}
   annotations:
-    {{- with .Values.ingress.frontend.annotations }}
+    {{- with .Values.ingress.backend.annotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
     {{- if .Values.ingress.enableTLS }}
     cert-manager.io/cluster-issuer: {{ .Values.ingress.clusterIssuer | quote }}
     {{- end }}
 spec:
-  ingressClassName: nginx
+  ingressClassName: {{ .Values.ingress.className }}
   rules:
     - host: {{ .Values.ingress.host }}
       http:
         paths:
-          - path: /
-            pathType: Prefix
+          # Backend
+          - path: /api(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: {{ index .Values "dome-wallet-backend" "fullnameOverride" }}
+                port:
+                  number: 80
+#           Frontend
+          - path: /()(.*)
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: {{ index .Values "dome-wallet-frontend" "fullnameOverride" }}
@@ -35,4 +44,4 @@ spec:
         - {{ .Values.ingress.host }}
       secretName: wallet-tls-secret
   {{- end }}
-{{- end }}
+  {{- end }}

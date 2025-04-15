@@ -54,7 +54,7 @@ dome-wallet-backend:
       internalUrl: http://localhost/keycloak/realms/wallet
     cors:
       # expects a string of url's separated with comma and space
-      allowedOrigins: "www.localhost.com, www.example-cors-two.com"
+      allowedOrigins: "http://localhost.com, https://localhost.com, www.example-cors-two.com"
     vault:
       provider: hashicorp
       url: http://vault-server:8200
@@ -124,10 +124,10 @@ dome-wallet-frontend:
     logoSrc: "assets/logos/no-image.png"
     faviconSrc: "assets/icons/dome-favicon.png"
     walletApi:
-      internalDomain: https://localhost
-      websocketExternalDomain: wss://localhost
+      internalDomain: http://localhost/api
+      websocketExternalDomain: ws://localhost/api
     iam:
-      externalUrl: https://localhost/keycloak/realms/wallet
+      externalUrl: http://localhost/keycloak/realms/wallet
 
 ## configuration for the dome-wallet-keycloak
 # todo: will be disabled when there is centralized keycloak
@@ -140,22 +140,22 @@ dome-wallet-keycloak:
   ingress:
     enabled: true
     className: nginx
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-in2-test-issuer
+    annotations: {}
+#      cert-manager.io/cluster-issuer: letsencrypt-in2-test-issuer
     hosts:
       - host: localhost
         paths:
           - path: /keycloak
             pathType: Prefix
     tls:
-      - hosts:
-          - localhost
-        secretName: wallet-tls-secret
+#      - hosts:
+#          - localhost
+#        secretName: wallet-tls-secret
   ## deployment specific configuration
   app:
     keycloak:
-      hostnameUrl: "http://dome-wallet-keycloak/keycloak"
-      adminUrl: "http://dome-wallet-keycloak/keycloak"
+      hostnameUrl: "http://localhost/keycloak"
+      adminUrl: "http://localhost/keycloak"
       relativePath: /keycloak
       admin: admin
       password: admin
