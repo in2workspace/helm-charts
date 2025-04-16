@@ -9,7 +9,7 @@ replicaCount: 1
 image:
   repository: in2workspace/dome-wallet-keycloak
   # This sets the pull policy for images.
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: v1.0.0
 
