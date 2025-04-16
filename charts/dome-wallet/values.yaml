@@ -129,8 +129,9 @@ dome-wallet-keycloak:
   ingress:
     enabled: true
     className: nginx
-    annotations: {}
-#      cert-manager.io/cluster-issuer: letsencrypt-in2-test-issuer
+    annotations:
+      nginx.ingress.kubernetes.io/use-regex: "true"
+      nginx.ingress.kubernetes.io/rewrite-target: /$2
     hosts:
       - host: localhost
         paths:
