@@ -21,7 +21,7 @@ dome-wallet-backend:
     # -- image pull policy
     pullPolicy: Always
     # -- image tag
-    tag: v1.4.3
+    tag: v1.4.5-snapshot
   # ingress specific configuration
   ingress:
     enabled: false
@@ -103,7 +103,7 @@ dome-wallet-frontend:
   # -- image pull policy
   pullPolicy: Always
   # -- image tag
-  tag: v1.9.0
+  tag: v1.9.1-snapshot
   ## ingress specific configuration
   ingress:
     enabled: false
