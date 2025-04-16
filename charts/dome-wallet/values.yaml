@@ -136,8 +136,8 @@ dome-wallet-keycloak:
     hosts:
       - host: localhost
         paths:
-          - path: /keycloak
-            pathType: Prefix
+          - path: /keycloak(/|$)(.*)
+            pathType: ImplementationSpecific
     tls:
 #      - hosts:
 #          - localhost
