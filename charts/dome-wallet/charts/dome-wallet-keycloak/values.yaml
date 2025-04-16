@@ -66,7 +66,7 @@ ingress:
   hosts:
     - host: chart-example.local
       paths:
-        - path: /keycloak
+        - path: /keycloak(/|$)(.*)
           pathType: ImplementationSpecific
   tls:
     - hosts:
@@ -88,13 +88,13 @@ resources: {}
 # This is to setup the liveness and readiness probes more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
 livenessProbe:
   httpGet:
-    path: /keycloak/health
+    path: /health
   initialDelaySeconds: 40
   failureThreshold: 6
   periodSeconds: 10
 readinessProbe:
   httpGet:
-    path: /keycloak/health
+    path: /health
   initialDelaySeconds: 40
   failureThreshold: 6
   periodSeconds: 10
@@ -131,7 +131,6 @@ app:
   keycloak:
     hostnameUrl: "http://dome-wallet-keycloak/keycloak"
     adminUrl: "http://dome-wallet-keycloak/keycloak/admin"
-    relativePath: /keycloak
     admin: admin
     password: admin
     existingSecret:

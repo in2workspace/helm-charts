@@ -55,8 +55,6 @@ spec:
           env:
             - name: KEYCLOAK_ADMIN
               value: {{.Values.app.keycloak.admin}}
-            - name: KC_HTTP_RELATIVE_PATH
-              value: {{.Values.app.keycloak.relativePath}}
             - name: KEYCLOAK_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:

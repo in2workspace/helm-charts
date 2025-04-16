@@ -147,7 +147,6 @@ dome-wallet-keycloak:
     keycloak:
       hostnameUrl: "http://localhost/keycloak"
       adminUrl: "http://localhost/keycloak"
-      relativePath: /keycloak
       admin: admin
       password: admin
       existingSecret:
