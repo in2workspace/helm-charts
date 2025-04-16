@@ -1,42 +1,52 @@
-fullNameOverride: ""
-nameOverride: ""
-
-# Ingress configuration
-ingress:
-  enabled: true
-  labels:
-  className: "nginx"
-  sslRedirect: false
-  backendProtocol: "HTTP"
-  enableTLS: false
-  clusterIssuer: "letsencrypt-in2-test-issuer"
-  host: "example-host"
+global:
+  domain: "localhost"
+  ingress:
+    enabled: true
+    className: "nginx"
+    labels: {}
+    annotations:
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+      nginx.ingress.kubernetes.io/use-regex: "true"
+      nginx.ingress.kubernetes.io/rewrite-target: /$2
+    enableTLS: false
+    clusterIssuer: "letsencrypt-in2-test-issuer"
 
 ## configuration for the dome-wallet-backend
 dome-wallet-backend:
-  # -- should be enabled?
-  enabled: true
   fullnameOverride: "dome-wallet-backend"
   image:
     # -- image pull policy
     pullPolicy: Always
     # -- image tag
-    tag: v1.4.3
+    tag: v1.4.5-snapshot
   # ingress specific configuration
   ingress:
     enabled: false
+  # scripts before container initializes
+  initContainers:
+  # a script can be added to wait for Keycloak to be ready before initializing
+  # useful while working with internal Keycloak that isn't initialized yet
+  # todo: remove when external Keycloak is used
+  # - name: wait-for-keycloak
+  #   image: curlimages/curl
+  # url has to match keycloak health url
+  #   command:
+  #     - sh
+  #     - -c
+  #     - >
+  #       timeout 75 sh -c '
+  #         until curl -s http://dome-wallet-keycloak:80/keycloak/health;
+  #         do echo "waiting for keycloak..."; sleep 5; done'
   ## deployment specific configuration
   app:
-    # has to match ingress backend path
-    # todo: remove or refactor to match it with ingress backend path
-    basePath: "/api"
     logLevel: DEBUG
     authServer:
-      externalUrl: http://www.example-external-domain.org/keycloak/realms/wallet
-      internalUrl: http://www.example-internal-domain.org/keycloak/realms/wallet
+      externalUrl: http://localhost/keycloak/realms/wallet
+      internalUrl: http://localhost/keycloak/realms/wallet
     cors:
       # expects a string of url's separated with comma and space
-      allowedOrigins: "www.example-cors.com, www.example-cors-two.com"
+      allowedOrigins: "http://localhost.com, https://localhost.com, www.example-cors-two.com"
     vault:
       provider: hashicorp
       url: http://vault-server:8200
@@ -47,9 +57,10 @@ dome-wallet-backend:
         # -- name of the secret
         name: dome-wallet-sealed-secret
         # -- key to retrieve the token from
-        key: token
+        key: vault-token
     ebsiTest:
-      url: http://dome-wallet-keycloak:8080/realms/wallet/protocol/openid-connect/token
+      # this will fail in the API unless the specified realm, client and user-password are created in the Keycloak instance
+      url: http://dome-wallet-keycloak:80/keycloak/realms/wallet/protocol/openid-connect/token
       client:
         id: user-registry-client
         secret: defaultSecret
@@ -59,7 +70,7 @@ dome-wallet-backend:
           # -- name of the secret
           name: dome-wallet-sealed-secret
           # -- key to retrieve the password from
-          key: client-secret
+          key: ebsi-client-secret
       userData:
         name: admin
         password: defaultPassword
@@ -69,10 +80,10 @@ dome-wallet-backend:
           # -- name of the secret
           name: dome-wallet-sealed-secret
           # -- key to retrieve the password from
-          key: user-password
+          key: ebsi-user-password
   db:
-    schema: public # remove?
-    host: wallet-postgres # dome-wallet-postgres?
+    schema: wallet
+    host: dome-wallet-postgres # dome-wallet-postgres?
     port: 5432
     name: wallet
     username: postgres
@@ -84,13 +95,11 @@ dome-wallet-backend:
 
 ## configuration for the dome-wallet-frontend
 dome-wallet-frontend:
-  # -- should be enabled?
-  enabled: true
   fullnameOverride: "dome-wallet-frontend"
   # -- image pull policy
   pullPolicy: Always
   # -- image tag
-  tag: v1.9.0
+  tag: v1.9.1-snapshot
   ## ingress specific configuration
   ingress:
     enabled: false
@@ -104,40 +113,39 @@ dome-wallet-frontend:
       secondaryContrast: "#50c8ff"
     logoSrc: "assets/logos/no-image.png"
     faviconSrc: "assets/icons/dome-favicon.png"
-    # path has to match backend basePath
     walletApi:
-      internalDomain: https://example-internal-domain.org/api
-      websocketExternalDomain: wss://example-external-domain/api
+      internalUrl: http://localhost/api
+      websocketExternalUrl: ws://localhost/api
     iam:
-      externalUrl: https://example-external-domain.org/keycloak/realms/wallet
+      externalUrl: http://localhost/keycloak/realms/wallet
 
 ## configuration for the dome-wallet-keycloak
-# todo: will be disabled when there is centralized keycloak
 dome-wallet-keycloak:
+  nameOverride: dome-wallet-keycloak
+  fullnameOverride: dome-wallet-keycloak
   # -- should be enabled?
-  enabled: false
+  enabled: true
   ## ingress specific configuration
   ingress:
     enabled: true
     className: nginx
     annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-in2-test-issuer
+      nginx.ingress.kubernetes.io/use-regex: "true"
+      nginx.ingress.kubernetes.io/rewrite-target: /$2
     hosts:
-      - host: wallet.dome-marketplace-lcl.org
+      - host: localhost
         paths:
-          - path: /keycloak
-            pathType: Prefix
+          - path: /keycloak(/|$)(.*)
+            pathType: ImplementationSpecific
     tls:
-      - hosts:
-          - wallet.dome-marketplace-lcl.org
-        secretName: wallet-tls-secret
+#      - hosts:
+#          - localhost
+#        secretName: wallet-tls-secret
   ## deployment specific configuration
   app:
-    internalServerPort: 8080
     keycloak:
-      hostnameUrl: "http://dome-wallet-keycloak/keycloak"
-      adminUrl: "http://dome-wallet-keycloak/keycloak"
-      relativePath: /keycloak
+      hostnameUrl: "http://localhost/keycloak"
+      adminUrl: "http://localhost/keycloak"
       admin: admin
       password: admin
       existingSecret:
@@ -172,7 +180,6 @@ dome-wallet-keycloak:
     type: postgres
     host: dome-wallet-keycloak-postgres
     port: 5432
-    externalService: false
     name: keycloak
     username: postgres
     password: postgres
@@ -185,7 +192,6 @@ dome-wallet-keycloak:
       key: keycloak-db-password
 
 ## configuration of postgres to be used for the blockchain-connector - see https://github.com/bitnami/charts/tree/main/bitnami/postgresql for details
-# todo: will be disabled when there is centralized keycloak
 dome-wallet-keycloak-postgresql:
   # -- should the postgresql deployment be enabled
   enabled: true
@@ -225,16 +231,13 @@ dome-wallet-keycloak-postgresql:
           psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE keycloak;"
 
 ## configuration of postgres
-# todo: will be disabled when there is centralized database
 dome-wallet-postgresql:
   # -- should the postgresql deployment be enabled
   enabled: true
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
-  # todo dome-wallet-postgres?
-  fullnameOverride: wallet-postgres
+  fullnameOverride: dome-wallet-postgres
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
-  # todo dome-wallet-postgres?
-  nameOverride: wallet-postgres
+  nameOverride: dome-wallet-postgres
   ## auth configuration for the database
   auth:
     # -- username to be used
@@ -255,10 +258,3 @@ dome-wallet-postgresql:
       enabled: true
       whenScaled: Retain
       whenDeleted: Retain
-    initdb:
-      # todo: remove? public schema instead of wallet?
-      scripts:
-        create.sh: |
-          psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE wallet;"
-        create-schema.sh: |
-          psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432/wallet -c "CREATE SCHEMA IF NOT EXISTS wallet;"

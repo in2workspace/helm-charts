@@ -1,10 +1,11 @@
 {{- if .Values.ingress.enabled -}}
 {{- $fullName := include "dome-wallet-backend.fullname" . -}}
+{{/* this is declared here because it is used inside a range */}}
 {{- $servicePort := .Values.service.port -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "dome-wallet-backend.fullname" . }}
+  name: {{ $fullName }}
   labels:
     {{ include "dome-wallet-backend.labels" . | nindent 4 }}
   {{- if .Values.ingress.annotations }}
@@ -32,8 +33,8 @@ spec:
     - host: {{ .host | quote }}
       http:
         paths:
-          - path: {{ $.Values.app.basePath | quote }}
-            pathType: Prefix
+          - path: {{ .path | quote }}
+            pathType: {{ .pathType | quote }}
             backend:
               service:
                 name: {{ $fullName }}

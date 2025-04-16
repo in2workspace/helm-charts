@@ -1,42 +1,46 @@
-{{- if .Values.ingress.enabled }}
+# as for the ingress nginx rewrite, see: https://kubernetes.github.io/ingress-nginx/examples/rewrite/
+
+{{- if .Values.global.ingress.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ include "dome-wallet.fullname" . }}
-  labels: {{ .Values.ingress.labels }}
+  labels:
+    {{- toYaml .Values.global.ingress.labels | nindent 4 }}
   namespace: {{ $.Release.Namespace | quote }}
   annotations:
-    nginx.ingress.kubernetes.io/ssl-redirect: "{{ .Values.ingress.sslRedirect }}"
-    nginx.ingress.kubernetes.io/backend-protocol: "{{ .Values.ingress.backendProtocol }}"
-    {{- if .Values.ingress.enableTLS }}
-    cert-manager.io/cluster-issuer: {{ .Values.ingress.clusterIssuer }}
+    {{- with .Values.global.ingress.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- if .Values.global.ingress.enableTLS }}
+    cert-manager.io/cluster-issuer: {{ .Values.global.ingress.clusterIssuer | quote }}
     {{- end }}
 spec:
-  ingressClassName: {{ .Values.ingress.className }}
+  ingressClassName: {{ .Values.global.ingress.className }}
   rules:
-    - host: {{ .Values.ingress.host }}
+    - host: {{ .Values.global.domain }}
       http:
         paths:
           # Backend
-          - path: {{ index .Values "dome-wallet-backend" "app" "basePath" | quote }}
-            pathType: Prefix
+          - path: /api(/|$)(.*)
+            pathType: ImplementationSpecific
             backend:
               service:
-                name: {{ index .Values "dome-wallet-backend" "fullnameOverride" }}
+                name: {{ include "dome-wallet-backend.service.name" . }}
                 port:
                   number: 80
-          # Frontend
-          - path: "/"
-            pathType: Prefix
+#           Frontend
+          - path: /()(.*)
+            pathType: ImplementationSpecific
             backend:
               service:
-                name: {{ index .Values "dome-wallet-frontend" "fullnameOverride" }}
+                name: {{ include "dome-wallet-frontend.service.name" . }}
                 port:
                   number: 80
-  {{- if .Values.ingress.enableTLS }}
+  {{- if .Values.global.ingress.enableTLS }}
   tls:
     - hosts:
-        - {{ .Values.ingress.host }}
+        - {{ .Values.global.domain }}
       secretName: wallet-tls-secret
   {{- end }}
   {{- end }}

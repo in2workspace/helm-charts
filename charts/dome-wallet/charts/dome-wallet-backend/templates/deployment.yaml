@@ -24,6 +24,10 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
+      # scripts before container initializes
+      # todo: maybe find another way to do this
+      initContainers:
+        {{- toYaml .Values.initContainers | nindent 8 }}
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
@@ -55,13 +59,11 @@ spec:
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
-          # todo: unify secrets
           env:
             - name: SERVER_PORT
               value: {{ include "dome-wallet-backend.serverPort" . | quote }}
-            # todo: refactor/remove?
-            - name: SPRING_WEBFLUX_BASEPATH
-              value: {{ .Values.app.basePath }}
+            - name: SPRING_WEBFLUX_BASE_PATH
+              value: /
             - name: LOGGING_LEVEL_ES_IN2_WALLET_API
               value: {{ .Values.app.logLevel }}
             # AUTH SERVER
@@ -101,23 +103,20 @@ spec:
                   key: {{ include "dome-wallet-backend.ebsiUserSecretKey" . }}
             # DATABASE
             - name: SPRING_R2DBC_URL
-              value: "r2dbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}?schema={{ .Values.db.schema }}"
-            # todo: remove?
-            - name: DB_SCHEMA
-              value: {{ .Values.db.schema }}
+              value: "r2dbc:postgresql://{{ .Values.app.db.host }}:{{ .Values.app.db.port }}/{{ .Values.app.db.name }}?schema={{ .Values.app.db.schema }}"
             - name: SPRING_R2DBC_USERNAME
-              value: {{ .Values.db.username }}
+              value: {{ .Values.app.db.username }}
             - name: SPRING_R2DBC_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "dome-wallet-backend.dbSecretName" . }}
                   key: {{ include "dome-wallet-backend.dbSecretKey" . }}
             - name: SPRING_FLYWAY_URL
-              value: "jdbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}?schema={{ .Values.db.schema }}"
+              value: "jdbc:postgresql://{{ .Values.app.db.host }}:{{ .Values.app.db.port }}/{{ .Values.app.db.name }}?schema={{ .Values.app.db.schema }}"
             - name: SPRING_FLYWAY_USER
-              value: {{ .Values.db.username }}
+              value: {{ .Values.app.db.username }}
             - name: SPRING_FLYWAY_DEFAULT_SCHEMA
-              value: "public"
+              value: {{ .Values.app.db.schema }}
             - name: SPRING_FLYWAY_PASSWORD
               valueFrom:
                 secretKeyRef:
