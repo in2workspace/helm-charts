@@ -137,7 +137,7 @@ app:
   logoSrc: "assets/logos/no-image.png"
   faviconSrc: "assets/icons/dome-favicon.png"
   walletApi:
-    internalDomain: https://example-internal-domain.org
-    websocketExternalDomain: wss://example-external-domain
+    internalUrl: https://example-internal-domain.org
+    websocketExternalUrl: wss://example-external-domain
   iam:
     externalUrl: https://example-external-domain.org/keycloak/realms/wallet

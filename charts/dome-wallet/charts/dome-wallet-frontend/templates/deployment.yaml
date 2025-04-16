@@ -68,8 +68,8 @@ spec:
             - name: FAVICON_SRC
               value: {{ .Values.app.faviconSrc }}
             - name: WALLET_API_INTERNAL_DOMAIN
-              value: {{.Values.app.walletApi.internalDomain}}
+              value: {{.Values.app.walletApi.internalUrl}}
             - name: WALLET_API_WEBSOCKET_EXTERNAL_DOMAIN
-              value: {{.Values.app.walletApi.websocketExternalDomain}}
+              value: {{.Values.app.walletApi.websocketExternalUrl}}
             - name: IAM_EXTERNAL_URL
               value: {{.Values.app.iam.externalUrl}}
