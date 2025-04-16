@@ -26,16 +26,14 @@ appVersion: "v0.0.5"
 dependencies:
   - name: dome-wallet-backend
     version: 1.2.2
-    condition: dome-wallet-backend.enabled
 
   - name: dome-wallet-frontend
-    condition: dome-wallet-frontend.enabled
     version: 0.4.1
 
   - name: postgresql
-    alias: dome-wallet-postgresql
-    repository: oci://registry-1.docker.io/bitnamicharts
     version: 16.4.5
+    repository: oci://registry-1.docker.io/bitnamicharts
+    alias: dome-wallet-postgresql
     condition: dome-wallet-postgresql.enabled
 
   - name: dome-wallet-keycloak
@@ -43,7 +41,7 @@ dependencies:
     condition: dome-wallet-keycloak.enabled
 
   - name: postgresql
-    alias: dome-wallet-keycloak-postgresql
     version: 16.4.5
     repository: oci://registry-1.docker.io/bitnamicharts
+    alias: dome-wallet-keycloak-postgresql
     condition: dome-wallet-keycloak-postgresql.enabled
