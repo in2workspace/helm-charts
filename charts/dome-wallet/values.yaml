@@ -14,8 +14,6 @@ global:
 
 ## configuration for the dome-wallet-backend
 dome-wallet-backend:
-  # -- should be enabled?
-  enabled: true
   fullnameOverride: "dome-wallet-backend"
   image:
     # -- image pull policy
@@ -97,8 +95,6 @@ dome-wallet-backend:
 
 ## configuration for the dome-wallet-frontend
 dome-wallet-frontend:
-  # -- should be enabled?
-  enabled: true
   fullnameOverride: "dome-wallet-frontend"
   # -- image pull policy
   pullPolicy: Always
