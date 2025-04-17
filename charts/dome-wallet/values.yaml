@@ -83,7 +83,7 @@ dome-wallet-backend:
           key: ebsi-user-password
     db:
       schema: wallet
-      host: dome-wallet-postgres
+      host: wallet-postgres
       port: 5432
       name: wallet
       username: postgres
@@ -99,7 +99,7 @@ dome-wallet-frontend:
   # -- image pull policy
   pullPolicy: Always
   # -- image tag
-  tag: v1.9.1-snapshot
+  tag: v1.9.1
   ## ingress specific configuration
   ingress:
     enabled: false
@@ -193,8 +193,10 @@ dome-wallet-keycloak-postgresql:
   # -- should the postgresql deployment be enabled
   enabled: true
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
+  # ! Changing this parameter may cause the PVC to be re-created and the data lost
   fullnameOverride: dome-wallet-keycloak-postgres
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
+  # ! Changing this parameter may cause the PVC to re-created and the data lost
   nameOverride: dome-wallet-keycloak-postgres
   ## network policy configuration
   networkPolicy:
@@ -232,9 +234,11 @@ dome-wallet-postgresql:
   # -- should the postgresql deployment be enabled
   enabled: true
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
-  fullnameOverride: dome-wallet-postgres
+  # ! Changing this parameter may cause the PVC to re-created and the data lost
+  fullnameOverride: wallet-postgres
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
-  nameOverride: dome-wallet-postgres
+  # ! Changing this parameter may cause the PVC to re-created and the data lost
+  nameOverride: wallet-postgres
   ## auth configuration for the database
   auth:
     # -- username to be used
