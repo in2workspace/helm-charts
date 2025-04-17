@@ -43,7 +43,7 @@ dome-wallet-backend:
     logLevel: DEBUG
     authServer:
       externalUrl: http://localhost/keycloak/realms/wallet
-      internalUrl: http://dome-wallet-keycloak/realms/realms/wallet
+      internalUrl: http://dome-wallet-keycloak:80/realms/wallet
     cors:
       # expects a string of url's separated with comma and space
       allowedOrigins: "http://localhost.com, https://localhost.com, www.example-cors-two.com"
@@ -60,7 +60,7 @@ dome-wallet-backend:
         key: vault-token
     ebsiTest:
       # this will fail in the API unless the specified realm, client and user-password are created in the Keycloak instance
-      url: http://dome-wallet-keycloak/realms/wallet/protocol/openid-connect/token
+      url: http://dome-wallet-keycloak:80/realms/wallet/protocol/openid-connect/token
       client:
         id: user-registry-client
         secret: defaultSecret
