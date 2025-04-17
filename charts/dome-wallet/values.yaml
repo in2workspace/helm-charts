@@ -19,7 +19,7 @@ dome-wallet-backend:
     # -- image pull policy
     pullPolicy: Always
     # -- image tag
-    tag: v1.4.5-snapshot
+    tag: v1.4.4
   # ingress specific configuration
   ingress:
     enabled: false
@@ -43,7 +43,7 @@ dome-wallet-backend:
     logLevel: DEBUG
     authServer:
       externalUrl: http://localhost/keycloak/realms/wallet
-      internalUrl: http://localhost/keycloak/realms/wallet
+      internalUrl: http://dome-wallet-keycloak:80/realms/wallet
     cors:
       # expects a string of url's separated with comma and space
       allowedOrigins: "http://localhost.com, https://localhost.com, www.example-cors-two.com"
@@ -60,7 +60,7 @@ dome-wallet-backend:
         key: vault-token
     ebsiTest:
       # this will fail in the API unless the specified realm, client and user-password are created in the Keycloak instance
-      url: http://dome-wallet-keycloak:80/keycloak/realms/wallet/protocol/openid-connect/token
+      url: http://dome-wallet-keycloak:80/realms/wallet/protocol/openid-connect/token
       client:
         id: user-registry-client
         secret: defaultSecret
@@ -81,17 +81,17 @@ dome-wallet-backend:
           name: dome-wallet-sealed-secret
           # -- key to retrieve the password from
           key: ebsi-user-password
-  db:
-    schema: wallet
-    host: dome-wallet-postgres # dome-wallet-postgres?
-    port: 5432
-    name: wallet
-    username: postgres
-    password: postgres
-    existingSecret:
-      enabled: false
-      name: dome-wallet-sealed-secret
-      key: password
+    db:
+      schema: wallet
+      host: wallet-postgres
+      port: 5432
+      name: wallet
+      username: postgres
+      password: postgres
+      existingSecret:
+        enabled: false
+        name: dome-wallet-sealed-secret
+        key: password
 
 ## configuration for the dome-wallet-frontend
 dome-wallet-frontend:
@@ -99,7 +99,7 @@ dome-wallet-frontend:
   # -- image pull policy
   pullPolicy: Always
   # -- image tag
-  tag: v1.9.1-snapshot
+  tag: v1.9.1
   ## ingress specific configuration
   ingress:
     enabled: false
@@ -137,11 +137,8 @@ dome-wallet-keycloak:
         paths:
           - path: /keycloak(/|$)(.*)
             pathType: ImplementationSpecific
-    tls:
-#      - hosts:
-#          - localhost
-#        secretName: wallet-tls-secret
-  ## deployment specific configuration
+    tls: []
+
   app:
     keycloak:
       hostnameUrl: "http://localhost/keycloak"
@@ -176,28 +173,30 @@ dome-wallet-keycloak:
                 enable: true
               ssl:
                 enable: false
-  db:
-    type: postgres
-    host: dome-wallet-keycloak-postgres
-    port: 5432
-    name: keycloak
-    username: postgres
-    password: postgres
-    existingSecret:
-      # -- should an existing secret be used
-      enabled: false
-      # -- name of the secret
-      name: dome-wallet-secret
-      # -- key to retrieve the password from
-      key: keycloak-db-password
+    db:
+      type: postgres
+      host: dome-wallet-keycloak-postgres
+      port: 5432
+      name: keycloak
+      username: postgres
+      password: postgres
+      existingSecret:
+        # -- should an existing secret be used
+        enabled: false
+        # -- name of the secret
+        name: dome-wallet-secret
+        # -- key to retrieve the password from
+        key: keycloak-db-password
 
 ## configuration of postgres to be used for the blockchain-connector - see https://github.com/bitnami/charts/tree/main/bitnami/postgresql for details
 dome-wallet-keycloak-postgresql:
   # -- should the postgresql deployment be enabled
   enabled: true
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
+  # ! Changing this parameter may cause the PVC to be re-created and the data lost
   fullnameOverride: dome-wallet-keycloak-postgres
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
+  # ! Changing this parameter may cause the PVC to re-created and the data lost
   nameOverride: dome-wallet-keycloak-postgres
   ## network policy configuration
   networkPolicy:
@@ -235,9 +234,11 @@ dome-wallet-postgresql:
   # -- should the postgresql deployment be enabled
   enabled: true
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
-  fullnameOverride: dome-wallet-postgres
+  # ! Changing this parameter may cause the PVC to re-created and the data lost
+  fullnameOverride: wallet-postgres
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
-  nameOverride: dome-wallet-postgres
+  # ! Changing this parameter may cause the PVC to re-created and the data lost
+  nameOverride: wallet-postgres
   ## auth configuration for the database
   auth:
     # -- username to be used
