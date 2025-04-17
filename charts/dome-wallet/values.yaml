@@ -43,7 +43,7 @@ dome-wallet-backend:
     logLevel: DEBUG
     authServer:
       externalUrl: http://localhost/keycloak/realms/wallet
-      internalUrl: http://localhost/keycloak/realms/wallet
+      internalUrl: http://dome-wallet-keycloak/realms/realms/wallet
     cors:
       # expects a string of url's separated with comma and space
       allowedOrigins: "http://localhost.com, https://localhost.com, www.example-cors-two.com"
