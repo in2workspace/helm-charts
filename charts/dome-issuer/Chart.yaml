@@ -24,12 +24,8 @@ version: 1.3.23
 appVersion: "v1.0.3"
 
 dependencies:
-  - name: dome-issuer-api
-    version: 1.1.19
-    repository: https://in2workspace.github.io/helm-charts
-    alias: dome-issuer-api
-    condition: dome-issuer-api.enabled
-
+  - name: dome-issuer-backend
+    version: 1.2.0
   - name: dome-issuer-frontend
     version: 1.3.1
 

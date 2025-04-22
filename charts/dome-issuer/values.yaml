@@ -1,31 +1,93 @@
 global:
-  tenantName: "dome"
   domain: "127.0.0.1.nip.io"
   ingress:
     enabled: false
     className: "nginx-acme"
+    labels: {}
     annotations:
-      sslRedirect: "true"
-      backendProtocol: "HTTP"
-      clusterIssuer: "letsencrypt-acme"
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+      nginx.ingress.kubernetes.io/use-regex: "true"
+      nginx.ingress.kubernetes.io/rewrite-target: /$2
     enableTLS: true
+    clusterIssuer: "letsencrypt"
 
-dome-issuer-api:
+dome-issuer-backend:
+  fullnameOverride: "dome-issuer-backend"
+  image:
+    # -- image pull policy
+    pullPolicy: IfNotPresent
+    # -- image tag
+    tag: v1.6.3
+  # ingress specific configuration
+  ingress:
+    enabled: false
+  ingressWellKnown:
+    enabled: false
+    className: ""
+    annotations: { }
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+    hosts:
+      - host: chart-example.local
+        paths:
+          - path: /.well-known/openid-configuration
+            pathType: ImplementationSpecific
+    tls: [ ]
+    #  - secretName: chart-example-tls
+    #    hosts:
+    #      - chart-example.local
+  ingressToken:
+    enabled: false
+    className: ""
+    annotations: { }
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+    hosts:
+      - host: chart-example.local
+        paths:
+          - path: /token
+            pathType: ImplementationSpecific
+    tls: [ ]
+    #  - secretName: chart-example-tls
+    #    hosts:
+    #      - chart-example.local
+  # scripts before container initializes
+  initContainers:
+  # a script can be added to wait for Keycloak to be ready before initializing
+  # useful while working with internal Keycloak that isn't initialized yet
+  # todo: remove when external Keycloak is used
+  # - name: wait-for-keycloak
+  #   image: curlimages/curl
+  # url has to match keycloak health url
+  #   command:
+  #     - sh
+  #     - -c
+  #     - >
+  #       timeout 75 sh -c '
+  #         until curl -s http://dome-wallet-keycloak:80/keycloak/health;
+  #         do echo "waiting for keycloak..."; sleep 5; done'
+  ## deployment specific configuration
   app:
-    profile: prod
     logLevel:
       app: INFO
       security: INFO
-    internalServerPort: 8080
+    url: https://example.org
+    issuerFrontedUrl: https://example.org
+    trustFrameworkUrl: "http://localhost:8080"
+    knowledgeBase:
+      walletGuideUrl: "https://knowledgebase.com"
+      uploadCertificationGuideUrl: "https://knowledgebase.com/upload-certification-guide"
+    verifierUrl: "https://example.org"
     mail:
-      host: smtp.ionos.de
+      host: smtp.example.org
       port: 587
       username: user
       password: password
       existingSecret:
         enabled: false
         name: mail-secret
-        userKey: mail-username
+        userKey: mail-user
         passwordKey: mail-password
       properties:
         mail:
@@ -34,12 +96,12 @@ dome-issuer-api:
             starttls:
               enable: true
             ssl:
-              trust: smtp.ionos.de
+              trust: smtp.example.org
     remoteSignature:
-      clientId: <CLIENT_ID>
-      clientSecret: <CLIENT_SECRET>
-      credentialId: <CREDENTIAL_ID>
-      credentialPassword: <CREDENTIAL_PASSWORD>
+      clientId: client-id
+      clientSecret: client-secret
+      credentialId: credential-id
+      credentialPassword: credential-password
       existingSecret:
         enabled: false
         name: remote-signature-secret
@@ -49,71 +111,28 @@ dome-issuer-api:
         credentialPassword: credential-password
       #Set to cloud if the remote signature service is not dss
       type: server
-      domain:
-        scheme: http
-        # change by the external url or set to localhost if deployed locally
-        host: example.org
-    api:
-      externalDomain:
-        # if deployed locally set to false
-        externalService: true
-        scheme: http
-        # change by the external url or set to localhost if deployed locally
-        host: example.org
-        # internalPort is only used if externalService is false
-        internalPort: 30001
-        path: /
-      internalDomain: http://issuer-api:8080
-      configSource: yaml
-      cacheLifetimeCredentialOffer: 10
-      cacheLifetimeVerifiableCredential: 10
+      url: https://example.org/dss
     authServer:
       provider: keycloak
-      externalDomain:
-        # if deployed locally set to false
-        externalService: true
-        scheme: http
-        # change by the external url or set to localhost if deployed locally
-        host: example.org
-        # internalPort is only used if externalService is false
-        internalPort: 30002
-        path: ""
-      internalDomain: http://issuer-keycloak:8080
-      realm: CredentialIssuer
+      externalUrl: https://example.org/keycloak/realms/dome-issuer
+      internalUrl: http://dome-issuer-keycloak:8080
+      realm: dome-issuer
       client:
-        clientId: oidc4vci-wallet-client
-        clientSecret: oidc4vci-wallet-client-secret
+        clientId: issuer-backend-client
         username: user
         password: user
         existingSecret:
           enabled: false
           name: auth-secret
-          clientSecretKey: authServerClientSecret
-          clientPasswordKey: authServerClientPassword
-      paths:
-        tokenPath: /realms/CredentialIssuer/protocol/openid-connect/token
-    ui:
-      externalDomain:
-        # if deployed locally set to false
-        externalService: true
-        scheme: http
-        # change by the external url or set to localhost if deployed locally
-        host: example.org
-        # internalPort is only used if externalService is false
-        internalPort: 30000
-        path: /
-      internalDomain: http://wallet-ui:8080
-    trustFramework:
-      url: "http://localhost:8080"
-    knowledgebase:
-      walletUrl: "http://knowledgebase.com"
+          clientSecretKey: client-secret
+          clientPasswordKey: password
     defaultSigner:
-      commonName: <COMMON_NAME>
-      country: <COUNTRY>
-      email: <EMAIL>
-      organizationIdentifier: <ORGANIZATION_IDENTIFIER>
-      organization: <ORGANIZATION>
-      serialNumber: <SERIAL_NUMBER>
+      commonName: common-name
+      country: country
+      email: email
+      organizationIdentifier: organization-identifier
+      organization: organization
+      serialNumber: serial-number
       existingSecret:
         enabled: false
         name: default-signer-secret
@@ -125,7 +144,7 @@ dome-issuer-api:
         serialNumber: serial-number
     issuerIdentity:
       credentialDidKey: <CREDENTIAL_DID_KEY>
-      vcJwt: <ENCRYPTED_VC>
+      jwtCredential: <ENCRYPTED_VC>
       privateKey: <PRIVATE_KEY>
       existingSecret:
         enabled: false
@@ -135,28 +154,34 @@ dome-issuer-api:
         credentialDidKey: credential-did-key
     cors:
       default:
+        # expects a string of url's separated with comma and space
         allowedOrigins: "https://example.org"
       external:
+        # expects a string of url's separated with comma and space
         allowedOrigins: "https://new.example.org, https://example-2.org"
-    verifier:
-      url: "https://example.org"
-  db:
-    externalService: false
-    schema: public
-    host: issuer-postgres
-    port: 5432
-    name: issuer
-    username: postgres
-    password: postgres
-    existingSecret:
-      enabled: false
-      name: db-secret
-      key: db-password
+    db:
+      externalService: false
+      schema: issuer
+      host: issuer-postgres
+      port: 5432
+      name: issuer
+      username: postgres
+      password: postgres
+      existingSecret:
+        enabled: false
+        name: db-secret
+        key: password
 
 dome-issuer-frontend:
+  fullnameOverride: "dome-issuer-frontend"
   image:
+    # -- image pull policy
     pullPolicy: IfNotPresent
+    # -- image tag
     tag: v1.10.2
+    # ingress specific configuration
+  ingress:
+    enabled: false
   app:
     colors:
       primary: "#2d58a7"

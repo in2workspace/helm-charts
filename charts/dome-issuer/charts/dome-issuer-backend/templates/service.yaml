@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "dome-issuer-backend.fullname" . }}
+  namespace: {{ $.Release.Namespace | quote }}
+  labels:
+    {{- include "dome-issuer-backend.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ include "dome-issuer-backend.serverPort" }}
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "dome-issuer-backend.selectorLabels" . | nindent 4 }}
