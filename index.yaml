@@ -1690,6 +1690,21 @@ entries:
   dome-wallet-api:
   - apiVersion: v2
     appVersion: v1.2.1
+    created: "2025-04-22T13:09:55.727787829Z"
+    description: A Helm chart for Kubernetes
+    digest: 6e82fc29d9ddbb8395b131c4573d19288d25880c538596889c70ef00704eb636
+    maintainers:
+    - email: domesupport@in2.es
+      name: IN2 Team
+    name: dome-wallet-api
+    sources:
+    - https://github.com/in2workspace/dome-wallet-api
+    type: application
+    urls:
+    - https://github.com/in2workspace/helm-charts/releases/download/dome-wallet-api-1.1.8/dome-wallet-api-1.1.8.tgz
+    version: 1.1.8
+  - apiVersion: v2
+    appVersion: v1.2.1
     created: "2025-03-31T09:23:52.734934986Z"
     description: A Helm chart for Kubernetes
     digest: 3eac17797a9360b2caeb1b4ee32f4269af327d193f7a8a4a7f8f203823112a5a
@@ -1734,6 +1749,21 @@ entries:
     - https://github.com/in2workspace/helm-charts/releases/download/dome-wallet-api-1.1.5/dome-wallet-api-1.1.5.tgz
     version: 1.1.5
   dome-wallet-keycloak:
+  - apiVersion: v2
+    appVersion: v1.0.2
+    created: "2025-04-22T13:09:55.849219775Z"
+    description: A Helm chart for Kubernetes
+    digest: dc6268a2fbc23bd8b1ad71ea4653fa698479e1029927a907e7b55dbc7b0e297e
+    maintainers:
+    - email: domesupport@in2.es
+      name: IN2 Team
+    name: dome-wallet-keycloak
+    sources:
+    - https://github.com/in2workspace/dome-wallet-keycloak
+    type: application
+    urls:
+    - https://github.com/in2workspace/helm-charts/releases/download/dome-wallet-keycloak-0.1.4/dome-wallet-keycloak-0.1.4.tgz
+    version: 0.1.4
   - apiVersion: v2
     appVersion: v1.0.2
     created: "2025-01-30T13:14:22.2785518+01:00"
@@ -1795,6 +1825,21 @@ entries:
     - https://in2workspace.github.io/helm-charts/dome-wallet-keycloak-0.1.0.tgz
     version: 0.1.0
   dome-wallet-ui:
+  - apiVersion: v2
+    appVersion: v1.6.1
+    created: "2025-04-22T13:09:56.003641567Z"
+    description: A Helm chart for Kubernetes
+    digest: 73fdcbeb6bff843b0e3f8a9be92c9f864f98c912cba64c193719cead309fcad7
+    maintainers:
+    - email: domesupport@in2.es
+      name: IN2 Team
+    name: dome-wallet-ui
+    sources:
+    - https://github.com/in2workspace/wallet-ui
+    type: application
+    urls:
+    - https://github.com/in2workspace/helm-charts/releases/download/dome-wallet-ui-0.3.3/dome-wallet-ui-0.3.3.tgz
+    version: 0.3.3
   - apiVersion: v2
     appVersion: v1.6.1
     created: "2025-03-31T07:25:03.355712212Z"
@@ -6417,4 +6462,4 @@ entries:
     urls:
     - https://in2workspace.github.io/helm-charts/wallet-api-1.0.0.tgz
     version: 1.0.0
-generated: "2025-04-17T12:33:06.064889686Z"
+generated: "2025-04-22T13:09:56.00411247Z"
