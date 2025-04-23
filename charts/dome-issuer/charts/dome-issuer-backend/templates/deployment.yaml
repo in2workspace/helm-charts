@@ -138,9 +138,9 @@ spec:
             - name: APP_TRUST_FRAMEWORK_URL
               value: {{ .Values.app.trustFrameworkUrl }}
             - name: APP_KNOWLEDGE_BASE_WALLET_GUIDE_URL
-              value: {{ .Values.app.knowledgebase.walletGuideUrl }}
+              value: {{ .Values.app.knowledgeBase.walletGuideUrl }}
             - name: APP_KNOWLEDGE_BASE_UPLOAD_CERTIFICATION_GUIDE_URL
-              value: {{ .Values.app.knowledgebase.uploadCertificationGuideUrl }}
+              value: {{ .Values.app.knowledgeBase.uploadCertificationGuideUrl }}
             - name: APP_VERIFIER_EXTERNAL_DOMAIN
               value: {{ .Values.app.verifierUrl }}
             - name: DEFAULT_SIGNER_COMMON_NAME
