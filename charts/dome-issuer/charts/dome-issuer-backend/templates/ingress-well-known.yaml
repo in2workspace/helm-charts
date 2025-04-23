@@ -1,23 +1,23 @@
-{{- if .Values.ingressToken.enabled -}}
+{{- if .Values.ingressWellKnown.enabled -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ingress-token
+  name: ingress-well-known
   labels:
-    {{ include "dome-issuer-api.labels" . | nindent 4 }}
-  {{- if .Values.ingressToken.annotations }}
+    {{ include "dome-issuer-backend.labels" . | nindent 4 }}
+  {{- if .Values.ingressWellKnown.annotations }}
   annotations:
-    {{- with .Values.ingressToken.annotations }}
+    {{- with .Values.ingressWellKnown.annotations }}
       {{- toYaml . | nindent 4 }}
       {{- end }}
   {{- end }}
 spec:
-  {{- if .Values.ingressToken.className }}
-  ingressClassName: {{ .Values.ingressToken.className }}
+  {{- if .Values.ingressWellKnown.className }}
+  ingressClassName: {{ .Values.ingressWellKnown.className }}
   {{- end }}
-  {{- if .Values.ingressToken.tls }}
+  {{- if .Values.ingressWellKnown.tls }}
   tls:
-    {{- range .Values.ingressToken.tls }}
+    {{- range .Values.ingressWellKnown.tls }}
     - hosts:
       {{- range .hosts }}
         - {{ . | quote }}
@@ -26,7 +26,7 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-  {{- range .Values.ingressToken.hosts }}
+  {{- range .Values.ingressWellKnown.hosts }}
     - host: {{ .host | quote }}
       http:
         paths:

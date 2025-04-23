@@ -1,12 +1,12 @@
 {{- if .Values.ingress.enabled -}}
-  {{- $fullName := include "dome-issuer-api.fullname" . -}}
+  {{- $fullName := include "dome-issuer-backend.fullname" . -}}
   {{- $servicePort := .Values.service.port -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "dome-issuer-api.fullname" . }}
+  name: {{ include "dome-issuer-backend.fullname" . }}
   labels:
-    {{ include "dome-issuer-api.labels" . | nindent 4 }}
+    {{ include "dome-issuer-backend.labels" . | nindent 4 }}
   {{- if .Values.ingress.annotations }}
   annotations:
     {{- with .Values.ingress.annotations }}

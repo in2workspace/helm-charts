@@ -1,16 +1,19 @@
-{{- define "issuer.fullname" -}}
-dome-issuer
-{{- end}}
+{{/*
+Create a default fully qualified app name.
+*/}}
+{{- define "dome-issuer.fullname" -}}
+{{- .Chart.Name }}
+{{- end }}
 
-{{- define "issuer.url" -}}
+{{- define "dome-issuer.url" -}}
 {{ .Values.global.domain }}
 {{- end }}
 
 
-{{- define "issuer-backend.service.name" -}}
-dome-issuer-api
+{{- define "dome-issuer-backend.service.name" -}}
+{{ index .Values "dome-issuer-backend" "fullnameOverride" }}
 {{- end }}
 
-{{- define "issuer-frontend.service.name" -}}
-dome-issuer-frontend
+{{- define "dome-issuer-frontend.service.name" -}}
+{{ index .Values "dome-wallet-frontend" "fullnameOverride" }}
 {{- end }}
