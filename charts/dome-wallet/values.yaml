@@ -251,6 +251,11 @@ dome-wallet-postgresql:
     database: wallet
   ## configuration of the postgres primary replica
   primary:
+    # Configuration for Velero backup
+    annotations:
+      backup.velero.io/backup-volumes: data
+    podAnnotations:
+      backup.velero.io/backup-volumes: data
     ## network policy configuration
     networkPolicy:
       enabled: false
