@@ -36,6 +36,13 @@ spec:
                 name: {{ include "dome-issuer-backend.service.name" . }}
                 port:
                   number: 80
+          - path: /backoffice(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: {{ include "dome-issuer-backend.service.name" . }}
+                port:
+                  number: 80
           #           Frontend
           - path: /()(.*)
             pathType: ImplementationSpecific
