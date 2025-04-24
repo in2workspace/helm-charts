@@ -200,4 +200,10 @@ postgresKeycloak:
     enablePostgresUser: true
     # -- should the default postgres user be enabled
     database: postgres_keycloak
+  primary:
+    # Configuration for Velero backup
+    annotations:
+      backup.velero.io/backup-volumes: data
+    podAnnotations:
+      backup.velero.io/backup-volumes: data
 
