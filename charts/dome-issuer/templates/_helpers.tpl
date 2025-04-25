@@ -15,5 +15,5 @@ Create a default fully qualified app name.
 {{- end }}
 
 {{- define "dome-issuer-frontend.service.name" -}}
-{{ index .Values "dome-wallet-frontend" "fullnameOverride" }}
+{{ index .Values "dome-issuer-frontend" "fullnameOverride" }}
 {{- end }}
