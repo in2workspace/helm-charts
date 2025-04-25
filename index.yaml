@@ -5103,6 +5103,27 @@ entries:
   keycloak:
   - apiVersion: v2
     appVersion: v1.0.0
+    created: "2025-04-25T09:39:49.831498436Z"
+    dependencies:
+    - alias: postgresKeycloak
+      condition: postgresKeycloak.enabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 16.4.5
+    description: Helm Chart for Keycloak and PostgreSQL
+    digest: dc385c959690da61fecdc386be8c936cae8660b938138a01fade56eeee268c8b
+    maintainers:
+    - email: contacto@in2.es
+      name: IN2 Kizuna DevTeam
+    name: keycloak
+    sources:
+    - https://github.com/in2workspace/dome-issuer-keycloak
+    type: application
+    urls:
+    - https://github.com/in2workspace/helm-charts/releases/download/keycloak-1.0.8/keycloak-1.0.8.tgz
+    version: 1.0.8
+  - apiVersion: v2
+    appVersion: v1.0.0
     created: "2025-04-25T06:10:45.402857264Z"
     dependencies:
     - alias: postgresKeycloak
@@ -6646,4 +6667,4 @@ entries:
     urls:
     - https://in2workspace.github.io/helm-charts/wallet-api-1.0.0.tgz
     version: 1.0.0
-generated: "2025-04-25T07:49:25.792329199Z"
+generated: "2025-04-25T09:39:49.831824124Z"
