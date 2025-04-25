@@ -81,16 +81,6 @@ spec:
                   key: {{ include "keycloak.db-passwordKey" . }}
             - name: KC_DB_URL
               value: "jdbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}"
-            - name: ISSUER_API_URL
-              value: {{ .Values.keycloakExtension.credentialIssuer.url }}
-            - name: ISSUER_API_EXTERNAL_URL
-              value: "{{ .Values.keycloakExtension.credentialIssuer.externalUrl.scheme }}://{{ .Values.keycloakExtension.credentialIssuer.externalUrl.host }}{{ if not .Values.keycloakExtension.credentialIssuer.externalUrl.externalService }}:{{ .Values.keycloakExtension.credentialIssuer.externalUrl.internalPort }}{{ end }}{{ .Values.keycloakExtension.credentialIssuer.externalUrl.path }}"
-            - name: PRE_AUTH_LIFESPAN
-              value: "{{ .Values.keycloakExtension.preAuthorizedCode.lifespan }}"
-            - name: PRE_AUTH_LIFESPAN_TIME_UNIT
-              value: {{ .Values.keycloakExtension.preAuthorizedCode.lifespanTimeUnit }}
-            - name: TOKEN_EXPIRATION
-              value: "{{ .Values.keycloakExtension.token.expiration }}"
             - name: QUARKUS_LOG_CATEGORY__ORG_KEYCLOAK_SERVICES_X509__LEVEL
               value: "{{ .Values.keycloak.logsCertsLevel }}"
             - name: KEYCLOAK_LOGLEVEL

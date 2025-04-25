@@ -5,10 +5,10 @@
 replicaCount: 1
 
 image:
-  repository: in2workspace/dome-issuer-keycloak
+  repository: in2workspace/in2-dome-keycloak
   pullPolicy: Always # IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: v1.0.3
+  tag: v1.1.0
 
 imagePullSecrets: []
 nameOverride: ""
@@ -120,8 +120,8 @@ affinity: {}
 keycloak:
   internalServerPort: 8080
   proxyHeaders: edge
-  logsCertsLevel: TRACE
-  logLevel: DEBUG
+  logsCertsLevel: INFO
+  logLevel: INFO
   admin:
     username: admin
     password: admin
@@ -151,24 +151,6 @@ keycloak:
       path: /
   https:
     clientAuth: request
-
-keycloakExtension:
-  preAuthorizedCode: # preAuth
-    lifespan: 10
-    lifespanTimeUnit: MINUTES
-  token:
-    expiration: 2592000
-  credentialIssuer: # issuerApi
-    url: http://issuer-api:8080
-    externalUrl:
-      # if deployed locally set to false
-      externalService: true
-      scheme: http
-      # change by the external url or set to localhost if deployed locally
-      host: example.org
-      # internalPort is only used if externalService is false
-      internalPort: 30001
-      path: /
 
 db:
   host: postgres-keycloak
