@@ -109,7 +109,7 @@ spec:
                 secretKeyRef:
                   name: {{ include "dome-issuer-backend.authServerClient-secretName" . }}
                   key: {{ include "dome-issuer-backend.authServerClient-passwordKey" . }}
-            - name: APP_ISSUER_FRONTED_URL
+            - name: APP_ISSUER_FRONTEND_URL
               value: {{ .Values.app.issuerFrontedUrl }}
             - name: REMOTE_SIGNATURE_TYPE
               value: "{{ .Values.app.remoteSignature.type }}"
@@ -141,7 +141,7 @@ spec:
               value: {{ .Values.app.knowledgeBase.walletGuideUrl }}
             - name: APP_KNOWLEDGE_BASE_UPLOAD_CERTIFICATION_GUIDE_URL
               value: {{ .Values.app.knowledgeBase.uploadCertificationGuideUrl }}
-            - name: APP_VERIFIER_EXTERNAL_DOMAIN
+            - name: APP_VERIFIER_URL
               value: {{ .Values.app.verifierUrl }}
             - name: DEFAULT_SIGNER_COMMON_NAME
               valueFrom:
