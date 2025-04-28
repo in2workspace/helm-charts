@@ -86,8 +86,8 @@ dome-issuer-backend:
       password: password
       existingSecret:
         enabled: false
-        name: mail-secret
-        userKey: mail-user
+        name: dome-issuer-sealed-secret
+        userKey: mail-username
         passwordKey: mail-password
       properties:
         mail:
@@ -104,11 +104,11 @@ dome-issuer-backend:
       credentialPassword: credential-password
       existingSecret:
         enabled: false
-        name: remote-signature-secret
-        clientId: client-id
-        clientSecret: client-secret
-        credentialId: credential-id
-        credentialPassword: credential-password
+        name: dome-issuer-sealed-secret
+        clientId: remote-signature-client-id
+        clientSecret: remote-signature-client-secret
+        credentialId: remote-signature-credential-id
+        credentialPassword: remote-signature-credential-password
       #Set to cloud if the remote signature service is not dss
       type: server
       url: https://example.org/dss
@@ -123,9 +123,8 @@ dome-issuer-backend:
         password: user
         existingSecret:
           enabled: false
-          name: auth-secret
-          clientSecretKey: client-secret
-          clientPasswordKey: password
+          name: dome-issuer-sealed-secret
+          clientPasswordKey: auth-server-password
     defaultSigner:
       commonName: common-name
       country: country
@@ -135,7 +134,7 @@ dome-issuer-backend:
       serialNumber: serial-number
       existingSecret:
         enabled: false
-        name: default-signer-secret
+        name: dome-issuer-sealed-secret
         commonName: common-name
         country: country
         email: email
@@ -148,10 +147,10 @@ dome-issuer-backend:
       privateKey: <PRIVATE_KEY>
       existingSecret:
         enabled: false
-        name: issuer-identity-secret
-        vc: vc
-        privateKey: private-key
-        credentialDidKey: credential-did-key
+        name: dome-issuer-sealed-secret
+        vc: issuer-identity-vc
+        privateKey: issuer-identity-key
+        credentialDidKey: issuer-identity-credential-did-key
     cors:
       default:
         # expects a string of url's separated with comma and space
@@ -169,8 +168,8 @@ dome-issuer-backend:
       password: postgres
       existingSecret:
         enabled: false
-        name: db-secret
-        key: password
+        name: dome-issuer-sealed-secret
+        key: postgres-password
 
 dome-issuer-frontend:
   fullnameOverride: "dome-issuer-frontend"
@@ -232,8 +231,8 @@ dome-issuer-keycloak:
       password: admin
       existingSecret:
         enabled: false
-        name: keycloak-secrets
-        passwordKey: keycloakAdminPassword
+        name: dome-issuer-sealed-secret
+        passwordKey: keycloak-admin-password
     relativePath: /keycloak
     hostname:
       url:
@@ -259,8 +258,8 @@ dome-issuer-keycloak:
       trustStorePassword: pempas
       existingSecret:
         enabled: false
-        name: keycloak-secrets
-        trustStorePasswordKey: keycloakTrustStorePassword
+        name: dome-issuer-sealed-secret
+        trustStorePasswordKey: keycloak-trust-store-password
       clientAuth: request
     db:
       host: issuer-keycloak-postgres
@@ -271,8 +270,8 @@ dome-issuer-keycloak:
       password: postgres
       existingSecret:
         enabled: false
-        name: keycloak-secrets
-        passwordKey: keycloakDbPassword
+        name: dome-issuer-sealed-secret
+        passwordKey: keycloak-db-password
     mail:
       host: smtp.ionos.de
       port: 587

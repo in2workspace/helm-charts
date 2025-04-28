@@ -68,7 +68,7 @@ Support for existing database secret
     {{- if .Values.app.db.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.db.existingSecret.name $) -}}
     {{- else -}}
-        {{- printf "issuer-backend-db-secret" -}}
+        {{- printf "%s" (include "dome-issuer-backend.fullname" .) | quote -}}
     {{- end -}}
 {{- end -}}
 
@@ -76,7 +76,7 @@ Support for existing database secret
     {{- if .Values.app.db.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.db.existingSecret.key $) -}}
     {{- else -}}
-        {{- printf "password" -}}
+        {{- printf "postgres-password" -}}
     {{- end -}}
 {{- end -}}
 
@@ -87,7 +87,7 @@ Support for existing auth server client secret
     {{- if .Values.app.authServer.client.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.authServer.client.existingSecret.name $) -}}
     {{- else -}}
-        {{- printf "issuer-backend-auth-secret" -}}
+        {{- printf "%s" (include "dome-issuer-backend.fullname" .) | quote -}}
     {{- end -}}
 {{- end -}}
 
@@ -95,7 +95,7 @@ Support for existing auth server client secret
     {{- if .Values.app.authServer.client.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.authServer.client.existingSecret.clientPasswordKey $) -}}
     {{- else -}}
-        {{- printf "password" -}}
+        {{- printf "auth-server-password" -}}
     {{- end -}}
 {{- end -}}
 
@@ -106,7 +106,7 @@ Support for existing mail secret
     {{- if .Values.app.mail.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.mail.existingSecret.name $) -}}
     {{- else -}}
-        {{- printf "issuer-backend-mail-secret" -}}
+        {{- printf "%s" (include "dome-issuer-backend.fullname" .) | quote -}}
     {{- end -}}
 {{- end -}}
 
@@ -114,7 +114,7 @@ Support for existing mail secret
     {{- if .Values.app.mail.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.mail.existingSecret.userKey $) -}}
     {{- else -}}
-        {{- printf "username" -}}
+        {{- printf "mail-username" -}}
     {{- end -}}
 {{- end -}}
 
@@ -122,7 +122,7 @@ Support for existing mail secret
     {{- if .Values.app.mail.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.mail.existingSecret.passwordKey $) -}}
     {{- else -}}
-        {{- printf "password" -}}
+        {{- printf "mail-password" -}}
     {{- end -}}
 {{- end -}}
 
@@ -133,7 +133,7 @@ Support for existing issuer identity secret
     {{- if .Values.app.issuerIdentity.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.issuerIdentity.existingSecret.name $) -}}
     {{- else -}}
-        {{- printf "issuer-backend-issuer-identity-secret" -}}
+        {{- printf "%s" (include "dome-issuer-backend.fullname" .) | quote -}}
     {{- end -}}
 {{- end -}}
 
@@ -141,7 +141,7 @@ Support for existing issuer identity secret
     {{- if .Values.app.issuerIdentity.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.issuerIdentity.existingSecret.privateKey $) -}}
     {{- else -}}
-        {{- printf "private-key" -}}
+        {{- printf "issuer-identity-private-key" -}}
     {{- end -}}
 {{- end -}}
 
@@ -149,7 +149,7 @@ Support for existing issuer identity secret
     {{- if .Values.app.issuerIdentity.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.issuerIdentity.existingSecret.vc $) -}}
     {{- else -}}
-        {{- printf "vc" -}}
+        {{- printf "issuer-identity-vc" -}}
     {{- end -}}
 {{- end -}}
 
@@ -157,7 +157,7 @@ Support for existing issuer identity secret
     {{- if .Values.app.issuerIdentity.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.issuerIdentity.existingSecret.credentialDidKey $) -}}
     {{- else -}}
-        {{- printf "credential-did-key" -}}
+        {{- printf "issuer-identity-credential-did-key" -}}
     {{- end -}}
 {{- end -}}
 
@@ -168,7 +168,7 @@ Support for existing default signer secret
     {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.defaultSigner.existingSecret.name $) -}}
     {{- else -}}
-        {{- printf "issuer-backend-default-signer-secret" -}}
+        {{- printf "%s" (include "dome-issuer-backend.fullname" .) | quote -}}
     {{- end -}}
 {{- end -}}
 
@@ -176,7 +176,7 @@ Support for existing default signer secret
     {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.defaultSigner.existingSecret.commonName $) -}}
     {{- else -}}
-        {{- printf "common-name" -}}
+        {{- printf "default-signer-common-name" -}}
     {{- end -}}
 {{- end -}}
 
@@ -184,7 +184,7 @@ Support for existing default signer secret
     {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.defaultSigner.existingSecret.organization $) -}}
     {{- else -}}
-        {{- printf "organization" -}}
+        {{- printf "default-signer-organization" -}}
     {{- end -}}
 {{- end -}}
 
@@ -192,7 +192,7 @@ Support for existing default signer secret
     {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.defaultSigner.existingSecret.country $) -}}
     {{- else -}}
-        {{- printf "country" -}}
+        {{- printf "default-signer-country" -}}
     {{- end -}}
 {{- end -}}
 
@@ -200,7 +200,7 @@ Support for existing default signer secret
     {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.defaultSigner.existingSecret.email $) -}}
     {{- else -}}
-        {{- printf "email" -}}
+        {{- printf "default-signer-email" -}}
     {{- end -}}
 {{- end -}}
 
@@ -208,7 +208,7 @@ Support for existing default signer secret
     {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.defaultSigner.existingSecret.organizationIdentifier $) -}}
     {{- else -}}
-        {{- printf "organization-identifier" -}}
+        {{- printf "default-signer-organization-identifier" -}}
     {{- end -}}
 {{- end -}}
 
@@ -216,7 +216,7 @@ Support for existing default signer secret
     {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.defaultSigner.existingSecret.serialNumber $) -}}
     {{- else -}}
-        {{- printf "serial-number" -}}
+        {{- printf "default-signer-serial-number" -}}
     {{- end -}}
 {{- end -}}
 
@@ -228,7 +228,7 @@ Support for existing remote-signature-secret
     {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.remoteSignature.existingSecret.name $) -}}
     {{- else -}}
-        {{- printf "issuer-backend-remote-signature-secret" -}}
+        {{- printf "%s" (include "dome-issuer-backend.fullname" .) | quote -}}
     {{- end -}}
 {{- end -}}
 
@@ -236,7 +236,7 @@ Support for existing remote-signature-secret
     {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.remoteSignature.existingSecret.clientId $) -}}
     {{- else -}}
-        {{- printf "client-id" -}}
+        {{- printf "remote-signature-client-id" -}}
     {{- end -}}
 {{- end -}}
 
@@ -244,7 +244,7 @@ Support for existing remote-signature-secret
     {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.remoteSignature.existingSecret.clientSecret $) -}}
     {{- else -}}
-        {{- printf "client-secret" -}}
+        {{- printf "remote-signature-client-secret" -}}
     {{- end -}}
 {{- end -}}
 
@@ -252,7 +252,7 @@ Support for existing remote-signature-secret
     {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.remoteSignature.existingSecret.credentialId $) -}}
     {{- else -}}
-        {{- printf "credential-id" -}}
+        {{- printf "remote-signature-credential-id" -}}
     {{- end -}}
 {{- end -}}
 
@@ -260,7 +260,7 @@ Support for existing remote-signature-secret
     {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.app.remoteSignature.existingSecret.credentialPassword $) -}}
     {{- else -}}
-        {{- printf "credential-password" -}}
+        {{- printf "remote-signature-credential-password" -}}
     {{- end -}}
 {{- end -}}
 
