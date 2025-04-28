@@ -7,11 +7,11 @@ replicaCount: 1
 
 # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
 image:
-  repository: in2workspace/in2-issuer-api
+  repository: in2workspace/in2-issuer-backend
   # This sets the pull policy for images.
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: v1.6.3
+  tag: v1.6.4
 
 # This is for the secrets for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 imagePullSecrets: []
@@ -193,8 +193,8 @@ app:
     password: password
     existingSecret:
       enabled: false
-      name: mail-secret
-      userKey: mail-user
+      name: dome-issuer-backend-secret
+      userKey: mail-username
       passwordKey: mail-password
     properties:
       mail:
@@ -211,11 +211,11 @@ app:
     credentialPassword: credential-password
     existingSecret:
       enabled: false
-      name: remote-signature-secret
-      clientId: client-id
-      clientSecret: client-secret
-      credentialId: credential-id
-      credentialPassword: credential-password
+      name: dome-issuer-backend-secret
+      clientId: remote-signature-client-id
+      clientSecret: remote-signature-client-secret
+      credentialId: remote-signature-credential-id
+      credentialPassword: remote-signature-credential-password
     #Set to cloud if the remote signature service is not dss
     type: server
     url: https://example.org/dss
@@ -230,9 +230,8 @@ app:
       password: user
       existingSecret:
         enabled: false
-        name: auth-secret
-        clientSecretKey: client-secret
-        clientPasswordKey: password
+        name: dome-issuer-backend-secret
+        clientPasswordKey: auth-server-password
   defaultSigner:
     commonName: common-name
     country: country
@@ -242,23 +241,23 @@ app:
     serialNumber: serial-number
     existingSecret:
       enabled: false
-      name: default-signer-secret
-      commonName: common-name
-      country: country
-      email: email
-      organizationIdentifier: organization-identifier
-      organization: organization
-      serialNumber: serial-number
+      name: dome-issuer-backend-secret
+      commonName: default-signer-common-name
+      country: default-signer-country
+      email: default-signer-email
+      organizationIdentifier: default-signer-organization-identifier
+      organization: default-signer-organization
+      serialNumber: default-signer-serial-number
   issuerIdentity:
-    credentialDidKey: <CREDENTIAL_DID_KEY>
-    jwtCredential: <ENCRYPTED_VC>
-    privateKey: <PRIVATE_KEY>
+    credentialDidKey: did:key:example
+    jwtCredential: credential
+    privateKey: key
     existingSecret:
       enabled: false
-      name: issuer-identity-secret
-      vc: vc
-      privateKey: private-key
-      credentialDidKey: credential-did-key
+      name: dome-issuer-backend-secret
+      vc: issuer-identity-vc
+      privateKey: issuer-identity-private-key
+      credentialDidKey: issuer-identity-credential-did-key
   cors:
     default:
       # expects a string of url's separated with comma and space
@@ -276,7 +275,7 @@ app:
     password: postgres
     existingSecret:
       enabled: false
-      name: db-secret
-      key: password
+      name: dome-issuer-backend-secret
+      key: postgres-password
 
   
