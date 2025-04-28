@@ -40,7 +40,7 @@ spec:
   {{- if .Values.global.ingress.enableTLS }}
   tls:
     - hosts:
-        - wallet.dome-marketplace-prd.org
+        - {{ .Values.global.ingress.secondary.domain }}
       secretName: wallet-tls-secret
   {{- end }}
   {{- end }}
