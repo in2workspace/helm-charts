@@ -11,6 +11,9 @@ global:
       nginx.ingress.kubernetes.io/rewrite-target: /$2
     enableTLS: false
     clusterIssuer: "letsencrypt-in2-test-issuer"
+    secondary:
+      enabled: false
+      domain: ""
 
 ## configuration for the dome-wallet-backend
 dome-wallet-backend:
