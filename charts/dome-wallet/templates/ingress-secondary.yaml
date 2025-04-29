@@ -1,10 +1,10 @@
-# as for the ingress nginx rewrite, see: https://kubernetes.github.io/ingress-nginx/examples/rewrite/
+# This ingress has been temporarily added to allow access throught a secondary domain (specially https://wallet.dome-marketplace-prd.org/)
 
-{{- if .Values.global.ingress.enabled }}
+{{- if .Values.global.ingress.secondary.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "dome-wallet.fullname" . }}
+  name: {{ include "dome-wallet.fullname" . }}-secondary-host
   labels:
     {{- toYaml .Values.global.ingress.labels | nindent 4 }}
   namespace: {{ $.Release.Namespace | quote }}
@@ -18,7 +18,7 @@ metadata:
 spec:
   ingressClassName: {{ .Values.global.ingress.className }}
   rules:
-    - host: {{ .Values.global.domain }}
+    - host: {{ .Values.global.ingress.secondary.domain }}
       http:
         paths:
           # Backend
@@ -26,7 +26,7 @@ spec:
             pathType: ImplementationSpecific
             backend:
               service:
-                name: {{ include "dome-wallet-backend.service.name" . }}
+                name: {{ include "dome-wallet-backend.service.name" $ }}
                 port:
                   number: 80
           # Frontend
@@ -34,13 +34,13 @@ spec:
             pathType: ImplementationSpecific
             backend:
               service:
-                name: {{ include "dome-wallet-frontend.service.name" . }}
+                name: {{ include "dome-wallet-frontend.service.name" $ }}
                 port:
                   number: 80
   {{- if .Values.global.ingress.enableTLS }}
   tls:
     - hosts:
-        - {{ .Values.global.domain }}
+        - {{ .Values.global.ingress.secondary.domain }}
       secretName: wallet-tls-secret
   {{- end }}
   {{- end }}
