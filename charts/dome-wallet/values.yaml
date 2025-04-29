@@ -115,8 +115,8 @@ dome-wallet-frontend:
     logoSrc: "assets/logos/no-image.png"
     faviconSrc: "assets/icons/dome-favicon.png"
     walletApi:
-      internalUrl: http://localhost/
-      websocketExternalUrl: ws://localhost/
+      internalUrl: http://localhost
+      websocketExternalUrl: ws://localhost
     iam:
       externalUrl: http://localhost/keycloak/realms/wallet
 
