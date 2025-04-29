@@ -41,6 +41,6 @@ spec:
   tls:
     - hosts:
         - {{ .Values.global.ingress.secondary.domain }}
-      secretName: wallet-tls-secret
+      secretName: wallet-tls-secondary-secret
   {{- end }}
   {{- end }}
