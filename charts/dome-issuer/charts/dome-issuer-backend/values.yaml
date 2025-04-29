@@ -60,16 +60,19 @@ service:
 ingress:
   enabled: false
   className: ""
-  annotations:
-    nginx.ingress.kubernetes.io/use-regex: "true"
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  annotations: {}
   hosts:
     - host: chart-example.local
       paths:
-        - path: /api(/|$)(.*)
-          pathType: ImplementationSpecific
-        - path: /vci(/|$)(.*)
-          pathType: ImplementationSpecific
+        - path: /api
+          pathType: Prefix
+        - path: /vci
+          pathType: Prefix
+        - path: /backoffice
+          pathType: Prefix
+        - path: /oid4vci
+          pathType: Prefix
+
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
