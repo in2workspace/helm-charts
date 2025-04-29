@@ -10,11 +10,11 @@ metadata:
   namespace: {{ $.Release.Namespace | quote }}
   annotations:
     {{- with .Values.global.ingress.annotations }}
-    {{- toYaml . | nindent 4 }}
-    {{- end }}
-    {{- if .Values.global.ingress.enableTLS }}
-    cert-manager.io/cluster-issuer: {{ .Values.global.ingress.clusterIssuer | quote }}
-    {{- end }}
+      {{- toYaml . | nindent 4 }}
+      {{- end }}
+      {{- if .Values.global.ingress.enableTLS }}
+      cert-manager.io/cluster-issuer: {{ .Values.global.ingress.clusterIssuer | quote }}
+      {{- end }}
 spec:
   ingressClassName: {{ .Values.global.ingress.className }}
   rules:
@@ -22,16 +22,16 @@ spec:
       http:
         paths:
           # Backend
-          - path: /api(/|$)(.*)
-            pathType: ImplementationSpecific
+          - path: /api
+            pathType: Prefix
             backend:
               service:
                 name: {{ include "dome-wallet-backend.service.name" $ }}
                 port:
                   number: 80
           # Frontend
-          - path: /()(.*)
-            pathType: ImplementationSpecific
+          - path: /
+            pathType: Prefix
             backend:
               service:
                 name: {{ include "dome-wallet-frontend.service.name" $ }}
