@@ -59,7 +59,7 @@ service:
 ingress:
   enabled: false
   className: ""
-  annotations:
+  annotations: {}
   hosts:
     - host: chart-example.local
       paths:
