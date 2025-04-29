@@ -7,8 +7,6 @@ global:
     annotations:
       nginx.ingress.kubernetes.io/ssl-redirect: "false"
       nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-      nginx.ingress.kubernetes.io/use-regex: "true"
-      nginx.ingress.kubernetes.io/rewrite-target: /$2
     enableTLS: false
     clusterIssuer: "letsencrypt-in2-test-issuer"
     secondary:
@@ -117,8 +115,8 @@ dome-wallet-frontend:
     logoSrc: "assets/logos/no-image.png"
     faviconSrc: "assets/icons/dome-favicon.png"
     walletApi:
-      internalUrl: http://localhost/api
-      websocketExternalUrl: ws://localhost/api
+      internalUrl: http://localhost
+      websocketExternalUrl: ws://localhost
     iam:
       externalUrl: http://localhost/keycloak/realms/wallet
 
