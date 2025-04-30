@@ -50,14 +50,7 @@ spec:
                 name: {{ include "dome-issuer-backend.service.name" . }}
                 port:
                   number: 80
-          - path: /.well-known/openid-credential-issuer
-            pathType: Prefix
-            backend:
-              service:
-                name: {{ include "dome-issuer-backend.service.name" . }}
-                port:
-                  number: 80
-          - path: /.well-known/openid-configuration
+          - path: /.well-known
             pathType: Prefix
             backend:
               service:

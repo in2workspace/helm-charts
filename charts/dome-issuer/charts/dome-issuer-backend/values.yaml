@@ -72,9 +72,7 @@ ingress:
           pathType: Prefix
         - path: /oid4vci
           pathType: Prefix
-        - path: /.well-known/openid-credential-issuer
-          pathType: Prefix
-        - path: /.well-known/openid-configuration
+        - path: /.well-known
           pathType: Prefix
         - path: /token
           pathType: Prefix
