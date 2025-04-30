@@ -57,7 +57,7 @@ spec:
                 name: {{ include "dome-issuer-backend.service.name" . }}
                 port:
                   number: 80
-          - path: /token
+          - path: /oauth/token
             pathType: Prefix
             backend:
               service:

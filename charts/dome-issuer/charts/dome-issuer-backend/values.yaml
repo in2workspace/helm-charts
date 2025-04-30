@@ -74,7 +74,7 @@ ingress:
           pathType: Prefix
         - path: /.well-known
           pathType: Prefix
-        - path: /token
+        - path: /oauth/token
           pathType: Prefix
 
   tls: []
