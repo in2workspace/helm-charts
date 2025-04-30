@@ -71,7 +71,7 @@ dome-issuer-backend:
       app: INFO
       security: INFO
     url: https://example.org
-    issuerFrontedUrl: https://example.org
+    issuerFrontendUrl: https://example.org
     trustFrameworkUrl: "http://localhost:8080"
     knowledgeBase:
       walletGuideUrl: "https://knowledgebase.com"

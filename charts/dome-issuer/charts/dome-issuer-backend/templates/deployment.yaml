@@ -110,7 +110,7 @@ spec:
                   name: {{ include "dome-issuer-backend.authServerClient-secretName" . }}
                   key: {{ include "dome-issuer-backend.authServerClient-passwordKey" . }}
             - name: APP_ISSUER_FRONTEND_URL
-              value: {{ .Values.app.issuerFrontedUrl }}
+              value: {{ .Values.app.issuerFrontendUrl }}
             - name: REMOTE_SIGNATURE_TYPE
               value: "{{ .Values.app.remoteSignature.type }}"
             - name: REMOTE_SIGNATURE_URL
