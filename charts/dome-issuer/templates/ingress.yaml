@@ -80,6 +80,13 @@ spec:
                 name: {{ include "dome-issuer-keycloak.service.name" . }}
                 port:
                   number: 80
+          - path: /realms
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "dome-issuer-keycloak.service.name" . }}
+                port:
+                  number: 80
           {{- end }}
   {{- if .Values.global.ingress.enableTLS }}
   tls:
