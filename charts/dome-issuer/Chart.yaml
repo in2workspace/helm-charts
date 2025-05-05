@@ -37,7 +37,7 @@ dependencies:
     condition: dome-issuer-postgresql.enabled
 
   - name: dome-issuer-keycloak
-    version: 1.1.0
+    version: 1.1.1
     condition: dome-issuer-keycloak.enabled
 
   - name: postgresql

@@ -66,7 +66,7 @@ Support for existing keycloak admin secret
 */}}
 {{- define "dome-issuer-keycloak.admin-secretName" -}}
     {{- if .Values.app.keycloak.admin.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.keycloak.admin.existingSecret.name $) -}}
+        {{- printf "%s" (tpl .Values.app.keycloak.admin.existingSecret.name $) -}}
     {{- else -}}
         {{- printf "%s" (include "dome-issuer-keycloak.fullname" .) | quote -}}
     {{- end -}}
@@ -74,7 +74,7 @@ Support for existing keycloak admin secret
 
 {{- define "dome-issuer-keycloak.admin-passwordKey" -}}
     {{- if .Values.app.keycloak.admin.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.keycloak.admin.existingSecret.passwordKey $) -}}
+        {{- printf "%s" (tpl .Values.app.keycloak.admin.existingSecret.passwordKey $) -}}
     {{- else -}}
         {{- printf "keycloak-password" -}}
     {{- end -}}
@@ -85,7 +85,7 @@ Support for existing keycloak db secret
 */}}
 {{- define "dome-issuer-keycloak.db-secretName" -}}
     {{- if .Values.app.db.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.db.existingSecret.name $) -}}
+        {{- printf "%s" (tpl .Values.app.db.existingSecret.name $) -}}
     {{- else -}}
         {{- printf "%s" (include "dome-issuer-keycloak.fullname" .) | quote -}}
     {{- end -}}
@@ -93,7 +93,7 @@ Support for existing keycloak db secret
 
 {{- define "dome-issuer-keycloak.db-passwordKey" -}}
     {{- if .Values.app.db.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.db.existingSecret.passwordKey $) -}}
+        {{- printf "%s" (tpl .Values.app.db.existingSecret.passwordKey $) -}}
     {{- else -}}
         {{- printf "keycloak-db-password" -}}
     {{- end -}}
