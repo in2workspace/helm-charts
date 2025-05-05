@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "dome-issuer-keycloak.fullname" . }}
+  namespace: {{ $.Release.Namespace | quote }}
+  labels:
+    {{- include "dome-issuer-keycloak.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "dome-issuer-keycloak.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "dome-issuer-keycloak.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "dome-issuer-keycloak.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ include "dome-issuer-keycloak.serverPort" . }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.livenessProbe.httpGet.path }}
+              port: {{ include "dome-issuer-keycloak.serverPort" . }}
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.readinessProbe.httpGet.path }}
+              port: {{ include "dome-issuer-keycloak.serverPort" . }}
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          env:
+            - name: KEYCLOAK_ADMIN
+              value: {{ .Values.app.keycloak.admin.username }}
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-issuer-keycloak.admin-secretName" . }}
+                  key: {{ include "dome-issuer-keycloak.admin-passwordKey" . }}
+            - name: KC_PROXY
+              value: {{.Values.app.keycloak.proxyHeaders}}
+            - name: KC_HOSTNAME_URL
+              value: {{.Values.app.keycloak.hostnameUrl}}
+            - name: KC_HOSTNAME_ADMIN_URL
+              value: {{.Values.app.keycloak.adminUrl}}
+            - name: KC_HTTPS_CLIENT_AUTH
+              value: {{ .Values.app.keycloak.https.clientAuth }}
+            - name: KC_DB
+              value: {{ .Values.app.db.type }}
+            - name: KC_DB_USERNAME
+              value: {{ .Values.app.db.username }}
+            - name: KC_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-issuer-keycloak.db-secretName" . }}
+                  key: {{ include "dome-issuer-keycloak.db-passwordKey" . }}
+            - name: KC_DB_URL
+              value: "jdbc:postgresql://{{ .Values.app.db.host }}{{ if not .Values.app.db.externalService }}:{{ .Values.app.db.port }}{{ end }}/{{ .Values.app.db.name }}"
+            - name: QUARKUS_LOG_CATEGORY__ORG_KEYCLOAK_SERVICES_X509__LEVEL
+              value: "{{ .Values.app.keycloak.logsCertsLevel }}"
+            - name: KEYCLOAK_LOGLEVEL
+              value: "{{ .Values.app.keycloak.logLevel }}"

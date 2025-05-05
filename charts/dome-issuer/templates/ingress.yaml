@@ -72,6 +72,15 @@ spec:
                 name: {{ include "dome-issuer-frontend.service.name" . }}
                 port:
                   number: 80
+          {{- if (index .Values "dome-issuer-keycloak" "enabled") }}
+          - path: /keycloak
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "dome-issuer-keycloak.service.name" . }}
+                port:
+                  number: 80
+          {{- end }}
   {{- if .Values.global.ingress.enableTLS }}
   tls:
     - hosts:
