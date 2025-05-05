@@ -64,83 +64,44 @@ Create the name of the service account to use
 {{/*
 Support for existing keycloak admin secret 
 */}}
-{{- define "keycloak.admin-secretName" -}}
-    {{- if .Values.keycloak.admin.existingSecret.enabled -}}
+{{- define "dome-issuer-keycloak.admin-secretName" -}}
+    {{- if .Values.app.keycloak.admin.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.keycloak.admin.existingSecret.name $) -}}
     {{- else -}}
-        {{- printf "issuer-keycloak-admin-secret" -}}
+        {{- printf "%s" (include "dome-issuer-keycloak.fullname" .) | quote -}}
     {{- end -}}
 {{- end -}}
 
-{{- define "keycloak.admin-passwordKey" -}}
-    {{- if .Values.keycloak.admin.existingSecret.enabled -}}
+{{- define "dome-issuer-keycloak.admin-passwordKey" -}}
+    {{- if .Values.app.keycloak.admin.existingSecret.enabled -}}
         {{- printf "%s" (tpl .Values.keycloak.admin.existingSecret.passwordKey $) -}}
     {{- else -}}
-        {{- printf "password" -}}
-    {{- end -}}
-{{- end -}}
-
-{{/*
-Support for existing keycloak https secret 
-*/}}
-{{- define "keycloak.https-secretName" -}}
-    {{- if .Values.keycloak.https.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.keycloak.https.existingSecret.name $) -}}
-    {{- else -}}
-        {{- printf "issuer-keycloak-trust-store-secrets" -}}
-    {{- end -}}
-{{- end -}}
-
-{{- define "keycloak.https-trustStorePasswordKey" -}}
-    {{- if .Values.keycloak.https.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.keycloak.https.existingSecret.trustStorePasswordKey $) -}}
-    {{- else -}}
-        {{- printf "trust-store-password" -}}
+        {{- printf "keycloak-password" -}}
     {{- end -}}
 {{- end -}}
 
 {{/*
 Support for existing keycloak db secret 
 */}}
-{{- define "keycloak.db-secretName" -}}
-    {{- if .Values.keycloak.db.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.keycloak.db.existingSecret.name $) -}}
+{{- define "dome-issuer-keycloak.db-secretName" -}}
+    {{- if .Values.app.db.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.db.existingSecret.name $) -}}
     {{- else -}}
-        {{- printf "issuer-keycloak-db-secret" -}}
+        {{- printf "%s" (include "dome-issuer-keycloak.fullname" .) | quote -}}
     {{- end -}}
 {{- end -}}
 
-{{- define "keycloak.db-passwordKey" -}}
-    {{- if .Values.keycloak.db.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.keycloak.db.existingSecret.passwordKey $) -}}
+{{- define "dome-issuer-keycloak.db-passwordKey" -}}
+    {{- if .Values.app.db.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.db.existingSecret.passwordKey $) -}}
     {{- else -}}
-        {{- printf "password" -}}
+        {{- printf "keycloak-db-password" -}}
     {{- end -}}
 {{- end -}}
 
 {{/*
-Support for existing mail secret
+Internal Server Port
 */}}
-{{- define "keycloak.mail-secretName" -}}
-    {{- if .Values.keycloak.mail.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.keycloak.mail.existingSecret.name $) -}}
-    {{- else -}}
-        {{- printf "issuer-keycloak-mail-secret" -}}
-    {{- end -}}
-{{- end -}}
-
-{{- define "keycloak.mail-userKey" -}}
-    {{- if .Values.keycloak.mail.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.keycloak.mail.existingSecret.userKey $) -}}
-    {{- else -}}
-        {{- printf "username" -}}
-    {{- end -}}
-{{- end -}}
-
-{{- define "keycloak.mail-passwordKey" -}}
-    {{- if .Values.keycloak.mail.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.keycloak.mail.existingSecret.passwordKey $) -}}
-    {{- else -}}
-        {{- printf "password" -}}
-    {{- end -}}
-{{- end -}}
+{{- define "dome-issuer-keycloak.serverPort" -}}
+{{- default 8080 }}
+{{- end }}
