@@ -20,7 +20,7 @@ dome-issuer-backend:
   # ingress specific configuration
   ingress:
     enabled: false
-  ingressWellKnown:
+  ingressIssuerApi:
     enabled: false
     className: ""
     annotations: { }
@@ -29,22 +29,7 @@ dome-issuer-backend:
     hosts:
       - host: chart-example.local
         paths:
-          - path: /.well-known/openid-configuration
-            pathType: ImplementationSpecific
-    tls: [ ]
-    #  - secretName: chart-example-tls
-    #    hosts:
-    #      - chart-example.local
-  ingressToken:
-    enabled: false
-    className: ""
-    annotations: { }
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-    hosts:
-      - host: chart-example.local
-        paths:
-          - path: /token
+          - path: /issuer-api
             pathType: ImplementationSpecific
     tls: [ ]
     #  - secretName: chart-example-tls
