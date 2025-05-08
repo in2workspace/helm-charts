@@ -1,23 +1,25 @@
 {{- if .Values.ingressIssuerApi.enabled -}}
+  {{- $fullName := include "dome-issuer-backend.fullname" . -}}
+  {{- $servicePort := .Values.service.port -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ingress-issuer-api
   labels:
     {{ include "dome-issuer-backend.labels" . | nindent 4 }}
-  {{- if .Values.ingressToken.annotations }}
+  {{- if .Values.ingressIssuerApi.annotations }}
   annotations:
-    {{- with .Values.ingressToken.annotations }}
+    {{- with .Values.ingressIssuerApi.annotations }}
       {{- toYaml . | nindent 4 }}
       {{- end }}
   {{- end }}
 spec:
-  {{- if .Values.ingressToken.className }}
-  ingressClassName: {{ .Values.ingressToken.className }}
+  {{- if .Values.ingressIssuerApi.className }}
+  ingressClassName: {{ .Values.ingressIssuerApi.className }}
   {{- end }}
-  {{- if .Values.ingressToken.tls }}
+  {{- if .Values.ingressIssuerApi.tls }}
   tls:
-    {{- range .Values.ingressToken.tls }}
+    {{- range .Values.ingressIssuerApi.tls }}
     - hosts:
       {{- range .hosts }}
         - {{ . | quote }}
@@ -26,7 +28,7 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-  {{- range .Values.ingressToken.hosts }}
+  {{- range .Values.ingressIssuerApi.hosts }}
     - host: {{ .host | quote }}
       http:
         paths:
@@ -35,9 +37,9 @@ spec:
             pathType: {{ .pathType | quote }}
             backend:
               service:
-                name: {{ .serviceName }}
+                name: {{ $fullName }}
                 port:
-                  number: {{ .servicePort }}
+                  number: {{ $servicePort }}
       {{- end }}
   {{- end }}
   {{- end }}
