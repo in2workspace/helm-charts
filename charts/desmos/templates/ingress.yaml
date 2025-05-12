@@ -28,18 +28,24 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-  {{- range .Values.ingress.hosts }}
-  - host: {{ .host | quote }}
-    http:
-      paths:
-      {{- range .paths }}
-      - path: {{ .path | quote }}
-        pathType: {{ .pathType | quote }}
+- host: {{ .Values.app.externalDomain.domain }}
+  http:
+    paths:
+      - path: /api/v1/sync/p2p
+        pathType: Prefix
         backend:
           service:
             name: {{ $fullName }}
             port:
               number: {{ $servicePort }}
-      {{- end }}
-  {{- end }}
-  {{- end }}
+- host: {{ .Values.app.externalDomain.domain }}
+  http:
+    paths:
+      - path: /api/v1/entities
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ $fullName }}
+            port:
+              number: {{ $servicePort }}
+{{- end }}

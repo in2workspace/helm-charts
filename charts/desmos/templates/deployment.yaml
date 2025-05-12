@@ -110,7 +110,7 @@ spec:
               value: {{.Values.app.externalAccessNodesUrls.customUrls}}
             {{- end }}
             - name: API_EXTERNAL_DOMAIN
-              value: {{.Values.app.externalDomain}}
+              value: {{.Values.app.externalDomain.protocol}}://{{.Values.app.externalDomain.domain}}
             - name: SECURITY_PRIVATE_KEY
               valueFrom:
                 secretKeyRef:
