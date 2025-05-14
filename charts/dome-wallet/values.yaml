@@ -9,9 +9,6 @@ global:
       nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
     enableTLS: false
     clusterIssuer: "letsencrypt-in2-test-issuer"
-    secondary:
-      enabled: false
-      domain: ""
 
 ## configuration for the dome-wallet-backend
 dome-wallet-backend:

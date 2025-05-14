@@ -16,7 +16,7 @@ dome-issuer-backend:
     # -- image pull policy
     pullPolicy: IfNotPresent
     # -- image tag
-    tag: v1.6.3
+    tag: v1.6.7
   # ingress specific configuration
   ingress:
     enabled: false
@@ -160,7 +160,7 @@ dome-issuer-frontend:
     # -- image pull policy
     pullPolicy: IfNotPresent
     # -- image tag
-    tag: v1.10.2
+    tag: v1.12.1
     # ingress specific configuration
   ingress:
     enabled: false
