@@ -265,6 +265,26 @@ Support for existing remote-signature-secret
 {{- end -}}
 
 {{/*
+Support for existing vault secret
+*/}}
+{{- define "dome-issuer-backend.vaultTokenSecretName" -}}
+  {{- if .Values.app.vault.existingSecret.enabled -}}
+    {{- printf "%s" .Values.app.vault.existingSecret.name | quote -}}
+  {{- else -}}
+    {{- printf "%s" (include "dome-issuer-backend.fullname" .) | quote -}}
+  {{- end }}
+{{- end }}
+
+
+{{- define "dome-issuer-backend.vaultTokenSecretKey" -}}
+  {{- if .Values.app.vault.existingSecret.enabled -}}
+    {{- printf "%s" .Values.app.vault.existingSecret.key | quote -}}
+  {{- else -}}
+    {{- printf "%s" "vault-token" | quote -}}
+  {{- end }}
+{{- end }}
+
+{{/*
 Internal Server Port
 */}}
 {{- define "dome-issuer-backend.serverPort" -}}

@@ -141,6 +141,16 @@ dome-issuer-backend:
       external:
         # expects a string of url's separated with comma and space
         allowedOrigins: "https://new.example.org, https://example-2.org"
+    vault:
+      url: http://vault-server:8200
+      token: defaultToken
+      existingSecret:
+        # -- should an existing secret be used
+        enabled: false
+        # -- name of the secret
+        name: dome-issuer-backend-secret
+        # -- key to retrieve the token from
+        key: vault-token
     db:
       externalService: false
       schema: issuer
