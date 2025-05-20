@@ -192,3 +192,11 @@ spec:
               value: {{ .Values.app.cors.default.allowedOrigins }}
             - name: CORS_EXTERNAL_ALLOWED_ORIGINS
               value: {{ .Values.app.cors.external.allowedOrigins }}
+            # VAULT
+            - name: SECURITY_VAULT_HASHICORP_URL
+              value: {{ .Values.app.vault.url }}
+            - name: SECURITY_VAULT_HASHICORP_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-issuer-backend.vaultTokenSecretName" . }}
+                  key: {{ include "dome-issuer-backend.vaultTokenSecretKey" . }}
