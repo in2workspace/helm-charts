@@ -36,43 +36,43 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: { { $fullName } }
+                name: {{ $fullName }}
                 port:
-                  number: { { $servicePort } }
+                  number: {{ $servicePort }}
           - path: /oidc
             pathType: Prefix
             backend:
               service:
-                name: { { $fullName } }
+                name: {{ $fullName }}
                 port:
-                  number: { { $servicePort } }
+                  number: {{ $servicePort }}
           - path: /login
             pathType: Prefix
             backend:
               service:
-                name: { { $fullName } }
+                name: {{ $fullName }}
                 port:
-                  number: { { $servicePort } }
+                  number: {{ $servicePort }}
           - path: /client-error
             pathType: Prefix
             backend:
               service:
-                name: { { $fullName } }
+                name: {{ $fullName }}
                 port:
-                  number: { { $servicePort } }
+                  number: {{ $servicePort }}
           - path: /qr-socket
             pathType: Prefix
             backend:
               service:
-                name: { { $fullName } }
+                name: {{ $fullName }}
                 port:
-                  number: { { $servicePort } }
+                  number: {{ $servicePort }}
           - path: /img
             pathType: Prefix
             backend:
               service:
-                name: { { $fullName } }
+                name: {{ $fullName }}
                 port:
-                  number: { { $servicePort } }
+                  number: {{ $servicePort }}
   {{- end }}
 {{- end }}
