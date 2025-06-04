@@ -32,14 +32,47 @@ spec:
     - host: {{ .host | quote }}
       http:
         paths:
-        {{- range .paths }}
-          - path: {{ .path | quote }}
-            pathType: {{ .pathType | quote }}
+          - path: /oid4vp
+            pathType: Prefix
             backend:
               service:
-                name: {{ $fullName }}
+                name: { { $fullName } }
                 port:
-                  number: {{ $servicePort }}
-        {{- end }}
+                  number: { { $servicePort } }
+          - path: /oidc
+            pathType: Prefix
+            backend:
+              service:
+                name: { { $fullName } }
+                port:
+                  number: { { $servicePort } }
+          - path: /login
+            pathType: Prefix
+            backend:
+              service:
+                name: { { $fullName } }
+                port:
+                  number: { { $servicePort } }
+          - path: /client-error
+            pathType: Prefix
+            backend:
+              service:
+                name: { { $fullName } }
+                port:
+                  number: { { $servicePort } }
+          - path: /qr-socket
+            pathType: Prefix
+            backend:
+              service:
+                name: { { $fullName } }
+                port:
+                  number: { { $servicePort } }
+          - path: /img
+            pathType: Prefix
+            backend:
+              service:
+                name: { { $fullName } }
+                port:
+                  number: { { $servicePort } }
   {{- end }}
 {{- end }}
