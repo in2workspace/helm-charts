@@ -79,9 +79,9 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: { { $fullName } }
+                name: {{ $fullName }}
                 port:
-                  number: { { $servicePort } }
+                  number: {{ $servicePort }}
 
   {{- end }}
 {{- end }}
