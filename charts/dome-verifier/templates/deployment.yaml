@@ -55,11 +55,11 @@ spec:
           env:
             # Frontend
             - name: VERIFIER_FRONTEND_URLS_ONBOARDING
-              value: {{ .Values.app.frontend.externalLinks.onboarding }}
+              value: {{ .Values.app.frontend.urls.onboarding }}
             - name: VERIFIER_FRONTEND_URLS_SUPPORT
-              value: {{ .Values.app.frontend.externalLinks.support }}
+              value: {{ .Values.app.frontend.urls.support }}
             - name: VERIFIER_FRONTEND_URLS_WALLET
-              value: {{ .Values.app.frontend.externalLinks.wallet }}
+              value: {{ .Values.app.frontend.urls.wallet }}
             - name: VERIFIER_FRONTEND_COLORS_PRIMARY
               value: {{ .Values.app.frontend.colors.primary | quote }}
             - name: VERIFIER_FRONTEND_COLORS_PRIMARY_CONTRAST
