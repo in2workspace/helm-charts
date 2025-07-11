@@ -8,7 +8,7 @@ image:
   repository: in2workspace/in2-verifier-api
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: v1.3.9
+  tag: v1.3.10
 
 imagePullSecrets: []
 nameOverride: ""
@@ -114,7 +114,7 @@ affinity: {}
 
 app:
   frontend:
-    externalLinks:
+    urls:
       # Placeholder for onboarding URL (REQUIRED)
       onboarding: "https://example.com/onboarding"
       # Placeholder for support URL (REQUIRED)
