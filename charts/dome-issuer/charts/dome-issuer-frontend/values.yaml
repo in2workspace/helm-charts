@@ -126,5 +126,5 @@ app:
   backendUrl: "https://issuer.127.0.0.1.nip.io/api"
   walletUrl: "https://wallet.127.0.1.nip.io"
   walletUrlTest: "https://wallet.127.0.1.nip.io"
-  showWalletUrlTest: "https://wallet.127.0.1.nip.io"
+  showWalletUrlTest: "false"
   knowledgeBaseUrl: "https://knowledgebase.example.com"
