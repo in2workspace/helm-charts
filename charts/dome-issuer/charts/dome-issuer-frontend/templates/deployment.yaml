@@ -76,6 +76,6 @@ spec:
             - name: WALLET_URL_TEST
               value: {{ .Values.app.walletUrlTest }}
             - name: SHOW_WALLET_URL_TEST
-              value: {{ .Values.app.showWalletUrlTest }}
+              value: {{ .Values.app.showWalletUrlTest | quote }}
             - name: KNOWLEDGE_BASE_URL
               value: {{ .Values.app.knowledgeBaseUrl }}
