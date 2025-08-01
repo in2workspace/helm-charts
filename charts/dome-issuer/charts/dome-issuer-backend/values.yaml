@@ -177,6 +177,7 @@ app:
     walletGuideUrl: "https://knowledgebase.com"
     uploadCertificationGuideUrl: "https://knowledgebase.com/upload-certification-guide"
   verifierUrl: "https://example.org"
+  walletURL: "https://wallet.127.0.1.nip.io"
   mail:
     host: smtp.example.org
     port: 587
