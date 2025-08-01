@@ -143,6 +143,8 @@ spec:
               value: {{ .Values.app.knowledgeBase.uploadCertificationGuideUrl }}
             - name: APP_VERIFIER_URL
               value: {{ .Values.app.verifierUrl }}
+            - name: APP_WALLET_URL
+              value: { { .Values.app.walletUrl } }
             - name: DEFAULT_SIGNER_COMMON_NAME
               valueFrom:
                 secretKeyRef:
