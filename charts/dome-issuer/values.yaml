@@ -62,6 +62,7 @@ dome-issuer-backend:
       walletGuideUrl: "https://knowledgebase.com"
       uploadCertificationGuideUrl: "https://knowledgebase.com/upload-certification-guide"
     verifierUrl: "https://example.org"
+    walletUrl: "https://wallet.127.0.1.nip.io"
     mail:
       host: smtp.example.org
       port: 587
@@ -185,6 +186,8 @@ dome-issuer-frontend:
     keycloakUrl: "https://keycloak.127.0.0.1.nip.io/realms/issuer"
     backendUrl: "https://issuer.127.0.0.1.nip.io/issuer-api"
     walletUrl: "https://wallet.127.0.1.nip.io"
+    walletUrlTest: "https://wallet.127.0.1.nip.io"
+    showWalletUrlTest: "false"
     knowledgeBaseUrl: "https://knowledgebase.example.com"
 
 dome-issuer-postgresql:
