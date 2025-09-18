@@ -226,6 +226,14 @@ dome-wallet-keycloak-postgresql:
         # -- create the database as expected by the blockchain-connector
         create.sh: |
           psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE keycloak;"
+  global:
+    security:
+      allowInsecureImages: true
+  image:
+    registry: docker.io
+    repository: bitnamilegacy/postgresql
+    tag: 16.0.0-debian-11-r13
+    pullPolicy: IfNotPresent
 
 ## configuration of postgres
 dome-wallet-postgresql:
@@ -262,3 +270,11 @@ dome-wallet-postgresql:
       enabled: true
       whenScaled: Retain
       whenDeleted: Retain
+  global:
+    security:
+      allowInsecureImages: true
+  image:
+    registry: docker.io
+    repository: bitnamilegacy/postgresql
+    tag: 16.0.0-debian-11-r13
+    pullPolicy: IfNotPresent
