@@ -232,7 +232,7 @@ dome-wallet-keycloak-postgresql:
   image:
     registry: docker.io
     repository: bitnamilegacy/postgresql
-    tag: 16.0.0-debian-11-r13
+    tag: 17.2.0-debian-12-r8
     pullPolicy: IfNotPresent
 
 ## configuration of postgres
@@ -276,5 +276,5 @@ dome-wallet-postgresql:
   image:
     registry: docker.io
     repository: bitnamilegacy/postgresql
-    tag: 16.0.0-debian-11-r13
+    tag: 17.2.0-debian-12-r8
     pullPolicy: IfNotPresent
