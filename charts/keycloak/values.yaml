@@ -194,5 +194,5 @@ postgresKeycloak:
   image:
     registry: docker.io
     repository: bitnamilegacy/postgresql
-    tag: docker.io/bitnami/postgresql:16.0.0-debian-11-r13
+    tag: 16.0.0-debian-11-r13
     pullPolicy: IfNotPresent
