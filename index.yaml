@@ -1761,6 +1761,37 @@ entries:
   dome-wallet:
   - apiVersion: v2
     appVersion: v0.0.5
+    created: "2025-09-18T13:06:53.406219578Z"
+    dependencies:
+    - name: dome-wallet-backend
+      repository: ""
+      version: 1.2.3
+    - name: dome-wallet-frontend
+      repository: ""
+      version: 0.4.2
+    - alias: dome-wallet-postgresql
+      condition: dome-wallet-postgresql.enabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 16.4.5
+    - condition: dome-wallet-keycloak.enabled
+      name: dome-wallet-keycloak
+      repository: ""
+      version: 0.1.5
+    - alias: dome-wallet-keycloak-postgresql
+      condition: dome-wallet-keycloak-postgresql.enabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 16.4.5
+    description: Helm chart for the Wallet
+    digest: 8cde4ce48178f2af21f82971a6c966419477f95f8473e61813703d34177bd65f
+    name: dome-wallet
+    type: application
+    urls:
+    - https://github.com/in2workspace/helm-charts/releases/download/dome-wallet-1.4.16/dome-wallet-1.4.16.tgz
+    version: 1.4.16
+  - apiVersion: v2
+    appVersion: v0.0.5
     created: "2025-09-18T10:23:58.065139785Z"
     dependencies:
     - name: dome-wallet-backend
@@ -5989,6 +6020,27 @@ entries:
   keycloak:
   - apiVersion: v2
     appVersion: v1.0.0
+    created: "2025-09-18T13:06:53.638711069Z"
+    dependencies:
+    - alias: postgresKeycloak
+      condition: postgresKeycloak.enabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 16.4.5
+    description: Helm Chart for Keycloak and PostgreSQL
+    digest: 3fd5083aae3d4d00c46ae069799a592b50f7776aa694f8ede6ab636a285b524a
+    maintainers:
+    - email: contacto@in2.es
+      name: IN2 Kizuna DevTeam
+    name: keycloak
+    sources:
+    - https://github.com/in2workspace/dome-issuer-keycloak
+    type: application
+    urls:
+    - https://github.com/in2workspace/helm-charts/releases/download/keycloak-1.0.10/keycloak-1.0.10.tgz
+    version: 1.0.10
+  - apiVersion: v2
+    appVersion: v1.0.0
     created: "2025-09-18T10:23:58.287411126Z"
     dependencies:
     - alias: postgresKeycloak
@@ -7574,4 +7626,4 @@ entries:
     urls:
     - https://in2workspace.github.io/helm-charts/wallet-api-1.0.0.tgz
     version: 1.0.0
-generated: "2025-09-18T10:23:58.288091883Z"
+generated: "2025-09-18T13:06:53.639237458Z"
