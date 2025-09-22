@@ -70,6 +70,8 @@ spec:
               value: {{.Values.app.logLevel.root}}
             - name: LOGGING_LEVEL_ES_IN2_DESMOS
               value: {{.Values.app.logLevel.app}}
+            - name: PATH_VERSION
+              value: {{.Values.app.desmosPathVersion}}
             - name: SERVER_PORT
               value: {{ quote .Values.app.internalServerPort}}
             - name: SPRING_R2DBC_URL

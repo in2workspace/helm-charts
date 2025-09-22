@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: <your-image-repository>
+  repository: in2workspace/in2-desmos-api
   # Overrides the image tag whose default is the chart appVersion.
   tag: <your-image-tag>
   pullPolicy: Always
@@ -110,6 +110,7 @@ affinity: {}
 
 app:
   profile: test
+  desmosPathVersion: v2
   logLevel:
     root: INFO
     app: INFO
@@ -121,14 +122,14 @@ app:
     internalDomain: http://scorpio:9090
     externalDomain: http://scorpio:9090
   ngsiSubscription:
-    notificationEndpoint: http://desmos:8080/api/v1/notifications/broker
+    notificationEndpoint: http://desmos:8080/api/${desmosPathVersion}/notifications/broker
     entityTypes:
   dltAdapter:
     provider: digitelts
     internalDomain: http://dlt-adapter:8080
     externalDomain: http://dlt-adapter:8080
   txSubscription:
-    notificationEndpoint: http://desmos:8080/api/v1/notifications/dlt
+    notificationEndpoint: http://desmos:8080/api/${desmosPathVersion}/notifications/dlt
     entityTypes:
   externalDomain:
     protocol: "https"
