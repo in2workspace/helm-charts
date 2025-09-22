@@ -188,4 +188,11 @@ postgresKeycloak:
       backup.velero.io/backup-volumes: data
     podAnnotations:
       backup.velero.io/backup-volumes: data
-
+  global:
+    security:
+      allowInsecureImages: true
+  image:
+    registry: docker.io
+    repository: bitnamilegacy/postgresql
+    tag: 17.2.0-debian-12-r8
+    pullPolicy: IfNotPresent
