@@ -11,7 +11,7 @@ image:
   # This sets the pull policy for images.
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: v1.9.0
+  tag: v2.0.0
 
 # This is for the secrets for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 imagePullSecrets: []
@@ -136,8 +136,10 @@ app:
     secondaryContrast: "#50c8ff"
   logoSrc: "assets/logos/no-image.png"
   faviconSrc: "assets/icons/dome-favicon.png"
+  defaultLang: "en"
   walletApi:
     externalUrl: https://example-external-domain.org
     websocketExternalUrl: wss://example-external-domain
   iam:
     externalUrl: https://example-external-domain.org/keycloak/realms/wallet
+

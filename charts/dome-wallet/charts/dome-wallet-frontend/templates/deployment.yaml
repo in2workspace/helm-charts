@@ -73,3 +73,5 @@ spec:
               value: {{.Values.app.walletApi.websocketExternalUrl}}
             - name: IAM_EXTERNAL_URL
               value: {{.Values.app.iam.externalUrl}}
+            - name: DEFAULT_LANG
+              value: {{.Values.app.defaultLang}}

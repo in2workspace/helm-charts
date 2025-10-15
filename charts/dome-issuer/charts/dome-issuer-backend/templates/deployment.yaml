@@ -145,6 +145,8 @@ spec:
               value: {{ .Values.app.verifierUrl }}
             - name: APP_WALLET_URL
               value: {{ .Values.app.walletUrl }}
+            - name: APP_DEFAULT_LANG
+              value: {{ .Values.app.defaultLang }}
             - name: DEFAULT_SIGNER_COMMON_NAME
               valueFrom:
                 secretKeyRef:

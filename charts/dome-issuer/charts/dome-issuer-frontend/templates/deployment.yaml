@@ -79,3 +79,5 @@ spec:
               value: {{ .Values.app.showWalletUrlTest | quote }}
             - name: KNOWLEDGE_BASE_URL
               value: {{ .Values.app.knowledgeBaseUrl }}
+            - name: DEFAULT_LANG
+              value: {{.Values.app.defaultLang}}
