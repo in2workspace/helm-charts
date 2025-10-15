@@ -8,7 +8,7 @@ image:
   repository: in2workspace/in2-issuer-ui
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: v1.10.2
+  tag: v2.0.0
 
 imagePullSecrets: []
 nameOverride: ""
@@ -128,3 +128,4 @@ app:
   walletUrlTest: "https://wallet.127.0.1.nip.io"
   showWalletUrlTest: "false"
   knowledgeBaseUrl: "https://knowledgebase.example.com"
+  defaultLang: "en"

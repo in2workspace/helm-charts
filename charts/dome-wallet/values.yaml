@@ -97,7 +97,7 @@ dome-wallet-frontend:
   # -- image pull policy
   pullPolicy: Always
   # -- image tag
-  tag: v1.9.1
+  tag: v2.0.0
   ## ingress specific configuration
   ingress:
     enabled: false
@@ -111,6 +111,7 @@ dome-wallet-frontend:
       secondaryContrast: "#50c8ff"
     logoSrc: "assets/logos/no-image.png"
     faviconSrc: "assets/icons/dome-favicon.png"
+    defaultLang: "en"
     walletApi:
       externalUrl: http://localhost
       websocketExternalUrl: ws://localhost

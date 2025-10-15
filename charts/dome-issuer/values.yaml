@@ -16,7 +16,7 @@ dome-issuer-backend:
     # -- image pull policy
     pullPolicy: IfNotPresent
     # -- image tag
-    tag: v1.6.7
+    tag: v2.0.0
   # ingress specific configuration
   ingress:
     enabled: false
@@ -63,6 +63,7 @@ dome-issuer-backend:
       uploadCertificationGuideUrl: "https://knowledgebase.com/upload-certification-guide"
     verifierUrl: "https://example.org"
     walletUrl: "https://wallet.127.0.1.nip.io"
+    defaultLang: "en"
     mail:
       host: smtp.example.org
       port: 587
@@ -171,7 +172,7 @@ dome-issuer-frontend:
     # -- image pull policy
     pullPolicy: IfNotPresent
     # -- image tag
-    tag: v1.12.1
+    tag: v2.0.0
     # ingress specific configuration
   ingress:
     enabled: false
@@ -189,6 +190,7 @@ dome-issuer-frontend:
     walletUrlTest: "https://wallet.127.0.1.nip.io"
     showWalletUrlTest: "false"
     knowledgeBaseUrl: "https://knowledgebase.example.com"
+    defaultLang: "en"
 
 dome-issuer-postgresql:
   # -- should the postgresql deployment be enabled
