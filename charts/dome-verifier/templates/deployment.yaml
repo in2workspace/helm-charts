@@ -72,6 +72,8 @@ spec:
               value: {{ .Values.app.frontend.logoSrc }}
             - name: VERIFIER_FRONTEND_FAVICON_SRC
               value: {{ .Values.app.frontend.faviconSrc }}
+            - name: VERIFIER_FRONTEND_DEFAULT_LANG
+              value: {{ .Values.app.frontend.defaultLang }}
             # Backend
             - name: LOGGING_LEVEL_ES_IN2_VCVERIFIER
               value: "{{ index .Values.app.backend.logging.level "es.in2.vcverifier" }}"

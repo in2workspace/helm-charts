@@ -136,6 +136,8 @@ app:
     # Placeholder for favicon source path (OPTIONAL)
     # This routes must point to internal folder: src/main/resources/static/img/<file_name.png>
     faviconSrc:
+    # Language 2-digits prefix, lowcase; i. e.: "en" for English
+    defaultLang: en
   backend:
     logging:
       level:
