@@ -1863,6 +1863,37 @@ entries:
   dome-wallet:
   - apiVersion: v2
     appVersion: v0.0.5
+    created: "2025-10-20T11:02:31.087953357Z"
+    dependencies:
+    - name: dome-wallet-backend
+      repository: ""
+      version: 1.2.3
+    - name: dome-wallet-frontend
+      repository: ""
+      version: 0.4.3
+    - alias: dome-wallet-postgresql
+      condition: dome-wallet-postgresql.enabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 16.4.5
+    - condition: dome-wallet-keycloak.enabled
+      name: dome-wallet-keycloak
+      repository: ""
+      version: 0.1.6
+    - alias: dome-wallet-keycloak-postgresql
+      condition: dome-wallet-keycloak-postgresql.enabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 16.4.5
+    description: Helm chart for the Wallet
+    digest: 01d16cee86bd6aa7e839c4238c4d3b4451514a8be1278cfbe048c519e5659e46
+    name: dome-wallet
+    type: application
+    urls:
+    - https://github.com/in2workspace/helm-charts/releases/download/dome-wallet-1.4.18/dome-wallet-1.4.18.tgz
+    version: 1.4.18
+  - apiVersion: v2
+    appVersion: v0.0.5
     created: "2025-10-15T08:27:20.02602121Z"
     dependencies:
     - name: dome-wallet-backend
@@ -7759,4 +7790,4 @@ entries:
     urls:
     - https://in2workspace.github.io/helm-charts/wallet-api-1.0.0.tgz
     version: 1.0.0
-generated: "2025-10-16T11:33:16.480884651Z"
+generated: "2025-10-20T11:02:31.088482777Z"
