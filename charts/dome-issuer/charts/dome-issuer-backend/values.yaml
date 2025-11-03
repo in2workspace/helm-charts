@@ -179,6 +179,7 @@ app:
   verifierUrl: "https://example.org"
   walletURL: "https://wallet.127.0.1.nip.io"
   defaultLang: "en"
+  adminOrganizationId: "VATES-00000000000"
   mail:
     host: smtp.example.org
     port: 587

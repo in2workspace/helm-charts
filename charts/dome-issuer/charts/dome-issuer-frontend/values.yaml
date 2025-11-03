@@ -129,3 +129,4 @@ app:
   showWalletUrlTest: "false"
   knowledgeBaseUrl: "https://knowledgebase.example.com"
   defaultLang: "en"
+  adminOrganizationId: "VATES-00000000000"
