@@ -440,6 +440,38 @@ entries:
   dome-issuer:
   - apiVersion: v2
     appVersion: v1.0.3
+    created: "2025-11-03T12:15:10.690788424Z"
+    dependencies:
+    - name: dome-issuer-backend
+      repository: ""
+      version: 1.3.5
+    - name: dome-issuer-frontend
+      repository: ""
+      version: 1.3.6
+    - alias: dome-issuer-postgresql
+      condition: dome-issuer-postgresql.enabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 13.1.5
+    - condition: dome-issuer-keycloak.enabled
+      name: dome-issuer-keycloak
+      repository: ""
+      version: 1.1.2
+    - alias: dome-issuer-keycloak-postgresql
+      condition: dome-issuer-keycloak-postgresql.enabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 13.1.5
+    description: Parent chart managing all the components of the Credential Issuer
+      application
+    digest: 32a25f86ecda3100a6e72ce1b40eb7ca9c0f8edfd30746507f43949ef8aeb41c
+    name: dome-issuer
+    type: application
+    urls:
+    - https://github.com/in2workspace/helm-charts/releases/download/dome-issuer-1.5.14/dome-issuer-1.5.14.tgz
+    version: 1.5.14
+  - apiVersion: v2
+    appVersion: v1.0.3
     created: "2025-10-15T08:27:19.784244429Z"
     dependencies:
     - name: dome-issuer-backend
@@ -7790,4 +7822,4 @@ entries:
     urls:
     - https://in2workspace.github.io/helm-charts/wallet-api-1.0.0.tgz
     version: 1.0.0
-generated: "2025-10-20T11:02:31.088482777Z"
+generated: "2025-11-03T12:15:10.691374779Z"
