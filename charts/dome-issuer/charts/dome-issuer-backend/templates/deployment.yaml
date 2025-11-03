@@ -147,6 +147,8 @@ spec:
               value: {{ .Values.app.walletUrl }}
             - name: APP_DEFAULT_LANG
               value: {{ .Values.app.defaultLang }}
+            - name: APP_ADMIN_ORGANIZATION_ID
+              value: {{ .Values.app.adminOrganizationId }}
             - name: DEFAULT_SIGNER_COMMON_NAME
               valueFrom:
                 secretKeyRef:

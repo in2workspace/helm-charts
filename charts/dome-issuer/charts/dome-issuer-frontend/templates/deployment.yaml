@@ -81,3 +81,5 @@ spec:
               value: {{ .Values.app.knowledgeBaseUrl }}
             - name: DEFAULT_LANG
               value: {{.Values.app.defaultLang}}
+            - name: ADMIN_ORGANIZATION_ID
+              value: {{.Values.app.adminOrganizationId}}
