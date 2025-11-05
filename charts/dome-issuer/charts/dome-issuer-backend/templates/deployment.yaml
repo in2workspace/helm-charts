@@ -149,6 +149,8 @@ spec:
               value: {{ .Values.app.defaultLang }}
             - name: APP_ADMIN_ORGANIZATION_ID
               value: {{ .Values.app.adminOrganizationId }}
+            - name: SYS_TENANT
+              value: {{ .Values.app.sysTenant }}
             - name: DEFAULT_SIGNER_COMMON_NAME
               valueFrom:
                 secretKeyRef:

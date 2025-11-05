@@ -83,3 +83,5 @@ spec:
               value: {{.Values.app.defaultLang}}
             - name: ADMIN_ORGANIZATION_ID
               value: {{.Values.app.adminOrganizationId}}
+            - name: SYS_TENANT
+              value: {{ .Values.app.sysTenant }}
