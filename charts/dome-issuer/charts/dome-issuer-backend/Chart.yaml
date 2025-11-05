@@ -2,5 +2,5 @@ apiVersion: v2
 name: dome-issuer-backend
 description: DOME Issuer Backend Helm chart (subchart of DOME Issuer Helm chart)
 type: application
-version: 1.3.6
+version: 1.3.7
 appVersion: v1.3.0
