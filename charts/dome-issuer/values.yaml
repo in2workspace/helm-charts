@@ -65,6 +65,7 @@ dome-issuer-backend:
     walletUrl: "https://wallet.127.0.1.nip.io"
     defaultLang: "en"
     adminOrganizationId: "VATES-00000000000"
+    sysTenant: "TENANT"
     mail:
       host: smtp.example.org
       port: 587
@@ -193,6 +194,7 @@ dome-issuer-frontend:
     knowledgeBaseUrl: "https://knowledgebase.example.com"
     defaultLang: "en"
     adminOrganizationId: "VATES-00000000000"
+    sysTenant: "TENANT"
 
 dome-issuer-postgresql:
   # -- should the postgresql deployment be enabled

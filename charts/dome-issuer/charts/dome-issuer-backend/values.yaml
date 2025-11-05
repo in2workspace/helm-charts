@@ -180,6 +180,7 @@ app:
   walletURL: "https://wallet.127.0.1.nip.io"
   defaultLang: "en"
   adminOrganizationId: "VATES-00000000000"
+  sysTenant: "TENANT"
   mail:
     host: smtp.example.org
     port: 587

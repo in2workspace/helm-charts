@@ -130,3 +130,4 @@ app:
   knowledgeBaseUrl: "https://knowledgebase.example.com"
   defaultLang: "en"
   adminOrganizationId: "VATES-00000000000"
+  sysTenant: "TENANT"
