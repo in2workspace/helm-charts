@@ -2,14 +2,14 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "isbe-csc.fullname" . }}
+  name: {{ include "isbe-csc-api.fullname" . }}
   labels:
-    {{- include "isbe-csc.labels" . | nindent 4 }}
+    {{- include "isbe-csc-api.labels" . | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "isbe-csc.fullname" . }}
+    name: {{ include "isbe-csc-api.fullname" . }}
   minReplicas: {{ .Values.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.autoscaling.maxReplicas }}
   metrics:

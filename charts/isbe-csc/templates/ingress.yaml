@@ -1,43 +1,44 @@
-{{- if .Values.ingress.enabled -}}
+{{- if .Values.global.ingress.enabled -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ include "isbe-csc.fullname" . }}
   labels:
-    {{- include "isbe-csc.labels" . | nindent 4 }}
-  {{- with .Values.ingress.annotations }}
+    {{- toYaml .Values.global.ingress.labels | nindent 4 }}
+  namespace: {{ $.Release.Namespace | quote }}
   annotations:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
+    {{ - with .Values.global.ingress.annotations }}
+    {{ - toYaml . | nindent 4 }}
+    {{ - end }}
+    {{ - if .Values.global.ingress.enableTLS }}
+    cert-manager.io/cluster-issuer: {{ .Values.global.ingress.clusterIssuer | quote }}
+    {{ - end }}
 spec:
-  {{- with .Values.ingress.className }}
-  ingressClassName: {{ . }}
-  {{- end }}
-  {{- if .Values.ingress.tls }}
-  tls:
-    {{- range .Values.ingress.tls }}
-    - hosts:
-        {{- range .hosts }}
-        - {{ . | quote }}
-        {{- end }}
-      secretName: {{ .secretName }}
-    {{- end }}
-  {{- end }}
+  ingressClassName: {{ .Values.global.ingress.className }}
   rules:
-    {{- range .Values.ingress.hosts }}
-    - host: {{ .host | quote }}
+    - host: {{ .Values.global.domain }}
       http:
         paths:
-          {{- range .paths }}
-          - path: {{ .path }}
-            {{- with .pathType }}
-            pathType: {{ . }}
-            {{- end }}
+          # Backend
+          - path: /api
+            pathType: Prefix
             backend:
               service:
-                name: {{ include "isbe-csc.fullname" $ }}
+                name: {{ include "dome-issuer-backend.service.name" . }}
                 port:
-                  number: {{ $.Values.service.port }}
-          {{- end }}
-    {{- end }}
-{{- end }}
+                  number: 80
+          # Frontend
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "dome-issuer-frontend.service.name" . }}
+                port:
+                  number: 80
+  {{- if .Values.global.ingress.enableTLS }}
+  tls:
+    - hosts:
+        - {{ .Values.global.domain }}
+      secretName: issuer-tls-secret
+  {{- end }}
+  {{- end }}
