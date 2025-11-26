@@ -7,9 +7,17 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
+    - port: {{ .Values.service.ports.certauth }}
+      targetPort: certauth
       protocol: TCP
-      name: http
+      name: certauth
+    - port: {{ .Values.service.ports.certsec }}
+      targetPort: certsec
+      protocol: TCP
+      name: certsec
+    - port: {{ .Values.service.ports.onboard }}
+      targetPort: onboard
+      protocol: TCP
+      name: onboard
   selector:
     {{- include "isbe-certauth.selectorLabels" . | nindent 4 }}

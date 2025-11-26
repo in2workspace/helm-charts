@@ -10,6 +10,13 @@ spec:
   containers:
     - name: wget
       image: busybox
-      command: ['wget']
-      args: ['{{ include "isbe-certauth.fullname" . }}:{{ .Values.service.port }}']
+      command: [ 'sh', '-c' ]
+      args:
+        - |
+          echo "Testing CertAuth..."
+          wget -qO- {{ include "isbe-certauth.fullname" . }}:{{ .Values.service.ports.certauth }} || echo "Failed CertAuth"
+          echo "Testing CertSec..."
+          wget -qO- {{ include "isbe-certauth.fullname" . }}:{{ .Values.service.ports.certsec }} || echo "Failed CertSec"
+          echo "Testing Onboard..."
+          wget -qO- {{ include "isbe-certauth.fullname" . }}:{{ .Values.service.ports.onboard }} || echo "Failed Onboard"
   restartPolicy: Never

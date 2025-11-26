@@ -41,8 +41,14 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - name: http
-              containerPort: {{ .Values.service.port }}
+            - name: certauth
+              containerPort: {{ .Values.service.ports.certauth }}
+              protocol: TCP
+            - name: certsec
+              containerPort: {{ .Values.service.ports.certsec }}
+              protocol: TCP
+            - name: onboard
+              containerPort: {{ .Values.service.ports.onboard }}
               protocol: TCP
           {{- with .Values.livenessProbe }}
           livenessProbe:
