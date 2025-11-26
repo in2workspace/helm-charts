@@ -7,12 +7,12 @@ metadata:
     {{- toYaml .Values.global.ingress.labels | nindent 4 }}
   namespace: {{ $.Release.Namespace | quote }}
   annotations:
-    {{ - with .Values.global.ingress.annotations }}
-    {{ - toYaml . | nindent 4 }}
-    {{ - end }}
-    {{ - if .Values.global.ingress.enableTLS }}
+    {{- with .Values.global.ingress.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- if .Values.global.ingress.enableTLS }}
     cert-manager.io/cluster-issuer: {{ .Values.global.ingress.clusterIssuer | quote }}
-    {{ - end }}
+    {{- end }}
 spec:
   ingressClassName: {{ .Values.global.ingress.className }}
   rules:
