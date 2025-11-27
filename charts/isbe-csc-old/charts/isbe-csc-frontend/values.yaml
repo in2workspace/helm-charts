@@ -1,4 +1,4 @@
-# Default values for isbe-csc-api.
+# Default values for isbe-csc-frontend.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
@@ -7,11 +7,11 @@ replicaCount: 1
 
 # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
 image:
-  repository: 841648405024.dkr.ecr.eu-west-1.amazonaws.com/isbe-csc-api
+  repository: 841648405024.dkr.ecr.eu-west-1.amazonaws.com/isbe-csc-frontend
   # This sets the pull policy for images.
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "v1.0.0"
+  tag: ""
 
 # This is for the secrets for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 imagePullSecrets: []
@@ -54,23 +54,24 @@ service:
   # This sets the service type more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
   type: ClusterIP
   # This sets the ports more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
-  port: 9991
-  # Puerto donde tu aplicación expone las métricas de Prometheus
-  metricsPort: 9113
+  port: 8080
 
-# Configuración del Ingress (ALB)
+# This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ingress:
-  enabled: true
-  # Reemplaza con el hostname deseado
-  hostname: tmf.dev.aws.envs.redisbe.com
-  # Anotaciones clave para el AWS Load Balancer Controller
-  annotations:
-    kubernetes.io/ingress.class: alb
-    alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/target-type: ip
-    # Opcional: Para usar un certificado ACM existente
-    # alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
-    # alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:eu-west-1:ACCOUNT_ID:certificate/CERT_ID
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
 
 # -- Expose the service via gateway-api HTTPRoute
 # Requires Gateway API resources and suitable controller installed within the cluster
@@ -110,26 +111,26 @@ httpRoute:
   #     - name: version
   #       value: v2
 
-resources:
+resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-   limits:
-     cpu: 200m
-     memory: 256Mi
-   requests:
-     cpu: 100m
-     memory: 128Mi
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
 
 # This is to setup the liveness and readiness probes more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
 livenessProbe:
   httpGet:
-    path: /health
+    path: /
     port: http
 readinessProbe:
   httpGet:
-    path: /health
+    path: /
     port: http
 
 # This section is for setting up autoscaling more information can be found here: https://kubernetes.io/docs/concepts/workloads/autoscaling/
@@ -158,20 +159,3 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
-
-# Integraciones de la plataforma
-observability:
-  enabled: true # Activa la creación del ServiceMonitor y PrometheusRule
-  dashboard:
-    enabled: true # Activa la creación del Dashboard de Grafana
-
-# Si no se pasa el bloque de velero, no se establece ningún tipo de backup por defecto
-velero:
-  schedule:
-    # Activa la creación de un recurso 'Schedule' para esta aplicación
-    enabled: true
-    # Frecuencia del backup en formato cron. Por defecto: todos los días a las 2 AM.
-    cron: "0 2 * * *"
-    # Tiempo de Retención (Time To Live) para cada backup.
-    # Formato: 720h0m0s (30 días), 168h0m0s (7 días), etc.
-    ttl: "720h0m0s"

@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "isbe-csc-frontend.fullname" . }}
+  name: {{ include "isbe-csc-api.fullname" . }}
   labels:
-    {{- include "isbe-csc-frontend.labels" . | nindent 4 }}
+    {{- include "isbe-csc-api.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "isbe-csc-frontend.selectorLabels" . | nindent 6 }}
+      {{- include "isbe-csc-api.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -18,7 +18,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "isbe-csc-frontend.labels" . | nindent 8 }}
+        {{- include "isbe-csc-api.labels" . | nindent 8 }}
         {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -27,7 +27,7 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "isbe-csc-frontend.serviceAccountName" . }}
+      serviceAccountName: {{ include "isbe-csc-api.serviceAccountName" . }}
       {{- with .Values.podSecurityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}
@@ -44,8 +44,6 @@ spec:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
-            - name: metrics
-              containerPort: 9113
           {{- with .Values.livenessProbe }}
           livenessProbe:
             {{- toYaml . | nindent 12 }}

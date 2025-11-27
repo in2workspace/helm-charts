@@ -4,8 +4,6 @@ metadata:
   name: {{ include "isbe-csc-api.fullname" . }}
   labels:
     {{- include "isbe-csc-api.labels" . | nindent 4 }}
-    # Etiqueta clave que usará el ServiceMonitor para encontrar este servicio
-    app: {{ include "isbe-csc-api.name" . }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -13,10 +11,5 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
-    # Puerto para que Prometheus recoja las métricas
-    - port: {{ .Values.service.metricsPort }}
-      targetPort: metrics
-      protocol: TCP
-      name: metrics
   selector:
     {{- include "isbe-csc-api.selectorLabels" . | nindent 4 }}
