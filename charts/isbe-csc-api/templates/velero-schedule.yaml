@@ -1,0 +1,34 @@
+{{- if .Values.velero.schedule.enabled -}}
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: {{ include "isbe-csc-api.fullname" . }}-backup
+  # Importante: Los Schedules deben crearse en el mismo namespace que Velero.
+  namespace: velero
+spec:
+  # La frecuencia con la que se ejecutará el backup.
+  schedule: {{ .Values.velero.schedule.cron | quote }}
+  # 'template' define cómo será el backup que se cree en cada ejecución.
+  template:
+    # Le indicamos a Velero qué recursos incluir en el backup.
+    # El método más robusto es usar un selector de etiquetas.
+    labelSelector:
+      matchLabels:
+        # Esta etiqueta debe coincidir con las etiquetas de TODOS los recursos
+        # de tu aplicación (Deployment, Service, PVC, etc.).
+        # El helper 'app.kubernetes.io/name' es ideal para esto.
+        app.kubernetes.io/name: {{ include "isbe-csc-api.name" . }}
+    
+    # También es una buena práctica incluir explícitamente el namespace de tu aplicación.
+    includeNamespaces:
+      - {{ .Release.Namespace }}
+    
+    # Le decimos a Velero que haga snapshots de los volúmenes persistentes.
+    snapshotVolumes: true
+    
+    # Define por cuánto tiempo se conservará este backup.
+    ttl: {{ .Values.velero.schedule.ttl }}
+    
+    # El 'storageLocation' por defecto se usará si no se especifica.
+    # storageLocation: default
+{{- end }}

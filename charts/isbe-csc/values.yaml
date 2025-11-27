@@ -1,5 +1,6 @@
 global:
-  domain: "127.0.0.1.nip.io"
+  backendDomain: ""
+  frontendDomain: ""
   ingress:
     enabled: false
     className: "nginx-acme"

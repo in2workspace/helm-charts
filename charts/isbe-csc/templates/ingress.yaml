@@ -24,15 +24,18 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ include "dome-issuer-backend.service.name" . }}
+                name: {{ include "isbe-csc-api.service.name" . }}
                 port:
                   number: 80
-          # Frontend
-          - path: /
+    - host: {{ .Values.global.domain }}
+      http:
+        paths:
+          # Backend
+          - path: /api
             pathType: Prefix
             backend:
               service:
-                name: {{ include "dome-issuer-frontend.service.name" . }}
+                name: { { include "isbe-csc-api.service.name" . } }
                 port:
                   number: 80
   {{- if .Values.global.ingress.enableTLS }}

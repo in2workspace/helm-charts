@@ -1,0 +1,18 @@
+{{- if .Values.observability.enabled -}}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "isbe-csc-api.fullname" . }}
+  labels:
+    # Esta etiqueta es importante para que Prometheus descubra este ServiceMonitor
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      # Debe coincidir con la etiqueta del Service que creamos
+      app: {{ include "isbe-csc-api.name" . }}
+  endpoints:
+    - port: metrics # El nombre del puerto de métricas en el Service
+      interval: 30s
+      path: /metrics # La ruta donde tu app expone las métricas
+{{- end }}

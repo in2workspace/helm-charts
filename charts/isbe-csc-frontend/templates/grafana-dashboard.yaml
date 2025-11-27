@@ -1,0 +1,52 @@
+{{- if .Values.observability.dashboard.enabled -}}
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: {{ include "isbe-csc-frontend.fullname" . }}-dashboard
+  labels:
+    # Etiqueta para que la instancia de Grafana descubra este dashboard
+    app: grafana
+spec:
+  # Selector para apuntar a la instancia correcta de Grafana en el clúster
+  instanceSelector:
+    matchLabels:
+      grafana_cr: grafana
+  # Definición del dashboard en formato JSON (escapado como un string)
+  json: |
+    {
+      "__inputs": [],
+      "__requires": [],
+      "annotations": { "list": [] },
+      "editable": true,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "id": null,
+      "links": [],
+      "panels": [
+        {
+          "datasource": { "type": "prometheus", "uid": "Prometheus" },
+          "title": "Peticiones HTTP por segundo",
+          "type": "timeseries",
+          "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" } } },
+          "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+          "targets": [
+            {
+              "expr": 'irate(http_requests_total{job="{{ include "isbe-csc-frontend.fullname" . }}"}[5m])',
+              "legendFormat": "{{`{{`}} code {{`}}`}}",
+              "refId": "A"
+            }
+          ]
+        }
+      ],
+      "refresh": "10s",
+      "schemaVersion": 36,
+      "style": "dark",
+      "tags": ["mi-app"],
+      "templating": { "list": [] },
+      "time": { "from": "now-1h", "to": "now" },
+      "timepicker": {},
+      "timezone": "browser",
+      "title": "Dashboard de Mi App Ejemplo",
+      "version": 1
+    }
+  {{- end }}

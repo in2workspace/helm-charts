@@ -1,0 +1,20 @@
+{{- if .Values.observability.enabled -}}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ include "isbe-csc-api.fullname" . }}-rules
+  labels:
+    release: prometheus
+spec:
+  groups:
+    - name: mi-app.rules
+      rules:
+        - alert: AppHasNoRunningPods
+          expr: kube_deployment_spec_replicas{deployment="{{ include "isbe-csc-api.fullname" . }}"} > 0 and kube_deployment_status_replicas_available{deployment="{{ include "isbe-csc-api.fullname" . }}"} == 0
+          for: 5m # La condición debe ser cierta durante 5 minutos para que la alerta se dispare
+          labels:
+            severity: critical # Etiqueta para enrutar la alerta (e.g., a PagerDuty)
+          annotations:
+            summary: "La aplicación {{ .Values.image.repository }} no tiene pods disponibles"
+            description: "El deployment {{ include "isbe-csc-api.fullname" . }} en el namespace {{ .Release.Namespace }} debería tener réplicas pero no tiene ninguna disponible."
+{{- end }}
