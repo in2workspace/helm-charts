@@ -135,3 +135,23 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+# Environment variables to set in the container.
+env:
+  # Admin password configuration.
+  # NOTE: Only one method should be used:
+  # - If existingSecret.enabled = true: password is read from the secret
+  # - If existingSecret.enabled = false: rawValue is used directly
+  certAuthAdminPassword:
+    # Direct password value (not recommended for production)
+    # Use existingSecret for better security practices
+    rawValue: ""
+
+    # Reference to an existing Kubernetes secret.
+    existingSecret:
+      # Enable to use an existing secret instead of rawValue
+      enabled: false
+      # Name of the Kubernetes secret containing the password
+      name: isbe-certauth-secret
+      # Key within the secret that contains the password value
+      key: certauth-admin-password

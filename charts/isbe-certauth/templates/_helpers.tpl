@@ -60,3 +60,18 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{- define "isbe-certauth.CertAuthAdminPasswordSecretName" -}}
+    {{- if .Values.env.certAuthAdminPassword.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.certAuthAdminPassword.existingSecret.name $) -}}
+    {{- else -}}
+        {{- printf "isbe-certauth-admin-password-secret" -}}
+    {{- end -}}
+{{- end -}}
+{{- define "isbe-certauth.CertAuthAdminPasswordKey" -}}
+    {{- if .Values.env.certAuthAdminPassword.existingSecret.enabled -}}
+        {{- printf "%s" (tpl .Values.app.certAuthAdminPassword.existingSecret.key $) -}}
+    {{- else -}}
+        {{- printf "certauth-admin-password" -}}
+    {{- end -}}
+{{- end -}}
