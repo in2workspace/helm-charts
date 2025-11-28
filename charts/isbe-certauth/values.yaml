@@ -145,7 +145,7 @@ env:
   certAuthAdminPassword:
     # Direct password value (not recommended for production)
     # Use existingSecret for better security practices
-    rawValue: ""
+    rawValue: "default"
 
     # Reference to an existing Kubernetes secret.
     existingSecret:
