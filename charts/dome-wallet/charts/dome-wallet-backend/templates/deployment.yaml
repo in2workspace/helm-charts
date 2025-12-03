@@ -79,6 +79,8 @@ spec:
               value: {{ .Values.app.vault.provider }}
             - name: SECURITY_VAULT_HASHICORP_URL
               value: {{ .Values.app.vault.url }}
+            - name: SECURITY_VAULT_HASHICORP_SECRETS_MOUNT
+              value: {{ .Values.app.vault.secretsMount }}
             - name: SECURITY_VAULT_HASHICORP_TOKEN
               valueFrom:
                 secretKeyRef:
