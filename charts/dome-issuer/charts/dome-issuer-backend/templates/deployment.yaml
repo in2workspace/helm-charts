@@ -203,6 +203,8 @@ spec:
             # VAULT
             - name: VAULT_HASHICORP_URL
               value: {{ .Values.app.vault.url }}
+            - name: VAULT_HASHICORP_SECRETS_MOUNT
+              value: {{ .Values.app.vault.secretsMount }}
             - name: VAULT_HASHICORP_TOKEN
               valueFrom:
                 secretKeyRef:

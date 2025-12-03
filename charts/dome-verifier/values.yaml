@@ -73,14 +73,14 @@ resources: {}
 
 livenessProbe:
   httpGet:
-    path: /health
+    path: /actuator/health
     port: 8080
   initialDelaySeconds: 40
   failureThreshold: 6
   periodSeconds: 10
 readinessProbe:
   httpGet:
-    path: /health
+    path: /actuator/health
     port: 8080
   initialDelaySeconds: 40
   failureThreshold: 6

@@ -262,6 +262,7 @@ app:
       allowedOrigins: "https://new.example.org, https://example-2.org"
   vault:
     url: http://vault-server:8200
+    secretsMount: kv
     token: defaultToken
     existingSecret:
       # -- should an existing secret be used

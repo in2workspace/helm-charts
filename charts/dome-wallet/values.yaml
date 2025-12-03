@@ -48,6 +48,7 @@ dome-wallet-backend:
     vault:
       provider: hashicorp
       url: http://vault-server:8200
+      secretsMount: kv
       token: defaultToken
       existingSecret:
         # -- should an existing secret be used
