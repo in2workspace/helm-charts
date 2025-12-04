@@ -72,6 +72,12 @@ spec:
                 secretKeyRef:
                   name: {{ include "isbe-certauth.CertAuthAdminPasswordSecretName" . }}
                   key: {{ include "isbe-certauth.CertAuthAdminPasswordKey" . }}
+            - name: CERTAUTH_URL
+              value: {{ .Values.env.certauthUrl }}
+            - name: CERTSEC_URL
+              value: {{ .Values.env.certsecUrl }}
+            - name: ONBOARD_URL
+              value: {{ .Values.env.onboardUrl }}
       {{- with .Values.volumes }}
       volumes:
         {{- toYaml . | nindent 8 }}

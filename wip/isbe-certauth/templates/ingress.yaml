@@ -25,6 +25,7 @@ spec:
   {{- end }}
   rules:
     {{- range .Values.ingress.hosts }}
+    {{- $port := .port }}
     - host: {{ .host | quote }}
       http:
         paths:
@@ -37,7 +38,7 @@ spec:
               service:
                 name: {{ include "isbe-certauth.fullname" $ }}
                 port:
-                  number: {{ $.port }}
+                  number: {{ $port }}
           {{- end }}
     {{- end }}
 {{- end }}
