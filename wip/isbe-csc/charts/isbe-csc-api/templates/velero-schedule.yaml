@@ -20,7 +20,7 @@ spec:
         app.kubernetes.io/name: {{ include "isbe-csc-api.name" . }}
     
     # También es una buena práctica incluir explícitamente el namespace de tu aplicación.
-    includeNamespaces:
+    includedNamespaces:
       - {{ .Release.Namespace }}
     
     # Le decimos a Velero que haga snapshots de los volúmenes persistentes.
