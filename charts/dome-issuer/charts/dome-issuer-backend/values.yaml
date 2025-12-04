@@ -112,13 +112,13 @@ ingressIssuerApi:
 # This is to set up the liveness and readiness probes more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
 livenessProbe:
   httpGet:
-    path: /actuator/health
+    path: /health
   initialDelaySeconds: 40
   failureThreshold: 6
   periodSeconds: 10
 readinessProbe:
   httpGet:
-    path: /actuator/health
+    path: /health
   initialDelaySeconds: 40
   failureThreshold: 6
   periodSeconds: 10
