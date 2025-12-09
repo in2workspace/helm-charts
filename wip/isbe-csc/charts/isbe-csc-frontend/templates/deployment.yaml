@@ -62,6 +62,17 @@ spec:
           volumeMounts:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+          env:
+            - name: BASE_URL
+              value: {{ .Values.env.baseUrl }}
+            - name: REGISTRATION_FORM_URL
+              value: {{ .Values.env.registrationFormUrl }}
+            - name: ISBE_REGISTER_LINK
+              value: {{ .Values.env.isbeRegisterLink }}
+            - name: AUTHORITY
+              value: {{ .Values.env.authority }}
+            - name: REDIRECT_URL
+              value: {{ .Values.env.redirectUrl }}
       {{- with .Values.volumes }}
       volumes:
         {{- toYaml . | nindent 8 }}

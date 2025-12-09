@@ -11,7 +11,7 @@ image:
   # This sets the pull policy for images.
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "v0.0.7"
+  tag: "v1.0.1"
 
 # This is for the secrets for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 imagePullSecrets: []
@@ -175,3 +175,10 @@ velero:
     # Tiempo de Retención (Time To Live) para cada backup.
     # Formato: 720h0m0s (30 días), 168h0m0s (7 días), etc.
     ttl: "720h0m0s"
+
+env:
+  baseUrl: "https://baseUrl.example"
+  registrationFormUrl: "https://registrationFormUrl.example"
+  isbeRegistrationForm: "https://isbeRegistrationForm.example"
+  authority: "https://authority.example"
+  redirectUrl: "https://redirectUrl.example"
