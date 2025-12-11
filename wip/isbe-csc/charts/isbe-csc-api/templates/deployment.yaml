@@ -58,13 +58,16 @@ spec:
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.volumeMounts }}
+          {{- if .Values.persistence.enabled }}
           volumeMounts:
-            {{- toYaml . | nindent 12 }}
+            - name: data
+              mountPath: {{ .Values.persistence.mountPath }}
           {{- end }}
-      {{- with .Values.volumes }}
       volumes:
-        {{- toYaml . | nindent 8 }}
+      {{- if .Values.persistence.enabled }}
+      - name: data
+        persistentVolumeClaim:
+          claimName: {{ include "isbe-csc-api.fullname" . }}-pvc
       {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

@@ -140,19 +140,6 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
 
-# Additional volumes on the output Deployment definition.
-volumes: []
-# - name: foo
-#   secret:
-#     secretName: mysecret
-#     optional: false
-
-# Additional volumeMounts on the output Deployment definition.
-volumeMounts: []
-# - name: foo
-#   mountPath: "/etc/foo"
-#   readOnly: true
-
 nodeSelector: {}
 
 tolerations: []
@@ -175,3 +162,10 @@ velero:
     # Tiempo de Retención (Time To Live) para cada backup.
     # Formato: 720h0m0s (30 días), 168h0m0s (7 días), etc.
     ttl: "720h0m0s"
+
+persistence:
+  enabled: true
+  storageClass: "gp3"
+  size: 10Gi
+  accessMode: ReadWriteOnce
+  mountPath: /data/coolify/databases/tmf
