@@ -58,7 +58,7 @@ spec:
             - name: LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY
               value: {{ .Values.app.logLevel.security }}
             - name: SPRING_R2DBC_URL
-              value: "r2dbc:postgresql://{{ .Values.app.db.host }}{{ if not .Values.app.db.externalService }}:{{ .Values.app.db.port }}{{ end }}/{{ .Values.app.db.name }}?schema={{ .Values.app.db.schema }}"
+              value: "r2dbc:postgresql://{{ .Values.app.db.host }}{{ if not .Values.app.db.externalService }}:{{ .Values.app.db.port }}{{ end }}/{{ .Values.app.db.name }}?ssl={{ .Values.app.db.ssl.enabled }}&sslmode={{ .Values.app.db.ssl.mode }}&schema={{ .Values.app.db.schema }}"
             - name: SPRING_R2DBC_USERNAME
               value: {{ .Values.app.db.username }}
             - name: SPRING_R2DBC_PASSWORD
