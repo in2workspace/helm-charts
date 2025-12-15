@@ -279,6 +279,9 @@ app:
     name: issuer
     username: postgres
     password: postgres
+    ssl:
+      enabled: false
+      mode: require
     existingSecret:
       enabled: false
       name: dome-issuer-backend-secret
