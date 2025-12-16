@@ -87,6 +87,9 @@ dome-wallet-backend:
       name: wallet
       username: postgres
       password: postgres
+      ssl:
+        enabled: false
+        mode: require
       existingSecret:
         enabled: false
         name: dome-wallet-sealed-secret
