@@ -80,7 +80,7 @@ spec:
                   name: {{ include "keycloak.db-secretName" . }}
                   key: {{ include "keycloak.db-passwordKey" . }}
             - name: KC_DB_URL
-              value: "jdbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}"
+              value: "jdbc:postgresql://{{ .Values.db.host }}{{ if not .Values.db.externalService }}:{{ .Values.db.port }}{{ end }}/{{ .Values.db.name }}?ssl={{ .Values.app.db.ssl.enabled }}&sslmode={{ .Values.app.db.ssl.mode }}&schema={{ .Values.app.db.schema }}"
             - name: QUARKUS_LOG_CATEGORY__ORG_KEYCLOAK_SERVICES_X509__LEVEL
               value: "{{ .Values.keycloak.logsCertsLevel }}"
             - name: KEYCLOAK_LOGLEVEL

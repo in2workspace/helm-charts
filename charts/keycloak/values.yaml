@@ -159,6 +159,9 @@ db:
   name: postgres_keycloak
   username: postgres
   password: postgres
+  ssl:
+    enabled: false
+    mode: require
   existingSecret:
     enabled: false
     name: keycloak-db-secret
