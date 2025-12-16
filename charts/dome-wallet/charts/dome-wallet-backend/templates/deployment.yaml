@@ -105,7 +105,7 @@ spec:
                   key: {{ include "dome-wallet-backend.ebsiUserSecretKey" . }}
             # DATABASE
             - name: SPRING_R2DBC_URL
-              value: "r2dbc:postgresql://{{ .Values.app.db.host }}:{{ .Values.app.db.port }}/{{ .Values.app.db.name }}?schema={{ .Values.app.db.schema }}"
+              value: "r2dbc:postgresql://{{ .Values.app.db.host }}:{{ .Values.app.db.port }}/{{ .Values.app.db.name }}?ssl={{ .Values.app.db.ssl.enabled }}&sslmode={{ .Values.app.db.ssl.mode }}&schema={{ .Values.app.db.schema }}"
             - name: SPRING_R2DBC_USERNAME
               value: {{ .Values.app.db.username }}
             - name: SPRING_R2DBC_PASSWORD
