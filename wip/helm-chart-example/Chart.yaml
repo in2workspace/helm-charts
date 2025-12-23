@@ -1,0 +1,6 @@
+apiVersion: v2
+name: app-example-chart
+description: Un Helm chart de ejemplo para desplegar aplicaciones en el clúster EKS de ISBE.
+type: application
+version: 0.1.0
+appVersion: "1.0.0"

@@ -1,0 +1,18 @@
+{{- if .Values.observability.enabled -}}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "app-example-chart.fullname" . }}
+  labels:
+    {{- include "app-example-chart.labels" . | nindent 4 }}
+    # Etiqueta para que el Prometheus Operator descubra este monitor
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      {{- include "app-example-chart.selectorLabels" . | nindent 6 }}
+  endpoints:
+  - port: {{ .Values.service.metricsPortName }}
+    interval: 30s
+    path: {{ .Values.observability.scrapePath }}
+{{- end }}
