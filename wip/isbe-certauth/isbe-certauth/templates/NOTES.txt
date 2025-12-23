@@ -1,0 +1,80 @@
+******************************************************************************
+* ISBE CertAuth has been successfully deployed!
+******************************************************************************
+
+Application: {{ include "isbe-certauth.fullname" . }}
+Namespace: {{ .Release.Namespace }}
+Version: {{ .Chart.AppVersion }}
+
+Three services are available:
+
+1. CertAuth Service (Port {{ .Values.service.ports.certauth }})
+{{- if .Values.ingress.certauth.enabled }}
+   URL: https://{{ .Values.ingress.certauth.hostname }}
+{{- end }}
+   
+2. CertSec Service (Port {{ .Values.service.ports.certsec }}) - mTLS Enabled
+{{- if .Values.ingress.certsec.enabled }}
+   URL: https://{{ .Values.ingress.certsec.hostname }}
+   Note: This endpoint requires client certificate authentication (mTLS passthrough)
+{{- end }}
+
+3. Onboard Service (Port {{ .Values.service.ports.onboard }})
+{{- if .Values.ingress.onboard.enabled }}
+   URL: https://{{ .Values.ingress.onboard.hostname }}
+{{- end }}
+
+{{- if .Values.persistence.enabled }}
+
+Persistent Storage:
+  PVC: {{ include "isbe-certauth.fullname" . }}-pvc
+  StorageClass: {{ .Values.persistence.storageClass }}
+  Size: {{ .Values.persistence.size }}
+  Mount Path: {{ .Values.persistence.mountPath }}
+{{- end }}
+
+Health Check:
+  Endpoint: /health (on port {{ .Values.service.ports.certauth }})
+
+To get the status of your deployment:
+
+  kubectl get pods -n {{ .Release.Namespace }} -l app.kubernetes.io/name={{ include "isbe-certauth.name" . }}
+
+To view logs:
+
+  kubectl logs -n {{ .Release.Namespace }} -l app.kubernetes.io/name={{ include "isbe-certauth.name" . }} --tail=100 -f
+
+{{- if .Values.observability.enabled }}
+
+Observability:
+  - ServiceMonitor: Prometheus will scrape metrics from {{ .Values.observability.scrapePath }}
+  - PrometheusRule: Alerts configured for service health
+{{- if .Values.observability.dashboard.enabled }}
+  - Grafana Dashboard: Available in Grafana UI
+{{- end }}
+{{- end }}
+
+IMPORTANT CONFIGURATION NOTES:
+
+1. Update ACM Certificate ARNs in values.yaml for production:
+   - ingress.certauth.annotations.alb.ingress.kubernetes.io/certificate-arn
+   - ingress.certsec.annotations.alb.ingress.kubernetes.io/certificate-arn
+   - ingress.onboard.annotations.alb.ingress.kubernetes.io/certificate-arn
+
+2. Update hostnames in values.yaml to match your domain:
+   - ingress.certauth.hostname
+   - ingress.certsec.hostname
+   - ingress.onboard.hostname
+
+3. Change default credentials in values.yaml or use existingSecret:
+   - adminPassword
+   - tsaCredentials
+   - smtpCredentials
+
+4. For mTLS on CertSec endpoint:
+   - The ALB is configured in "passthrough" mode
+   - Client certificates are forwarded to the application
+   - Your application must handle TLS termination and certificate validation
+   - Ensure your application has proper server certificates configured
+
+For more information, visit: https://github.com/in2workspace/helm-charts

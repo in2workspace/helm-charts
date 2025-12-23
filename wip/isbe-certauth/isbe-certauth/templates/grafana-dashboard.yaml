@@ -1,0 +1,96 @@
+{{- if .Values.observability.dashboard.enabled -}}
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: {{ include "isbe-certauth.fullname" . }}-dashboard
+  labels:
+    {{- include "isbe-certauth.labels" . | nindent 4 }}
+    # Label for Grafana instance to discover this dashboard
+    app: grafana
+spec:
+  # Selector to point to the correct Grafana instance in the cluster
+  instanceSelector:
+    matchLabels:
+      grafana_cr: grafana
+  # Dashboard definition in JSON format (escaped as a string)
+  json: |
+    {
+      "__inputs": [],
+      "__requires": [],
+      "annotations": { "list": [] },
+      "editable": true,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "id": null,
+      "links": [],
+      "panels": [
+        {
+          "datasource": { "type": "prometheus", "uid": "Prometheus" },
+          "title": "CertAuth Service Uptime",
+          "type": "stat",
+          "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": {"mode": "absolute", "steps": [{"color": "red", "value": null}, {"color": "green", "value": 1}]} } },
+          "gridPos": { "h": 4, "w": 6, "x": 0, "y": 0 },
+          "options": {"reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "orientation": "auto", "textMode": "auto"},
+          "targets": [
+            {
+              "expr": "up{job=\"{{ include "isbe-certauth.fullname" . }}\"}",
+              "legendFormat": "{{`{{`}} pod {{`}}`}}",
+              "refId": "A"
+            }
+          ]
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "Prometheus" },
+          "title": "Available Pods",
+          "type": "stat",
+          "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": {"mode": "absolute", "steps": [{"color": "red", "value": null}, {"color": "yellow", "value": 1}, {"color": "green", "value": 2}]} } },
+          "gridPos": { "h": 4, "w": 6, "x": 6, "y": 0 },
+          "options": {"reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "orientation": "auto", "textMode": "auto"},
+          "targets": [
+            {
+              "expr": "kube_deployment_status_replicas_available{deployment=\"{{ include "isbe-certauth.fullname" . }}\"}",
+              "legendFormat": "Available",
+              "refId": "A"
+            }
+          ]
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "Prometheus" },
+          "title": "Pod Restarts",
+          "type": "timeseries",
+          "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" } } },
+          "gridPos": { "h": 8, "w": 12, "x": 0, "y": 4 },
+          "targets": [
+            {
+              "expr": "rate(kube_pod_container_status_restarts_total{pod=~\"{{ include "isbe-certauth.fullname" . }}.*\"}[5m])",
+              "legendFormat": "{{`{{`}} pod {{`}}`}}",
+              "refId": "A"
+            }
+          ]
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "Prometheus" },
+          "title": "Memory Usage",
+          "type": "timeseries",
+          "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "unit": "bytes" } },
+          "gridPos": { "h": 8, "w": 12, "x": 12, "y": 4 },
+          "targets": [
+            {
+              "expr": "container_memory_usage_bytes{pod=~\"{{ include "isbe-certauth.fullname" . }}.*\", container!=\"\"}",
+              "legendFormat": "{{`{{`}} pod {{`}}`}}",
+              "refId": "A"
+            }
+          ]
+        }
+      ],
+      "refresh": "10s",
+      "schemaVersion": 36,
+      "style": "dark",
+      "tags": ["isbe-certauth", "certificate-auth"],
+      "time": { "from": "now-1h", "to": "now" },
+      "timepicker": {},
+      "timezone": "browser",
+      "title": "ISBE CertAuth Dashboard",
+      "version": 1
+    }
+{{- end }}

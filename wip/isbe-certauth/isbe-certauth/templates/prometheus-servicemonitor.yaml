@@ -1,0 +1,18 @@
+{{- if .Values.observability.enabled -}}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "isbe-certauth.fullname" . }}
+  labels:
+    {{- include "isbe-certauth.labels" . | nindent 4 }}
+    # Label for Prometheus Operator to discover this monitor
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      {{- include "isbe-certauth.selectorLabels" . | nindent 6 }}
+  endpoints:
+  - port: certauth-port
+    interval: 30s
+    path: {{ .Values.observability.scrapePath }}
+{{- end }}

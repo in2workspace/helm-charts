@@ -1,0 +1,6 @@
+apiVersion: v2
+name: isbe-certauth
+description: Helm chart for ISBE CertAuth - Certificate Authentication Service with three endpoints (certauth, certsec, onboard)
+type: application
+version: 0.1.0
+appVersion: "latest"

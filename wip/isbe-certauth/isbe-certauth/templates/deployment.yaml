@@ -1,0 +1,101 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "isbe-certauth.fullname" . }}
+  labels:
+    {{- include "isbe-certauth.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "isbe-certauth.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "isbe-certauth.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: certauth-port
+              containerPort: {{ .Values.service.ports.certauth }}
+              protocol: TCP
+            - name: certsec-port
+              containerPort: {{ .Values.service.ports.certsec }}
+              protocol: TCP
+            - name: onboard-port
+              containerPort: {{ .Values.service.ports.onboard }}
+              protocol: TCP
+          env:
+            # Application Profile
+            - name: PROFILE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "isbe-certauth.profile.secretName" . }}
+                  key: {{ include "isbe-certauth.profile.key" . }}
+            # Service URLs
+            - name: CERTAUTH_URL
+              value: {{ .Values.serviceUrls.certauth | quote }}
+            - name: CERTSEC_URL
+              value: {{ .Values.serviceUrls.certsec | quote }}
+            - name: ONBOARD_URL
+              value: {{ .Values.serviceUrls.onboard | quote }}
+            # Admin Password
+            - name: CERTAUTH_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "isbe-certauth.adminPassword.secretName" . }}
+                  key: {{ include "isbe-certauth.adminPassword.key" . }}
+            # TSA Credentials
+            - name: TSA_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "isbe-certauth.tsaCredentials.secretName" . }}
+                  key: {{ include "isbe-certauth.tsaCredentials.userKey" . }}
+            - name: TSA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "isbe-certauth.tsaCredentials.secretName" . }}
+                  key: {{ include "isbe-certauth.tsaCredentials.passwordKey" . }}
+            # SMTP Credentials
+            - name: SMTP_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "isbe-certauth.smtpCredentials.secretName" . }}
+                  key: {{ include "isbe-certauth.smtpCredentials.usernameKey" . }}
+            - name: SMTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "isbe-certauth.smtpCredentials.secretName" . }}
+                  key: {{ include "isbe-certauth.smtpCredentials.passwordKey" . }}
+          {{- if .Values.persistence.enabled }}
+          volumeMounts:
+            - name: data
+              mountPath: {{ .Values.persistence.mountPath }}
+          {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.service.ports.certauth }}
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.service.ports.certauth }}
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- if .Values.persistence.enabled }}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ include "isbe-certauth.fullname" . }}-pvc
+      {{- end }}

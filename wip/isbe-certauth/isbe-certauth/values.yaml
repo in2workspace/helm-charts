@@ -1,0 +1,137 @@
+# --- Application Configuration ---
+replicaCount: 2
+
+image:
+  # Docker Hub image for ISBE CertAuth
+  repository: flai/isbe-certauth
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+# Application name used in labels and selectors
+appName: "isbe-certauth"
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi
+
+# --- Service URLs Configuration ---
+# External URLs for the three services
+serviceUrls:
+  certauth: "https://certauth.example.com"
+  certsec: "https://certsec.example.com"
+  onboard: "https://onboard.example.com"
+
+# --- Credentials Configuration ---
+# Admin password for CertAuth
+adminPassword:
+  value: "change-me-in-production"
+  existingSecret:
+    enabled: false
+    name: ""
+    key: "admin-password"
+
+# TSA (Time Stamping Authority) credentials
+tsaCredentials:
+  user: "tsa-user"
+  password: "change-me-in-production"
+  existingSecret:
+    enabled: false
+    name: ""
+    userKey: "tsa-user"
+    passwordKey: "tsa-password"
+
+# SMTP credentials for email
+smtpCredentials:
+  username: "smtp-user"
+  password: "change-me-in-production"
+  existingSecret:
+    enabled: false
+    name: ""
+    usernameKey: "smtp-username"
+    passwordKey: "smtp-password"
+
+# Application profile configuration
+profile:
+  value: "local"
+  existingSecret:
+    enabled: false
+    name: ""
+    key: "profile"
+
+# --- Network Configuration ---
+service:
+  type: ClusterIP
+  ports:
+    # CertAuth service port
+    certauth: 8010
+    # CertSec service port (requires mTLS)
+    certsec: 8011
+    # Onboard service port
+    onboard: 8012
+
+# --- Persistence Configuration ---
+persistence:
+  enabled: true
+  storageClass: "gp3"
+  size: 10Gi
+  accessMode: ReadWriteOnce
+  mountPath: /data
+
+# --- External Exposure Configuration (Ingress/ALB) ---
+ingress:
+  # CertAuth service ingress (standard HTTPS)
+  certauth:
+    enabled: true
+    hostname: "certauth.example.com"
+    annotations:
+      kubernetes.io/ingress.class: "alb"
+      alb.ingress.kubernetes.io/scheme: "internet-facing"
+      alb.ingress.kubernetes.io/target-type: "ip"
+      alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+      alb.ingress.kubernetes.io/ssl-redirect: '443'
+      # alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:REGION:ACCOUNT_ID:certificate/CERT_ID"
+      alb.ingress.kubernetes.io/healthcheck-path: "/health"
+      alb.ingress.kubernetes.io/healthcheck-port: "8010"
+  
+  # CertSec service ingress (mTLS with passthrough)
+  certsec:
+    enabled: true
+    hostname: "certsec.example.com"
+    annotations:
+      kubernetes.io/ingress.class: "alb"
+      alb.ingress.kubernetes.io/scheme: "internet-facing"
+      alb.ingress.kubernetes.io/target-type: "ip"
+      alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
+      # alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:REGION:ACCOUNT_ID:certificate/CERT_ID"
+      # Enable mTLS in passthrough mode - client certificate passed to backend
+      alb.ingress.kubernetes.io/mutual-authentication: '[{"port": 443, "mode": "passthrough"}]'
+      # Backend protocol must be HTTPS for mTLS passthrough
+      alb.ingress.kubernetes.io/backend-protocol: "HTTPS"
+      alb.ingress.kubernetes.io/healthcheck-path: "/health"
+      alb.ingress.kubernetes.io/healthcheck-port: "8010"
+      alb.ingress.kubernetes.io/healthcheck-protocol: "HTTP"
+  
+  # Onboard service ingress (standard HTTPS)
+  onboard:
+    enabled: true
+    hostname: "onboard.example.com"
+    annotations:
+      kubernetes.io/ingress.class: "alb"
+      alb.ingress.kubernetes.io/scheme: "internet-facing"
+      alb.ingress.kubernetes.io/target-type: "ip"
+      alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+      alb.ingress.kubernetes.io/ssl-redirect: '443'
+      # alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:REGION:ACCOUNT_ID:certificate/CERT_ID"
+      alb.ingress.kubernetes.io/healthcheck-path: "/health"
+      alb.ingress.kubernetes.io/healthcheck-port: "8010"
+
+# --- Observability Configuration ---
+observability:
+  enabled: true
+  scrapePath: /metrics
+  dashboard:
+    enabled: true

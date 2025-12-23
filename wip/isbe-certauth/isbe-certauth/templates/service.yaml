@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "isbe-certauth.fullname" . }}
+  labels:
+    {{- include "isbe-certauth.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.ports.certauth }}
+      targetPort: certauth-port
+      protocol: TCP
+      name: certauth-port
+    - port: {{ .Values.service.ports.certsec }}
+      targetPort: certsec-port
+      protocol: TCP
+      name: certsec-port
+    - port: {{ .Values.service.ports.onboard }}
+      targetPort: onboard-port
+      protocol: TCP
+      name: onboard-port
+  selector:
+    {{- include "isbe-certauth.selectorLabels" . | nindent 4 }}
