@@ -10,6 +10,9 @@ metadata:
   annotations:
     {{- toYaml .Values.ingress.certauth.annotations | nindent 4 }}
 spec:
+  {{- if .Values.ingress.certauth.className }}
+  ingressClassName: {{ .Values.ingress.certauth.className }}
+  {{- end }}
   rules:
     - host: {{ .Values.ingress.certauth.hostname | quote }}
       http:
@@ -35,6 +38,9 @@ metadata:
   annotations:
     {{- toYaml .Values.ingress.certsec.annotations | nindent 4 }}
 spec:
+  {{- if .Values.ingress.certsec.className }}
+  ingressClassName: {{ .Values.ingress.certsec.className }}
+  {{- end }}
   rules:
     - host: {{ .Values.ingress.certsec.hostname | quote }}
       http:
@@ -60,6 +66,9 @@ metadata:
   annotations:
     {{- toYaml .Values.ingress.onboard.annotations | nindent 4 }}
 spec:
+  {{- if .Values.ingress.onboard.className }}
+  ingressClassName: {{ .Values.ingress.onboard.className }}
+  {{- end }}
   rules:
     - host: {{ .Values.ingress.onboard.hostname | quote }}
       http:
