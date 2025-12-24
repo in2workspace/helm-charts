@@ -179,9 +179,21 @@ echo ""
 echo -e "${YELLOW}Fetching ALB information...${NC}"
 sleep 10  # Give ALB time to be created
 
+# Check number of ingresses
+INGRESS_COUNT=$(kubectl get ingress -n $NAMESPACE --no-headers 2>/dev/null | wc -l | tr -d ' ')
+EXPECTED_INGRESS_COUNT=3
+
+echo -e "${YELLOW}Verifying ingress resources...${NC}"
+if [ "$INGRESS_COUNT" -eq "$EXPECTED_INGRESS_COUNT" ]; then
+    echo -e "${GREEN}✓ All $INGRESS_COUNT ingress resources created successfully${NC}"
+elif [ "$INGRESS_COUNT" -gt 0 ]; then
+    echo -e "${YELLOW}⚠ Found $INGRESS_COUNT ingress(es), expected $EXPECTED_INGRESS_COUNT${NC}"
+else
+    echo -e "${RED}✗ No ingress resources found${NC}"
+fi
+
 INGRESSES=$(kubectl get ingress -n $NAMESPACE -o json)
 if [ "$(echo $INGRESSES | jq '.items | length')" -gt 0 ]; then
-    echo -e "${GREEN}✓ Ingress resources created${NC}"
     kubectl get ingress -n $NAMESPACE
     echo ""
     

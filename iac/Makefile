@@ -27,8 +27,10 @@ help:
 	@echo ""
 	@echo "Application Deployment:"
 	@echo "  certauth-deploy   - Deploy isbe-certauth to EKS"
+	@echo "  certauth-dry-run  - Validate Helm chart without deploying"
 	@echo "  certauth-status   - Check isbe-certauth deployment status"
 	@echo "  certauth-logs     - View isbe-certauth logs"
+	@echo "  certauth-uninstall - Uninstall isbe-certauth from EKS"
 	@echo ""
 	@echo "Complete Workflow:"
 	@echo "  all               - Deploy everything (EKS + Application)"
@@ -161,6 +163,31 @@ certauth-deploy: kubectl-config
 	@chmod +x ./deploy-certauth.sh
 	@./deploy-certauth.sh
 
+# Dry run - validate Helm chart
+certauth-dry-run: kubectl-config
+	@echo "═══════════════════════════════════════"
+	@echo "  Validating isbe-certauth Helm Chart"
+	@echo "═══════════════════════════════════════"
+	@echo ""
+	@echo "Running Helm dry-run..."
+	@helm upgrade --install isbe-certauth ../wip/isbe-certauth \
+		--namespace $(NAMESPACE) \
+		--create-namespace \
+		--values ../wip/isbe-certauth/values.yaml \
+		--values ../wip/isbe-certauth/values-altia.yaml \
+		--dry-run --debug > /tmp/certauth-dryrun.yaml 2>&1
+	@echo ""
+	@echo "✓ Helm chart validation complete"
+	@echo "✓ Output saved to: /tmp/certauth-dryrun.yaml"
+	@echo ""
+	@echo "Preview (first 50 lines):"
+	@head -50 /tmp/certauth-dryrun.yaml
+	@echo ""
+	@echo "To view full output:"
+	@echo "  cat /tmp/certauth-dryrun.yaml"
+	@echo "  or"
+	@echo "  helm template isbe-certauth ../wip/isbe-certauth -f ../wip/isbe-certauth/values-altia.yaml"
+
 # Check application status
 certauth-status:
 	@echo "═══════════════════════════════════════"
@@ -191,6 +218,24 @@ certauth-logs:
 certauth-port-forward:
 	@echo "Port forwarding to isbe-certauth on http://localhost:8010"
 	@kubectl port-forward -n $(NAMESPACE) svc/isbe-certauth 8010:8010
+
+# Uninstall isbe-certauth application
+certauth-uninstall:
+	@echo "═══════════════════════════════════════"
+	@echo "  Uninstalling isbe-certauth Application"
+	@echo "═══════════════════════════════════════"
+	@echo ""
+	@echo "⚠️  WARNING: This will remove the isbe-certauth Helm release!"
+	@read -p "Are you sure you want to uninstall (y/n)? " answer; \
+	case $$answer in \
+		y|Y ) \
+			echo "Uninstalling isbe-certauth..."; \
+			helm uninstall isbe-certauth -n $(NAMESPACE) 2>/dev/null || echo "Release not found"; \
+			echo "✓ isbe-certauth uninstalled";; \
+		* ) \
+			echo "»»» Uninstall canceled"; \
+			exit 1;; \
+	esac
 
 ################################################################################
 # Complete Workflow

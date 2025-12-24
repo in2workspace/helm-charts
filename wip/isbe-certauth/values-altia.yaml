@@ -3,7 +3,7 @@
 # Certificate ARN: arn:aws:acm:eu-west-1:147108726325:certificate/c08fad25-729a-40da-9978-1024fc277037
 
 # Application Configuration
-replicaCount: 2
+replicaCount: 1
 
 # Service URLs Configuration
 serviceUrls:
@@ -13,11 +13,11 @@ serviceUrls:
 
 # Credentials Configuration (update these with actual values)
 adminPassword:
-  value: "change-me-in-production"
+  value: "pepe"
 
 tsaCredentials:
   user: "tsa-user"
-  password: "change-me-in-production"
+  password: "change-me-in-production" 
 
 smtpCredentials:
   username: "smtp-user"
@@ -39,12 +39,14 @@ ingress:
     annotations:
       alb.ingress.kubernetes.io/scheme: "internet-facing"
       alb.ingress.kubernetes.io/target-type: "ip"
-      alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
-      alb.ingress.kubernetes.io/ssl-redirect: '443'
+      alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
       alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:eu-west-1:147108726325:certificate/c08fad25-729a-40da-9978-1024fc277037"
       alb.ingress.kubernetes.io/healthcheck-path: "/health"
-      alb.ingress.kubernetes.io/healthcheck-port: "8010"
+      alb.ingress.kubernetes.io/healthcheck-port: "8012"
       alb.ingress.kubernetes.io/healthcheck-protocol: "HTTP"
+      alb.ingress.kubernetes.io/group.name: "grp-isbe-certauth"
+      alb.ingress.kubernetes.io/group.order: "1"
+ 
   
   # CertSec service ingress (mTLS with passthrough)
   certsec:
@@ -56,13 +58,16 @@ ingress:
       alb.ingress.kubernetes.io/target-type: "ip"
       alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
       alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:eu-west-1:147108726325:certificate/c08fad25-729a-40da-9978-1024fc277037"
-      # Enable mTLS in passthrough mode - client certificate passed to backend
-      alb.ingress.kubernetes.io/mutual-authentication: '[{"port": 443, "mode": "passthrough"}]'
-      # Backend protocol must be HTTPS for mTLS passthrough
-      alb.ingress.kubernetes.io/backend-protocol: "HTTPS"
       alb.ingress.kubernetes.io/healthcheck-path: "/health"
-      alb.ingress.kubernetes.io/healthcheck-port: "8010"
+      alb.ingress.kubernetes.io/healthcheck-port: "8012"
       alb.ingress.kubernetes.io/healthcheck-protocol: "HTTP"
+      alb.ingress.kubernetes.io/group.name: "grp-isbe-certauth"
+      alb.ingress.kubernetes.io/group.order: "2"
+      # Enable mTLS in passthrough mode - client certificate passed to backend
+      # alb.ingress.kubernetes.io/mutual-authentication: '[{"port": 443, "mode": "passthrough"}]'
+      # # Backend protocol must be HTTPS for mTLS passthrough
+      # alb.ingress.kubernetes.io/backend-protocol: "HTTPS"
+ 
   
   # Onboard service ingress (standard HTTPS)
   onboard:
@@ -72,12 +77,14 @@ ingress:
     annotations:
       alb.ingress.kubernetes.io/scheme: "internet-facing"
       alb.ingress.kubernetes.io/target-type: "ip"
-      alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
-      alb.ingress.kubernetes.io/ssl-redirect: '443'
+      alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
       alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:eu-west-1:147108726325:certificate/c08fad25-729a-40da-9978-1024fc277037"
       alb.ingress.kubernetes.io/healthcheck-path: "/health"
-      alb.ingress.kubernetes.io/healthcheck-port: "8010"
+      alb.ingress.kubernetes.io/healthcheck-port: "8012"
       alb.ingress.kubernetes.io/healthcheck-protocol: "HTTP"
+      alb.ingress.kubernetes.io/group.name: "grp-isbe-certauth"
+      alb.ingress.kubernetes.io/group.order: "3"
+ 
 
 # Resource Configuration (optimized for cost-effective t3a.small nodes)
 resources:
