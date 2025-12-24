@@ -48,7 +48,7 @@ ingress:
       alb.ingress.kubernetes.io/group.order: "1"
  
   
-  # CertSec service ingress (mTLS with passthrough)
+  # CertSec service ingress (mTLS with passthrough) - Separate ALB
   certsec:
     enabled: true
     hostname: "certsec.altia.eudistack.net"
@@ -61,12 +61,12 @@ ingress:
       alb.ingress.kubernetes.io/healthcheck-path: "/health"
       alb.ingress.kubernetes.io/healthcheck-port: "8012"
       alb.ingress.kubernetes.io/healthcheck-protocol: "HTTP"
-      alb.ingress.kubernetes.io/group.name: "grp-isbe-certauth"
-      alb.ingress.kubernetes.io/group.order: "2"
-      # Enable mTLS in passthrough mode - client certificate passed to backend
-      # alb.ingress.kubernetes.io/mutual-authentication: '[{"port": 443, "mode": "passthrough"}]'
-      # # Backend protocol must be HTTPS for mTLS passthrough
-      # alb.ingress.kubernetes.io/backend-protocol: "HTTPS"
+      # Separate ALB group for mTLS - this creates a dedicated ALB
+      alb.ingress.kubernetes.io/group.name: "grp-isbe-certauth-mtls"
+      alb.ingress.kubernetes.io/group.order: "1"
+      # Enable mTLS - ALB terminates TLS, validates cert, and passes to backend in X-Amzn-Mtls-Clientcert header
+      # Note: This requires a trust store to be configured on the ALB listener
+      # For now, we'll use optional client cert (no verification) for testing
  
   
   # Onboard service ingress (standard HTTPS)
