@@ -18,7 +18,7 @@ module "eks" {
   version = "~> 20.0"
 
   cluster_name    = local.cluster_name
-  cluster_version = "1.32"
+  cluster_version = "1.34"
 
   # Cost optimization: Public endpoint only (no private endpoint charges)
   cluster_endpoint_public_access  = true
