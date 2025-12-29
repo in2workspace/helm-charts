@@ -108,7 +108,7 @@ ingress:
       alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
       # alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:REGION:ACCOUNT_ID:certificate/CERT_ID"
       # Enable mTLS in passthrough mode - client certificate passed to backend
-      # alb.ingress.kubernetes.io/mutual-authentication: '[{"port": 443, "mode": "passthrough"}]'
+      alb.ingress.kubernetes.io/mutual-authentication: '[{"port": 443, "mode": "passthrough"}]'
       # Backend protocol must be HTTPS for mTLS passthrough
       # alb.ingress.kubernetes.io/backend-protocol: "HTTPS"
       alb.ingress.kubernetes.io/healthcheck-path: "/health"
