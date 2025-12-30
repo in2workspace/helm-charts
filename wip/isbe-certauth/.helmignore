@@ -21,3 +21,9 @@
 .idea/
 *.tmproj
 .vscode/
+# Helm files
+.helmignore
+# Documentation
+README.md
+deploy.sh
+values-production.yaml

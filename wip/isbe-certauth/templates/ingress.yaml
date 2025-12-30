@@ -1,47 +1,81 @@
-{{- range .Values.ingresses }}
-{{- if .enabled }}
+{{- if .Values.ingress.certauth.enabled }}
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ .name }}
+  name: {{ include "isbe-certauth.fullname" . }}-certauth
   labels:
-    {{- include "isbe-certauth.labels" $ | nindent 4 }}
-  {{- with .annotations }}
+    {{- include "isbe-certauth.labels" . | nindent 4 }}
+    app.kubernetes.io/component: certauth
   annotations:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
+    {{- toYaml .Values.ingress.certauth.annotations | nindent 4 }}
 spec:
-  {{- with .className }}
-  ingressClassName: {{ . }}
-  {{- end }}
-  {{- if .tls }}
-  tls:
-    {{- range .tls }}
-    - hosts:
-        {{- range .hosts }}
-        - {{ . | quote }}
-        {{- end }}
-      secretName: {{ .secretName }}
-    {{- end }}
+  {{- if .Values.ingress.certauth.className }}
+  ingressClassName: {{ .Values.ingress.certauth.className }}
   {{- end }}
   rules:
-    {{- range .hosts }}
-    {{- $port := .port }}
-    - host: {{ .host | quote }}
+    - host: {{ .Values.ingress.certauth.hostname | quote }}
       http:
         paths:
-          {{- range .paths }}
-          - path: {{ .path }}
-            {{- with .pathType }}
-            pathType: {{ . }}
-            {{- end }}
+          - path: /
+            pathType: Prefix
             backend:
               service:
-                name: {{ include "isbe-certauth.fullname" $ }}
+                name: {{ include "isbe-certauth.fullname" . }}
                 port:
-                  number: {{ $port }}
-          {{- end }}
-    {{- end }}
+                  name: certauth-port
 {{- end }}
+{{- if .Values.ingress.certsec.enabled }}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "isbe-certauth.fullname" . }}-certsec
+  labels:
+    {{- include "isbe-certauth.labels" . | nindent 4 }}
+    app.kubernetes.io/component: certsec
+  annotations:
+    {{- toYaml .Values.ingress.certsec.annotations | nindent 4 }}
+spec:
+  {{- if .Values.ingress.certsec.className }}
+  ingressClassName: {{ .Values.ingress.certsec.className }}
+  {{- end }}
+  rules:
+    - host: {{ .Values.ingress.certsec.hostname | quote }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "isbe-certauth.fullname" . }}
+                port:
+                  name: certsec-port
+{{- end }}
+{{- if .Values.ingress.onboard.enabled }}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "isbe-certauth.fullname" . }}-onboard
+  labels:
+    {{- include "isbe-certauth.labels" . | nindent 4 }}
+    app.kubernetes.io/component: onboard
+  annotations:
+    {{- toYaml .Values.ingress.onboard.annotations | nindent 4 }}
+spec:
+  {{- if .Values.ingress.onboard.className }}
+  ingressClassName: {{ .Values.ingress.onboard.className }}
+  {{- end }}
+  rules:
+    - host: {{ .Values.ingress.onboard.hostname | quote }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "isbe-certauth.fullname" . }}
+                port:
+                  name: onboard-port
 {{- end }}

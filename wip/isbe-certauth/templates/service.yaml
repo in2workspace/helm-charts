@@ -8,16 +8,16 @@ spec:
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.ports.certauth }}
-      targetPort: certauth
+      targetPort: certauth-port
       protocol: TCP
-      name: certauth
+      name: certauth-port
     - port: {{ .Values.service.ports.certsec }}
-      targetPort: certsec
+      targetPort: certsec-port
       protocol: TCP
-      name: certsec
+      name: certsec-port
     - port: {{ .Values.service.ports.onboard }}
-      targetPort: onboard
+      targetPort: onboard-port
       protocol: TCP
-      name: onboard
+      name: onboard-port
   selector:
     {{- include "isbe-certauth.selectorLabels" . | nindent 4 }}

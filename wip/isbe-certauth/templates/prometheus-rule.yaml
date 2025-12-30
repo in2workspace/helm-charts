@@ -1,0 +1,31 @@
+{{- if .Values.observability.enabled -}}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ include "isbe-certauth.fullname" . }}-rules
+  labels:
+    {{- include "isbe-certauth.labels" . | nindent 4 }}
+    # Label for Prometheus Operator to discover these rules
+    release: prometheus
+spec:
+  groups:
+  - name: {{ include "isbe-certauth.name" . }}.rules
+    rules:
+    - alert: ISBECertAuthDown
+      expr: up{job="{{ include "isbe-certauth.fullname" . }}"} == 0
+      for: 2m
+      labels:
+        severity: critical
+      annotations:
+        summary: "ISBE CertAuth service is down"
+        description: "Prometheus has not been able to scrape metrics from job {{`{{ $labels.job }}`}} for more than 2 minutes."
+    
+    - alert: ISBECertAuthNoPodsAvailable
+      expr: kube_deployment_status_replicas_available{deployment="{{ include "isbe-certauth.fullname" . }}"} == 0
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "ISBE CertAuth has no available pods"
+        description: "The deployment {{ include "isbe-certauth.fullname" . }} in namespace {{ .Release.Namespace }} should have replicas but none are available."
+{{- end }}

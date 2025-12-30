@@ -5,92 +5,97 @@ metadata:
   labels:
     {{- include "isbe-certauth.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
-  {{- end }}
   selector:
     matchLabels:
       {{- include "isbe-certauth.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
-      annotations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
       labels:
-        {{- include "isbe-certauth.labels" . | nindent 8 }}
-        {{- with .Values.podLabels }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
+        {{- include "isbe-certauth.selectorLabels" . | nindent 8 }}
     spec:
-      {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      serviceAccountName: {{ include "isbe-certauth.serviceAccountName" . }}
-      {{- with .Values.podSecurityContext }}
-      securityContext:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
-          {{- with .Values.securityContext }}
-          securityContext:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - name: certauth
+            - name: certauth-port
               containerPort: {{ .Values.service.ports.certauth }}
               protocol: TCP
-            - name: certsec
+            - name: certsec-port
               containerPort: {{ .Values.service.ports.certsec }}
               protocol: TCP
-            - name: onboard
+            - name: onboard-port
               containerPort: {{ .Values.service.ports.onboard }}
               protocol: TCP
-          {{- with .Values.livenessProbe }}
-          livenessProbe:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-          {{- with .Values.readinessProbe }}
-          readinessProbe:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-          {{- with .Values.resources }}
-          resources:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-          {{- with .Values.volumeMounts }}
-          volumeMounts:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
           env:
+            # Application Profile
+            - name: PROFILE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "isbe-certauth.profile.secretName" . }}
+                  key: {{ include "isbe-certauth.profile.key" . }}
+            # Service URLs
+            - name: CERTAUTH_URL
+              value: {{ .Values.serviceUrls.certauth | quote }}
+            - name: CERTSEC_URL
+              value: {{ .Values.serviceUrls.certsec | quote }}
+            - name: ONBOARD_URL
+              value: {{ .Values.serviceUrls.onboard | quote }}
+            # Admin Password
             - name: CERTAUTH_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "isbe-certauth.CertAuthAdminPasswordSecretName" . }}
-                  key: {{ include "isbe-certauth.CertAuthAdminPasswordKey" . }}
-            - name: CERTAUTH_URL
-              value: {{ .Values.env.certauthUrl }}
-            - name: CERTSEC_URL
-              value: {{ .Values.env.certsecUrl }}
-            - name: ONBOARD_URL
-              value: {{ .Values.env.onboardUrl }}
-      {{- with .Values.volumes }}
+                  name: {{ include "isbe-certauth.adminPassword.secretName" . }}
+                  key: {{ include "isbe-certauth.adminPassword.key" . }}
+            # TSA Credentials
+            - name: TSA_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "isbe-certauth.tsaCredentials.secretName" . }}
+                  key: {{ include "isbe-certauth.tsaCredentials.userKey" . }}
+            - name: TSA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "isbe-certauth.tsaCredentials.secretName" . }}
+                  key: {{ include "isbe-certauth.tsaCredentials.passwordKey" . }}
+            # SMTP Credentials
+            - name: SMTP_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "isbe-certauth.smtpCredentials.secretName" . }}
+                  key: {{ include "isbe-certauth.smtpCredentials.usernameKey" . }}
+            - name: SMTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "isbe-certauth.smtpCredentials.secretName" . }}
+                  key: {{ include "isbe-certauth.smtpCredentials.passwordKey" . }}
+          {{- if .Values.persistence.enabled }}
+          volumeMounts:
+            - name: data
+              mountPath: {{ .Values.persistence.mountPath }}
+          {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.service.ports.certauth }}
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.service.ports.certauth }}
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- if .Values.persistence.enabled }}
       volumes:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ include "isbe-certauth.fullname" . }}-pvc
       {{- end }}

@@ -1,171 +1,137 @@
-# Default values for isbe-certauth.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
+# --- Application Configuration ---
+replicaCount: 2
 
-# This will set the replicaset count more information can be found here: https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/
-replicaCount: 1
-
-# This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
 image:
-  repository: 841648405024.dkr.ecr.eu-west-1.amazonaws.com/isbe-certauth
-  # This sets the pull policy for images.
+  # Docker Hub image for ISBE CertAuth
+  repository: flai/isbe-certauth
   pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: "v1.0.3"
+  tag: "latest"
 
-# This is for the secrets for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-imagePullSecrets: []
-# This is to override the chart name.
-nameOverride: ""
-fullnameOverride: ""
+# Application name used in labels and selectors
+appName: "isbe-certauth"
 
-# This section builds out the service account more information can be found here: https://kubernetes.io/docs/concepts/security/service-accounts/
-serviceAccount:
-  # Specifies whether a service account should be created
-  create: true
-  # Automatically mount a ServiceAccount's API credentials?
-  automount: true
-  # Annotations to add to the service account
-  annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name: ""
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi
 
-# This is for setting Kubernetes Annotations to a Pod.
-# For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-podAnnotations: {}
-# This is for setting Kubernetes Labels to a Pod.
-# For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-podLabels: {}
+# --- Service URLs Configuration ---
+# External URLs for the three services
+serviceUrls:
+  certauth: "https://certauth.example.com"
+  certsec: "https://certsec.example.com"
+  onboard: "https://onboard.example.com"
 
-podSecurityContext: {}
-  # fsGroup: 2000
+# --- Credentials Configuration ---
+# Admin password for CertAuth
+adminPassword:
+  value: "change-me-in-production"
+  existingSecret:
+    enabled: false
+    name: ""
+    key: "admin-password"
 
-securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
+# TSA (Time Stamping Authority) credentials
+tsaCredentials:
+  user: "tsa-user"
+  password: "change-me-in-production"
+  existingSecret:
+    enabled: false
+    name: ""
+    userKey: "tsa-user"
+    passwordKey: "tsa-password"
 
-# This is for setting up a service more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/
+# SMTP credentials for email
+smtpCredentials:
+  username: "smtp-user"
+  password: "change-me-in-production"
+  existingSecret:
+    enabled: false
+    name: ""
+    usernameKey: "smtp-username"
+    passwordKey: "smtp-password"
+
+# Application profile configuration
+profile:
+  value: "local"
+  existingSecret:
+    enabled: false
+    name: ""
+    key: "profile"
+
+# --- Network Configuration ---
 service:
-  # This sets the service type more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
   type: ClusterIP
-  # This sets the ports more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
   ports:
+    # CertAuth service port
     certauth: 8010
+    # CertSec service port (requires mTLS)
     certsec: 8011
+    # Onboard service port
     onboard: 8012
 
-# This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
-ingresses:
-  - enabled: false
-    className: ""
-    annotations: {}
-      # kubernetes.io/ingress.class: nginx
-      # kubernetes.io/tls-acme: "true"
-    hosts:
-      - host: certauth.local
-        port: 8010
-        paths:
-          - path: /
-            pathType: Prefix
-      - host: onboard.local
-        port: 8012
-        paths:
-          - path: /
-            pathType: Prefix
-    tls: []
-    #  - secretName: chart-example-tls
-    #    hosts:
-    #      - chart-example.local
-  - enabled: false
-    className: ""
-    annotations: {}
-      # kubernetes.io/ingress.class: nginx
-      # kubernetes.io/tls-acme: "true"
-    hosts:
-      - host: certsec.local
-        port: 8011
-        paths:
-          - path: /
-            pathType: Prefix
-    tls: []
-    #  - secretName: chart-example-tls
-    #    hosts:
-    #      - chart-example.local
+# --- Persistence Configuration ---
+persistence:
+  enabled: true
+  storageClass: "gp3"
+  size: 10Gi
+  accessMode: ReadWriteOnce
+  mountPath: /data
 
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+# --- External Exposure Configuration (Ingress/ALB) ---
+ingress:
+  # CertAuth service ingress (standard HTTPS)
+  certauth:
+    enabled: true
+    hostname: "certauth.example.com"
+    className: "alb"
+    annotations:
+      alb.ingress.kubernetes.io/scheme: "internet-facing"
+      alb.ingress.kubernetes.io/target-type: "ip"
+      alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+      alb.ingress.kubernetes.io/ssl-redirect: '443'
+      # alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:REGION:ACCOUNT_ID:certificate/CERT_ID"
+      alb.ingress.kubernetes.io/healthcheck-path: "/health"
+      alb.ingress.kubernetes.io/healthcheck-port: "8010"
+  
+  # CertSec service ingress (mTLS with passthrough)
+  certsec:
+    enabled: true
+    hostname: "certsec.example.com"
+    className: "alb"
+    annotations:
+      alb.ingress.kubernetes.io/scheme: "internet-facing"
+      alb.ingress.kubernetes.io/target-type: "ip"
+      alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
+      # alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:REGION:ACCOUNT_ID:certificate/CERT_ID"
+      # Enable mTLS in passthrough mode - client certificate passed to backend
+      alb.ingress.kubernetes.io/mutual-authentication: '[{"port": 443, "mode": "passthrough"}]'
+      # Backend protocol must be HTTPS for mTLS passthrough
+      # alb.ingress.kubernetes.io/backend-protocol: "HTTPS"
+      alb.ingress.kubernetes.io/healthcheck-path: "/health"
+      alb.ingress.kubernetes.io/healthcheck-port: "8010"
+      alb.ingress.kubernetes.io/healthcheck-protocol: "HTTP"
+  
+  # Onboard service ingress (standard HTTPS)
+  onboard:
+    enabled: true
+    hostname: "onboard.example.com"
+    className: "alb"
+    annotations:
+      alb.ingress.kubernetes.io/scheme: "internet-facing"
+      alb.ingress.kubernetes.io/target-type: "ip"
+      alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+      alb.ingress.kubernetes.io/ssl-redirect: '443'
+      # alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:REGION:ACCOUNT_ID:certificate/CERT_ID"
+      alb.ingress.kubernetes.io/healthcheck-path: "/health"
+      alb.ingress.kubernetes.io/healthcheck-port: "8010"
 
-# This is to setup the liveness and readiness probes more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
-livenessProbe:
-  httpGet:
-    path: /health
-    port: certauth
-readinessProbe:
-  httpGet:
-    path: /health
-    port: certauth
-
-# This section is for setting up autoscaling more information can be found here: https://kubernetes.io/docs/concepts/workloads/autoscaling/
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
-
-# Additional volumes on the output Deployment definition.
-volumes: []
-# - name: foo
-#   secret:
-#     secretName: mysecret
-#     optional: false
-
-# Additional volumeMounts on the output Deployment definition.
-volumeMounts: []
-# - name: foo
-#   mountPath: "/etc/foo"
-#   readOnly: true
-
-nodeSelector: {}
-
-tolerations: []
-
-affinity: {}
-
-# Environment variables to set in the container.
-env:
-  # Admin password configuration.
-  # NOTE: Only one method should be used:
-  # - If existingSecret.enabled = true: password is read from the secret
-  # - If existingSecret.enabled = false: rawValue is used directly
-  certAuthAdminPassword:
-    # Direct password value (not recommended for production)
-    # Use existingSecret for better security practices
-    rawValue: "default"
-
-    # Reference to an existing Kubernetes secret.
-    existingSecret:
-      # Enable to use an existing secret instead of rawValue
-      enabled: false
-      # Name of the Kubernetes secret containing the password
-      name: isbe-certauth-secret
-      # Key within the secret that contains the password value
-      key: certauth-admin-password
-
-  certauthUrl: "certauth.example"
-  certsecUrl: "certsec.example"
-  onboardUrl: "onboard.example"
+# --- Observability Configuration ---
+observability:
+  enabled: true
+  scrapePath: /metrics
+  dashboard:
+    enabled: true

@@ -1,1 +1,44 @@
+# IDE and Editor files
 .idea
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Helm
+*.tgz
+charts/*/charts/
+charts/*/Chart.lock
+
+# Temporary files
+*.tmp
+*.bak
+*.orig
+
+# Local values files (may contain secrets)
+values-local.yaml
+**/values-local.yaml
+local-values.yaml
+**/local-values.yaml
+secret-values.yaml
+**/secret-values.yaml
+values-dev.yaml
+**/values-dev.yaml
+values-pre.yaml
+**/values-pre.yaml
+values-pro.yaml
+**/values-pro.yaml
+
+
+# Dependencies
+.terraform/
+node_modules/
+
+# Build outputs
+dist/
+build/
+
+# Environment files
+.env
+.env.local
