@@ -134,9 +134,9 @@ app:
       # Base URL for assets (REQUIRED)
       baseUrl: "src/main/resources/static/img"
       # Placeholder for logo source path (REQUIRED)
-      logoSrc: dome_logo_white.svg
+      logoPath: dome_logo_white.svg
       # Placeholder for favicon source path (REQUIRED)
-      faviconSrc: dome_favicon.png
+      faviconPath: dome_favicon.png
       # Language 2-digits prefix, lowcase; i. e.: "en" for English
     defaultLang: en
   backend:
