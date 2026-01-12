@@ -68,10 +68,12 @@ spec:
               value: {{ .Values.app.frontend.colors.secondary | quote }}
             - name: VERIFIER_FRONTEND_COLORS_SECONDARY_CONTRAST
               value: {{ .Values.app.frontend.colors.secondaryContrast | quote }}
-            - name: VERIFIER_FRONTEND_LOGO_SRC
-              value: {{ .Values.app.frontend.logoSrc }}
-            - name: VERIFIER_FRONTEND_FAVICON_SRC
-              value: {{ .Values.app.frontend.faviconSrc }}
+            - name: VERIFIER_FRONTEND_ASSETS_BASE_URL
+              value: {{ .Values.app.frontend.assets.baseUrl }}
+            - name: VERIFIER_FRONTEND_ASSETS_LOGO_PATH
+              value: {{ .Values.app.frontend.assets.logoPath }}
+            - name: VERIFIER_FRONTEND_ASSETS_FAVICON_PATH
+              value: {{ .Values.app.frontend.assets.faviconPath }}
             - name: VERIFIER_FRONTEND_DEFAULT_LANG
               value: {{ .Values.app.frontend.defaultLang }}
             # Backend

@@ -134,8 +134,10 @@ app:
     primaryContrast: "#ffffff"
     secondary: "#50c8ff"
     secondaryContrast: "#50c8ff"
-  logoSrc: "assets/logos/no-image.png"
-  faviconSrc: "assets/icons/dome-favicon.png"
+  assets:
+    baseUrl: "assets"
+    logoPath: "logos/no-image.png"
+    faviconPath: "icons/dome-favicon.png"
   defaultLang: "en"
   walletApi:
     externalUrl: https://example-external-domain.org

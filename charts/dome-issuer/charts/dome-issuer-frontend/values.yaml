@@ -120,8 +120,10 @@ app:
     primaryContrast: "#ffffff"
     secondary: "#2cb6b2"
     secondaryContrast: "#dde6f6"
-  logoSrc: "assets/logos/no-image.png"
-  faviconSrc: "assets/logos/no-image.png"
+  assets:
+    baseUrl: "assets"
+    logoPath: "logos/no-image.png"
+    faviconPath: "logos/no-image.png"
   keycloakUrl: "https://keycloak.127.0.0.1.nip.io/realms/issuer"
   backendUrl: "https://issuer.127.0.0.1.nip.io/api"
   walletUrl: "https://wallet.127.0.1.nip.io"

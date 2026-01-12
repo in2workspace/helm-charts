@@ -130,13 +130,14 @@ app:
       secondary: "#14274A"
       # Defines contrasting text color for secondary color (OPTIONAL with default value)
       secondaryContrast: "#00ADD3"
-    # Placeholder for logo source path (REQUIRED)
-    # This routes must point to internal folder: src/main/resources/static/img/<file_name.png>
-    logoSrc: dome_logo_white.svg
-    # Placeholder for favicon source path (OPTIONAL)
-    # This routes must point to internal folder: src/main/resources/static/img/<file_name.png>
-    faviconSrc:
-    # Language 2-digits prefix, lowcase; i. e.: "en" for English
+    assets:
+      # Base URL for assets (REQUIRED)
+      baseUrl: "src/main/resources/static/img"
+      # Placeholder for logo source path (REQUIRED)
+      logoPath: dome_logo_white.svg
+      # Placeholder for favicon source path (REQUIRED)
+      faviconPath: dome_favicon.png
+      # Language 2-digits prefix, lowcase; i. e.: "en" for English
     defaultLang: en
   backend:
     logging:
