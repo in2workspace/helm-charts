@@ -55,14 +55,8 @@ spec:
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
           env:
-            - name: PRIMARY
-              value: {{ .Values.app.colors.primary | quote }}
-            - name: PRIMARY_CONTRAST
-              value: {{ .Values.app.colors.primaryContrast | quote }}
-            - name: SECONDARY
-              value: {{ .Values.app.colors.secondary | quote }}
-            - name: SECONDARY_CONTRAST
-              value: {{ .Values.app.colors.secondaryContrast | quote }}
+            - name: THEME_NAME
+              value: {{ .Values.app.themeName }}
             - name: ASSETS_BASE_URL
               value: {{ .Values.app.assets.baseUrl }}
             - name: LOGO_PATH

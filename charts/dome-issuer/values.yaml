@@ -183,11 +183,7 @@ dome-issuer-frontend:
   ingress:
     enabled: false
   app:
-    colors:
-      primary: "#2d58a7"
-      primaryContrast: "#ffffff"
-      secondary: "#2cb6b2"
-      secondaryContrast: "#dde6f6"
+    themeName: "default-theme"
     assets:
       baseUrl: "assets"
       logoPath: "logos/no-image.png"
