@@ -76,6 +76,8 @@ ingress:
           pathType: Prefix
         - path: /oauth/token
           pathType: Prefix
+        - path: /w3c
+          pathType: Prefix
 
   tls: []
   #  - secretName: chart-example-tls
