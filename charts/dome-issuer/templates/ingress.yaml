@@ -64,6 +64,13 @@ spec:
                 name: {{ include "dome-issuer-backend.service.name" . }}
                 port:
                   number: 80
+          - path: /w3c
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "dome-issuer-backend.service.name" . }}
+                port:
+                  number: 80
           #           Frontend
           - path: /
             pathType: Prefix
