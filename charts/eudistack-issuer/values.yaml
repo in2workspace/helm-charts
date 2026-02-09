@@ -48,7 +48,7 @@ eudistack-issuer-core-backend:
   #     - -c
   #     - >
   #       timeout 75 sh -c '
-  #         until curl -s http://dome-wallet-keycloak:80/keycloak/health;
+  #         until curl -s http://eudistack-wallet-keycloak:80/keycloak/health;
   #         do echo "waiting for keycloak..."; sleep 5; done'
   ## deployment specific configuration
   app:
@@ -230,104 +230,6 @@ eudistack-issuer-postgresql:
         # -- !!Put the same database name and the same database schema
         create.sh: |
           psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE issuer;"
-  global:
-    security:
-      allowInsecureImages: true
-  image:
-    registry: docker.io
-    repository: bitnamilegacy/postgresql
-    tag: 16.0.0-debian-11-r13
-    pullPolicy: IfNotPresent
-
-eudistack-issuer-keycloak:
-  nameOverride: eudistack-issuer-keycloak
-  fullnameOverride: eudistack-issuer-keycloak
-  # -- should be enabled?
-  enabled: true
-  ## ingress specific configuration
-  ingress:
-    enabled: false
-    className: ""
-    annotations: { }
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-    hosts:
-      - host: chart-example.local
-        paths:
-          - path: /keycloak
-            pathType: Prefix
-    tls:
-      - hosts:
-          - example-host
-        secretName: example-secret
-  app:
-    keycloak:
-      internalServerPort: 8080
-      proxyHeaders: edge
-      logsCertsLevel: INFO
-      logLevel: INFO
-      admin:
-        username: admin
-        password: admin
-        existingSecret:
-          # -- should an existing secret be used
-          enabled: false
-          # -- name of the secret
-          name: keycloak-admin-secret
-          # -- key to retrieve the password from
-          passwordKey: keycloakAdminPassword
-      hostnameUrl: "http://dome-wallet-keycloak:80"
-      adminUrl: "http://dome-wallet-keycloak:80/admin"
-      https:
-        clientAuth: request
-
-    db:
-      type: postgres
-      host: eudistack-issuer-keycloak-postgres
-      port: 5432
-      externalService: true
-      name: keycloak
-      username: postgres
-      password: postgres
-      existingSecret:
-        # -- should an existing secret be used
-        enabled: false
-        # -- name of the secret
-        name: dome-wallet-keycloak-secret
-        # -- key to retrieve the password from
-        passwordKey: keycloak-db-password
-
-eudistack-issuer-keycloak-postgresql:
-  # -- should the postgresql deployment be enabled
-  enabled: true
-  # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
-  # ! Changing this parameter may cause the PVC to re-created and the data lost
-  fullnameOverride: issuer-keycloak-postgres
-  # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
-  # ! Changing this parameter may cause the PVC to re-created and the data lost
-  nameOverride: issuer-keycloak-postgres
-  ## auth configuration for the database
-  auth:
-    # -- username to be used
-    username: postgres
-    # -- should the default postgres user be enabled
-    enablePostgresUser: true
-    # -- password to be used
-    password: postgres
-  ## configuration of the postgres primary replica
-  primary:
-    # Configuration for Velero backup
-    annotations:
-      backup.velero.io/backup-volumes: data
-    podAnnotations:
-      backup.velero.io/backup-volumes: data
-    ## provide db initialization
-    initdb:
-      ## provide scripts for initialization
-      scripts:
-        # -- create the database
-        create.sh: |
-          psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE cred;"
   global:
     security:
       allowInsecureImages: true
