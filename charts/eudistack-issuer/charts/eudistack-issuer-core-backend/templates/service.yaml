@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "eudistack-issuer-core-backend.fullname" . }}
+  namespace: {{ $.Release.Namespace | quote }}
+  labels:
+    {{- include "eudistack-issuer-core-backend.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ include "eudistack-issuer-core-backend.serverPort" . }}
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "eudistack-issuer-core-backend.selectorLabels" . | nindent 4 }}
