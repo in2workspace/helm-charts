@@ -3677,6 +3677,31 @@ entries:
     - https://github.com/in2workspace/helm-charts/releases/download/eudistack-issuer-1.5.22/eudistack-issuer-1.5.22.tgz
     version: 1.5.22
   - apiVersion: v2
+    created: "2026-02-09T14:23:40.320516474Z"
+    dependencies:
+    - name: eudistack-issuer-core-backend
+      repository: ""
+      version: 1.0.0
+    - name: eudistack-issuer-enterprise-backend
+      repository: ""
+      version: 1.0.1
+    - name: eudistack-issuer-frontend
+      repository: ""
+      version: 1.0.0
+    - alias: eudistack-issuer-postgresql
+      condition: eudistack-issuer-postgresql.enabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 13.1.5
+    description: Parent chart managing all the components of the Credential Issuer
+      application
+    digest: c1bbb79abe96fa3e94a60934fd2c56e9eee1c220a736ed143ff16b0a927bf9d2
+    name: eudistack-issuer
+    type: application
+    urls:
+    - https://github.com/in2workspace/helm-charts/releases/download/eudistack-issuer-1.0.1/eudistack-issuer-1.0.1.tgz
+    version: 1.0.1
+  - apiVersion: v2
     created: "2026-02-09T14:17:10.263341252Z"
     dependencies:
     - name: eudistack-issuer-core-backend
@@ -8274,4 +8299,4 @@ entries:
     urls:
     - https://in2workspace.github.io/helm-charts/wallet-api-1.0.0.tgz
     version: 1.0.0
-generated: "2026-02-09T14:17:10.263714317Z"
+generated: "2026-02-09T14:23:40.320916856Z"
