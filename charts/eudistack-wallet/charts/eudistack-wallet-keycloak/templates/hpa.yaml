@@ -2,15 +2,15 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "dome-wallet-keycloak.fullname" . }}
+  name: {{ include "eudistack-wallet-keycloak.fullname" . }}
   namespace: {{ $.Release.Namespace | quote }}
   labels:
-    {{- include "dome-wallet-keycloak.labels" . | nindent 4 }}
+    {{- include "eudistack-wallet-keycloak.labels" . | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "dome-wallet-keycloak.fullname" . }}
+    name: {{ include "eudistack-wallet-keycloak.fullname" . }}
   minReplicas: {{ .Values.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.autoscaling.maxReplicas }}
   metrics:

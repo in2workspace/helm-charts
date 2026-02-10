@@ -15,7 +15,7 @@ type: application
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 1.0.1
+version: 1.0.2
 
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application. Versions are not expected to
@@ -25,7 +25,7 @@ version: 1.0.1
 
 dependencies:
   - name: eudistack-wallet-enterprise-backend
-    version: 1.0.1
+    version: 1.0.2
 
   - name: eudistack-wallet-core-frontend
     version: 1.0.1
@@ -33,15 +33,15 @@ dependencies:
   - name: postgresql
     version: 16.4.5
     repository: oci://registry-1.docker.io/bitnamicharts
-    alias: dome-wallet-postgresql
-    condition: dome-wallet-postgresql.enabled
+    alias: eudistack-wallet-postgresql
+    condition: eudistack-wallet-postgresql.enabled
 
-  - name: dome-wallet-keycloak
-    version: 0.1.6
-    condition: dome-wallet-keycloak.enabled
+  - name: eudistack-wallet-keycloak
+    version: 0.1.7
+    condition: eudistack-wallet-keycloak.enabled
 
   - name: postgresql
     version: 16.4.5
     repository: oci://registry-1.docker.io/bitnamicharts
-    alias: dome-wallet-keycloak-postgresql
-    condition: dome-wallet-keycloak-postgresql.enabled
+    alias: eudistack-wallet-keycloak-postgresql
+    condition: eudistack-wallet-keycloak-postgresql.enabled
