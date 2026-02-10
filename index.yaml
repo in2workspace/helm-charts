@@ -3728,6 +3728,36 @@ entries:
     version: 1.0.0
   eudistack-wallet:
   - apiVersion: v2
+    created: "2026-02-10T12:25:42.563978294Z"
+    dependencies:
+    - name: eudistack-wallet-enterprise-backend
+      repository: ""
+      version: 1.0.2
+    - name: eudistack-wallet-core-frontend
+      repository: ""
+      version: 1.0.1
+    - alias: eudistack-wallet-postgresql
+      condition: eudistack-wallet-postgresql.enabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 16.4.5
+    - condition: eudistack-wallet-keycloak.enabled
+      name: eudistack-wallet-keycloak
+      repository: ""
+      version: 0.1.7
+    - alias: eudistack-wallet-keycloak-postgresql
+      condition: eudistack-wallet-keycloak-postgresql.enabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 16.4.5
+    description: Helm chart for the Wallet
+    digest: a436568fc87ecf385c47237ffebaef92d1413eee838a9e00ebf0d65cb0e317b8
+    name: eudistack-wallet
+    type: application
+    urls:
+    - https://github.com/in2workspace/helm-charts/releases/download/eudistack-wallet-1.0.2/eudistack-wallet-1.0.2.tgz
+    version: 1.0.2
+  - apiVersion: v2
     created: "2026-02-10T09:01:31.071011438Z"
     dependencies:
     - name: eudistack-wallet-enterprise-backend
@@ -8361,4 +8391,4 @@ entries:
     urls:
     - https://in2workspace.github.io/helm-charts/wallet-api-1.0.0.tgz
     version: 1.0.0
-generated: "2026-02-10T09:01:31.071463731Z"
+generated: "2026-02-10T12:25:42.564384562Z"
