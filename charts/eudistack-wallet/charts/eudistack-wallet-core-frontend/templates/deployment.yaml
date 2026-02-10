@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "dome-wallet-frontend.fullname" . }}
+  name: {{ include "eudistack-wallet-core-frontend.fullname" . }}
   namespace: {{ $.Release.Namespace | quote }}
   labels:
-    {{- include "dome-wallet-frontend.labels" . | nindent 4 }}
+    {{- include "eudistack-wallet-core-frontend.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "dome-wallet-frontend.selectorLabels" . | nindent 6 }}
+      {{- include "eudistack-wallet-core-frontend.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -19,13 +19,13 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "dome-wallet-frontend.labels" . | nindent 8 }}
+        {{- include "eudistack-wallet-core-frontend.labels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "dome-wallet-frontend.serviceAccountName" . }}
+      serviceAccountName: {{ include "eudistack-wallet-core-frontend.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -36,19 +36,19 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ include "dome-wallet-frontend.serverPort" . }}
+              containerPort: {{ include "eudistack-wallet-core-frontend.serverPort" . }}
               protocol: TCP
           livenessProbe:
             httpGet:
               path: {{ .Values.livenessProbe.httpGet.path }}
-              port: {{ include "dome-wallet-frontend.serverPort" . }}
+              port: {{ include "eudistack-wallet-core-frontend.serverPort" . }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
           readinessProbe:
             httpGet:
               path: {{ .Values.readinessProbe.httpGet.path }}
-              port: {{ include "dome-wallet-frontend.serverPort" . }}
+              port: {{ include "eudistack-wallet-core-frontend.serverPort" . }}
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}

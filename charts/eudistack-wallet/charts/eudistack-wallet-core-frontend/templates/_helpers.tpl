@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "dome-wallet-frontend.name" -}}
+{{- define "eudistack-wallet-core-frontend.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "dome-wallet-frontend.fullname" -}}
+{{- define "eudistack-wallet-core-frontend.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,16 +26,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "dome-wallet-frontend.chart" -}}
+{{- define "eudistack-wallet-core-frontend.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "dome-wallet-frontend.labels" -}}
-helm.sh/chart: {{ include "dome-wallet-frontend.chart" . }}
-{{ include "dome-wallet-frontend.selectorLabels" . }}
+{{- define "eudistack-wallet-core-frontend.labels" -}}
+helm.sh/chart: {{ include "eudistack-wallet-core-frontend.chart" . }}
+{{ include "eudistack-wallet-core-frontend.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -45,17 +45,17 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "dome-wallet-frontend.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "dome-wallet-frontend.name" . }}
+{{- define "eudistack-wallet-core-frontend.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "eudistack-wallet-core-frontend.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "dome-wallet-frontend.serviceAccountName" -}}
+{{- define "eudistack-wallet-core-frontend.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "dome-wallet-frontend.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "eudistack-wallet-core-frontend.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
@@ -64,6 +64,6 @@ Create the name of the service account to use
 {{/*
 Internal Server Port
 */}}
-{{- define "dome-wallet-frontend.serverPort" -}}
+{{- define "eudistack-wallet-core-frontend.serverPort" -}}
 {{- default 8080 }}
 {{- end }}
