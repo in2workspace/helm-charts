@@ -34,7 +34,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ include "eudistack-wallet-core-frontend.service.service.name" . }}
+                name: {{ include "eudistack-wallet-core-frontend.service.name" . }}
                 port:
                   number: 80
   {{- if .Values.global.ingress.enableTLS }}
