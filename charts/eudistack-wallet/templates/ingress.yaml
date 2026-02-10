@@ -4,7 +4,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "dome-wallet.fullname" . }}
+  name: {{ include "eudistack-wallet.fullname" . }}
   labels:
     {{- toYaml .Values.global.ingress.labels | nindent 4 }}
   namespace: {{ $.Release.Namespace | quote }}
@@ -26,7 +26,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ include "dome-wallet-backend.service.name" . }}
+                name: {{ include "eudistack-wallet-enterprise-backend.service.name" . }}
                 port:
                   number: 80
           # Frontend
@@ -34,7 +34,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ include "dome-wallet-frontend.service.name" . }}
+                name: {{ include "eudistack-wallet-core-frontend.service.name" . }}
                 port:
                   number: 80
   {{- if .Values.global.ingress.enableTLS }}
