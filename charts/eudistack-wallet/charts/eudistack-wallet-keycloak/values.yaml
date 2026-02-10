@@ -6,6 +6,7 @@
 replicaCount: 1
 
 # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
+# todo point to EUDIStack Keycloak image if it ever exists
 image:
   repository: in2workspace/in2-dome-keycloak
   # This sets the pull policy for images.
@@ -129,15 +130,15 @@ affinity: {}
 # specific app (Keycloak) configuration
 app:
   keycloak:
-    hostnameUrl: "http://dome-wallet-keycloak/keycloak"
-    adminUrl: "http://dome-wallet-keycloak/keycloak/admin"
+    hostnameUrl: "http://eudistack-wallet-keycloak/keycloak"
+    adminUrl: "http://eudistack-wallet-keycloak/keycloak/admin"
     admin: admin
     password: admin
     existingSecret:
       # -- should an existing secret be used
       enabled: false
       # -- name of the secret
-      name: dome-wallet-keycloak-secret
+      name: eudistack-wallet-keycloak-secret
       # -- key to retrieve the password from
       key: keycloak-password
     mail:
@@ -150,7 +151,7 @@ app:
       password: password
       existingSecret:
         enabled: false
-        name: dome-wallet-keycloak-secret
+        name: eudistack-wallet-keycloak-secret
         userKey: mail-user
         passwordKey: mail-password
       properties:
@@ -164,7 +165,7 @@ app:
 
   db:
     type: postgres
-    host: dome-wallet-keycloak-postgres
+    host: eudistack-wallet-keycloak-postgres
     port: 5432
     name: keycloak
     username: postgres
@@ -173,6 +174,6 @@ app:
       # -- should an existing secret be used
       enabled: false
       # -- name of the secret
-      name: dome-wallet-keycloak-secret
+      name: eudistack-wallet-keycloak-secret
       # -- key to retrieve the password from
       key: keycloak-db-password

@@ -27,7 +27,7 @@ eudistack-wallet-enterprise-backend:
     logLevel: DEBUG
     authServer:
       externalUrl: http://localhost/keycloak/realms/wallet
-      internalUrl: http://dome-wallet-keycloak:80/realms/wallet
+      internalUrl: http://eudistack-wallet-keycloak:80/realms/wallet
     cors:
       # expects a string of url's separated with comma and space
       allowedOrigins: "http://localhost.com, https://localhost.com, www.example-cors-two.com"
@@ -45,7 +45,7 @@ eudistack-wallet-enterprise-backend:
         key: vault-token
     ebsiTest:
       # this will fail in the API unless the specified realm, client and user-password are created in the Keycloak instance
-      url: http://dome-wallet-keycloak:80/realms/wallet/protocol/openid-connect/token
+      url: http://eudistack-wallet-keycloak:80/realms/wallet/protocol/openid-connect/token
       client:
         id: user-registry-client
         secret: defaultSecret
@@ -110,10 +110,10 @@ eudistack-wallet-core-frontend:
     iam:
       externalUrl: http://localhost/keycloak/realms/wallet
 
-## configuration for the dome-wallet-keycloak
-dome-wallet-keycloak:
-  nameOverride: dome-wallet-keycloak
-  fullnameOverride: dome-wallet-keycloak
+## configuration for the eudistack-wallet-keycloak
+eudistack-wallet-keycloak:
+  nameOverride: eudistack-wallet-keycloak
+  fullnameOverride: eudistack-wallet-keycloak
   # -- should be enabled?
   enabled: true
   ## ingress specific configuration
@@ -166,7 +166,7 @@ dome-wallet-keycloak:
                 enable: false
     db:
       type: postgres
-      host: dome-wallet-keycloak-postgres
+      host: eudistack-wallet-keycloak-postgres
       port: 5432
       name: keycloak
       username: postgres
@@ -175,20 +175,20 @@ dome-wallet-keycloak:
         # -- should an existing secret be used
         enabled: false
         # -- name of the secret
-        name: dome-wallet-secret
+        name: dome-wallet-sealed-secret
         # -- key to retrieve the password from
         key: keycloak-db-password
 
 ## configuration of postgres to be used for the blockchain-connector - see https://github.com/bitnami/charts/tree/main/bitnami/postgresql for details
-dome-wallet-keycloak-postgresql:
+eudistack-wallet-keycloak-postgresql:
   # -- should the postgresql deployment be enabled
   enabled: true
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
   # ! Changing this parameter may cause the PVC to be re-created and the data lost
-  fullnameOverride: dome-wallet-keycloak-postgres
+  fullnameOverride: eudistack-wallet-keycloak-postgres
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
   # ! Changing this parameter may cause the PVC to re-created and the data lost
-  nameOverride: dome-wallet-keycloak-postgres
+  nameOverride: eudistack-wallet-keycloak-postgres
   ## network policy configuration
   networkPolicy:
     enabled: false
@@ -229,7 +229,7 @@ dome-wallet-keycloak-postgresql:
     pullPolicy: IfNotPresent
 
 ## configuration of postgres
-dome-wallet-postgresql:
+eudistack-wallet-postgresql:
   # -- should the postgresql deployment be enabled
   enabled: true
   # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace

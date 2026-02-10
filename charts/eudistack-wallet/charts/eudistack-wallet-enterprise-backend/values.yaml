@@ -145,7 +145,7 @@ app:
       # -- key to retrieve the token from
       key: vault-token
   ebsiTest:
-    url: http://dome-wallet-keycloak:80/realms/wallet/protocol/openid-connect/token
+    url: http://eudistack-wallet-keycloak:80/realms/wallet/protocol/openid-connect/token
     client:
       id: user-registry-client
       secret: defaultSecret
@@ -168,7 +168,7 @@ app:
         key: ebsi-user-password
   db:
     schema: wallet
-    host: dome-wallet-postgres
+    host: wallet-postgres
     port: 5432
     name: wallet
     username: postgres
