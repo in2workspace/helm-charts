@@ -10,7 +10,7 @@ global:
     enableTLS: false
     clusterIssuer: "letsencrypt-in2-test-issuer"
 
-## configuration for the dome-wallet-backend
+## configuration for the eudistack-wallet-enterprise-backend
 eudistack-wallet-enterprise-backend:
   fullnameOverride: "eudistack-wallet-enterprise-backend"
   image:
@@ -22,21 +22,7 @@ eudistack-wallet-enterprise-backend:
   ingress:
     enabled: false
   # scripts before container initializes
-  initContainers:
-  # a script can be added to wait for Keycloak to be ready before initializing
-  # useful while working with internal Keycloak that isn't initialized yet
-  # todo: remove when external Keycloak is used
-  # - name: wait-for-keycloak
-  #   image: curlimages/curl
-  # url has to match keycloak health url
-  #   command:
-  #     - sh
-  #     - -c
-  #     - >
-  #       timeout 75 sh -c '
-  #         until curl -s http://dome-wallet-keycloak:80/keycloak/health;
-  #         do echo "waiting for keycloak..."; sleep 5; done'
-  ## deployment specific configuration
+
   app:
     logLevel: DEBUG
     authServer:
@@ -116,7 +102,7 @@ eudistack-wallet-core-frontend:
     assets:
       baseUrl: "assets"
       logoPath: "logos/no-image.png"
-      faviconPath: "icons/dome-favicon.png"
+      faviconPath: "icons/altia-favicon.ico"
     defaultLang: "en"
     walletApi:
       externalUrl: http://localhost

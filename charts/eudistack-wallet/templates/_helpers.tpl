@@ -1,19 +1,19 @@
 {{/*
 Create a default fully qualified app name.
 */}}
-{{- define "dome-wallet.fullname" -}}
+{{- define "eudistack-wallet.fullname" -}}
 {{- .Chart.Name }}
 {{- end }}
 
 
-{{- define "dome-wallet.url" -}}
+{{- define "eudistack-wallet.url" -}}
 {{ .Values.global.domain }}
 {{- end }}
 
-{{- define "dome-wallet-backend.service.name" -}}
+{{- define "eudistack-wallet-enterprise-backend.service.name" -}}
 {{ index .Values "eudistack-wallet-enterprise-backend" "fullnameOverride" }}
 {{- end }}
 
-{{- define "dome-wallet-frontend.service.name" -}}
+{{- define "eudistack-wallet-core-frontend.service.name" -}}
 {{ index .Values "eudistack-wallet-core-frontend" "fullnameOverride" }}
 {{- end }}
