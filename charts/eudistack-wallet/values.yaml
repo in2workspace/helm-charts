@@ -40,7 +40,7 @@ eudistack-wallet-enterprise-backend:
         # -- should an existing secret be used
         enabled: false
         # -- name of the secret
-        name: dome-wallet-sealed-secret
+        name: eudistack-wallet-sealed-secret
         # -- key to retrieve the token from
         key: vault-token
     ebsiTest:
@@ -53,7 +53,7 @@ eudistack-wallet-enterprise-backend:
           # -- should an existing secret be used
           enabled: false
           # -- name of the secret
-          name: dome-wallet-sealed-secret
+          name: eudistack-wallet-sealed-secret
           # -- key to retrieve the password from
           key: ebsi-client-secret
       userData:
@@ -63,7 +63,7 @@ eudistack-wallet-enterprise-backend:
           # -- should an existing secret be used
           enabled: false
           # -- name of the secret
-          name: dome-wallet-sealed-secret
+          name: eudistack-wallet-sealed-secret
           # -- key to retrieve the password from
           key: ebsi-user-password
     db:
@@ -78,7 +78,7 @@ eudistack-wallet-enterprise-backend:
         mode: require
       existingSecret:
         enabled: false
-        name: dome-wallet-sealed-secret
+        name: eudistack-wallet-sealed-secret
         key: password
 
 ## configuration for the eudistack-wallet-core-frontend
@@ -140,7 +140,7 @@ eudistack-wallet-keycloak:
         # -- should an existing secret be used
         enabled: false
         # -- name of the secret
-        name: dome-wallet-sealed-secret
+        name: eudistack-wallet-sealed-secret
         # -- key to retrieve the password from
         key: keycloak-password
       mail:
@@ -175,7 +175,7 @@ eudistack-wallet-keycloak:
         # -- should an existing secret be used
         enabled: false
         # -- name of the secret
-        name: dome-wallet-sealed-secret
+        name: eudistack-wallet-sealed-secret
         # -- key to retrieve the password from
         key: keycloak-db-password
 
