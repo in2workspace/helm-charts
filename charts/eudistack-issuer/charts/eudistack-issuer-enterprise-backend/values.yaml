@@ -167,3 +167,6 @@ initContainers:
 #       timeout 75 sh -c '
 #         until curl -s http://eudistack-issuer-keycloak:80/keycloak/health;
 #         do echo "waiting for keycloak..."; sleep 5; done'
+
+app:
+  profile:
