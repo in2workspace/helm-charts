@@ -26,7 +26,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ include "eudistack-issuer-enterprise.service.name" . }}
+                name: {{ include "eudistack-issuer-enterprise-backend.service.name" . }}
                 port:
                   number: 80
           - path: /vci
