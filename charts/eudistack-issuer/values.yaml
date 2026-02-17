@@ -172,6 +172,9 @@ eudistack-issuer-core-backend:
         name: eudistack-issuer-sealed-secret
         key: postgres-password
 
+eudistack-issuer-enterprise-backend:
+  fullnameOverride: "eudistack-issuer-core-backend"
+
 eudistack-issuer-frontend:
   fullnameOverride: "eudistack-issuer-frontend"
   image:
