@@ -22,7 +22,7 @@ spec:
       http:
         paths:
           # Backend
-          - path: /api
+          - path: /procedures
             pathType: Prefix
             backend:
               service:
