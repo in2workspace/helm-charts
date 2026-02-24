@@ -170,3 +170,6 @@ initContainers:
 
 app:
   profile:
+  signing:
+    provider: provider
+    coreUrl: coreUrl
