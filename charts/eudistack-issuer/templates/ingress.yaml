@@ -75,7 +75,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: { { include "eudistack-issuer-core-backend.service.name" . } }
+                name: {{ include "eudistack-issuer-core-backend.service.name" . }}
                 port:
                   number: 80
           #           Frontend

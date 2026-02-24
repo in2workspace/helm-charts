@@ -78,6 +78,8 @@ ingress:
           pathType: Prefix
         - path: /w3c
           pathType: Prefix
+        - path: /internal/signing
+          pathType: Prefix
 
   tls: []
   #  - secretName: chart-example-tls
