@@ -55,3 +55,7 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: {{ .Values.app.profile }}
+            - name: SIGNING_PROVIDER
+              value: {{ .Values.app.signing.provider }}
+            - name: SIGNING_CORE_URL
+              value: {{ .Values.app.signing.coreUrl }}

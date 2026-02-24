@@ -176,6 +176,9 @@ eudistack-issuer-enterprise-backend:
   fullnameOverride: "eudistack-issuer-enterprise-backend"
   app:
     profile:
+    signing:
+      provider: provider
+      coreUrl: coreUrl
 
 eudistack-issuer-frontend:
   fullnameOverride: "eudistack-issuer-frontend"
