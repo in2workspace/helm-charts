@@ -2,4 +2,4 @@ apiVersion: v2
 name: eudistack-issuer-enterprise-backend
 description: eudistack Issuer Backend Helm chart (subchart of eudistack Issuer Helm chart)
 type: application
-version: 1.0.3
+version: 1.0.4
