@@ -66,43 +66,23 @@ Support for existing remote-signature-secret
 */}}
 
 {{- define "eudistack-issuer-enterprise-backend.remoteSignature-secretName" -}}
-    {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.remoteSignature.existingSecret.name $) -}}
-    {{- else -}}
-        {{- printf "%s" (include "eudistack-issuer-enterprise-backend.fullname" .) | quote -}}
-    {{- end -}}
+    {{- printf "%s" (include "eudistack-issuer-enterprise-backend.fullname" .) | quote -}}
 {{- end -}}
 
 {{- define "eudistack-issuer-enterprise-backend.remoteSignature-clientId" -}}
-    {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.remoteSignature.existingSecret.clientId $) -}}
-    {{- else -}}
-        {{- printf "remote-signature-client-id" -}}
-    {{- end -}}
+    {{- printf "remote-signature-client-id" -}}
 {{- end -}}
 
 {{- define "eudistack-issuer-enterprise-backend.remoteSignature-clientSecret" -}}
-    {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.remoteSignature.existingSecret.clientSecret $) -}}
-    {{- else -}}
-        {{- printf "remote-signature-client-secret" -}}
-    {{- end -}}
+    {{- printf "remote-signature-client-secret" -}}
 {{- end -}}
 
 {{- define "eudistack-issuer-enterprise-backend.remoteSignature-credentialId" -}}
-    {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.remoteSignature.existingSecret.credentialId $) -}}
-    {{- else -}}
-        {{- printf "remote-signature-credential-id" -}}
-    {{- end -}}
+    {{- printf "remote-signature-credential-id" -}}
 {{- end -}}
 
 {{- define "eudistack-issuer-enterprise-backend.remoteSignature-credentialPassword" -}}
-    {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.remoteSignature.existingSecret.credentialPassword $) -}}
-    {{- else -}}
-        {{- printf "remote-signature-credential-password" -}}
-    {{- end -}}
+    {{- printf "remote-signature-credential-password" -}}
 {{- end -}}
 
 {{/*
