@@ -57,8 +57,8 @@ spec:
               value: {{ .Values.app.profile }}
             - name: SIGNING_PROVIDER
               value: {{ .Values.app.signing.provider }}
-            - name: SIGNING_CORE_URL
-              value: {{ .Values.app.signing.coreUrl }}
+            - name: SIGNING_enterprise_URL
+              value: {{ .Values.app.signing.enterpriseUrl }}
             - name: REMOTE_SIGNATURE_TYPE
               value: "{{ .Values.app.remoteSignature.type }}"
             - name: REMOTE_SIGNATURE_URL
@@ -66,20 +66,20 @@ spec:
             - name: REMOTE_SIGNATURE_CREDENTIAL_ID
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "eudistack-issuer-core-backend.remoteSignature-secretName" . }}
-                  key: {{ include "eudistack-issuer-core-backend.remoteSignature-credentialId" . }}
+                  name: {{ include "eudistack-issuer-enterprise-backend.remoteSignature-secretName" . }}
+                  key: {{ include "eudistack-issuer-enterprise-backend.remoteSignature-credentialId" . }}
             - name: REMOTE_SIGNATURE_CREDENTIAL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "eudistack-issuer-core-backend.remoteSignature-secretName" . }}
-                  key: {{ include "eudistack-issuer-core-backend.remoteSignature-credentialPassword" . }}
+                  name: {{ include "eudistack-issuer-enterprise-backend.remoteSignature-secretName" . }}
+                  key: {{ include "eudistack-issuer-enterprise-backend.remoteSignature-credentialPassword" . }}
             - name: REMOTE_SIGNATURE_CLIENT_ID
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "eudistack-issuer-core-backend.remoteSignature-secretName" . }}
-                  key: {{ include "eudistack-issuer-core-backend.remoteSignature-clientId" . }}
+                  name: {{ include "eudistack-issuer-enterprise-backend.remoteSignature-secretName" . }}
+                  key: {{ include "eudistack-issuer-enterprise-backend.remoteSignature-clientId" . }}
             - name: REMOTE_SIGNATURE_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "eudistack-issuer-core-backend.remoteSignature-secretName" . }}
-                  key: {{ include "eudistack-issuer-core-backend.remoteSignature-clientSecret" . }}
+                  name: {{ include "eudistack-issuer-enterprise-backend.remoteSignature-secretName" . }}
+                  key: {{ include "eudistack-issuer-enterprise-backend.remoteSignature-clientSecret" . }}

@@ -180,7 +180,7 @@ app:
     credentialPassword: credential-password
     existingSecret:
       enabled: false
-      name: eudistack-issuer-core-backend-secret
+      name: eudistack-issuer-enterprise-backend-secret
       clientId: remote-signature-client-id
       clientSecret: remote-signature-client-secret
       credentialId: remote-signature-credential-id

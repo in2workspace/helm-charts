@@ -221,50 +221,6 @@ Support for existing default signer secret
 {{- end -}}
 
 {{/*
-Support for existing remote-signature-secret
-*/}}
-
-{{- define "eudistack-issuer-core-backend.remoteSignature-secretName" -}}
-    {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.remoteSignature.existingSecret.name $) -}}
-    {{- else -}}
-        {{- printf "%s" (include "eudistack-issuer-core-backend.fullname" .) | quote -}}
-    {{- end -}}
-{{- end -}}
-
-{{- define "eudistack-issuer-core-backend.remoteSignature-clientId" -}}
-    {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.remoteSignature.existingSecret.clientId $) -}}
-    {{- else -}}
-        {{- printf "remote-signature-client-id" -}}
-    {{- end -}}
-{{- end -}}
-
-{{- define "eudistack-issuer-core-backend.remoteSignature-clientSecret" -}}
-    {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.remoteSignature.existingSecret.clientSecret $) -}}
-    {{- else -}}
-        {{- printf "remote-signature-client-secret" -}}
-    {{- end -}}
-{{- end -}}
-
-{{- define "eudistack-issuer-core-backend.remoteSignature-credentialId" -}}
-    {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.remoteSignature.existingSecret.credentialId $) -}}
-    {{- else -}}
-        {{- printf "remote-signature-credential-id" -}}
-    {{- end -}}
-{{- end -}}
-
-{{- define "eudistack-issuer-core-backend.remoteSignature-credentialPassword" -}}
-    {{- if .Values.app.defaultSigner.existingSecret.enabled -}}
-        {{- printf "%s" (tpl .Values.app.remoteSignature.existingSecret.credentialPassword $) -}}
-    {{- else -}}
-        {{- printf "remote-signature-credential-password" -}}
-    {{- end -}}
-{{- end -}}
-
-{{/*
 Support for existing vault secret
 */}}
 {{- define "eudistack-issuer-core-backend.vaultTokenSecretName" -}}
