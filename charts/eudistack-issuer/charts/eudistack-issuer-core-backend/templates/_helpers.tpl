@@ -220,6 +220,7 @@ Support for existing default signer secret
     {{- end -}}
 {{- end -}}
 
+{{/*
 Support for existing vault secret
 */}}
 {{- define "eudistack-issuer-core-backend.vaultTokenSecretName" -}}
