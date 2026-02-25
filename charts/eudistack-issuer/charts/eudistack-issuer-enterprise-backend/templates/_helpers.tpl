@@ -62,35 +62,53 @@ Create the name of the service account to use
 {{- end }}
 
 {{/*
-Support for existing remote-signature-secret
+Remote signature secret name
 */}}
-
 {{- define "eudistack-issuer-enterprise-backend.remoteSignature-secretName" -}}
 {{- if .Values.app.remoteSignature.existingSecret.enabled -}}
   {{- if .Values.app.remoteSignature.existingSecret.name -}}
     {{- .Values.app.remoteSignature.existingSecret.name -}}
   {{- else -}}
-    {{- fail "remoteSignature.existingSecret.enabled=true but no existingSecret.name provided" -}}
+    {{- fail "app.remoteSignature.existingSecret.enabled=true but no app.remoteSignature.existingSecret.name provided" -}}
   {{- end -}}
 {{- else -}}
   {{- include "eudistack-issuer-enterprise-backend.fullname" . -}}
 {{- end -}}
 {{- end -}}
 
+{{/*
+Remote signature keys inside the Secret
+*/}}
 {{- define "eudistack-issuer-enterprise-backend.remoteSignature-clientId" -}}
+{{- if .Values.app.remoteSignature.existingSecret.enabled -}}
+  {{- default "remote-signature-client-id" .Values.app.remoteSignature.existingSecret.clientId -}}
+{{- else -}}
 remote-signature-client-id
+{{- end -}}
 {{- end -}}
 
 {{- define "eudistack-issuer-enterprise-backend.remoteSignature-clientSecret" -}}
+{{- if .Values.app.remoteSignature.existingSecret.enabled -}}
+  {{- default "remote-signature-client-secret" .Values.app.remoteSignature.existingSecret.clientSecret -}}
+{{- else -}}
 remote-signature-client-secret
+{{- end -}}
 {{- end -}}
 
 {{- define "eudistack-issuer-enterprise-backend.remoteSignature-credentialId" -}}
+{{- if .Values.app.remoteSignature.existingSecret.enabled -}}
+  {{- default "remote-signature-credential-id" .Values.app.remoteSignature.existingSecret.credentialId -}}
+{{- else -}}
 remote-signature-credential-id
+{{- end -}}
 {{- end -}}
 
 {{- define "eudistack-issuer-enterprise-backend.remoteSignature-credentialPassword" -}}
+{{- if .Values.app.remoteSignature.existingSecret.enabled -}}
+  {{- default "remote-signature-credential-password" .Values.app.remoteSignature.existingSecret.credentialPassword -}}
+{{- else -}}
 remote-signature-credential-password
+{{- end -}}
 {{- end -}}
 
 {{/*
