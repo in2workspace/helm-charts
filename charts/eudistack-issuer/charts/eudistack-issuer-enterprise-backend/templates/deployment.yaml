@@ -57,6 +57,8 @@ spec:
               value: {{ .Values.app.profile }}
             - name: SIGNING_PROVIDER
               value: {{ .Values.app.signing.provider }}
+            - name: SIGNING_CORE_URL
+              value: {{ .Values.app.signing.coreUrl }}
             - name: SIGNING_enterprise_URL
               value: {{ .Values.app.signing.enterpriseUrl }}
             - name: REMOTE_SIGNATURE_TYPE
