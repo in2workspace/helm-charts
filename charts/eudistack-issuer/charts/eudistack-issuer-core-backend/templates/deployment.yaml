@@ -111,30 +111,6 @@ spec:
                   key: {{ include "eudistack-issuer-core-backend.authServerClient-passwordKey" . }}
             - name: APP_ISSUER_FRONTEND_URL
               value: {{ .Values.app.issuerFrontendUrl }}
-            - name: REMOTE_SIGNATURE_TYPE
-              value: "{{ .Values.app.remoteSignature.type }}"
-            - name: REMOTE_SIGNATURE_URL
-              value: {{ .Values.app.remoteSignature.url }}
-            - name: REMOTE_SIGNATURE_CREDENTIAL_ID
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "eudistack-issuer-core-backend.remoteSignature-secretName" . }}
-                  key: {{ include "eudistack-issuer-core-backend.remoteSignature-credentialId" . }}
-            - name: REMOTE_SIGNATURE_CREDENTIAL_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "eudistack-issuer-core-backend.remoteSignature-secretName" . }}
-                  key: {{ include "eudistack-issuer-core-backend.remoteSignature-credentialPassword" . }}
-            - name: REMOTE_SIGNATURE_CLIENT_ID
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "eudistack-issuer-core-backend.remoteSignature-secretName" . }}
-                  key: {{ include "eudistack-issuer-core-backend.remoteSignature-clientId" . }}
-            - name: REMOTE_SIGNATURE_CLIENT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "eudistack-issuer-core-backend.remoteSignature-secretName" . }}
-                  key: {{ include "eudistack-issuer-core-backend.remoteSignature-clientSecret" . }}
             - name: APP_TRUST_FRAMEWORK_URL
               value: {{ .Values.app.trustFrameworkUrl }}
             - name: APP_KNOWLEDGE_BASE_WALLET_GUIDE_URL

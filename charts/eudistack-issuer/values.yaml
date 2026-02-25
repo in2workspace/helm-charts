@@ -84,21 +84,6 @@ eudistack-issuer-core-backend:
               enable: true
             ssl:
               trust: smtp.example.org
-    remoteSignature:
-      clientId: client-id
-      clientSecret: client-secret
-      credentialId: credential-id
-      credentialPassword: credential-password
-      existingSecret:
-        enabled: false
-        name: eudistack-issuer-sealed-secret
-        clientId: remote-signature-client-id
-        clientSecret: remote-signature-client-secret
-        credentialId: remote-signature-credential-id
-        credentialPassword: remote-signature-credential-password
-      #Set to cloud if the remote signature service is not dss
-      type: server
-      url: https://example.org/dss
     authServer:
       provider: keycloak
       externalUrl: https://example.org/keycloak/realms/eudistack-issuer
@@ -179,6 +164,21 @@ eudistack-issuer-enterprise-backend:
     signing:
       provider: provider
       coreUrl: coreUrl
+    remoteSignature:
+      clientId: client-id
+      clientSecret: client-secret
+      credentialId: credential-id
+      credentialPassword: credential-password
+      existingSecret:
+        enabled: false
+        name: eudistack-issuer-sealed-secret
+        clientId: remote-signature-client-id
+        clientSecret: remote-signature-client-secret
+        credentialId: remote-signature-credential-id
+        credentialPassword: remote-signature-credential-password
+      #Set to cloud if the remote signature service is not dss
+      type: server
+      url: https://example.org/dss
 
 eudistack-issuer-frontend:
   fullnameOverride: "eudistack-issuer-frontend"
