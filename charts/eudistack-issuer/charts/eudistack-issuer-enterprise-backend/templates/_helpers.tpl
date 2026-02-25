@@ -106,7 +106,6 @@ Support for existing remote-signature-secret
 {{- end -}}
 
 {{/*
-{{/*
 Internal Server Port
 */}}
 {{- define "eudistack-issuer-enterprise-backend.serverPort" -}}
