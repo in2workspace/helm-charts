@@ -22,7 +22,7 @@ dependencies:
     version: 1.0.2
 
   - name: eudistack-issuer-enterprise-backend
-    version: 1.0.4
+    version: 1.0.5
 
   - name: eudistack-issuer-frontend
     version: 1.0.0
