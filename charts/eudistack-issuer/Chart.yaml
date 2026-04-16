@@ -15,17 +15,17 @@ type: application
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 1.0.20
+version: 1.0.21
 
 dependencies:
   - name: eudistack-issuer-core-backend
-    version: 1.0.2
+    version: 1.0.3
 
   - name: eudistack-issuer-enterprise-backend
-    version: 1.0.10
+    version: 1.0.11
 
   - name: eudistack-issuer-frontend
-    version: 1.0.0
+    version: 1.0.1
 
   - name: postgresql
     version: 13.1.5

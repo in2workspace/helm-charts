@@ -27,7 +27,7 @@ spec:
           "datasource": { "type": "prometheus", "uid": "Prometheus" },
           "title": "Peticiones HTTP por segundo",
           "type": "timeseries",
-          "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" } } },
+          "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }} },
           "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
           "targets": [
             {

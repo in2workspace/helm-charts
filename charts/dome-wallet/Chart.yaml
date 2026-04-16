@@ -15,7 +15,7 @@ type: application
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 1.4.22
+version: 1.4.23
 
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application. Versions are not expected to
@@ -25,10 +25,10 @@ appVersion: "v0.0.5"
 
 dependencies:
   - name: dome-wallet-backend
-    version: 1.2.6
+    version: 1.2.7
 
   - name: dome-wallet-frontend
-    version: 0.4.4
+    version: 0.4.5
 
   - name: postgresql
     version: 16.4.5
@@ -37,7 +37,7 @@ dependencies:
     condition: dome-wallet-postgresql.enabled
 
   - name: dome-wallet-keycloak
-    version: 0.1.6
+    version: 0.1.7
     condition: dome-wallet-keycloak.enabled
 
   - name: postgresql
