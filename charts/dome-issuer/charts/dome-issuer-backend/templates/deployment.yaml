@@ -113,6 +113,10 @@ spec:
                   key: {{ include "dome-issuer-backend.authServerClient-passwordKey" . }}
             - name: APP_ISSUER_FRONTEND_URL
               value: {{ .Values.app.issuerFrontendUrl }}
+            - name: LABEL_UPLOAD_CERTIFIER_EMAIL
+              value: {{ .Values.app.labelUpload.certifierEmail }}
+            - name: LABEL_UPLOAD_MARKETPLACE_EMAIL
+              value: {{ .Values.app.labelUpload.marketplaceEmail }}
             - name: REMOTE_SIGNATURE_TYPE
               value: "{{ .Values.app.remoteSignature.type }}"
             - name: REMOTE_SIGNATURE_URL
