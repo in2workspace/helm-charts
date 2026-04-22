@@ -262,6 +262,9 @@ app:
     external:
       # expects a string of url's separated with comma and space
       allowedOrigins: "https://new.example.org, https://example-2.org"
+  labelUpload:
+    certifierEmail: "example@example.org"
+    marketplaceEmail: "example@example.org"
   vault:
     url: http://vault-server:8200
     secretsMount: kv
