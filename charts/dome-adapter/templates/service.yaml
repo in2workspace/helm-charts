@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "dome-adapter.fullname" . }}
+  namespace: {{ $.Release.Namespace | quote }}
+  labels:
+    {{- include "dome-adapter.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ include "dome-adapter.serverPort" . }}
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "dome-adapter.selectorLabels" . | nindent 4 }}

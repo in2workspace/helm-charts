@@ -1,0 +1,167 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "dome-adapter.fullname" . }}
+  namespace: {{ $.Release.Namespace | quote }}
+  labels:
+    {{- include "dome-adapter.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "dome-adapter.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "dome-adapter.selectorLabels" . | nindent 8 }}
+          {{- with .Values.podLabels }}
+          {{- toYaml . | nindent 8 }}
+          {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "dome-adapter.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          ports:
+            - name: http
+              containerPort: {{ include "dome-adapter.serverPort" . }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.livenessProbe.httpGet.path }}
+              port: {{ include "dome-adapter.serverPort" . }}
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.readinessProbe.httpGet.path }}
+              port: {{ include "dome-adapter.serverPort" . }}
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          env:
+            # Server
+            - name: SERVER_PORT
+              value: {{ include "dome-adapter.serverPort" . | quote }}
+            # Database — R2DBC
+            - name: SPRING_R2DBC_URL
+              value: {{ .Values.spring.r2dbc.url | quote }}
+            - name: SPRING_R2DBC_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-adapter.r2dbcSecretName" . }}
+                  key: {{ include "dome-adapter.key.r2dbcUsername" . }}
+            - name: SPRING_R2DBC_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-adapter.r2dbcSecretName" . }}
+                  key: {{ include "dome-adapter.key.r2dbcPassword" . }}
+            # Database — Flyway
+            - name: SPRING_FLYWAY_URL
+              value: {{ .Values.spring.flyway.url | quote }}
+            - name: SPRING_FLYWAY_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-adapter.r2dbcSecretName" . }}
+                  key: {{ include "dome-adapter.key.r2dbcUsername" . }}
+            - name: SPRING_FLYWAY_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-adapter.r2dbcSecretName" . }}
+                  key: {{ include "dome-adapter.key.r2dbcPassword" . }}
+            # Mail
+            - name: SPRING_MAIL_HOST
+              value: {{ .Values.spring.mail.host | quote }}
+            - name: SPRING_MAIL_PORT
+              value: {{ .Values.spring.mail.port | quote }}
+            - name: SPRING_MAIL_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-adapter.mailSecretName" . }}
+                  key: {{ include "dome-adapter.key.mailUsername" . }}
+            - name: SPRING_MAIL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-adapter.mailSecretName" . }}
+                  key: {{ include "dome-adapter.key.mailPassword" . }}
+            - name: SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH
+              value: {{ .Values.spring.mail.properties.mail.smtp.auth | quote }}
+            - name: SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE
+              value: {{ .Values.spring.mail.properties.mail.smtp.starttls.enable | quote }}
+            - name: SPRING_MAIL_PROPERTIES_MAIL_SMTP_SSL_ENABLE
+              value: {{ .Values.spring.mail.properties.mail.smtp.ssl.enable | quote }}
+            - name: SPRING_MAIL_PROPERTIES_MAIL_SMTP_SSL_TRUST
+              value: {{ .Values.spring.mail.properties.mail.smtp.ssl.trust | quote }}
+            # App
+            - name: APP_VERIFIER_URL
+              value: {{ index .Values "app" "verifier-url" | quote }}
+            - name: APP_ISSUER_URL
+              value: {{ index .Values "app" "issuer-url" | quote }}
+            - name: APP_DEFAULT_LANG
+              value: {{ index .Values "app" "default-lang" | quote }}
+            - name: APP_CONFIG_SOURCE
+              value: {{ index .Values "app" "config-source" | quote }}
+            - name: APP_MAIL_FROM
+              value: {{ .Values.app.mail.from | quote }}
+            # Adapter identity
+            - name: ADAPTER_IDENTITY_CREDENTIAL_SUBJECT_DID_KEY
+              value: {{ index .Values "adapter-identity" "credential-subject-did-key" | quote }}
+            - name: ADAPTER_IDENTITY_JWT_CREDENTIAL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-adapter.identitySecretName" . }}
+                  key: {{ include "dome-adapter.key.jwtCredential" . }}
+            - name: ADAPTER_IDENTITY_CRYPTO_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-adapter.identitySecretName" . }}
+                  key: {{ include "dome-adapter.key.privateKey" . }}
+            # CORS
+            - name: CORS_EXTERNAL_ALLOWED_ORIGINS
+              value: {{ index .Values "cors" "external-allowed-origins" | quote }}
+            # Retry notifications
+            - name: RETRY_LABEL_UPLOAD_CERTIFIER_EMAIL
+              value: {{ index .Values "retry" "label-upload" "certifier-email" | quote }}
+            - name: RETRY_LABEL_UPLOAD_MARKETPLACE_EMAIL
+              value: {{ index .Values "retry" "label-upload" "marketplace-email" | quote }}
+            # Logging
+            - name: LOGGING_LEVEL_ES_ALTIA_DOMEADAPTER
+              value: {{ index .Values.logging.level "es.altia.domeadapter" | quote }}
+          {{- with .Values.volumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.volumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

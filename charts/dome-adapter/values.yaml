@@ -1,0 +1,169 @@
+replicaCount: 1
+
+image:
+  repository: dome-adapter
+  pullPolicy: IfNotPresent
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: dome-adapter.127.0.0.1.nip.io
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+resources: {}
+  # limits:
+  #   cpu: 500m
+  #   memory: 512Mi
+  # requests:
+  #   cpu: 250m
+  #   memory: 256Mi
+
+livenessProbe:
+  httpGet:
+    path: /health
+  initialDelaySeconds: 40
+  failureThreshold: 6
+  periodSeconds: 10
+
+readinessProbe:
+  httpGet:
+    path: /health
+  initialDelaySeconds: 40
+  failureThreshold: 6
+  periodSeconds: 10
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+volumes: []
+volumeMounts: []
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+secret:
+  name: dome-adapter-secret
+
+# -- Application configuration (mirrors application.yml hierarchy)
+
+spring:
+  r2dbc:
+    url: ""
+    username: "username"
+    password: "password"
+    secretKeys:
+      username: r2dbc-username
+      password: r2dbc-password
+    existingSecret:
+      enabled: false
+      name: adapter-secret
+  flyway:
+    # JDBC connection URL — e.g. jdbc:postgresql://host:5432/db (REQUIRED)
+    url: ""
+  mail:
+    # SMTP server host (REQUIRED)
+    host: localhost
+    # SMTP server port (REQUIRED)
+    port: 587
+    # SMTP username — stored in Secret (OPTIONAL)
+    username: ""
+    # SMTP password — stored in Secret (OPTIONAL)
+    password: ""
+    existingSecret:
+      # Set enabled: true to reference a pre-existing Secret instead of letting the chart create one.
+      enabled: false
+      name: adapter-secret
+      # Key names within the Secret
+      username: mail-username
+      password: mail-password
+    properties:
+      mail:
+        smtp:
+          # Whether SMTP authentication is required (OPTIONAL, default: true)
+          auth: true
+          starttls:
+            # Whether to enable STARTTLS (OPTIONAL, default: true)
+            enable: true
+          ssl:
+            # Whether to enable SSL (OPTIONAL, default: false)
+            enable: false
+            # Trusted SSL hosts, e.g. smtp.example.com (OPTIONAL)
+            trust: ""
+
+logging:
+  level:
+    # Logging level for the application package (OPTIONAL, default: INFO)
+    es.altia.domeadapter: INFO
+
+app:
+  # URL of the external verifier, for token validation and M2M token acquisition (REQUIRED)
+  verifier-url: ""
+  # URL of the external issuer, for forwarding issuance requests and token validation (REQUIRED)
+  issuer-url: ""
+  # Default language for email notifications (OPTIONAL, default: en)
+  default-lang: en
+  # Configuration source (OPTIONAL, default: yaml)
+  config-source: yaml
+  mail:
+    # Sender email address (REQUIRED)
+    from: no-reply@example.com
+
+adapter-identity:
+  # DID:key of this service's credential subject, used for M2M token acquisition (REQUIRED)
+  credential-subject-did-key: ""
+  # Base64-encoded JWT machine credential — stored in Secret (REQUIRED)
+  jwt-credential: ""
+  existingSecret:
+    # Set enabled: true to reference a pre-existing Secret instead of letting the chart create one.
+    enabled: false
+    name: adapter-secret
+    # Key names within the Secret
+    jwtCredential: jwt-credential
+    privateKey: private-key
+  crypto:
+    # Hex-encoded secp256r1 private key for JWT signing — stored in Secret (REQUIRED)
+    private-key: ""
+
+cors:
+  # Comma-separated list of origins allowed to call POST /api/v1/issuances (REQUIRED)
+  # e.g. https://marketplace.dome-marketplace.eu
+  external-allowed-origins: ""
+
+retry:
+  label-upload:
+    # Certifier email address to notify on label delivery failures (REQUIRED)
+    certifier-email: ""
+    # Marketplace email address to notify on label delivery failures (REQUIRED)
+    marketplace-email: ""
