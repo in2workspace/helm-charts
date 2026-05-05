@@ -5,30 +5,6 @@ Expand the name of the chart.
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
-{{- define "dome-adapter.key.r2dbcUsername" -}}
-{{- .Values.spring.r2dbc.existingSecret.username -}}
-{{- end -}}
-
-{{- define "dome-adapter.key.r2dbcPassword" -}}
-{{- .Values.spring.r2dbc.existingSecret.password -}}
-{{- end -}}
-
-{{- define "dome-adapter.key.mailUsername" -}}
-{{- .Values.spring.mail.existingSecret.username -}}
-{{- end -}}
-
-{{- define "dome-adapter.key.mailPassword" -}}
-{{- .Values.spring.mail.existingSecret.password -}}
-{{- end -}}
-
-{{- define "dome-adapter.key.jwtCredential" -}}
-{{- index .Values "adapter-identity" "existingSecret" "jwtCredential" -}}
-{{- end -}}
-
-{{- define "dome-adapter.key.privateKey" -}}
-{{- index .Values "adapter-identity" "existingSecret" "privateKey" -}}
-{{- end -}}
-
 {{/*
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
@@ -92,33 +68,101 @@ Internal server port (matches server.port in application.yml)
 {{- 8081 -}}
 {{- end }}
 
-{{/* ---- R2DBC secret ---- */}}
-
-{{- define "dome-adapter.r2dbcSecretName" -}}
-{{- if .Values.spring.r2dbc.existingSecret.enabled -}}
-{{- tpl .Values.spring.r2dbc.existingSecret.name $ -}}
+{{/*
+Database Secret name
+*/}}
+{{- define "dome-adapter.db-secretName" -}}
+{{- if .Values.app.db.existingSecret.enabled -}}
+{{- .Values.app.db.existingSecret.name -}}
 {{- else -}}
-{{- .Values.secret.name -}}
+{{- include "dome-adapter.fullname" . -}}
 {{- end -}}
+{{- end }}
+
+{{/*
+Database password Secret key
+*/}}
+{{- define "dome-adapter.key.db-passwordKey" -}}
+{{- if .Values.app.db.existingSecret.enabled -}}
+{{- .Values.app.db.existingSecret.password -}}
+{{- else -}}
+postgres-password
 {{- end -}}
+{{- end }}
 
-{{/* ---- Mail secret ---- */}}
-
-{{- define "dome-adapter.mailSecretName" -}}
+{{/*
+Mail Secret name
+*/}}
+{{- define "dome-adapter.mail-secretName" -}}
 {{- if .Values.spring.mail.existingSecret.enabled -}}
-{{- tpl .Values.spring.mail.existingSecret.name $ -}}
+{{- .Values.spring.mail.existingSecret.name -}}
 {{- else -}}
-{{- .Values.secret.name -}}
+{{- include "dome-adapter.fullname" . -}}
 {{- end -}}
+{{- end }}
+
+{{/*
+Mail username Secret key
+*/}}
+{{- define "dome-adapter.key.mail-userKey" -}}
+{{- if .Values.spring.mail.existingSecret.enabled -}}
+{{- .Values.spring.mail.existingSecret.username -}}
+{{- else -}}
+mail-username
 {{- end -}}
+{{- end }}
 
-{{/* ---- Adapter identity secret ---- */}}
+{{/*
+Mail password Secret key
+*/}}
+{{- define "dome-adapter.key.mail-passwordKey" -}}
+{{- if .Values.spring.mail.existingSecret.enabled -}}
+{{- .Values.spring.mail.existingSecret.password -}}
+{{- else -}}
+mail-password
+{{- end -}}
+{{- end }}
 
+{{/*
+Adapter identity Secret name
+*/}}
 {{- define "dome-adapter.identitySecretName" -}}
-{{- $ai := index .Values "adapter-identity" -}}
-{{- if $ai.existingSecret.enabled -}}
-{{- tpl $ai.existingSecret.name $ -}}
+{{- if index .Values "adapter-identity" "existingSecret" "enabled" -}}
+{{- index .Values "adapter-identity" "existingSecret" "name" -}}
 {{- else -}}
-{{- $.Values.secret.name -}}
+{{- include "dome-adapter.fullname" . -}}
 {{- end -}}
+{{- end }}
+
+{{/*
+Adapter identity credential subject DID key Secret key
+*/}}
+{{- define "dome-adapter.key.credentialSubjectDidKey" -}}
+{{- if index .Values "adapter-identity" "existingSecret" "enabled" -}}
+{{- index .Values "adapter-identity" "existingSecret" "credentialSubjectDidKey" -}}
+{{- else -}}
+adapter-identity-credential-subject-did-key
 {{- end -}}
+{{- end }}
+
+{{/*
+Adapter identity JWT credential Secret key
+*/}}
+{{- define "dome-adapter.key.jwtCredential" -}}
+{{- if index .Values "adapter-identity" "existingSecret" "enabled" -}}
+{{- index .Values "adapter-identity" "existingSecret" "jwtCredential" -}}
+{{- else -}}
+adapter-identity-jwt-credential
+{{- end -}}
+{{- end }}
+
+{{/*
+Adapter identity private key Secret key
+*/}}
+{{- define "dome-adapter.key.privateKey" -}}
+{{- if index .Values "adapter-identity" "existingSecret" "enabled" -}}
+{{- index .Values "adapter-identity" "existingSecret" "privateKey" -}}
+{{- else -}}
+adapter-identity-private-key
+{{- end -}}
+{{- end }}

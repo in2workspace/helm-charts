@@ -43,7 +43,7 @@ resources: {}
   #   memory: 512Mi
   # requests:
   #   cpu: 250m
-  #   memory: 256Mi
+#   memory: 256Mi
 
 livenessProbe:
   httpGet:
@@ -76,94 +76,117 @@ affinity: {}
 secret:
   name: dome-adapter-secret
 
-# -- Application configuration (mirrors application.yml hierarchy)
+logging:
+  level:
+    es.altia.domeadapter: INFO
 
 spring:
-  r2dbc:
-    url: ""
-    username: "username"
-    password: "password"
-    secretKeys:
-      username: r2dbc-username
-      password: r2dbc-password
-    existingSecret:
-      enabled: false
-      name: adapter-secret
-  flyway:
-    # JDBC connection URL — e.g. jdbc:postgresql://host:5432/db (REQUIRED)
-    url: ""
   mail:
-    # SMTP server host (REQUIRED)
     host: localhost
-    # SMTP server port (REQUIRED)
     port: 587
-    # SMTP username — stored in Secret (OPTIONAL)
     username: ""
-    # SMTP password — stored in Secret (OPTIONAL)
     password: ""
     existingSecret:
-      # Set enabled: true to reference a pre-existing Secret instead of letting the chart create one.
       enabled: false
       name: adapter-secret
-      # Key names within the Secret
       username: mail-username
       password: mail-password
+
+app:
+  logLevel:
+    security: INFO
+
+  db:
+    host: localhost
+    port: 5432
+    name: dome_adapter
+    schema: dome_adapter
+    username: username
+    password: password
+    externalService: false
+    ssl:
+      enabled: false
+      mode: disable
+    existingSecret:
+      enabled: false
+      name: adapter-secret
+      username: r2dbc-username
+      password: r2dbc-password
+
+  verifier-url: ""
+  issuer-url: ""
+  default-lang: en
+  config-source: yaml
+
+  mail:
+    from: no-reply@example.com
     properties:
       mail:
         smtp:
-          # Whether SMTP authentication is required (OPTIONAL, default: true)
           auth: true
           starttls:
-            # Whether to enable STARTTLS (OPTIONAL, default: true)
             enable: true
           ssl:
-            # Whether to enable SSL (OPTIONAL, default: false)
-            enable: false
-            # Trusted SSL hosts, e.g. smtp.example.com (OPTIONAL)
             trust: ""
 
-logging:
-  level:
-    # Logging level for the application package (OPTIONAL, default: INFO)
-    es.altia.domeadapter: INFO
-
-app:
-  # URL of the external verifier, for token validation and M2M token acquisition (REQUIRED)
-  verifier-url: ""
-  # URL of the external issuer, for forwarding issuance requests and token validation (REQUIRED)
-  issuer-url: ""
-  # Default language for email notifications (OPTIONAL, default: en)
-  default-lang: en
-  # Configuration source (OPTIONAL, default: yaml)
-  config-source: yaml
-  mail:
-    # Sender email address (REQUIRED)
-    from: no-reply@example.com
-
 adapter-identity:
-  # DID:key of this service's credential subject, used for M2M token acquisition (REQUIRED)
   credential-subject-did-key: ""
-  # Base64-encoded JWT machine credential — stored in Secret (REQUIRED)
   jwt-credential: ""
+  crypto:
+    private-key: ""
   existingSecret:
-    # Set enabled: true to reference a pre-existing Secret instead of letting the chart create one.
     enabled: false
     name: adapter-secret
-    # Key names within the Secret
-    jwtCredential: jwt-credential
-    privateKey: private-key
-  crypto:
-    # Hex-encoded secp256r1 private key for JWT signing — stored in Secret (REQUIRED)
-    private-key: ""
+    credentialSubjectDidKey: adapter-identity-credential-subject-did-key
+    jwtCredential: adapter-identity-jwt-credential
+    privateKey: adapter-identity-private-key
 
 cors:
-  # Comma-separated list of origins allowed to call POST /api/v1/issuances (REQUIRED)
-  # e.g. https://marketplace.dome-marketplace.eu
   external-allowed-origins: ""
 
 retry:
   label-upload:
-    # Certifier email address to notify on label delivery failures (REQUIRED)
     certifier-email: ""
-    # Marketplace email address to notify on label delivery failures (REQUIRED)
     marketplace-email: ""
+
+
+dome-adapter-postgresql:
+  # -- should the postgresql deployment be enabled
+  enabled: true
+  # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
+  # ! Changing this parameter may cause the PVC to re-created and the data lost
+  fullnameOverride: adapter-postgres
+  # -- overrides the generated name, provides stable service names - this should be avoided if multiple instances are available in the same namespace
+  # ! Changing this parameter may cause the PVC to re-created and the data lost
+  nameOverride: adapter-postgres
+  ## auth configuration for the database
+  auth:
+    # -- username to be used
+    username: postgres
+    # -- should the default postgres user be enabled
+    enablePostgresUser: true
+    # -- password to be used
+    password: postgres
+  ## configuration of the postgres primary replica
+  primary:
+    # Configuration for Velero backup
+    annotations:
+      backup.velero.io/backup-volumes: data
+    podAnnotations:
+      backup.velero.io/backup-volumes: data
+    ## provide db initialization
+    initdb:
+      ## provide scripts for initialization
+      scripts:
+        # -- create the database
+        # -- !!Put the same database name and the same database schema
+        create.sh: |
+          psql postgresql://postgres:${POSTGRES_PASSWORD}@localhost:5432 -c "CREATE DATABASE adapter;"
+  global:
+    security:
+      allowInsecureImages: true
+  image:
+    registry: docker.io
+    repository: bitnamilegacy/postgresql
+    tag: 16.0.0-debian-11-r13
+    pullPolicy: IfNotPresent

@@ -22,3 +22,10 @@ version: 0.0.1
 # follow Semantic Versioning. They should reflect the version the application is using.
 # It is recommended to use it with quotes.
 appVersion: "v0.0.1"
+
+dependencies:
+  - name: postgresql
+    version: 13.1.5
+    repository: oci://registry-1.docker.io/bitnamicharts
+    alias: dome-adapter-postgresql
+    condition: dome-adapter-postgresql.enabled

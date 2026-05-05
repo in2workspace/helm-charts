@@ -61,32 +61,26 @@ spec:
             # Server
             - name: SERVER_PORT
               value: {{ include "dome-adapter.serverPort" . | quote }}
+            # Logging
+            - name: LOGGING_LEVEL_ES_ALTIA_DOMEADAPTER
+              value: {{ index .Values.logging.level "es.altia.domeadapter" | quote }}
+            - name: LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY
+              value: {{ .Values.app.logLevel.security }}
             # Database — R2DBC
             - name: SPRING_R2DBC_URL
-              value: {{ .Values.spring.r2dbc.url | quote }}
+              value: "r2dbc:postgresql://{{ .Values.app.db.host }}{{ if not .Values.app.db.externalService }}:{{ .Values.app.db.port }}{{ end }}/{{ .Values.app.db.name }}?ssl={{ .Values.app.db.ssl.enabled }}&sslmode={{ .Values.app.db.ssl.mode }}&schema={{ .Values.app.db.schema }}"
             - name: SPRING_R2DBC_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "dome-adapter.r2dbcSecretName" . }}
-                  key: {{ include "dome-adapter.key.r2dbcUsername" . }}
+              value: {{ .Values.app.db.username }}
             - name: SPRING_R2DBC_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "dome-adapter.r2dbcSecretName" . }}
-                  key: {{ include "dome-adapter.key.r2dbcPassword" . }}
+                  name: {{ include "dome-adapter.db-secretName" . }}
+                  key: {{ include "dome-adapter.key.db-passwordKey" . }}
             # Database — Flyway
             - name: SPRING_FLYWAY_URL
-              value: {{ .Values.spring.flyway.url | quote }}
-            - name: SPRING_FLYWAY_USER
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "dome-adapter.r2dbcSecretName" . }}
-                  key: {{ include "dome-adapter.key.r2dbcUsername" . }}
-            - name: SPRING_FLYWAY_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "dome-adapter.r2dbcSecretName" . }}
-                  key: {{ include "dome-adapter.key.r2dbcPassword" . }}
+              value: "jdbc:postgresql://{{ .Values.app.db.host }}{{ if not .Values.app.db.externalService }}:{{ .Values.app.db.port }}{{ end }}/{{ .Values.app.db.name }}"
+            - name: SPRING_FLYWAY_DEFAULT_SCHEMA
+              value: {{ .Values.app.db.schema }}
             # Mail
             - name: SPRING_MAIL_HOST
               value: {{ .Values.spring.mail.host | quote }}
@@ -95,21 +89,19 @@ spec:
             - name: SPRING_MAIL_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "dome-adapter.mailSecretName" . }}
-                  key: {{ include "dome-adapter.key.mailUsername" . }}
+                  name: {{ include "dome-adapter.mail-secretName" . }}
+                  key: {{ include "dome-adapter.key.mail-userKey" . }}
             - name: SPRING_MAIL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "dome-adapter.mailSecretName" . }}
-                  key: {{ include "dome-adapter.key.mailPassword" . }}
+                  name: {{ include "dome-adapter.mail-secretName" . }}
+                  key: {{ include "dome-adapter.key.mail-passwordKey" . }}
             - name: SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH
-              value: {{ .Values.spring.mail.properties.mail.smtp.auth | quote }}
+              value: "{{ .Values.app.mail.properties.mail.smtp.auth }}"
             - name: SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE
-              value: {{ .Values.spring.mail.properties.mail.smtp.starttls.enable | quote }}
-            - name: SPRING_MAIL_PROPERTIES_MAIL_SMTP_SSL_ENABLE
-              value: {{ .Values.spring.mail.properties.mail.smtp.ssl.enable | quote }}
+              value: "{{ .Values.app.mail.properties.mail.smtp.starttls.enable }}"
             - name: SPRING_MAIL_PROPERTIES_MAIL_SMTP_SSL_TRUST
-              value: {{ .Values.spring.mail.properties.mail.smtp.ssl.trust | quote }}
+              value: {{ .Values.app.mail.properties.mail.smtp.ssl.trust }}
             # App
             - name: APP_VERIFIER_URL
               value: {{ index .Values "app" "verifier-url" | quote }}
@@ -123,7 +115,10 @@ spec:
               value: {{ .Values.app.mail.from | quote }}
             # Adapter identity
             - name: ADAPTER_IDENTITY_CREDENTIAL_SUBJECT_DID_KEY
-              value: {{ index .Values "adapter-identity" "credential-subject-did-key" | quote }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dome-adapter.identitySecretName" . }}
+                  key: {{ include "dome-adapter.key.credentialSubjectDidKey" . }}
             - name: ADAPTER_IDENTITY_JWT_CREDENTIAL
               valueFrom:
                 secretKeyRef:
@@ -142,9 +137,6 @@ spec:
               value: {{ index .Values "retry" "label-upload" "certifier-email" | quote }}
             - name: RETRY_LABEL_UPLOAD_MARKETPLACE_EMAIL
               value: {{ index .Values "retry" "label-upload" "marketplace-email" | quote }}
-            # Logging
-            - name: LOGGING_LEVEL_ES_ALTIA_DOMEADAPTER
-              value: {{ index .Values.logging.level "es.altia.domeadapter" | quote }}
           {{- with .Values.volumeMounts }}
           volumeMounts:
             {{- toYaml . | nindent 12 }}
