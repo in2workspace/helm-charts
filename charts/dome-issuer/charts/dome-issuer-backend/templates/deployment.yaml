@@ -101,6 +101,14 @@ spec:
               value: "{{ .Values.app.mail.properties.mail.smtp.starttls.enable }}" # Convert to string
             - name: SPRING_MAIL_PROPERTIES_MAIL_SMTP_SSL_TRUST
               value: {{ .Values.app.mail.properties.mail.smtp.ssl.trust }}
+            - name: SPRING_MAIL_PROPERTIES_MAIL_SMTP_CONNECTIONTIMEOUT
+              value: "{{ .Values.app.mail.properties.mail.smtp.connectiontimeout }}"
+            - name: SPRING_MAIL_PROPERTIES_MAIL_SMTP_TIMEOUT
+              value: "{{ .Values.app.mail.properties.mail.smtp.timeout }}"
+            - name: SPRING_MAIL_PROPERTIES_MAIL_SMTP_WRITETIMEOUT
+              value: "{{ .Values.app.mail.properties.mail.smtp.writetimeout }}"
+            - name: MANAGEMENT_HEALTH_MAIL_ENABLED
+              value: "{{ .Values.app.mail.health.enabled }}"
             - name: APP_URL
               value: {{ .Values.app.url }}
             - name: AUTH_SERVER_PROVIDER
