@@ -178,6 +178,9 @@ initContainers:
 #         do echo "waiting for keycloak..."; sleep 5; done'
 
 app:
+  netty:
+    accessLog:
+      enabled: false
   logLevel:
     app: INFO
     security: INFO
