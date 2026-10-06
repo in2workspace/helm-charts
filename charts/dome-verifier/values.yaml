@@ -170,5 +170,4 @@ app:
         # Placeholder for revoked credentials list URL
         revokedCredentialListUrl: "https://raw.example-external-domain.com/path/to/file/filename.yaml"
     # Legacy PlainListEntity status list URLs whose status check is bypassed (OPTIONAL)
-    # Rendered as a comma-separated list into VERIFIER_BACKEND_PLAINLISTENTITYBYPASSURLS
     plainListEntityBypassUrls: []
