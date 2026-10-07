@@ -2285,6 +2285,16 @@ entries:
     version: 1.2.3
   dome-verifier:
   - apiVersion: v2
+    appVersion: v2.0.14
+    created: "2026-10-07T06:29:49.657646798Z"
+    description: Verifier Helm chart for Kubernetes
+    digest: 30daca2f7b601b4b9435ce55d191861d9cab905aa496a5ebfc2b26af1894fcb4
+    name: dome-verifier
+    type: application
+    urls:
+    - https://github.com/in2workspace/helm-charts/releases/download/dome-verifier-1.2.27/dome-verifier-1.2.27.tgz
+    version: 1.2.27
+  - apiVersion: v2
     appVersion: v2.0.6
     created: "2026-04-16T13:22:22.75076694Z"
     description: Verifier Helm chart for Kubernetes
@@ -9127,4 +9137,4 @@ entries:
     urls:
     - https://in2workspace.github.io/helm-charts/wallet-api-1.0.0.tgz
     version: 1.0.0
-generated: "2026-07-10T11:37:01.043315729Z"
+generated: "2026-10-07T06:29:49.658031398Z"
