@@ -99,6 +99,8 @@ spec:
                 secretKeyRef:
                   name: {{ include "dome-verifier.verifierSecretFileName" . }}
                   key: {{ include "dome-verifier.learCredentialMachine-key" . }}
+            - name: VERIFIER_BACKEND_PLAINLISTENTITYBYPASSURLS
+              value: {{ join "," (.Values.app.backend.plainListEntityBypassUrls | default list) | quote }}
             - name: SPRING_CONFIG_ADDITIONAL_LOCATION
               value: "/config/application.yaml"
           volumeMounts:
